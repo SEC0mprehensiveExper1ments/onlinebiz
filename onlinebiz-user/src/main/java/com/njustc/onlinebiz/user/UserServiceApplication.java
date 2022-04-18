@@ -1,11 +1,11 @@
-package com.njustc.onlinebiz.microdoc;
+package com.njustc.onlinebiz.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DocumentServiceApplication {
+public class UserServiceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(DocumentServiceApplication.class, args);
+        SpringApplication.run(UserServiceApplication.class, args);
     }
 }
