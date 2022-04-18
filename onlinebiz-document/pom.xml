@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>online-biz</artifactId>
+        <artifactId>onlinebiz</artifactId>
         <groupId>com.njustc</groupId>
         <version>0.0.1</version>
     </parent>
 
-    <artifactId>doc-service</artifactId>
+    <artifactId>onlinebiz-document</artifactId>
 
     <dependencies>
         <dependency>

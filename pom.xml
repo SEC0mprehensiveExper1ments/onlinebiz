@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>com.njustc</groupId>
-    <artifactId>online-biz</artifactId>
+    <artifactId>onlinebiz</artifactId>
     <version>0.0.1</version>
     <description>Online business system for Nanjing University Software Testing Center.</description>
     <packaging>pom</packaging>
@@ -25,8 +25,8 @@
     </properties>
 
     <modules>
-        <module>user-service</module>
-        <module>doc-service</module>
+        <module>onlinebiz-document</module>
+        <module>onlinebiz-user</module>
     </modules>
 
     <dependencyManagement>
