@@ -15,6 +15,7 @@ public class DocumentOSSProvider {
   AmazonS3 space;
 
   DocumentOSSProvider() {
+    // 实例化一个client
     AWSCredentialsProvider credentialsProvider =
         new AWSStaticCredentialsProvider(
             new BasicAWSCredentials(
@@ -28,6 +29,11 @@ public class DocumentOSSProvider {
             .build();
   }
 
+  /*
+  将一个任意大小的PDF文档上传到OSS，返回一个可以直接下载PDF的signed URL
+  fileName: 文件名
+  content: PDF文件的byte数组
+   */
   public String uploadDocument(String fileName, byte[] content) {
     InputStream inputStream = new java.io.ByteArrayInputStream(content);
     ObjectMetadata metadata = new ObjectMetadata();
@@ -36,6 +42,7 @@ public class DocumentOSSProvider {
 
     space.putObject("mcdse", fileName, inputStream, metadata);
 
+    // 设置过期时间为一天
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(new java.util.Date());
     calendar.add(Calendar.DATE, 1);
