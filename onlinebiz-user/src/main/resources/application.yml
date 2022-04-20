@@ -2,9 +2,9 @@ spring:
   application:
     name: user-service
   datasource:
-    url: jdbc:mysql://localhost:3306/UserDB
+    url: jdbc:mysql://128.199.174.49:3306/UserDB
     username: root
-    password: dxh1314alone
+    password: nAnj1ng_Jia0tong_Univ
     driver-class-name: com.mysql.cj.jdbc.Driver
 
     druid:
