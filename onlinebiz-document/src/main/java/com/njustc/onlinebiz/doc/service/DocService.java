@@ -5,6 +5,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.njustc.onlinebiz.doc.domain.JS003;
 import com.njustc.onlinebiz.doc.domain.JS004;
+import com.njustc.onlinebiz.doc.mapper.DocumentOSSProvider;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -14,9 +15,10 @@ import java.io.IOException;
 @Service
 public class DocService {
 
-    public void fillJS003(JS003 newJson) throws IOException, DocumentException {
+    public String fillJS003(JS003 newJson) throws IOException, DocumentException {
         Document doc=new Document();
-        PdfWriter writer=PdfWriter.getInstance(doc,new FileOutputStream("C:\\Users\\ASUS\\Desktop\\test.pdf"));
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PdfWriter.getInstance(doc, byteArrayOutputStream);
         doc.open();
 
         //doc.addTitle("委托测试软件功能列表");
@@ -161,6 +163,8 @@ public class DocService {
         doc.add(lastParagraph);
 
         doc.close();
+        DocumentOSSProvider documentOSSProvider=new DocumentOSSProvider();
+        return documentOSSProvider.uploadDocument("JS003.pdf",byteArrayOutputStream.toByteArray());
     }
     public String fillJS004(JS004 newJson){//利用模板生成pdf
         //模板路径

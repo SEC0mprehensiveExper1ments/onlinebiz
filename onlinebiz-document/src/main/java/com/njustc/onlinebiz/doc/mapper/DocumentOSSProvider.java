@@ -14,7 +14,7 @@ import java.util.Calendar;
 public class DocumentOSSProvider {
   AmazonS3 space;
 
-  DocumentOSSProvider() {
+  public DocumentOSSProvider() {
     // 实例化一个client
     AWSCredentialsProvider credentialsProvider =
         new AWSStaticCredentialsProvider(

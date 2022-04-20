@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @RestController
@@ -24,11 +23,10 @@ public class JsonController {
 
     @PostMapping("/doc/JS003")
     @ResponseBody
-    public JS003 JsonControllerJS003(@RequestBody JS003 newJson) throws DocumentException, IOException {
+    public String JsonControllerJS003(@RequestBody JS003 newJson) throws DocumentException, IOException {
         //System.out.println(newJson.toString());
         DocService fileJS003=new DocService();
-        fileJS003.fillJS003(newJson);
-        return newJson;
+        return fileJS003.fillJS003(newJson);
     }
 
 }
