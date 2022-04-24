@@ -1,46 +1,32 @@
 package com.njustc.onlinebiz.user.mapper;
 
-import com.njustc.onlinebiz.user.pojo.User;
-import org.apache.ibatis.annotations.Insert;
+import com.njustc.onlinebiz.user.model.User;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface UserMapper {
-    /**
-     * 通过用户名查询用户
-     *
-     * @param userName 待查询的用户名
-     * @return 若查询成功，则返回user对象；若查询失败，则返回null
-     */
-    @Select("select * from user where user.userName=#{userName}")
-    User queryUserByUserName(String userName);
 
-    /**
-     * 通过用户id查询用户
-     *
-     * @param userId 待查询的用户id
-     * @return 若查询成功，则返回user对象；若查询失败，则返回null
-     */
-    @Select("select * from user where user.userId=#{userId}")
-    User queryUserByUserId(int userId);
+    User selectUserByUserId(Long userId);
+
+    User selectUserByUserName(String userName);
 
     /**
      * 保存用户信息至数据库
      *
-     * @param userName 待保存用户的用户名
-     * @param userPassword 待保存用户的用户密码
+     * @param user 要保存的 User 对象，除了 userId 以外的各个字段必须被正确设置。如果操作成功
+     *             会把自增主键的值取回来，放在 user 对象的 userId 字段里。
+     * @return 本次操作影响的行数，若成功应当返回 1；失败返回 0
      */
-    @Insert("insert into user(userName, userPassword) values(#{userName}, #{userPassword})")
-    void saveUser(String userName, String userPassword);
+    int insertUser(User user);
 
-    /**
-     * 通过用户名与用户密码查询用户
-     *
-     * @param userName 待登录用户的用户名
-     * @param userPassword 待登录用户的用户密码
-     * @return 若查询成功，则返回User对象；若查询失败，则返回null
-     */
-    @Select("select * from user where user.userName=#{userName} and user.userPassword=#{userPassword}")
-    User queryUserByUserNameAndUserPassword(String userName, String userPassword);
+    int updateUserNameById(Long userId, String userName);
+
+    int updateUserPasswordById(Long userId, String userPassword);
+
+    int updateUserRoleById(Long userId, String userRole);
+
+    int deleteUserById(Long userId);
+
 }
