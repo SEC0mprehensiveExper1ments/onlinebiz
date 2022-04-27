@@ -13,6 +13,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="onlinebiz" target="11" />
+      <module name="onlinebiz-api" target="11" />
       <module name="onlinebiz-auth" target="11" />
       <module name="onlinebiz-config" target="11" />
       <module name="onlinebiz-discovery" target="11" />
@@ -23,6 +24,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="onlinebiz-api" options="-parameters" />
       <module name="onlinebiz-auth" options="-parameters" />
       <module name="onlinebiz-config" options="-parameters" />
       <module name="onlinebiz-discovery" options="-parameters" />
