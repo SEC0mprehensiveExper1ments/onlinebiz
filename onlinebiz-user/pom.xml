@@ -70,7 +70,7 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
-<!--        对控制层、服务层、数据层进行端到端的集成测试需要用到这个依赖-->
+<!--        对控制层、服务层、数据层进行端到端的集成测试需要用到这个依赖（主要是因为用了 WebTestClient）-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>

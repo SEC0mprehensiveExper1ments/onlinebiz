@@ -1,26 +1,15 @@
 package com.njustc.onlinebiz.user;
 
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.session.web.http.SessionRepositoryFilter;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
-import org.springframework.web.context.WebApplicationContext;
 
+// 在这里我们要启动整个应用，然后通过 WebTestClient 的实例向 Controller
+// 发送请求并检验响应状态。由于我们不是在浏览器环境下测试，所以我们需要手动
+// 为后续每个请求加上 cookie，并且由于每个测试用例使用一个不同的测试类实例，
+// 我们需要把测试间共享的数据放在静态域中。
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserControllerIT {
-
-//    @Autowired
-//    private WebApplicationContext context;
-//
-//    @Autowired
-//    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-//    private SessionRepositoryFilter<?> sessionRepositoryFilter;
 
     // 用来发送请求的对象
     private static final WebTestClient client = WebTestClient.bindToServer().baseUrl("http://localhost:8001").build();
@@ -30,14 +19,6 @@ public class UserControllerIT {
 
     // 保存会话 id 用于后面的测试
     private static String sessionId;
-
-//    @BeforeEach
-//    public void prepareTestClient() {
-//        client = MockMvcWebTestClient
-//                .bindToApplicationContext(context)
-//                .filter(sessionRepositoryFilter)
-//                .build();
-//    }
 
     @Test
     @Order(1)
@@ -345,6 +326,14 @@ public class UserControllerIT {
 
     @Test
     @Order(36)
+    public void testGetUserIdentityAfterRemoveUser() {
+        client.get()
+                .uri("/user/identity").cookie(sessionCookieName, sessionId)
+                .exchange().expectStatus().is4xxClientError();
+    }
+
+    @Test
+    @Order(37)
     public void testLogInAgainWithAnotherAccount() {
         client.post()
                 .uri("/login").cookie(sessionCookieName, sessionId)
@@ -354,7 +343,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(37)
+    @Order(38)
     public void testUserIdentityAgain() {
         String body = client.get()
                 .uri("/user/identity").cookie(sessionCookieName, sessionId)
@@ -364,7 +353,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(38)
+    @Order(39)
     public void testLogOutAgain() {
         client.post()
                 .uri("/logout").cookie(sessionCookieName, sessionId)

@@ -2,7 +2,6 @@ package com.njustc.onlinebiz.user.service;
 
 import com.njustc.onlinebiz.user.mapper.UserMapper;
 import com.njustc.onlinebiz.user.model.User;
-import org.apache.el.stream.StreamELResolverImpl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -138,8 +137,8 @@ public class UserServiceImpl implements UserService {
             @CacheEvict(value = "user-by-username", allEntries = true, condition = "#result == true")
     })
     public boolean removeUser(HttpServletRequest request) {
-        HttpSession session = null;
-        User user = null;
+        HttpSession session;
+        User user;
         if ((session = request.getSession(false)) == null ||
                 (user = (User) session.getAttribute(USER_SESSION_FIELD)) == null) {
             return false;
