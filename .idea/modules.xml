@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/onlinebiz.iml" filepath="$PROJECT_DIR$/.idea/onlinebiz.iml" />
       <module fileurl="file://$PROJECT_DIR$/onlinebiz-document/onlinebiz-document.iml" filepath="$PROJECT_DIR$/onlinebiz-document/onlinebiz-document.iml" />
+      <module fileurl="file://$PROJECT_DIR$/onlinebiz-gateway/onlinebiz-gateway.iml" filepath="$PROJECT_DIR$/onlinebiz-gateway/onlinebiz-gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/onlinebiz-user/onlinebiz-user.iml" filepath="$PROJECT_DIR$/onlinebiz-user/onlinebiz-user.iml" />
     </modules>
   </component>

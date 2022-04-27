@@ -27,6 +27,7 @@
     <modules>
         <module>onlinebiz-document</module>
         <module>onlinebiz-user</module>
+        <module>onlinebiz-gateway</module>
     </modules>
 
     <dependencyManagement>
