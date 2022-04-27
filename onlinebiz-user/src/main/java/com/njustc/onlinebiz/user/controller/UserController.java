@@ -1,5 +1,7 @@
 package com.njustc.onlinebiz.user.controller;
 
+import com.njustc.onlinebiz.user.model.User;
+import com.njustc.onlinebiz.user.model.UserDto;
 import com.njustc.onlinebiz.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,10 +34,10 @@ public class UserController {
     // 登出
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request) {
-        if (!userService.handleLogOut(request)) {
-            return ResponseEntity.badRequest().build();
+        if (userService.handleLogOut(request)) {
+            return ResponseEntity.ok().build();
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.badRequest().build();
     }
 
     // 注册账号
@@ -59,7 +61,7 @@ public class UserController {
     }
 
     // 验证某个用户名是否存在
-    @GetMapping("/user")
+    @GetMapping("/user/existence")
     public ResponseEntity<Void> checkAccountByUserName(@RequestParam("userName") String userName) {
         if (userService.findUserByUserName(userName) != null) {
             // 找到返回 ok
@@ -70,13 +72,13 @@ public class UserController {
     }
 
     // 修改用户名
-    @PostMapping("/user/{userId}/username")
+    @PostMapping("/user/username")
     public ResponseEntity<Void> changeUsername(
-            @PathVariable(value = "userId") Long userId,
-            @RequestParam(value = "newValue") String userName
+            @RequestParam(value = "newValue") String userName,
+            HttpServletRequest request
     ) {
         // 修改用户名
-        if (!userService.updateUserName(userId, userName)) {
+        if (!userService.updateUserName(userName, request)) {
             return ResponseEntity.badRequest().build();
         }
         // 成功
@@ -84,25 +86,35 @@ public class UserController {
     }
 
     // 修改密码
-    @PostMapping("/user/{userId}/password")
+    @PostMapping("/user/password")
     public ResponseEntity<Void> changePassword(
-            @PathVariable("userId") Long userId,
             @RequestParam("oldValue") String oldPassword,
-            @RequestParam("newValue") String newPassword
+            @RequestParam("newValue") String newPassword,
+            HttpServletRequest request
     ) {
-        if (!userService.updateUserPassword(userId, oldPassword, newPassword)) {
+        if (!userService.updateUserPassword(oldPassword, newPassword, request)) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();
     }
 
     // 注销账号
-    @DeleteMapping("/user/{userId}")
-    public ResponseEntity<Void> closeAccount(@PathVariable("userId") Long userId) {
-        if (!userService.removeUser(userId)) {
+    @DeleteMapping("/user")
+    public ResponseEntity<Void> closeAccount(HttpServletRequest request) {
+        if (!userService.removeUser(request)) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();
     }
 
+    // 获取用户自己的身份信息
+    @GetMapping("/user/identity")
+    public ResponseEntity<UserDto> getUserIdentity(HttpServletRequest request) {
+        User user = userService.getUserIdentity(request);
+        if (user == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        // 返回 DTO，这里我们不返回密码，虽然它也是加密的
+        return ResponseEntity.ok().body(new UserDto(user));
+    }
 }

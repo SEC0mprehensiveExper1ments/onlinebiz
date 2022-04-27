@@ -2,6 +2,7 @@ package com.njustc.onlinebiz.user.service;
 
 import com.njustc.onlinebiz.user.mapper.UserMapper;
 import com.njustc.onlinebiz.user.model.User;
+import org.apache.el.stream.StreamELResolverImpl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -66,50 +67,88 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Caching (evict = {
-        @CacheEvict(value = "user-by-id", key = "#root.args[0]", condition = "#result == true"),
-        @CacheEvict(value = "user-by-username", key = "#root.args[1]", condition = "#result == true")
+        @CacheEvict(value = "user-by-id", allEntries = true, condition = "#result == true"),
+        @CacheEvict(value = "user-by-username", key = "#root.args[0]", condition = "#result == true")
     })
-    public boolean updateUserName(Long userId, String userName) {
-        if (userId == null || userName == null || !userName.matches(USERNAME_PATTERN)) {
+    public boolean updateUserName(String userName, HttpServletRequest request) {
+        // 检查新用户名的合法性
+        if (userName == null || !userName.matches(USERNAME_PATTERN) ||
+                findUserByUserName(userName) != null) {
             return false;
         }
-        User user = findUserByUserId(userId);
-        if (user == null) {
-            // 用户不存在
+        // 检查会话数据
+        HttpSession session = request.getSession(false);
+        if (session == null) {
             return false;
-        } else if (userName.equals(user.getUserName())) {
-            // 新用户名和旧用户名相同
+        }
+        User user = (User) session.getAttribute(USER_SESSION_FIELD);
+        if (user == null) {
+            // 不在登录状态
+            return false;
+        }
+        // 更新数据库
+        if (userMapper.updateUserNameById(user.getUserId(), userName) == 1) {
+            // 更新会话
+            user.setUserName(userName);
+            session.setAttribute(USER_SESSION_FIELD, user);
             return true;
         }
-        return userMapper.updateUserNameById(userId, userName) == 1;
+        // 写入数据库失败
+        return false;
     }
 
     @Override
     @Caching(evict = {
-            @CacheEvict(value = "user-by-id", key = "#root.args[0]", condition = "#result == true"),
+            @CacheEvict(value = "user-by-id", allEntries = true, condition = "#result == true"),
             @CacheEvict(value = "user-by-username", allEntries = true, condition = "#result == true")
     })
-    public boolean updateUserPassword(Long userId, String oldPassword, String newPassword) {
-        if (userId == null || oldPassword == null || newPassword == null) {
+    public boolean updateUserPassword(String oldPassword, String newPassword, HttpServletRequest request) {
+        // 检查数据合法性
+        if (oldPassword == null || newPassword == null) {
             return false;
         }
+        // 检查会话数据
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            return false;
+        }
+        User user = (User) session.getAttribute(USER_SESSION_FIELD);
+        if (user == null) {
+            return false;
+        }
+        // 检查旧密码是否一致
         String oldPasswordEncoded = DigestUtils.md5DigestAsHex(oldPassword.getBytes());
-        User user = findUserByUserId(userId);
-        if (user == null || !oldPasswordEncoded.equals(user.getUserPassword())) {
-            // 用户不存在或旧密码不对
+        if (!oldPasswordEncoded.equals(user.getUserPassword())) {
             return false;
         }
+        // 更新数据库
         String newPasswordEncoded = DigestUtils.md5DigestAsHex(newPassword.getBytes());
-        return userMapper.updateUserPasswordById(userId, newPasswordEncoded) == 1;
+        if (userMapper.updateUserPasswordById(user.getUserId(), newPasswordEncoded) == 1) {
+            // 更新会话
+            user.setUserPassword(newPasswordEncoded);
+            session.setAttribute(USER_SESSION_FIELD, user);
+            return true;
+        }
+        return false;
     }
 
     @Override
     @Caching(evict = {
-            @CacheEvict(value = "user-by-id", key = "#root.args[0]", condition = "#result == true"),
+            @CacheEvict(value = "user-by-id", allEntries = true, condition = "#result == true"),
             @CacheEvict(value = "user-by-username", allEntries = true, condition = "#result == true")
     })
-    public boolean removeUser(Long userId) {
-        return findUserByUserId(userId) != null && userMapper.deleteUserById(userId) == 1;
+    public boolean removeUser(HttpServletRequest request) {
+        HttpSession session = null;
+        User user = null;
+        if ((session = request.getSession(false)) == null ||
+                (user = (User) session.getAttribute(USER_SESSION_FIELD)) == null) {
+            return false;
+        }
+        if (userMapper.deleteUserById(user.getUserId()) == 1) {
+            session.removeAttribute(USER_SESSION_FIELD);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -153,5 +192,15 @@ public class UserServiceImpl implements UserService {
     public boolean checkLogIn(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         return session != null && session.getAttribute(USER_SESSION_FIELD) != null;
+    }
+
+    @Override
+    public User getUserIdentity(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            return null;
+        }
+        // 从 redis 获取用户信息
+        return (User) session.getAttribute(USER_SESSION_FIELD);
     }
 }
