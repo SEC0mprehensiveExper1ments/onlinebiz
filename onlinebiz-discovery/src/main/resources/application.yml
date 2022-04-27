@@ -1,0 +1,17 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: onlinebiz-discovery
+
+#配置运行在独立模式（standalone）的 Eureka 服务器
+eureka:
+  instance:
+    instance-id: eureka-server8761
+    prefer-ip-address: true
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://localhost:8761/eureka
