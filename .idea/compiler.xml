@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="onlinebiz-user" />
         <module name="onlinebiz-document" />
+        <module name="onlinebiz-gateway" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

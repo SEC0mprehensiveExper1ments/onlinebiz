@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: onlinebiz-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+#      配置网关路由
+      routes:
+        - id: user-management-public
+          uri: lb://onlinebiz-user
+          predicates:
+            - name: Path
+              args:
+                patterns:
+                  - /login**
+                  - /logout
+                  - /register
+                  - /user**
