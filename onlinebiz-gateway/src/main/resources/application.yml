@@ -28,7 +28,7 @@ spring:
                   - /login/**
                   - /logout
                   - /register
-                  - /user/**
+                  - /account/**
 
 eureka:
   instance:

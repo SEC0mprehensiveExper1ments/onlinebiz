@@ -12,7 +12,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 public class UserControllerIT {
 
     // 用来发送请求的对象
-    private static final WebTestClient client = WebTestClient.bindToServer().baseUrl("http://124.222.168.27:8080").build();
+    private static final WebTestClient client = WebTestClient.bindToServer().baseUrl("http://localhost:8001").build();
 
     // 从配置文件中读取 cookie 的名称
     private static final String sessionCookieName = "NJUSTC_ONLINEBIZ_SESSION";
@@ -60,7 +60,7 @@ public class UserControllerIT {
     @Order(5)
     public void testUpdateUsernameWhenNotLogIn() {
         client.post()
-                .uri("/user/username?newValue=admin")
+                .uri("/account/username?newValue=admin")
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -68,7 +68,7 @@ public class UserControllerIT {
     @Order(6)
     public void testUpdatePasswordWhenNotLogIn() {
         client.post()
-                .uri("/user/password?oldValue=admin&newValue=admin")
+                .uri("/account/password?oldValue=admin&newValue=admin")
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -76,7 +76,7 @@ public class UserControllerIT {
     @Order(7)
     public void testRemoveAccountWhenNotLogIn() {
         client.delete()
-                .uri("/user")
+                .uri("/account")
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -84,7 +84,7 @@ public class UserControllerIT {
     @Order(8)
     public void testGetUserIdentityWhenNotLogIn() {
         client.get()
-                .uri("/user/identity")
+                .uri("/account")
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -151,7 +151,7 @@ public class UserControllerIT {
     @Order(15)
     public void testUserExistenceWithExistingUsername() {
         client.get()
-                .uri("/user/existence?userName=admin").cookie(sessionCookieName, sessionId)
+                .uri("/account/existence?userName=admin").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().isOk();
     }
 
@@ -159,7 +159,7 @@ public class UserControllerIT {
     @Order(16)
     public void testUserExistenceWithNonExistingUsername() {
         client.get()
-                .uri("/user/existence?userName=Jack").cookie(sessionCookieName, sessionId)
+                .uri("/account/existence?userName=Jack").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -167,7 +167,7 @@ public class UserControllerIT {
     @Order(17)
     public void testGetUserIdentityWhenLogIn() {
         String body = client.get()
-                .uri("/user/identity").cookie(sessionCookieName, sessionId)
+                .uri("/account").cookie(sessionCookieName, sessionId)
                 .exchange().returnResult(String.class).getResponseBody().blockFirst();
         Assertions.assertNotNull(body);
         Assertions.assertTrue(body.contains("admin"));
@@ -177,7 +177,7 @@ public class UserControllerIT {
     @Order(18)
     public void testUpdateUsernameWithInvalidValue() {
         client.post()
-                .uri("/user/username?newValue=#@$Jack").cookie(sessionCookieName, sessionId)
+                .uri("/account/username?newValue=#@$Jack").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -185,7 +185,7 @@ public class UserControllerIT {
     @Order(19)
     public void testUpdateUsernameWithDuplicatedValue() {
         client.post()
-                .uri("/user/username?newValue=guest").cookie(sessionCookieName, sessionId)
+                .uri("/account/username?newValue=guest").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -193,7 +193,7 @@ public class UserControllerIT {
     @Order(20)
     public void testUpdateUsernameShouldSuccess() {
         client.post()
-                .uri("/user/username?newValue=David").cookie(sessionCookieName, sessionId)
+                .uri("/account/username?newValue=David").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().isOk();
     }
 
@@ -201,7 +201,7 @@ public class UserControllerIT {
     @Order(21)
     public void testUpdatePasswordWithWrongOldValue() {
         client.post()
-                .uri("/user/password?oldValue=qwer&newValue=abc").cookie(sessionCookieName, sessionId)
+                .uri("/account/password?oldValue=qwer&newValue=abc").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -209,7 +209,7 @@ public class UserControllerIT {
     @Order(22)
     public void testUpdatePasswordShouldSuccess() {
         client.post()
-                .uri("/user/password?oldValue=123&newValue=abc").cookie(sessionCookieName, sessionId)
+                .uri("/account/password?oldValue=123&newValue=abc").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().isOk();
     }
 
@@ -217,7 +217,7 @@ public class UserControllerIT {
     @Order(23)
     public void testUserIdentityConsistent() {
         String body = client.get()
-                .uri("/user/identity").cookie(sessionCookieName, sessionId)
+                .uri("/account").cookie(sessionCookieName, sessionId)
                 .exchange().returnResult(String.class).getResponseBody().blockFirst();
         Assertions.assertNotNull(body);
         Assertions.assertTrue(body.contains("David"));
@@ -243,7 +243,7 @@ public class UserControllerIT {
     @Order(26)
     public void testUpdateUsernameWhenLogout() {
         client.post()
-                .uri("/user/username?newValue=Jack").cookie(sessionCookieName, sessionId)
+                .uri("/account/username?newValue=Jack").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -251,7 +251,7 @@ public class UserControllerIT {
     @Order(27)
     public void testUpdatePasswordWhenLogout() {
         client.post()
-                .uri("/user/password?oldValue=abc&newValue=admin").cookie(sessionCookieName, sessionId)
+                .uri("/account/password?oldValue=abc&newValue=admin").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -259,7 +259,7 @@ public class UserControllerIT {
     @Order(28)
     public void testRemoveUserWhenLogout() {
         client.delete()
-                .uri("/user").cookie(sessionCookieName, sessionId)
+                .uri("/account").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -275,7 +275,7 @@ public class UserControllerIT {
     @Order(30)
     public void testRemoveUserWhenLogIn() {
         client.delete()
-                .uri("/user").cookie(sessionCookieName, sessionId)
+                .uri("/account").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().isOk();
     }
 
@@ -291,7 +291,7 @@ public class UserControllerIT {
     @Order(32)
     public void testUpdateUsernameAfterRemoveUser() {
         client.post()
-                .uri("/user/username?newValue=Jack").cookie(sessionCookieName, sessionId)
+                .uri("/account/username?newValue=Jack").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -299,7 +299,7 @@ public class UserControllerIT {
     @Order(33)
     public void testUpdatePasswordAfterRemoveUser() {
         client.post()
-                .uri("/user/password").cookie(sessionCookieName, sessionId)
+                .uri("/account/password").cookie(sessionCookieName, sessionId)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .bodyValue("oldValue=abc&newValue=admin")
                 .exchange().expectStatus().is4xxClientError();
@@ -309,7 +309,7 @@ public class UserControllerIT {
     @Order(34)
     public void testRemoveAgainAfterRemove() {
         client.delete()
-                .uri("/user").cookie(sessionCookieName, sessionId)
+                .uri("/account").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -317,10 +317,10 @@ public class UserControllerIT {
     @Order(35)
     public void testUserExistenceAfterRemoveUser() {
         client.get()
-                .uri("/user/existence?userName=admin").cookie(sessionCookieName, sessionId)
+                .uri("/account/existence?userName=admin").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().is4xxClientError();
         client.get()
-                .uri("/user/existence?userName=guest").cookie(sessionCookieName, sessionId)
+                .uri("/account/existence?userName=guest").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().isOk();
     }
 
@@ -328,7 +328,7 @@ public class UserControllerIT {
     @Order(36)
     public void testGetUserIdentityAfterRemoveUser() {
         client.get()
-                .uri("/user/identity").cookie(sessionCookieName, sessionId)
+                .uri("/account").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -346,7 +346,7 @@ public class UserControllerIT {
     @Order(38)
     public void testUserIdentityAgain() {
         String body = client.get()
-                .uri("/user/identity").cookie(sessionCookieName, sessionId)
+                .uri("/account").cookie(sessionCookieName, sessionId)
                 .exchange().returnResult(String.class).getResponseBody().blockFirst();
         Assertions.assertNotNull(body);
         Assertions.assertTrue(body.contains("guest"));

@@ -4,50 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="154dc991-c741-4a8a-832c-7f0b9448c931" name="Changes" comment="增加eureka服务器">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_starter_netflix_eureka_client_3_1_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/resources/application-staging.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/onlinebiz.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__antlr_antlr_2_7_7.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_woodstox_woodstox_core_6_2_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_gson_gson_2_8_9.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_guava_guava_19_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_inject_guice_4_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_netflix_eureka_eureka_client_1_10_17.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_netflix_eureka_eureka_core_1_10_17.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_netflix_netflix_commons_netflix_eventbus_0_3_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_netflix_netflix_commons_netflix_infix_0_3_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_netflix_servo_servo_core_0_12_21.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_stoyanr_evictor_1_0_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_thoughtworks_xstream_xstream_1_4_18.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_configuration_commons_configuration_1_10.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_jxpath_commons_jxpath_1_3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_lang_commons_lang_2_6.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_x_stream_mxparser_1_2_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__javax_inject_javax_inject_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__javax_ws_rs_jsr311_api_1_1_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__joda_time_joda_time_2_3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_antlr_antlr_runtime_3_4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_antlr_stringtemplate_3_2_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_commons_commons_math_2_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_jettison_jettison_1_4_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_woodstox_stax2_api_4_2_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_loadbalancer_3_1_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_netflix_eureka_client_3_1_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_starter_loadbalancer_3_1_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__xmlpull_xmlpull_1_1_3_1.xml" beforeDir="false" />
+    <list default="true" id="154dc991-c741-4a8a-832c-7f0b9448c931" name="Changes" comment="添加.idea目录下的内容">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-discovery/onlinebiz-discovery.iml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-discovery/onlinebiz-discovery.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-discovery/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-discovery/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-document/onlinebiz-document.iml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-document/onlinebiz-document.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-gateway/onlinebiz-gateway.iml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-gateway/onlinebiz-gateway.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-gateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-gateway/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-gateway/src/main/java/com/njustc/onlinebiz/gateway/GatewayServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-gateway/src/main/java/com/njustc/onlinebiz/gateway/GatewayServiceApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/onlinebiz-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-gateway/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/onlinebiz-user.iml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/onlinebiz-user.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/UserServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/UserServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/resources/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/controller/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserControllerIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserControllerIT.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -96,7 +56,6 @@
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -150,7 +109,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserControllerIT.testRegisterShouldSuccess" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="UserControllerIT.testUserExistenceWithExistingUsername" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="onlinebiz-user" />
       <extension name="coverage">
         <pattern>
@@ -160,7 +119,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.njustc.onlinebiz.user" />
       <option name="MAIN_CLASS_NAME" value="com.njustc.onlinebiz.user.UserControllerIT" />
-      <option name="METHOD_NAME" value="testRegisterShouldSuccess" />
+      <option name="METHOD_NAME" value="testUserExistenceWithExistingUsername" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -209,10 +168,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.UserControllerIT" />
+        <item itemvalue="JUnit.UserControllerIT.testUserExistenceWithExistingUsername" />
         <item itemvalue="Spring Boot.GatewayServiceApplication" />
         <item itemvalue="Spring Boot.DiscoveryServiceApplication" />
         <item itemvalue="JUnit.UserControllerIT.testLogInWithValidAccount" />
-        <item itemvalue="JUnit.UserControllerIT.testRegisterShouldSuccess" />
       </list>
     </recent_temporary>
   </component>
@@ -236,7 +195,8 @@
       <workItem from="1651054855739" duration="9766000" />
       <workItem from="1651074093080" duration="6653000" />
       <workItem from="1651089941571" duration="161000" />
-      <workItem from="1651104720046" duration="2961000" />
+      <workItem from="1651104720046" duration="4011000" />
+      <workItem from="1651142558314" duration="1142000" />
     </task>
     <task id="LOCAL-00001" summary="修复已知错误，增加集成测试">
       <created>1651026340778</created>
@@ -266,7 +226,21 @@
       <option name="project" value="LOCAL" />
       <updated>1651092237848</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="连接网关、eureka和用户管理，部署到staging环境">
+      <created>1651108718638</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1651108718638</updated>
+    </task>
+    <task id="LOCAL-00006" summary="添加.idea目录下的内容">
+      <created>1651108846108</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1651108846108</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -289,7 +263,9 @@
     <MESSAGE value="微调代码" />
     <MESSAGE value="开放API接口" />
     <MESSAGE value="增加eureka服务器" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加eureka服务器" />
+    <MESSAGE value="连接网关、eureka和用户管理，部署到staging环境" />
+    <MESSAGE value="添加.idea目录下的内容" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加.idea目录下的内容" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

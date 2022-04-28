@@ -60,8 +60,8 @@ public class UserController {
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    // 验证某个用户名是否存在
-    @GetMapping("/user/existence")
+    // 验证某个账号是否存在
+    @GetMapping("/account/existence")
     public ResponseEntity<Void> checkAccountByUserName(@RequestParam("userName") String userName) {
         if (userService.findUserByUserName(userName) != null) {
             // 找到返回 ok
@@ -72,7 +72,7 @@ public class UserController {
     }
 
     // 修改用户名
-    @PostMapping("/user/username")
+    @PostMapping("/account/username")
     public ResponseEntity<Void> changeUsername(
             @RequestParam(value = "newValue") String userName,
             HttpServletRequest request
@@ -86,7 +86,7 @@ public class UserController {
     }
 
     // 修改密码
-    @PostMapping("/user/password")
+    @PostMapping("/account/password")
     public ResponseEntity<Void> changePassword(
             @RequestParam("oldValue") String oldPassword,
             @RequestParam("newValue") String newPassword,
@@ -99,7 +99,7 @@ public class UserController {
     }
 
     // 注销账号
-    @DeleteMapping("/user")
+    @DeleteMapping("/account")
     public ResponseEntity<Void> closeAccount(HttpServletRequest request) {
         if (!userService.removeUser(request)) {
             return ResponseEntity.badRequest().build();
@@ -107,8 +107,8 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    // 获取用户自己的身份信息
-    @GetMapping("/user/identity")
+    // 获取用户自己的账号信息
+    @GetMapping("/account")
     public ResponseEntity<UserDto> getUserIdentity(HttpServletRequest request) {
         User user = userService.getUserIdentity(request);
         if (user == null) {
