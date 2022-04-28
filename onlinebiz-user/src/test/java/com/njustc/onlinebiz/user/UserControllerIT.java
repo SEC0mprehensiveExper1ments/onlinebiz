@@ -12,7 +12,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 public class UserControllerIT {
 
     // 用来发送请求的对象
-    private static final WebTestClient client = WebTestClient.bindToServer().baseUrl("http://localhost:8001").build();
+    private static final WebTestClient client = WebTestClient.bindToServer().baseUrl("http://124.222.168.27:8080").build();
 
     // 从配置文件中读取 cookie 的名称
     private static final String sessionCookieName = "NJUSTC_ONLINEBIZ_SESSION";

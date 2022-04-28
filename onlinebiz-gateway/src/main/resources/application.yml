@@ -6,10 +6,18 @@ spring:
     name: onlinebiz-gateway
   cloud:
     gateway:
+#      允许Ajax跨域请求
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods: "*"
+#      使用DiscoveryClient
       discovery:
         locator:
           enabled: true
-#      配置网关路由
+      #      配置网关路由
       routes:
         - id: user-management-public
           uri: lb://onlinebiz-user
@@ -17,7 +25,16 @@ spring:
             - name: Path
               args:
                 patterns:
-                  - /login**
+                  - /login/**
                   - /logout
                   - /register
-                  - /user**
+                  - /user/**
+
+eureka:
+  instance:
+    instance-id: gateway8080
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka

@@ -13,7 +13,7 @@ spring:
   application:
     name: onlinebiz-user
   datasource:
-    url: jdbc:mysql://124.222.168.27:33060/user_db
+    url: jdbc:mysql://124.222.168.27:3306/user_db
     username: root
     password: nAnj1ng_Jia0tong_Univ
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,7 +21,7 @@ spring:
     store-type: redis
   redis:
     host: 124.222.168.27
-    port: 63790
+    port: 6379
     database: 0
     password: nAnj1ng_Jia0tong_Univ
   cache:
