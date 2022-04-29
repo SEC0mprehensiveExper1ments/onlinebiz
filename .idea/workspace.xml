@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="154dc991-c741-4a8a-832c-7f0b9448c931" name="Changes" comment="添加.idea目录下的内容">
+    <list default="true" id="154dc991-c741-4a8a-832c-7f0b9448c931" name="Changes" comment="修改URL映射使其更加符合语义">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-gateway/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserControllerIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserControllerIT.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,7 +193,7 @@
       <workItem from="1651074093080" duration="6653000" />
       <workItem from="1651089941571" duration="161000" />
       <workItem from="1651104720046" duration="4011000" />
-      <workItem from="1651142558314" duration="1142000" />
+      <workItem from="1651142558314" duration="1941000" />
     </task>
     <task id="LOCAL-00001" summary="修复已知错误，增加集成测试">
       <created>1651026340778</created>
@@ -240,7 +237,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651108846108</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="修改URL映射使其更加符合语义">
+      <created>1651143715877</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1651143715877</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -265,7 +269,8 @@
     <MESSAGE value="增加eureka服务器" />
     <MESSAGE value="连接网关、eureka和用户管理，部署到staging环境" />
     <MESSAGE value="添加.idea目录下的内容" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加.idea目录下的内容" />
+    <MESSAGE value="修改URL映射使其更加符合语义" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改URL映射使其更加符合语义" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
