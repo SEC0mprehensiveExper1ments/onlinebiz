@@ -29,6 +29,7 @@
         <module>onlinebiz-user</module>
         <module>onlinebiz-gateway</module>
         <module>onlinebiz-discovery</module>
+        <module>onlinebiz-contract</module>
     </modules>
 
     <dependencyManagement>

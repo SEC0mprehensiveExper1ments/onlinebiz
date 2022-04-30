@@ -1,0 +1,14 @@
+server:
+  port: 9001
+
+spring:
+  application:
+    name: onlinebiz-contract
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      username: alwayssmiling
+      password: ikaros_1225
+      database: onlinebiz
+      authentication-database: admin

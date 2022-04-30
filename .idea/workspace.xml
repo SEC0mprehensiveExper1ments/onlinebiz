@@ -4,8 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="154dc991-c741-4a8a-832c-7f0b9448c931" name="Changes" comment="Nothing special">
-      <change beforePath="$PROJECT_DIR$/Jenkinsfile" beforeDir="false" />
+    <list default="true" id="154dc991-c741-4a8a-832c-7f0b9448c931" name="Changes" comment="放弃搭建CI/CD Pipeline">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_mongodb_bson_4_4_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_mongodb_mongodb_driver_core_4_4_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_mongodb_mongodb_driver_sync_4_4_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_data_mongodb_2_6_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_data_spring_data_mongodb_3_3_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-contract/onlinebiz-contract.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-contract/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/ContractServiceApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/controller/ContractController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/model/Contract.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/model/Outline.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/model/Party.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/service/ContractService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/service/MongoContractService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-document/onlinebiz-document.iml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-document/onlinebiz-document.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/onlinebiz-user.iml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/onlinebiz-user.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +74,7 @@
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -74,7 +96,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.UserControllerIT">
+  <component name="RunManager" selected="Spring Boot.ContractServiceApplication">
     <configuration name="UserControllerIT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="onlinebiz-user" />
       <extension name="coverage">
@@ -118,6 +140,13 @@
       <option name="MAIN_CLASS_NAME" value="com.njustc.onlinebiz.user.UserControllerIT" />
       <option name="METHOD_NAME" value="testUserExistenceWithExistingUsername" />
       <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ContractServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="onlinebiz-contract" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.njustc.onlinebiz.contract.ContractServiceApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -194,7 +223,10 @@
       <workItem from="1651089941571" duration="161000" />
       <workItem from="1651104720046" duration="4011000" />
       <workItem from="1651142558314" duration="1941000" />
-      <workItem from="1651239733903" duration="306000" />
+      <workItem from="1651239733903" duration="1093000" />
+      <workItem from="1651258019876" duration="6978000" />
+      <workItem from="1651310349391" duration="17831000" />
+      <workItem from="1651334855292" duration="7188000" />
     </task>
     <task id="LOCAL-00001" summary="修复已知错误，增加集成测试">
       <created>1651026340778</created>
@@ -252,7 +284,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651240001929</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="放弃搭建CI/CD Pipeline">
+      <created>1651240114276</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1651240114276</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -279,7 +318,8 @@
     <MESSAGE value="添加.idea目录下的内容" />
     <MESSAGE value="修改URL映射使其更加符合语义" />
     <MESSAGE value="Nothing special" />
-    <option name="LAST_COMMIT_MESSAGE" value="Nothing special" />
+    <MESSAGE value="放弃搭建CI/CD Pipeline" />
+    <option name="LAST_COMMIT_MESSAGE" value="放弃搭建CI/CD Pipeline" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

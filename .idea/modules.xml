@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/onlinebiz.iml" filepath="$PROJECT_DIR$/.idea/onlinebiz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/onlinebiz-contract/onlinebiz-contract.iml" filepath="$PROJECT_DIR$/onlinebiz-contract/onlinebiz-contract.iml" />
       <module fileurl="file://$PROJECT_DIR$/onlinebiz-discovery/onlinebiz-discovery.iml" filepath="$PROJECT_DIR$/onlinebiz-discovery/onlinebiz-discovery.iml" />
       <module fileurl="file://$PROJECT_DIR$/onlinebiz-document/onlinebiz-document.iml" filepath="$PROJECT_DIR$/onlinebiz-document/onlinebiz-document.iml" />
       <module fileurl="file://$PROJECT_DIR$/onlinebiz-gateway/onlinebiz-gateway.iml" filepath="$PROJECT_DIR$/onlinebiz-gateway/onlinebiz-gateway.iml" />

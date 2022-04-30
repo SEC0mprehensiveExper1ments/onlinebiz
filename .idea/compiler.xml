@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="onlinebiz-contract" />
         <module name="onlinebiz-discovery" />
         <module name="onlinebiz-user" />
         <module name="onlinebiz-document" />
@@ -18,6 +19,7 @@
       <module name="onlinebiz-api" target="11" />
       <module name="onlinebiz-auth" target="11" />
       <module name="onlinebiz-config" target="11" />
+      <module name="onlinebiz-contract" target="11" />
       <module name="onlinebiz-discovery" target="11" />
       <module name="onlinebiz-document" target="11" />
       <module name="onlinebiz-gateway" target="11" />
@@ -29,6 +31,7 @@
       <module name="onlinebiz-api" options="-parameters" />
       <module name="onlinebiz-auth" options="-parameters" />
       <module name="onlinebiz-config" options="-parameters" />
+      <module name="onlinebiz-contract" options="-parameters" />
       <module name="onlinebiz-discovery" options="-parameters" />
       <module name="onlinebiz-document" options="-parameters" />
       <module name="onlinebiz-gateway" options="-parameters" />
