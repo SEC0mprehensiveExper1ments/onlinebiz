@@ -1656,5 +1656,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: io.netty:netty-handler-proxy:4.1.74.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: io.netty:netty-codec-socks:4.1.74.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-webflux:5.3.16" level="project" />
+    <orderEntry type="module" module-name="onlinebiz-common" />
   </component>
 </module>

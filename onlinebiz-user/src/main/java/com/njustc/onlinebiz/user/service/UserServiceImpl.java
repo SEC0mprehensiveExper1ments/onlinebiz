@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.user.service;
 
+import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.user.mapper.UserMapper;
 import com.njustc.onlinebiz.user.model.User;
 import org.springframework.cache.annotation.CacheEvict;
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
         }
         // 用 md5 加密明文密码，得到 32 字节的结果
         String passwordEncoded = DigestUtils.md5DigestAsHex(userPassword.getBytes());
-        User user = new User(userName, passwordEncoded, User.GUEST_ROLE);
+        User user = new User(userName, passwordEncoded, Role.CUSTOMER);
         return userMapper.insertUser(user) == 1;
     }
 

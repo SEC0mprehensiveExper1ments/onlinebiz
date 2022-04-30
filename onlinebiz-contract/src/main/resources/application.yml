@@ -8,7 +8,7 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      username: alwayssmiling
-      password: ikaros_1225
+      username: root
+      password: nAnj1ng_Jia0tong_Univ
       database: onlinebiz
       authentication-database: admin

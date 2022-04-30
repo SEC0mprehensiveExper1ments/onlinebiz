@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.user;
 
+import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.user.mapper.UserMapper;
 import com.njustc.onlinebiz.user.model.User;
 import com.njustc.onlinebiz.user.service.UserService;
@@ -21,7 +22,7 @@ public class UserServiceTest {
     private final UserService userService = new UserServiceImpl(userMapper);
 
     // 准备两条数据记录
-    private final User userTom = new User(1L, "Tom", DigestUtils.md5DigestAsHex("123".getBytes()), User.GUEST_ROLE);
+    private final User userTom = new User(1L, "Tom", DigestUtils.md5DigestAsHex("123".getBytes()), Role.CUSTOMER);
 
     // 下面每个测试之前都要执行这个方法，来准备一个模拟的 UserMapper 对象
     // 并注入到 UserService 实例中

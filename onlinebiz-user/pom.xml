@@ -81,6 +81,11 @@
             <artifactId>spring-boot-starter-webflux</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.njustc</groupId>
+            <artifactId>onlinebiz-common</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

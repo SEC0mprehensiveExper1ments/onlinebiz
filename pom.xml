@@ -30,6 +30,7 @@
         <module>onlinebiz-gateway</module>
         <module>onlinebiz-discovery</module>
         <module>onlinebiz-contract</module>
+        <module>onlinebiz-common</module>
     </modules>
 
     <dependencyManagement>
@@ -63,10 +64,11 @@
                 <version>${mybatis.version}</version>
             </dependency>
 
+<!--            公共模块作为依赖引入-->
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid-spring-boot-starter</artifactId>
-                <version>${druid.version}</version>
+                <groupId>com.njustc</groupId>
+                <artifactId>onlinebiz-common</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

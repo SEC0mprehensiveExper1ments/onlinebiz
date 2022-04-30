@@ -25,7 +25,7 @@ public class Party {
     private String contact;
 
     // 通讯地址
-    private String mailingAddress;
+    private String address;
 
     // 电话
     private String phoneNumber;

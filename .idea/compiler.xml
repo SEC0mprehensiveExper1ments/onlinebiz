@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="onlinebiz-contract" />
+        <module name="onlinebiz-common" />
         <module name="onlinebiz-discovery" />
         <module name="onlinebiz-user" />
         <module name="onlinebiz-document" />
@@ -18,6 +19,7 @@
       <module name="onlinebiz" target="11" />
       <module name="onlinebiz-api" target="11" />
       <module name="onlinebiz-auth" target="11" />
+      <module name="onlinebiz-common" target="11" />
       <module name="onlinebiz-config" target="11" />
       <module name="onlinebiz-contract" target="11" />
       <module name="onlinebiz-discovery" target="11" />
@@ -30,6 +32,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="onlinebiz-api" options="-parameters" />
       <module name="onlinebiz-auth" options="-parameters" />
+      <module name="onlinebiz-common" options="-parameters" />
       <module name="onlinebiz-config" options="-parameters" />
       <module name="onlinebiz-contract" options="-parameters" />
       <module name="onlinebiz-discovery" options="-parameters" />

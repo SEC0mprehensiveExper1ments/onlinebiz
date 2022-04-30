@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.user;
 
+import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.user.mapper.UserMapper;
 import com.njustc.onlinebiz.user.model.User;
 import org.junit.jupiter.api.Assertions;
@@ -21,7 +22,7 @@ public class UserMapperIT {
     @Autowired
     private UserMapper userMapper;
 
-    private final User user = new User(1L, "Tom", DigestUtils.md5DigestAsHex("123".getBytes()), User.CUSTOMER_ROLE);
+    private final User user = new User(1L, "Tom", DigestUtils.md5DigestAsHex("123".getBytes()), Role.CUSTOMER);
 
     @Test
     public void testInsertUserSuccess() {
@@ -61,7 +62,7 @@ public class UserMapperIT {
 
         @Test
         public void testUpdateUserRoleFail() {
-            Assertions.assertEquals(0, userMapper.updateUserRoleById(10L, User.ADMIN_ROLE));
+            Assertions.assertEquals(0, userMapper.updateUserRoleById(10L, Role.CUSTOMER));
             Assertions.assertEquals(user, userMapper.selectUserByUserId(user.getUserId()));
         }
 
@@ -97,8 +98,8 @@ public class UserMapperIT {
 
         @Test
         public void testUpdateUserRoleSuccess() {
-            Assertions.assertEquals(1, userMapper.updateUserRoleById(user.getUserId(), User.ADMIN_ROLE));
-            Assertions.assertEquals(User.ADMIN_ROLE, userMapper.selectUserByUserId(user.getUserId()).getUserRole());
+            Assertions.assertEquals(1, userMapper.updateUserRoleById(user.getUserId(), Role.MARKETING));
+            Assertions.assertEquals(Role.MARKETING, userMapper.selectUserByUserId(user.getUserId()).getUserRole());
         }
 
         @Test
