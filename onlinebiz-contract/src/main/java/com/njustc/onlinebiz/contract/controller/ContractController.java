@@ -2,7 +2,7 @@ package com.njustc.onlinebiz.contract.controller;
 
 import com.njustc.onlinebiz.contract.model.Contract;
 import com.njustc.onlinebiz.contract.model.Outline;
-import com.njustc.onlinebiz.contract.service.MongoContractService;
+import com.njustc.onlinebiz.contract.service.ContractService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,29 +14,52 @@ import java.util.List;
 @RestController
 public class ContractController {
 
-    private final MongoContractService contractService;
+    private final ContractService contractService;
 
-    public ContractController(MongoContractService contractService) {
+    public ContractController(ContractService contractService) {
         this.contractService = contractService;
     }
 
     @PostMapping("/contract")
     public ResponseEntity<Contract> createContract(
             @RequestParam("principalId") Long principalId,
-            @RequestParam("userId") Long creatorId
+            @RequestParam("userId") Long creatorId,
+            @RequestParam("entrustId") String entrustId
     ) {
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
+    // 查看系统中所有的合同
     @GetMapping("/contract")
     public ResponseEntity<List<Outline>> getAllContracts() {
         return ResponseEntity.ok().body(contractService.findAllContracts());
     }
 
+    // 查看任意合同的详细信息
     @GetMapping("/contract/{contractId}")
     public ResponseEntity<Contract> getContractById(@PathVariable("contractId") String contractId) {
         Contract contract = contractService.findContractById(contractId);
-        return contract == null ? ResponseEntity.notFound().build() : ResponseEntity.ok().body(contract);
+        return contract == null ?
+                ResponseEntity.notFound().build() :
+                ResponseEntity.ok().body(contract);
+    }
+
+    // 查看用户自己的所有合同
+    @GetMapping("/contract/individual")
+    public ResponseEntity<List<Outline>> getIndividualContracts(@RequestParam("userId") Long userId) {
+        return ResponseEntity.ok().body(contractService.search().byPrincipalId(userId).getResult());
+    }
+
+    // 查看用户自己的合同详情
+    @GetMapping("/contract/individual/{contractId}")
+    public ResponseEntity<Contract> getIndividualContractById(
+            @RequestParam("userId") Long userId,
+            @PathVariable("contractId") String contractId
+    ) {
+        Contract contract = contractService.findContractByIdAndPrincipal(contractId, userId);
+        return contract == null ?
+                ResponseEntity.notFound().build() :
+                ResponseEntity.ok().body(contract);
     }
 
     // 根据组合条件查询合同
@@ -46,24 +69,23 @@ public class ContractController {
             @RequestParam(value = "companyName", required = false) String companyName,
             @RequestParam(value = "representativeName", required = false) String representativeName,
             @RequestParam(value = "projectName", required = false) String projectName,
-            @RequestParam(value = "targetSoftware", required = false) String targetSoftware,
-            @RequestParam(value = "principalId", required = false) Long principalId
+            @RequestParam(value = "targetSoftware", required = false) String targetSoftware
     ) {
-        try {
-            return ResponseEntity.ok().body(
-                    contractService.search()
-                    .byContact(contactName)
-                    .byCompany(companyName)
-                    .byAuthorizedRepresentative(representativeName)
-                    .byProjectName(projectName)
-                    .byTargetSoftware(targetSoftware)
-                    .byPrincipalId(principalId)
-                    .getResult()
-            );
-        } catch (Exception e) {
-            log.warn("按条件搜索合同失败");
+        // 检查条件是否全空
+        if (contactName == null && companyName == null && representativeName == null &&
+                projectName == null && targetSoftware == null) {
             return ResponseEntity.badRequest().build();
         }
+        // null 参数会被忽略
+        return ResponseEntity.ok().body(
+                contractService.search()
+                .byContact(contactName)
+                .byCompany(companyName)
+                .byAuthorizedRepresentative(representativeName)
+                .byProjectName(projectName)
+                .byTargetSoftware(targetSoftware)
+                .getResult()
+        );
     }
 
     @PostMapping("/contract/{contractId}")

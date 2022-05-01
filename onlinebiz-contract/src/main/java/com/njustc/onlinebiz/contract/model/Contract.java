@@ -61,4 +61,7 @@ public class Contract {
     // 创建者的用户 id
     private Long creatorId;
 
+    // 此合同对应的委托 id
+    private String entrustId;
+
 }

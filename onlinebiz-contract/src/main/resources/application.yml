@@ -1,14 +1,3 @@
-server:
-  port: 9001
-
 spring:
-  application:
-    name: onlinebiz-contract
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      username: root
-      password: nAnj1ng_Jia0tong_Univ
-      database: onlinebiz
-      authentication-database: admin
+  profiles:
+    active: dev
