@@ -3,14 +3,15 @@ package com.njustc.onlinebiz.user.service;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.user.mapper.UserMapper;
 import com.njustc.onlinebiz.user.model.User;
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Objects;
 
 // 这里对数据记录的存在性做了额外校验，而实际上根据 MyBatis 的返回值
 // 我们就可以知道操作是否成功。考虑到查询数据库可以用 Redis 缓存优化，
@@ -23,22 +24,22 @@ public class UserServiceImpl implements UserService {
     private static final String USERNAME_PATTERN = "^[A-Za-z0-9_]{1,32}$";
 
     // 保存在 redis 中的用户信息的名字（用这个名字可以从 redis 取到用户信息）
-    private static final String USER_SESSION_FIELD = "user-basic";
+    private static final String USER_SESSION_FIELD = "user";
 
+    @Autowired
     UserMapper userMapper;
 
-    public UserServiceImpl(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
+    @Autowired
+    CacheManager cacheManager;
 
     @Override
-    @Cacheable("user-by-id")
+    @Cacheable("userId")
     public User findUserByUserId(Long userId) {
         return userId == null ? null : userMapper.selectUserByUserId(userId);
     }
 
     @Override
-    @Cacheable("user-by-username")
+    @Cacheable("userName")
     public User findUserByUserName(String userName) {
         if (userName == null || !userName.matches(USERNAME_PATTERN)) {
             // 用户名为空或者不符合要求
@@ -48,10 +49,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Caching(evict = {
-            @CacheEvict(value = "user-by-id", allEntries = true, condition = "#result == true"),
-            @CacheEvict(value = "user-by-username", key = "#root.args[0]", condition = "#result == true")
-    })
     public boolean createUser(String userName, String userPassword) {
         if (userPassword == null || userName == null || !userName.matches(USERNAME_PATTERN)) {
             return false;
@@ -62,14 +59,17 @@ public class UserServiceImpl implements UserService {
         // 用 md5 加密明文密码，得到 32 字节的结果
         String passwordEncoded = DigestUtils.md5DigestAsHex(userPassword.getBytes());
         User user = new User(userName, passwordEncoded, Role.CUSTOMER);
-        return userMapper.insertUser(user) == 1;
+        if (userMapper.insertUser(user) == 1) {
+            // 创建成功需要更新缓存
+            Objects.requireNonNull(cacheManager.getCache("userId")).put(user.getUserId(), user);
+            Objects.requireNonNull(cacheManager.getCache("userName")).put(userName, user);
+            return true;
+        }
+        // 未知失败原因，和数据库有关
+        return false;
     }
 
     @Override
-    @Caching (evict = {
-        @CacheEvict(value = "user-by-id", allEntries = true, condition = "#result == true"),
-        @CacheEvict(value = "user-by-username", key = "#root.args[0]", condition = "#result == true")
-    })
     public boolean updateUserName(String userName, HttpServletRequest request) {
         // 检查新用户名的合法性
         if (userName == null || !userName.matches(USERNAME_PATTERN) ||
@@ -88,9 +88,14 @@ public class UserServiceImpl implements UserService {
         }
         // 更新数据库
         if (userMapper.updateUserNameById(user.getUserId(), userName) == 1) {
-            // 更新会话
+            // 删除旧的缓存
+            Objects.requireNonNull(cacheManager.getCache("userName")).evict(user.getUserName());
+            // 更新会话数据
             user.setUserName(userName);
             session.setAttribute(USER_SESSION_FIELD, user);
+            // 更新缓存内容
+            Objects.requireNonNull(cacheManager.getCache("userId")).put(user.getUserId(), user);
+            Objects.requireNonNull(cacheManager.getCache("userName")).put(userName, user);
             return true;
         }
         // 写入数据库失败
@@ -98,10 +103,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Caching(evict = {
-            @CacheEvict(value = "user-by-id", allEntries = true, condition = "#result == true"),
-            @CacheEvict(value = "user-by-username", allEntries = true, condition = "#result == true")
-    })
     public boolean updateUserPassword(String oldPassword, String newPassword, HttpServletRequest request) {
         // 检查数据合法性
         if (oldPassword == null || newPassword == null) {
@@ -133,26 +134,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Caching(evict = {
-            @CacheEvict(value = "user-by-id", allEntries = true, condition = "#result == true"),
-            @CacheEvict(value = "user-by-username", allEntries = true, condition = "#result == true")
-    })
     public boolean removeUser(HttpServletRequest request) {
-        HttpSession session;
-        User user;
-        if ((session = request.getSession(false)) == null ||
-                (user = (User) session.getAttribute(USER_SESSION_FIELD)) == null) {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
             return false;
         }
+        User user = (User) session.getAttribute(USER_SESSION_FIELD);
+        if (user == null) {
+            return false;
+        }
+        // 确实在登录状态
         if (userMapper.deleteUserById(user.getUserId()) == 1) {
+            // 更新会话数据
             session.removeAttribute(USER_SESSION_FIELD);
+            // 更新缓存
+            Objects.requireNonNull(cacheManager.getCache("userId")).evict(user.getUserId());
+            Objects.requireNonNull(cacheManager.getCache("userName")).evict(user.getUserName());
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean handleLogIn(String username, String password, HttpServletRequest request) {
+    public boolean handleLogIn(String userName, String userPassword, HttpServletRequest request) {
         // 判断是否已经登录
         HttpSession session = request.getSession(false);
         if (session == null) {
@@ -163,8 +167,8 @@ public class UserServiceImpl implements UserService {
             session.removeAttribute(USER_SESSION_FIELD);
         }
 
-        User user = findUserByUserName(username);
-        String passwordEncoded = DigestUtils.md5DigestAsHex(password.getBytes());
+        User user = findUserByUserName(userName);
+        String passwordEncoded = DigestUtils.md5DigestAsHex(userPassword.getBytes());
         if (user == null || !passwordEncoded.equals(user.getUserPassword())) {
             // 用户名或密码错误
             return false;

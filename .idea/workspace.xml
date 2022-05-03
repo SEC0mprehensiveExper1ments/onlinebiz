@@ -4,20 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="154dc991-c741-4a8a-832c-7f0b9448c931" name="Changes" comment="抽取公共模块">
-      <change afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/service/ConditionBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/service/MongoConditionBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/resources/application-dev.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/onlinebiz-contract/src/test/java/com/njustc/onlinebiz/contract/ContractServiceIT.java" afterDir="false" />
+    <list default="true" id="154dc991-c741-4a8a-832c-7f0b9448c931" name="Changes" comment="完善合同管理，增加集成测试">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-contract/onlinebiz-contract.iml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-contract/onlinebiz-contract.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-contract/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-contract/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/ContractServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/ContractServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/controller/ContractController.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/controller/ContractController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/model/Contract.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/model/Contract.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/service/ContractService.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/service/ContractService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/service/MongoContractService.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/java/com/njustc/onlinebiz/contract/service/MongoContractService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-contract/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-contract/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserServiceTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +67,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.23822975" />
-    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.ignored.files" />
+    <property name="settings.editor.selected.configurable" value="vcs.Subversion.Network" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
@@ -88,7 +79,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.ContractServiceIT">
+  <component name="RunManager" selected="JUnit.UserControllerIT">
     <configuration name="ContractServiceIT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="onlinebiz-contract" />
       <extension name="coverage">
@@ -135,6 +126,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="UserMapperIT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="onlinebiz-user" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.njustc.onlinebiz.user.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.njustc.onlinebiz.user" />
+      <option name="MAIN_CLASS_NAME" value="com.njustc.onlinebiz.user.UserMapperIT" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ContractServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="onlinebiz-contract" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.njustc.onlinebiz.contract.ContractServiceApplication" />
@@ -162,19 +168,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GatewayServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
-      <module name="onlinebiz-gateway" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.njustc.onlinebiz.gateway.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.njustc.onlinebiz.gateway.GatewayServiceApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="UserServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="onlinebiz-user" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.njustc.onlinebiz.user.UserServiceApplication" />
@@ -184,17 +177,17 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ContractServiceIT" />
         <item itemvalue="JUnit.UserControllerIT" />
-        <item itemvalue="JUnit.UserControllerIT.testUserExistenceWithExistingUsername" />
-        <item itemvalue="Spring Boot.GatewayServiceApplication" />
+        <item itemvalue="JUnit.UserMapperIT" />
         <item itemvalue="Spring Boot.DiscoveryServiceApplication" />
+        <item itemvalue="JUnit.ContractServiceIT" />
+        <item itemvalue="JUnit.UserControllerIT.testUserExistenceWithExistingUsername" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
-    <configuration />
+    <configuration>$USER_HOME$/.subversion</configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -218,7 +211,8 @@
       <workItem from="1651258019876" duration="6978000" />
       <workItem from="1651310349391" duration="17831000" />
       <workItem from="1651334855292" duration="14230000" />
-      <workItem from="1651396589670" duration="13405000" />
+      <workItem from="1651396589670" duration="14312000" />
+      <workItem from="1651570975187" duration="6525000" />
     </task>
     <task id="LOCAL-00001" summary="修复已知错误，增加集成测试">
       <created>1651026340778</created>
@@ -297,7 +291,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651356593151</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="完善合同管理，增加集成测试">
+      <created>1651411194465</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1651411194465</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -327,7 +328,8 @@
     <MESSAGE value="放弃搭建CI/CD Pipeline" />
     <MESSAGE value="完成合同管理的大部分代码编写" />
     <MESSAGE value="抽取公共模块" />
-    <option name="LAST_COMMIT_MESSAGE" value="抽取公共模块" />
+    <MESSAGE value="完善合同管理，增加集成测试" />
+    <option name="LAST_COMMIT_MESSAGE" value="完善合同管理，增加集成测试" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
