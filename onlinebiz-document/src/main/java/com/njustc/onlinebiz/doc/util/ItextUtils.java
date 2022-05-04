@@ -4,6 +4,8 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 
 import java.io.FileOutputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ItextUtils {
 
@@ -235,7 +237,6 @@ public class ItextUtils {
         Phrase combine = new Phrase();
         // combine.setLeading();    // 设置行距
         for (int i = 0; i < values.length; i++) {
-//            System.out.println(values[i]);
             combine.add(new Chunk(values[i], (i%2 == 0) ? font : otherFont));
         }
         cell.setPhrase(combine);
@@ -367,18 +368,31 @@ public class ItextUtils {
      * */
     public static Chunk fixedUnderlineChunk(String value, Font font, int fixLength, float thickness) {
         String res = "";
+        Pattern pattern = Pattern.compile("[a-z0-9A-Z_]");
         while (value.length() > 0) {
-            if (value.length() > fixLength) {
+            Matcher matcher1 = pattern.matcher(value);
+            int letters = 0;
+            while (matcher1.find()) letters++;
+            if (value.length() - letters / 2 > fixLength) {
                 String tmp = value.substring(0, fixLength);
                 value = value.substring(fixLength);
-                res = res + " " + tmp + " \u0232\n";
+                Matcher matcher2 = pattern.matcher(tmp);
+                int subletters = 0;
+                while (matcher2.find())  subletters++;
+                if (subletters > 0) {
+                    tmp += value.substring(subletters / 2);
+                    value = value.substring(subletters / 2);
+                    if (subletters % 2 == 1) tmp += " ";
+                }
+                res += " " + tmp + " \u0232\n";
             }
             else {
-                int blanks = fixLength - value.length();
+                int blanks = fixLength - value.length() + letters / 2;
                 String tmp = " ";
                 for (int i = 0; i < blanks; i++) { tmp = " " + tmp; }
                 tmp = tmp + value;
                 for (int i = 0; i < blanks; i++) { tmp = tmp + " "; }
+                if (letters % 2 == 1) tmp = tmp + " ";
                 tmp = tmp + " \u0232";
                 value = "";
                 res += tmp;

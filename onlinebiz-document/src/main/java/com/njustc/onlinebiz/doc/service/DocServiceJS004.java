@@ -20,11 +20,12 @@ public class DocServiceJS004 {
     private static int marginLeft;
     private static int marginRight;
     private static int marginTop;
+    private static int maxWidth = 430;      // 最大宽度
     private static int marginBottom;
     private static String absolutePath;
     static {
         absolutePath = ClassUtils.getDefaultClassLoader().getResource("").getPath();
-        System.out.println(absolutePath);       // 输出path: D:/java_project/manage/target/classes/ ---> 下面有com, font, out, static
+        // System.out.println(absolutePath);       // 输出path: D:/java_project/manage/target/classes/ ---> 下面有com, font, out, static
         // 在 iText 中每一个单位大小默认近似于点（pt）
         // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
         marginLeft = 90;        // 页边距：左
@@ -41,6 +42,7 @@ public class DocServiceJS004 {
     public boolean fill(JS004 newJson) {
         JS004Json = newJson;
         String pdfPath = absolutePath + "tmp/JS004_tmp.pdf";
+        System.out.println(absolutePath);
         try {
             // 1.新建document对象
             Document document = new Document(PageSize.A4);// 建立一个Document对象
@@ -84,6 +86,7 @@ public class DocServiceJS004 {
             document.close();
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
         // 添加图章
         try {
@@ -100,18 +103,14 @@ public class DocServiceJS004 {
         return true;
     }
 
-    // 定义全局的字体静态变量
     private static Font titlefont1;
     private static Font titlefont2;
     private static Font keyfont;
     private static Font textfont;
     private static BaseFont bfChinese;
     private static BaseFont bfHeiTi;
-    private static int maxWidth = 430;      // 最大宽度
-
     static {
         try {
-            // 不同字体（这里定义为同一种字体：包含不同字号、不同style）
             bfChinese = BaseFont.createFont(absolutePath + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             bfHeiTi = BaseFont.createFont(absolutePath + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont1 = new Font(bfHeiTi, 29, Font.BOLD);

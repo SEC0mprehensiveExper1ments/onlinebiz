@@ -20,7 +20,7 @@ public class JS004Test {
         JS004 newJson = new JS004()
                 .setInputXiangMuMingChen("南京大学国家计算机重点实验室科研项目——针对计算机软件理论的研究")
                 .setInputJiaFang("南京大学计算机软件新技术国家重点实验室下属X实验室X实验室X实验室")
-                .setInputYiFang("南京大学国家计算机软件新技术国家重点实验室")
+                .setInputYiFang("南京大学国家计算机软件新技术国家重点X实验室")
                 .setInputQianDingDiDian("江苏省南京市栖霞区仙林街道南京大学仙林校区计算机系楼")
                 .setInputQianDingRiQi0Nian("2022")
                 .setInputQianDingRiQi0Yue("4")

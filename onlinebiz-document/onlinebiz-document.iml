@@ -4,9 +4,7 @@
     <facet type="web" name="Web">
       <configuration>
         <webroots />
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/main/resources" />
-        </sourceRoots>
+        <sourceRoots />
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
@@ -17,13 +15,13 @@
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <content url="file://$MODULE_DIR$">
@@ -848,13 +846,16 @@
     <orderEntry type="library" name="Maven: org.checkerframework:checker-qual:3.8.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.errorprone:error_prone_annotations:2.5.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.j2objc:j2objc-annotations:1.3" level="project" />
-    <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:3.14.9" level="project" />
-    <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.17.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.13.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.13.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.13.1" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcprov-jdk15on:1.69" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.21" level="project" />
     <orderEntry type="library" name="Maven: org.xerial.snappy:snappy-java:1.1.8.4" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:4.9.3" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okio:okio:2.8.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.6.10" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains:annotations:13.0" level="project" />
   </component>
 </module>
