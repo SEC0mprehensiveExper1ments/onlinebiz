@@ -9,4 +9,7 @@ public class Role {
     // 市场部人员
     public static final String MARKETING = "marketing";
 
+    public static boolean checkValid(String role) {
+        return role.equals(CUSTOMER) || role.equals(MARKETING);
+    }
 }

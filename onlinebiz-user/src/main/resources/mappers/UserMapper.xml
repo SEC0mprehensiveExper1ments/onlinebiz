@@ -26,13 +26,16 @@
         where user_id = #{userId}
     </update>
 
-    <update id="updateUserRoleById">
+    <update id="updateUserRoleByUserName">
         update user_account set user_role = #{userRole}
-        where user_id = #{userId}
+        where user_name = #{userName}
     </update>
 
     <delete id="deleteUserById">
-        delete from user_account
-        where user_id = #{userId}
+        delete from user_account where user_id = #{userId}
     </delete>
+
+    <select id="selectUsersWithUserNameLike" resultType="User">
+        select * from user_account where user_name like #{pattern}
+    </select>
 </mapper>

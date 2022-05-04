@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Path;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
@@ -16,6 +19,18 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    // 注册账号
+    @PostMapping("/register")
+    public ResponseEntity<Void> createAccount(
+            @RequestParam("userName") String userName,
+            @RequestParam("userPassword") String userPassword
+    ) {
+        if (!userService.createUser(userName, userPassword)) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
     }
 
     // 登录
@@ -31,6 +46,14 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    // 查看当前登录状态（先留着，后面不用的话再说）
+    @GetMapping("/login/status")
+    public ResponseEntity<Void> getLogInStatus(HttpServletRequest request) {
+        return userService.checkLogIn(request) ?
+                ResponseEntity.ok().build() :
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
     // 登出
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request) {
@@ -40,45 +63,14 @@ public class UserController {
         return ResponseEntity.badRequest().build();
     }
 
-    // 注册账号
-    @PostMapping("/register")
-    public ResponseEntity<Void> register(
-            @RequestParam("userName") String userName,
-            @RequestParam("userPassword") String userPassword
-    ) {
-        if (!userService.createUser(userName, userPassword)) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok().build();
-    }
-
-    // 查看当前登录状态（先留着，后面不用的话再说）
-    @GetMapping("/login/status")
-    public ResponseEntity<Void> getLogInStatus(HttpServletRequest request) {
-        return userService.checkLogIn(request) ?
-                ResponseEntity.ok().build() :
-                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
-
-    // 验证某个账号是否存在
-    @GetMapping("/account/existence")
-    public ResponseEntity<Void> checkAccountByUserName(@RequestParam("userName") String userName) {
-        if (userService.findUserByUserName(userName) != null) {
-            // 找到返回 ok
-            return ResponseEntity.ok().build();
-        }
-        // 找不到返回 404
-        return ResponseEntity.notFound().build();
-    }
-
     // 修改用户名
     @PostMapping("/account/username")
     public ResponseEntity<Void> changeUsername(
-            @RequestParam(value = "newValue") String userName,
+            @RequestParam("newValue") String userName,
             HttpServletRequest request
     ) {
         // 修改用户名
-        if (!userService.updateUserName(userName, request)) {
+        if (!userService.updateCurrentUserName(userName, request)) {
             return ResponseEntity.badRequest().build();
         }
         // 成功
@@ -92,7 +84,7 @@ public class UserController {
             @RequestParam("newValue") String newPassword,
             HttpServletRequest request
     ) {
-        if (!userService.updateUserPassword(oldPassword, newPassword, request)) {
+        if (!userService.updateCurrentUserPassword(oldPassword, newPassword, request)) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();
@@ -100,8 +92,8 @@ public class UserController {
 
     // 注销账号
     @DeleteMapping("/account")
-    public ResponseEntity<Void> closeAccount(HttpServletRequest request) {
-        if (!userService.removeUser(request)) {
+    public ResponseEntity<Void> removeIndividualAccount(HttpServletRequest request) {
+        if (!userService.removeCurrentUser(request)) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();
@@ -109,12 +101,30 @@ public class UserController {
 
     // 获取用户自己的账号信息
     @GetMapping("/account")
-    public ResponseEntity<UserDto> getUserIdentity(HttpServletRequest request) {
-        User user = userService.getUserIdentity(request);
+    public ResponseEntity<UserDto> getIndividualAccount(HttpServletRequest request) {
+        User user = userService.getCurrentUser(request);
         if (user == null) {
             return ResponseEntity.badRequest().build();
         }
         // 返回 DTO，这里我们不返回密码，虽然它也是加密的
         return ResponseEntity.ok().body(new UserDto(user));
+    }
+
+    // 按用户名查找某个账号
+    @GetMapping("/account/search")
+    public ResponseEntity<List<UserDto>> searchAccount(@RequestParam("userName") String userName) {
+        List<User> userList = userService.searchUserByUserName(userName);
+        return ResponseEntity.ok().body(userList.stream().map(UserDto::new).collect(Collectors.toList()));
+    }
+
+    // 修改某个账号的角色
+    @PostMapping("/account/role")
+    public ResponseEntity<Void> changeRole(
+            @RequestParam("userName") String userName,
+            @RequestParam("newValue") String userRole
+    ) {
+        return userService.updateUserRole(userName, userRole) ?
+                ResponseEntity.ok().build() :
+                ResponseEntity.badRequest().build();
     }
 }

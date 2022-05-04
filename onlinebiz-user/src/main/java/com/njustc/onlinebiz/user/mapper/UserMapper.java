@@ -3,6 +3,8 @@ package com.njustc.onlinebiz.user.mapper;
 import com.njustc.onlinebiz.user.model.User;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
 
@@ -23,8 +25,10 @@ public interface UserMapper {
 
     int updateUserPasswordById(Long userId, String userPassword);
 
-    int updateUserRoleById(Long userId, String userRole);
+    int updateUserRoleByUserName(String userName, String userRole);
 
     int deleteUserById(Long userId);
 
+    // 根据 pattern 查找用户，模糊匹配
+    List<User> selectUsersWithUserNameLike(String pattern);
 }

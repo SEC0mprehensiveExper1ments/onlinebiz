@@ -4,11 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="154dc991-c741-4a8a-832c-7f0b9448c931" name="Changes" comment="完善合同管理，增加集成测试">
+    <list default="true" id="154dc991-c741-4a8a-832c-7f0b9448c931" name="Changes" comment="去掉用户管理的单元测试，完善缓存管理">
+      <change afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/SimpleUserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/SimpleUserServiceConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-common/src/main/java/com/njustc/onlinebiz/common/model/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-common/src/main/java/com/njustc/onlinebiz/common/model/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/UserServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/UserServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/mapper/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/mapper/UserMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/UserServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/resources/mappers/UserMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/resources/mappers/UserMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserControllerIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserControllerIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserMapperIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserMapperIT.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -212,7 +220,11 @@
       <workItem from="1651310349391" duration="17831000" />
       <workItem from="1651334855292" duration="14230000" />
       <workItem from="1651396589670" duration="14312000" />
-      <workItem from="1651570975187" duration="6525000" />
+      <workItem from="1651570975187" duration="9291000" />
+      <workItem from="1651584706041" duration="4941000" />
+      <workItem from="1651596250081" duration="14387000" />
+      <workItem from="1651655507184" duration="2594000" />
+      <workItem from="1651677385915" duration="5921000" />
     </task>
     <task id="LOCAL-00001" summary="修复已知错误，增加集成测试">
       <created>1651026340778</created>
@@ -298,7 +310,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651411194465</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="去掉用户管理的单元测试，完善缓存管理">
+      <created>1651578101132</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1651578101132</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -329,7 +348,19 @@
     <MESSAGE value="完成合同管理的大部分代码编写" />
     <MESSAGE value="抽取公共模块" />
     <MESSAGE value="完善合同管理，增加集成测试" />
-    <option name="LAST_COMMIT_MESSAGE" value="完善合同管理，增加集成测试" />
+    <MESSAGE value="去掉用户管理的单元测试，完善缓存管理" />
+    <option name="LAST_COMMIT_MESSAGE" value="去掉用户管理的单元测试，完善缓存管理" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserControllerIT.java</url>
+          <line>352</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

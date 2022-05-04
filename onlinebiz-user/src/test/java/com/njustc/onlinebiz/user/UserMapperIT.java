@@ -62,7 +62,7 @@ public class UserMapperIT {
 
         @Test
         public void testUpdateUserRoleFail() {
-            Assertions.assertEquals(0, userMapper.updateUserRoleById(10L, Role.CUSTOMER));
+            Assertions.assertEquals(0, userMapper.updateUserRoleByUserName("non-existing-userName", Role.CUSTOMER));
             Assertions.assertEquals(user, userMapper.selectUserByUserId(user.getUserId()));
         }
 
@@ -98,8 +98,18 @@ public class UserMapperIT {
 
         @Test
         public void testUpdateUserRoleSuccess() {
-            Assertions.assertEquals(1, userMapper.updateUserRoleById(user.getUserId(), Role.MARKETING));
+            Assertions.assertEquals(1, userMapper.updateUserRoleByUserName(user.getUserName(), Role.MARKETING));
             Assertions.assertEquals(Role.MARKETING, userMapper.selectUserByUserId(user.getUserId()).getUserRole());
+        }
+
+        @Test
+        public void testSearchByUserNameShouldBeEmpty() {
+            Assertions.assertEquals(0, userMapper.selectUsersWithUserNameLike("%non-exists%").size());
+        }
+
+        @Test
+        public void testSearchByUserNameShouldNotBeEmpty() {
+            Assertions.assertNotEquals(0, userMapper.selectUsersWithUserNameLike("%o%").size());
         }
 
         @Test
