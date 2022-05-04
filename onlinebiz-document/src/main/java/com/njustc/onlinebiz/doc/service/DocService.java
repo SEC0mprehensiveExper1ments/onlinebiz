@@ -161,7 +161,13 @@ public class DocService {
         doc.add(lastParagraph);
 
         doc.close();
-        DocumentOSSProvider documentOSSProvider=new DocumentOSSProvider();
-        return documentOSSProvider.uploadDocument("JS003.pdf",byteArrayOutputStream.toByteArray());
+        try {
+            DocumentOSSProvider documentOSSProvider=new DocumentOSSProvider();
+            return documentOSSProvider.uploadDocument("JS003.pdf", byteArrayOutputStream.toByteArray());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return "minio error";
+        }
     }
 }
