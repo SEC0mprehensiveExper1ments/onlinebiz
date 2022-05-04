@@ -4,12 +4,10 @@ package com.njustc.onlinebiz.doc.service;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.njustc.onlinebiz.doc.domain.JS003;
-import com.njustc.onlinebiz.doc.domain.JS004;
 import com.njustc.onlinebiz.doc.mapper.DocumentOSSProvider;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 @Service
@@ -165,47 +163,5 @@ public class DocService {
         doc.close();
         DocumentOSSProvider documentOSSProvider=new DocumentOSSProvider();
         return documentOSSProvider.uploadDocument("JS003.pdf",byteArrayOutputStream.toByteArray());
-    }
-    public String fillJS004(JS004 newJson){//利用模板生成pdf
-        //模板路径
-        String templatePath = "static/test.pdf";
-        //生成的新文件路径
-        String newPDFPath = "C:\\Users\\ASUS\\Desktop\\newtest.pdf";
-        PdfReader reader;
-        FileOutputStream out;
-        ByteArrayOutputStream bos;
-        PdfStamper stamper;
-        try {
-            out = new FileOutputStream(newPDFPath);//输出流
-            reader = new PdfReader(templatePath);//读取pdf模板
-            bos = new ByteArrayOutputStream();
-            stamper = new PdfStamper(reader, bos);
-            AcroFields form = stamper.getAcroFields();
-
-            form.setField("XiangMuMingCheng",newJson.getXiangMuMingCheng());
-            form.setField("WeiTuoFangJiaFang",newJson.getWeiTuoFangJiaFang());
-            form.setField("ShouTuoFangYiFang",newJson.getShouTuoFangYiFang());
-            form.setField("QianDingDiDian",newJson.getQianDingDiDian());
-            form.setField("QianDingRiQi_Nian",newJson.getQianDingRiQi_Nian());
-            form.setField("QianDingRiQi_Yue",newJson.getQianDingRiQi_Yue());
-            form.setField("QianDingRiQi_Ri",newJson.getQianDingRiQi_Ri());
-            stamper.setFormFlattening(true);//如果为false那么生成的PDF文件还能编辑，一定要设为true
-            stamper.close();
-
-            Document doc = new Document();
-            PdfCopy copy = new PdfCopy(doc, out);
-            doc.open();
-            PdfImportedPage importPage = copy.getImportedPage(
-                    new PdfReader(bos.toByteArray()), 1);
-            copy.addPage(importPage);
-            doc.close();
-
-        } catch (IOException e) {
-            System.out.println(1);
-        } catch (DocumentException e) {
-            System.out.println(2);
-        }
-        return "Success";
-
     }
 }

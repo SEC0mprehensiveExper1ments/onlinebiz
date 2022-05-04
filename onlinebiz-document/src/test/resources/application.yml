@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: doc-service
+
+server:
+  port: 7001

@@ -4,6 +4,7 @@ import com.itextpdf.text.DocumentException;
 import com.njustc.onlinebiz.doc.domain.JS003;
 import com.njustc.onlinebiz.doc.service.DocService;
 import com.njustc.onlinebiz.doc.domain.JS004;
+import com.njustc.onlinebiz.doc.service.DocServiceJS004;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,10 +16,10 @@ import java.io.IOException;
 public class JsonController {
   @PostMapping("/doc/JS004")
   @ResponseBody
-  public String JsonControllerJS004(@RequestBody JS004 newJson) {
-    DocService fileJS004 = new DocService();
+  public boolean JsonControllerJS004(@RequestBody JS004 newJson) {
+    DocServiceJS004 fileJS004 = new DocServiceJS004();
     // System.out.println(newJson.toString());
-    return fileJS004.fillJS004(newJson);
+    return fileJS004.fill(newJson);
   }
 
   @PostMapping("/doc/JS003")
