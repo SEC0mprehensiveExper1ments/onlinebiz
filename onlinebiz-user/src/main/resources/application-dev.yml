@@ -32,7 +32,7 @@ spring:
 
 mybatis:
   mapper-locations: classpath:mappers/*.xml
-  type-aliases-package: com.njustc.onlinebiz.user.model
+  type-aliases-package: com.njustc.onlinebiz.user.model,com.njustc.onlinebiz.common.model
   configuration:
     jdbc-type-for-null: null
     lazy-loading-enabled: true
