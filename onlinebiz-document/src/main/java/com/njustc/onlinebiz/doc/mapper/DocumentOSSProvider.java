@@ -22,7 +22,7 @@ public class DocumentOSSProvider {
     minioClient =
         MinioClient.builder()
             .endpoint("https://oss.syh1en.asia")
-            .credentials("spring", "123456M1ni0")
+            .credentials("spring", "123456Spr1ng")
             .build();
     boolean docFound = minioClient.bucketExists(BucketExistsArgs.builder().bucket("doc").build());
     if (!docFound) {
