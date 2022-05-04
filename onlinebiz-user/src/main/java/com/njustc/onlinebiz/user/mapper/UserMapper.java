@@ -1,6 +1,6 @@
 package com.njustc.onlinebiz.user.mapper;
 
-import com.njustc.onlinebiz.user.model.User;
+import com.njustc.onlinebiz.common.model.User;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

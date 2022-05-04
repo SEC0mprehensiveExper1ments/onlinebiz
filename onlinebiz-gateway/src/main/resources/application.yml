@@ -28,7 +28,19 @@ spring:
                   - /login/**
                   - /logout
                   - /register
-                  - /account/**
+                  - /account/username
+                  - /account/password
+                  - /account
+        - id: user-management-admin
+          uri: lb://onlinebiz-user
+          predicates:
+            - name: Path
+              args:
+                patterns:
+                  - /account/search
+                  - /account/role
+          filters:
+            - CheckRole=[admin]
 
 eureka:
   instance:

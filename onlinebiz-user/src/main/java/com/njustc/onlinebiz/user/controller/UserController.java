@@ -1,6 +1,6 @@
 package com.njustc.onlinebiz.user.controller;
 
-import com.njustc.onlinebiz.user.model.User;
+import com.njustc.onlinebiz.common.model.User;
 import com.njustc.onlinebiz.user.model.UserDto;
 import com.njustc.onlinebiz.user.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 

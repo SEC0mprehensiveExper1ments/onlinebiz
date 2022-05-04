@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.user.model;
+package com.njustc.onlinebiz.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

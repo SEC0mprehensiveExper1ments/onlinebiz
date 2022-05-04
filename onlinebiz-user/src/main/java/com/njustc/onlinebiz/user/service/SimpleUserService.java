@@ -2,7 +2,7 @@ package com.njustc.onlinebiz.user.service;
 
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.user.mapper.UserMapper;
-import com.njustc.onlinebiz.user.model.User;
+import com.njustc.onlinebiz.common.model.User;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
