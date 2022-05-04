@@ -1,0 +1,15 @@
+/src/
+
+/src/test/
+
+/target/
+
+/.dockerignore
+
+/Dockerfile
+
+/onlinebiz-user.iml
+
+/pom.xml
+
+!/target/*.jar

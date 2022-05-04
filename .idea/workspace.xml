@@ -4,19 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="154dc991-c741-4a8a-832c-7f0b9448c931" name="Changes" comment="去掉用户管理的单元测试，完善缓存管理">
-      <change afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/SimpleUserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/SimpleUserServiceConfiguration.java" afterDir="false" />
+    <list default="true" id="154dc991-c741-4a8a-832c-7f0b9448c931" name="Changes" comment="简化用户管理，增加修改用户角色和按用户名查找">
+      <change afterPath="$PROJECT_DIR$/onlinebiz-user/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-user/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-common/src/main/java/com/njustc/onlinebiz/common/model/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-common/src/main/java/com/njustc/onlinebiz/common/model/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/UserServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/UserServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/mapper/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/mapper/UserMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/UserServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/resources/mappers/UserMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/resources/mappers/UserMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserControllerIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserControllerIT.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserMapperIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserMapperIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/resources/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/resources/application-sta.yml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/resources/application-sta.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +46,9 @@
         <option name="useMavenConfig" value="true" />
       </MavenGeneralSettings>
     </option>
+  </component>
+  <component name="MavenRunner">
+    <option name="skipTests" value="true" />
   </component>
   <component name="ProjectId" id="28IQVv7AlhZbPGUwwMl4VtpjIlL" />
   <component name="ProjectViewState">
@@ -224,7 +221,7 @@
       <workItem from="1651584706041" duration="4941000" />
       <workItem from="1651596250081" duration="14387000" />
       <workItem from="1651655507184" duration="2594000" />
-      <workItem from="1651677385915" duration="5921000" />
+      <workItem from="1651677385915" duration="9135000" />
     </task>
     <task id="LOCAL-00001" summary="修复已知错误，增加集成测试">
       <created>1651026340778</created>
@@ -317,7 +314,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651578101132</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="简化用户管理，增加修改用户角色和按用户名查找">
+      <created>1651683370163</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1651683370163</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -349,7 +353,8 @@
     <MESSAGE value="抽取公共模块" />
     <MESSAGE value="完善合同管理，增加集成测试" />
     <MESSAGE value="去掉用户管理的单元测试，完善缓存管理" />
-    <option name="LAST_COMMIT_MESSAGE" value="去掉用户管理的单元测试，完善缓存管理" />
+    <MESSAGE value="简化用户管理，增加修改用户角色和按用户名查找" />
+    <option name="LAST_COMMIT_MESSAGE" value="简化用户管理，增加修改用户角色和按用户名查找" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
