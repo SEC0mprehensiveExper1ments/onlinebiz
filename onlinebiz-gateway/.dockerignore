@@ -1,0 +1,13 @@
+/src/
+
+/target/
+
+/.dockerignore
+
+/Dockerfile
+
+/onlinebiz-gateway.iml
+
+/pom.xml
+
+!/target/*.jar

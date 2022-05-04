@@ -1,0 +1,52 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: onlinebiz-gateway
+  cloud:
+    gateway:
+      #      允许Ajax跨域请求
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods: "*"
+      #      使用DiscoveryClient
+      discovery:
+        locator:
+          enabled: true
+      #      配置网关路由
+      routes:
+        - id: user-management-public
+          uri: lb://onlinebiz-user
+          predicates:
+            - name: Path
+              args:
+                patterns:
+                  - /login/**
+                  - /logout
+                  - /register
+                  - /account/username
+                  - /account/password
+                  - /account
+        - id: user-management-admin
+          uri: lb://onlinebiz-user
+          predicates:
+            - name: Path
+              args:
+                patterns:
+                  - /account/search
+                  - /account/role
+          filters:
+            - CheckRole=[admin]
+
+eureka:
+  instance:
+    instance-id: gateway8080
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://124.222.168.27:8761/eureka

@@ -4,23 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="154dc991-c741-4a8a-832c-7f0b9448c931" name="Changes" comment="为用户服务增加docker部署">
-      <change afterPath="$PROJECT_DIR$/onlinebiz-gateway/src/main/java/com/njustc/onlinebiz/gateway/filter/CheckRoleGatewayFilterFactory.java" afterDir="false" />
+    <list default="true" id="154dc991-c741-4a8a-832c-7f0b9448c931" name="Changes" comment="网关增加对应路由和权限控制">
+      <change afterPath="$PROJECT_DIR$/onlinebiz-gateway/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-gateway/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-gateway/src/main/resources/application-dev.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/onlinebiz-gateway/src/main/resources/application-sta.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-common/onlinebiz-common.iml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-common/onlinebiz-common.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-common/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-gateway/onlinebiz-gateway.iml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-gateway/onlinebiz-gateway.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-gateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-gateway/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-gateway/src/main/java/com/njustc/onlinebiz/gateway/GatewayServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-gateway/src/main/java/com/njustc/onlinebiz/gateway/GatewayServiceApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/onlinebiz-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-gateway/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/onlinebiz-user/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/onlinebiz-user/onlinebiz-user.iml" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/onlinebiz-user.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/mapper/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/mapper/UserMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-common/src/main/java/com/njustc/onlinebiz/common/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/model/UserDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/model/UserDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/SimpleUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/SimpleUserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/main/java/com/njustc/onlinebiz/user/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserMapperIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/onlinebiz-user/src/test/java/com/njustc/onlinebiz/user/UserMapperIT.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -238,7 +230,7 @@
       <workItem from="1651584706041" duration="4941000" />
       <workItem from="1651596250081" duration="14387000" />
       <workItem from="1651655507184" duration="2594000" />
-      <workItem from="1651677385915" duration="15779000" />
+      <workItem from="1651677385915" duration="18036000" />
     </task>
     <task id="LOCAL-00001" summary="修复已知错误，增加集成测试">
       <created>1651026340778</created>
@@ -345,7 +337,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651686621890</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="网关增加对应路由和权限控制">
+      <created>1651697179341</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1651697179341</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -379,7 +378,8 @@
     <MESSAGE value="去掉用户管理的单元测试，完善缓存管理" />
     <MESSAGE value="简化用户管理，增加修改用户角色和按用户名查找" />
     <MESSAGE value="为用户服务增加docker部署" />
-    <option name="LAST_COMMIT_MESSAGE" value="为用户服务增加docker部署" />
+    <MESSAGE value="网关增加对应路由和权限控制" />
+    <option name="LAST_COMMIT_MESSAGE" value="网关增加对应路由和权限控制" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

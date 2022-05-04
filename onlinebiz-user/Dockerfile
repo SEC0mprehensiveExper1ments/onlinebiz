@@ -1,5 +1,5 @@
 FROM openjdk:11-jre-slim
 
-COPY target/onlinebiz-user-0.0.1.jar /target/
+COPY target/*.jar /target/onlinebiz-user.jar
 
-CMD java -jar /target/onlinebiz-user-0.0.1.jar --spring.profiles.active=sta
+CMD java -jar /target/onlinebiz-user.jar --spring.profiles.active=sta
