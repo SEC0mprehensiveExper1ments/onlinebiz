@@ -58,11 +58,7 @@ public class HeaderFooter extends PdfPageEventHelper {
      * */
     @Override
     public void onEndPage(PdfWriter writer, Document document) {
-        PdfPTable table = new PdfPTable(1);             // 用来画页眉页脚处直线
         try {
-            table.setTotalWidth(document.right() - document.left());
-            table.setLockedWidth(true);
-            table.getDefaultCell().setFixedHeight(-10);
 //            table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
             if (writer.getPageNumber() <= headerToPage) {                         // 写入页眉
                 ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_RIGHT, new Phrase(header, headFont), headerLoc[0], headerLoc[1], 0);
@@ -77,15 +73,21 @@ public class HeaderFooter extends PdfPageEventHelper {
                 cb.addTemplate(totalPage, footerLoc[0] + len, footerLoc[1]); // 调节模版显示的位置
             }
             if (isHaderLine) {                                                      // 写入页眉处直线
-                table.getDefaultCell().setBorderWidth(1.0f);
-                table.addCell("");
-                table.getDefaultCell().setBorder(Rectangle.BOTTOM);
+                PdfPTable table = new PdfPTable(1);             // 用来画页眉页脚处直线
+                table.setTotalWidth(document.right() - document.left());
+                PdfPCell cell = table.getDefaultCell();
+                cell.setBorderWidth(1.0f);
+                cell.setBorder(Rectangle.BOTTOM);
+                table.addCell(cell);
                 table.writeSelectedRows(0, 1, document.left(), headerLoc[1] + headLineOff, writer.getDirectContent());
             }
             if (isFooterLine) {                                                     // 写入页脚处直线
-                table.getDefaultCell().setBorder(Rectangle.TOP);
-                table.addCell("");
-                table.getDefaultCell().setBorderWidth(0.8f);
+                PdfPTable table = new PdfPTable(1);             // 用来画页眉页脚处直线
+                table.setTotalWidth(document.right() - document.left());
+                PdfPCell cell = table.getDefaultCell();
+                cell.setBorder(Rectangle.TOP);
+                cell.setBorderWidth(0.3f);
+                table.addCell(cell);
                 table.writeSelectedRows(0, 1, document.left(), footerLoc[1] + footLineOff, writer.getDirectContent());
             }
         } catch (Exception de) {
