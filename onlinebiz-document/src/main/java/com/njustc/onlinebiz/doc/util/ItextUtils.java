@@ -168,6 +168,28 @@ public class ItextUtils {
         return cell;
     }
 
+    public static PdfPCell createCell(String value, Font font, int align, int colspan, int rowspan, float fixedLeading, float[] paddings, float borderWidth) {
+        PdfPCell cell = new PdfPCell();
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setHorizontalAlignment(align);
+        cell.setColspan(colspan);
+        cell.setRowspan(rowspan);
+        cell.setPhrase(new Phrase(value, font));
+//        cell.setPaddingTop(10.0f);
+//        cell.setPaddingBottom(10.0f);
+//        cell.setPaddingLeft(5.0f);
+//        cell.setPaddingRight(5.0f);
+//        cell.setBorderWidth(1f);
+        cell.setPaddingTop(paddings[0]);
+        cell.setPaddingBottom(paddings[1]);
+        cell.setPaddingLeft(paddings[2]);
+        cell.setPaddingRight(paddings[3]);
+        cell.setBorderWidth(borderWidth);
+//        cell.setBorder(haveBorder);
+        cell.setLeading(fixedLeading, 0f);
+        return cell;
+    }
+
     public static PdfPCell createCell(String value, Font font, int alignH, int alignV, int colspan, int rowspan, float[] paddings, int haveBorder, int fixLength, float thickness) {
         PdfPCell cell = new PdfPCell();
         cell.setVerticalAlignment(alignV);
@@ -368,7 +390,7 @@ public class ItextUtils {
      * */
     public static Chunk fixedUnderlineChunk(String value, Font font, int fixLength, float thickness) {
         String res = "";
-        Pattern pattern = Pattern.compile("[a-z0-9A-Z_]");
+        Pattern pattern = Pattern.compile("[a-z0-9A-Z_-]");
         while (value.length() > 0) {
             Matcher matcher1 = pattern.matcher(value);
             int letters = 0;

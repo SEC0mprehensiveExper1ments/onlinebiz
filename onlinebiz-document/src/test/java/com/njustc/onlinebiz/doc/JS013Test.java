@@ -14,7 +14,7 @@ public class JS013Test {
     DocServiceJS013 docServiceJS013;
 
     @Test
-    void testFillJS005Success() {
+    void testFillJS013Success() {
         JS013 newJson = new JS013()
                 .setInputRuanJianMingChen("江苏省某在线表格管理平台")
                 .setInputBanBenHao("XXXX-2011")
