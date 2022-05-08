@@ -11,7 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 @Service
-public class DocService {
+public class DocServiceJS003 {
 
     public String fillJS003(JS003 newJson) throws IOException, DocumentException {
         Document doc=new Document();

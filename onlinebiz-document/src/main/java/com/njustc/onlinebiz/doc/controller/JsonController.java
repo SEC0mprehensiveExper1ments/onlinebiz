@@ -2,7 +2,7 @@ package com.njustc.onlinebiz.doc.controller;
 
 import com.itextpdf.text.DocumentException;
 import com.njustc.onlinebiz.doc.domain.JS003;
-import com.njustc.onlinebiz.doc.service.DocService;
+import com.njustc.onlinebiz.doc.service.DocServiceJS003;
 import com.njustc.onlinebiz.doc.domain.JS004;
 import com.njustc.onlinebiz.doc.service.DocServiceJS004;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +27,7 @@ public class JsonController {
   public String JsonControllerJS003(@RequestBody JS003 newJson)
       throws DocumentException, IOException {
     // System.out.println(newJson.toString());
-    DocService fileJS003 = new DocService();
+    DocServiceJS003 fileJS003 = new DocServiceJS003();
     return fileJS003.fillJS003(newJson);
   }
 }
