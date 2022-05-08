@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.doc;
 
+import com.alibaba.fastjson2.JSON;
 import com.njustc.onlinebiz.doc.domain.JS010;
 import com.njustc.onlinebiz.doc.service.DocServiceJS004;
 import com.njustc.onlinebiz.doc.service.DocServiceJS010;
@@ -34,6 +35,7 @@ public class JS010Test {
                 .setInputJianChaJieGuo0113("不合格")
                 .setInputJianChaJieGuo012("不合格");
 
+        System.out.println(JSON.toJSONString(newJson));
         Assertions.assertTrue(docServiceJS010.fill(newJson));
     }
 }

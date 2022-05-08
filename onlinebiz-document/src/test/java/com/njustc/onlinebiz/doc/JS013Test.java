@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.doc;
 
+import com.alibaba.fastjson2.JSON;
 import com.njustc.onlinebiz.doc.domain.JS013;
 import com.njustc.onlinebiz.doc.service.DocServiceJS013;
 import org.junit.jupiter.api.Assertions;
@@ -37,6 +38,7 @@ public class JS013Test {
                 .setInputBuTongGuo07("不通过，原因不明")
                 .setInputBuTongGuo08("");
 
+        System.out.println(JSON.toJSONString(newJson));
         Assertions.assertTrue(docServiceJS013.fill(newJson));
     }
 }
