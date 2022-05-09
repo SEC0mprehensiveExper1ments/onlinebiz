@@ -168,6 +168,27 @@ public class ItextUtils {
         return cell;
     }
 
+    public static PdfPCell createCell(int align, int colspan, int rowspan, float fixedLeading, float[] paddings, float borderWidth) {
+        PdfPCell cell = new PdfPCell();
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setHorizontalAlignment(align);
+        cell.setColspan(colspan);
+        cell.setRowspan(rowspan);
+//        cell.setPaddingTop(10.0f);
+//        cell.setPaddingBottom(10.0f);
+//        cell.setPaddingLeft(5.0f);
+//        cell.setPaddingRight(5.0f);
+//        cell.setBorderWidth(1f);
+        cell.setPaddingTop(paddings[0]);
+        cell.setPaddingBottom(paddings[1]);
+        cell.setPaddingLeft(paddings[2]);
+        cell.setPaddingRight(paddings[3]);
+        cell.setBorderWidth(borderWidth);
+        cell.setLeading(fixedLeading, 0f);
+//        cell.setBorder(haveBorder);
+        return cell;
+    }
+
     public static PdfPCell createCell(String value, Font font, int align, int colspan, int rowspan, float fixedLeading, float[] paddings, float borderWidth) {
         PdfPCell cell = new PdfPCell();
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -425,4 +446,51 @@ public class ItextUtils {
         return chunk;
     }
 
+    public static Chunk leastUnderlineChunk(String value, Font font, int leastLen, float thickness, boolean isCenter) {
+        String res;
+        System.out.println(value);
+        Pattern pattern = Pattern.compile("[a-z0-9A-Z_-]|\\x20");
+        Matcher matcher1 = pattern.matcher(value);
+        int letters = 0;
+        while (matcher1.find()) letters++;
+        int blanks = leastLen - value.length() + letters / 2;
+        if (blanks > 0) {
+            if (isCenter == true) {
+                res = "";
+                for (int i = 0; i < blanks; i++) {
+                    res = " " + res;
+                }
+                res = res + value;
+                for (int i = 0; i < blanks; i++) {
+                    res += " ";
+                }
+                if (letters % 2 == 1) res += " ";
+                res += "\u0232";
+            }
+            else {
+                res = value;
+                for (int i = 0; i < blanks; i++) {
+                    res += "  ";
+                }
+                if (letters % 2 == 1) res += " ";
+                res += "\u0232";
+            }
+        }
+        else
+            res = value;
+        System.out.println(blanks);
+        Chunk chunk = new Chunk(res, font);
+        chunk.setUnderline(thickness, -3f);
+        return chunk;
+    }
+
+    public static Phrase crossSetFont(String[] value, Font font, Font otherFont) {
+        Phrase phrase = new Phrase();
+        for(int i = 0; i < value.length; i++) {
+            phrase.add(i % 2 == 0 ?
+                    new Chunk(value[i], font) :
+                    new Chunk(value[i], otherFont));
+        }
+        return phrase;
+    }
 }
