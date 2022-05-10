@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.doc;
 
+import com.alibaba.fastjson2.JSON;
 import com.njustc.onlinebiz.doc.domain.JS012;
 import com.njustc.onlinebiz.doc.service.DocServiceJS012;
 import org.junit.jupiter.api.Assertions;
@@ -63,6 +64,7 @@ public class JS012Test {
                 .setInputQueRen0107("")
                 .setInputQueRen0108("");
 
+        System.out.println(JSON.toJSONString(newJson));
         Assertions.assertTrue(docServiceJS012.fill(newJson));
     }
 
