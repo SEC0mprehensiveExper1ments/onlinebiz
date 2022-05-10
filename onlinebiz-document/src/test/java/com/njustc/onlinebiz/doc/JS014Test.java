@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.doc;
 
+import com.alibaba.fastjson2.JSON;
 import com.njustc.onlinebiz.doc.domain.JS014;
 import com.njustc.onlinebiz.doc.service.DocServiceJS014;
 import org.junit.jupiter.api.Assertions;
@@ -92,6 +93,7 @@ public class JS014Test {
                 .setInputPingShenShuoMing0262("")
                 .setInputPingShenShuoMing0263("");
 
+        System.out.println(JSON.toJSONString(newJson));
         Assertions.assertTrue(docServiceJS014.fill(newJson));
 
     }
