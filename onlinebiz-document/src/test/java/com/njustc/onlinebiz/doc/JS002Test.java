@@ -21,7 +21,7 @@ public class JS002Test {
                 .setInputCeShiLeiXing02("测试一下")
                 .setMultiCeShiLeiXing03("1")
                 .setMultiCeShiLeiXing04("1")
-                .setInputRuanJianMingChen("某在线表格管理系统")
+                .setInputRuanJianMingChen("某在线表格管理系统管理系统管理系统管理。")
                 .setInputBanBenHao("XXX-2012")
                 .setInputWeiTuoDanWeiZhongWen("某在线表格管理系统")
                 .setInputWeiTuoDanWeiYingWen("某在线表格管理系统")
