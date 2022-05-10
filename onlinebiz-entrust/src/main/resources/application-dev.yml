@@ -1,0 +1,23 @@
+server:
+  port: 9001
+
+spring:
+  application:
+    name: onlinebiz-entrust
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      username: root
+      password: nAnj1ng_Jia0tong_Univ
+      database: onlinebiz
+      authentication-database: admin
+
+eureka:
+  instance:
+    instance-id: entrust-service9001
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
