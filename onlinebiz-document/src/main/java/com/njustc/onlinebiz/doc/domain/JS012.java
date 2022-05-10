@@ -48,13 +48,13 @@ public class JS012 {
     private String inputQueRen091;
     private String inputQueRen092;
     private String inputQueRen093;
-    private String inputQueRen0101;
-    private String inputQueRen0102;
-    private String inputQueRen0103;
-    private String inputQueRen0104;
-    private String inputQueRen0105;
-    private String inputQueRen0106;
-    private String inputQueRen0107;
-    private String inputQueRen0108;
+//    private String inputQueRen0101;
+//    private String inputQueRen0102;
+//    private String inputQueRen0103;
+//    private String inputQueRen0104;
+//    private String inputQueRen0105;
+//    private String inputQueRen0106;
+//    private String inputQueRen0107;
+//    private String inputQueRen0108;
 }
 

@@ -24,7 +24,7 @@ public class DocServiceJS004 {
     private static int marginBottom;
     private static String absolutePath;
     static {
-        absolutePath = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        absolutePath = ClassUtils.getDefaultClassLoader().getResource("font").getPath() + "/../";
         // System.out.println(absolutePath);       // 输出path: D:/java_project/manage/target/classes/ ---> 下面有com, font, out, static
         // 在 iText 中每一个单位大小默认近似于点（pt）
         // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）

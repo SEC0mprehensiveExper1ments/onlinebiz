@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.njustc.onlinebiz.doc.domain.JS012;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
@@ -24,7 +25,7 @@ public class DocServiceJS012 {
     private static int maxWidth = 430;      // 最大宽度
     private static String absolutePath;
     static {
-        absolutePath = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        absolutePath = ClassUtils.getDefaultClassLoader().getResource("font").getPath() + "/../";
         // 在 iText 中每一个单位大小默认近似于点（pt）
         // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
         marginLeft = 65f;
@@ -87,7 +88,7 @@ public class DocServiceJS012 {
     private static Font textfont;
     static {
         try {
-            bfSimSun = BaseFont.createFont("font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            bfSimSun = BaseFont.createFont(absolutePath + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont = new Font(bfSimSun, 17f, Font.BOLD);
             titlefont2 = new Font(bfSimSun, 12f, Font.NORMAL);
             textfont = new Font(bfSimSun, 10.5f, Font.NORMAL);
@@ -307,22 +308,22 @@ public class DocServiceJS012 {
 
         table.addCell(ItextUtils.createCell("10", textfont, Element.ALIGN_LEFT, 2, 16, paddings3, borderWidth));
         table.addCell(ItextUtils.createCell("附件目录", textfont, Element.ALIGN_LEFT, 9, 16, fixedLeading, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell("1、《软件项目委托测试工作流程》", textfont, Element.ALIGN_LEFT, 17, 2, fixedLeading, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0101(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell("2、《需提供的书面文档》", textfont, Element.ALIGN_LEFT, 17, 2, fixedLeading, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0102(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell("3、《软件项目委托测试报告编制作业指导书》", textfont, Element.ALIGN_LEFT, 17, 2, fixedLeading, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0103(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell("4、《报告检查表》", textfont, Element.ALIGN_LEFT, 17, 2, fixedLeading, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0104(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell("5、《测试报告编码规则》", textfont, Element.ALIGN_LEFT, 17, 2, fixedLeading, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0105(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell("6、《软件委托测试资料清单》", textfont, Element.ALIGN_LEFT, 17, 2, fixedLeading, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0106(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell("7、《软件委托测试资料标签》", textfont, Element.ALIGN_LEFT, 17, 2, fixedLeading, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0107(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell("8、《软件委托测试资料目录》", textfont, Element.ALIGN_LEFT, 17, 2, fixedLeading, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0108(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
+        table.addCell(ItextUtils.createCell("1、《软件项目委托测试工作流程》", textfont, Element.ALIGN_LEFT, 22, 2, fixedLeading, paddings3, borderWidth));
+//        table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0101(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
+        table.addCell(ItextUtils.createCell("2、《需提供的书面文档》", textfont, Element.ALIGN_LEFT, 22, 2, fixedLeading, paddings3, borderWidth));
+//        table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0102(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
+        table.addCell(ItextUtils.createCell("3、《软件项目委托测试报告编制作业指导书》", textfont, Element.ALIGN_LEFT, 22, 2, fixedLeading, paddings3, borderWidth));
+        // table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0103(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
+        table.addCell(ItextUtils.createCell("4、《报告检查表》", textfont, Element.ALIGN_LEFT, 22, 2, fixedLeading, paddings3, borderWidth));
+        // table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0104(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
+        table.addCell(ItextUtils.createCell("5、《测试报告编码规则》", textfont, Element.ALIGN_LEFT, 22, 2, fixedLeading, paddings3, borderWidth));
+        // table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0105(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
+        table.addCell(ItextUtils.createCell("6、《软件委托测试资料清单》", textfont, Element.ALIGN_LEFT, 22, 2, fixedLeading, paddings3, borderWidth));
+        // table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0106(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
+        table.addCell(ItextUtils.createCell("7、《软件委托测试资料标签》", textfont, Element.ALIGN_LEFT, 22, 2, fixedLeading, paddings3, borderWidth));
+        // table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0107(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
+        table.addCell(ItextUtils.createCell("8、《软件委托测试资料目录》", textfont, Element.ALIGN_LEFT, 22, 2, fixedLeading, paddings3, borderWidth));
+        // table.addCell(ItextUtils.createCell(JS012Json.getInputQueRen0108(), textfont, Element.ALIGN_LEFT, 5, 2, paddings3, borderWidth));
 
         document.add(new Paragraph("\n"));
         document.add(title);
