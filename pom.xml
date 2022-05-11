@@ -31,6 +31,7 @@
         <module>onlinebiz-discovery</module>
         <module>onlinebiz-contract</module>
         <module>onlinebiz-common</module>
+        <module>onlinebiz-apply</module>
     </modules>
 
     <dependencyManagement>
