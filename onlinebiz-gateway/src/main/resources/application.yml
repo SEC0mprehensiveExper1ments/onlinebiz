@@ -41,6 +41,42 @@ spring:
                   - /account/role
           filters:
             - CheckRole=[admin]
+        - id: contract-management-public
+          uri: lb://onlinebiz-contract
+          predicates:
+            - name: Path
+              args:
+                patterns:
+                  - /contract/individual/**
+        - id: contract-management-internal
+          uri: lb://onlinebiz-contract
+          predicates:
+            - name: Path
+              args:
+                patterns:
+                  - /contract
+                  - /contract/{contractId}
+                  - /contract/search
+          filters:
+            - CheckRole=[admin,marketing]
+        - id: apply-management-public
+          uri: lb://onlinebiz-apply
+          predicates:
+            - name: Path
+              args:
+                patterns:
+                  - /apply/individual/**
+        - id: apply-management-internal
+          uri: lb://onlinebiz-apply
+          predicates:
+            - name: Path
+              args:
+                patterns:
+                  - /apply
+                  - /apply/{applyId}
+                  - /apply/search
+          filters:
+            - CheckRole=[admin,marketing]
 
 eureka:
   instance:

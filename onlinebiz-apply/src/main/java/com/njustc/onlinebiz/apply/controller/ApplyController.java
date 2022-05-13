@@ -19,7 +19,7 @@ public class ApplyController {
         this.applyService = applyService;
     }
 
-    @PostMapping("/apply")
+    @PostMapping("/apply/individual")
     public ResponseEntity<Apply> createApply(
             @RequestParam("principalId") Long principalId,
             @RequestBody Apply apply
@@ -31,13 +31,13 @@ public class ApplyController {
         return ResponseEntity.badRequest().build();
     }
 
-    // 查看系统中所有的合同
+    // 查看系统中所有的申请
     @GetMapping("/apply")
     public ResponseEntity<List<ApplyOutline>> getAllApplys() {
         return ResponseEntity.ok().body(applyService.findAllApplys());
     }
 
-    // 查看任意合同的详细信息
+    // 查看任意申请的详细信息
     @GetMapping("/apply/{applyId}")
     public ResponseEntity<Apply> getApplyById(@PathVariable("applyId") String applyId) {
         Apply contract = applyService.findApplyById(applyId);
@@ -46,13 +46,13 @@ public class ApplyController {
                 ResponseEntity.ok().body(contract);
     }
 
-    // 查看用户自己的所有合同
+    // 查看用户自己的所有申请
     @GetMapping("/apply/individual")
     public ResponseEntity<List<ApplyOutline>> getIndividualApplys(@RequestParam("userId") Long userId) {
         return ResponseEntity.ok().body(applyService.search().byPrincipalId(userId).getResult());
     }
 
-    // 查看用户自己的合同详情
+    // 查看用户自己的申请详情
     @GetMapping("/apply/individual/{applyId}")
     public ResponseEntity<Apply> getIndividualApplyById(
             @RequestParam("userId") Long userId,
@@ -64,7 +64,7 @@ public class ApplyController {
                 ResponseEntity.ok().body(contract);
     }
 
-    // 根据组合条件查询合同
+    // 根据组合条件查询申请
     @GetMapping("/apply/search")
     public ResponseEntity<List<ApplyOutline>> searchApplys(
             @RequestParam(value = "contactName", required = false) String contactName,
