@@ -1,6 +1,6 @@
 package com.njustc.onlinebiz.contract.service;
 
-import com.njustc.onlinebiz.contract.model.Outline;
+import com.njustc.onlinebiz.common.model.ContractOutline;
 
 import java.util.List;
 
@@ -26,5 +26,5 @@ public interface ConditionBuilder {
     ConditionBuilder byPrincipalId(Long principalId);
 
     // 获取查询结果
-    List<Outline> getResult();
+    List<ContractOutline> getResult();
 }

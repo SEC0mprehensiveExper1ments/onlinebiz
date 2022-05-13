@@ -1,5 +1,5 @@
 server:
-  port: 9001
+  port: 10001
 
 spring:
   application:
@@ -15,7 +15,7 @@ spring:
 
 eureka:
   instance:
-    instance-id: apply-service9001
+    instance-id: apply-service10001
   client:
     fetch-registry: true
     register-with-eureka: true

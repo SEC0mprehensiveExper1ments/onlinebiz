@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.contract.model;
+package com.njustc.onlinebiz.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class Party {
+public class ContractParty {
 
     // 单位全称
     private String company;

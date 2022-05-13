@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.contract.service;
 
-import com.njustc.onlinebiz.contract.model.Contract;
-import com.njustc.onlinebiz.contract.model.Outline;
+import com.njustc.onlinebiz.common.model.Contract;
+import com.njustc.onlinebiz.common.model.ContractOutline;
 
 import java.util.List;
 
@@ -11,13 +11,13 @@ public interface ContractService {
      * 创建一份新的合同
      * @param principalId 委托方用户ID
      * @param creatorId 创建者的用户ID，应当是内部员工
-     * @param entrustId 该合同对应的委托ID
+     * @param applyId 该合同对应的委托ID
      * @return 新创建的合同对象，合同ID已被正确设置
      */
-    Contract createContract(Long principalId, Long creatorId, String entrustId);
+    Contract createContract(Long principalId, Long creatorId, String applyId);
 
     // 返回所有合同信息的概要列表
-    List<Outline> findAllContracts();
+    List<ContractOutline> findAllContracts();
 
     // 根据合同ID查找合同
     Contract findContractById(String contractId);

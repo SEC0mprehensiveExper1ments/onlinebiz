@@ -1,10 +1,9 @@
 package com.njustc.onlinebiz.apply.controller;
 
-import com.njustc.onlinebiz.apply.model.Apply;
-import com.njustc.onlinebiz.apply.model.Outline;
+import com.njustc.onlinebiz.common.model.Apply;
+import com.njustc.onlinebiz.common.model.ApplyOutline;
 import com.njustc.onlinebiz.apply.service.ApplyService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,18 +19,21 @@ public class ApplyController {
         this.applyService = applyService;
     }
 
-
     @PostMapping("/apply")
     public ResponseEntity<Apply> createApply(
             @RequestParam("principalId") Long principalId,
-            @RequestParam("auditorId") Long auditorId
+            @RequestBody Apply apply
     ) {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        Apply result = applyService.createApply(principalId, apply);
+        if (result != null) {
+            return ResponseEntity.ok().body(apply);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     // 查看系统中所有的合同
     @GetMapping("/apply")
-    public ResponseEntity<List<Outline>> getAllApplys() {
+    public ResponseEntity<List<ApplyOutline>> getAllApplys() {
         return ResponseEntity.ok().body(applyService.findAllApplys());
     }
 
@@ -46,7 +48,7 @@ public class ApplyController {
 
     // 查看用户自己的所有合同
     @GetMapping("/apply/individual")
-    public ResponseEntity<List<Outline>> getIndividualApplys(@RequestParam("userId") Long userId) {
+    public ResponseEntity<List<ApplyOutline>> getIndividualApplys(@RequestParam("userId") Long userId) {
         return ResponseEntity.ok().body(applyService.search().byPrincipalId(userId).getResult());
     }
 
@@ -64,7 +66,7 @@ public class ApplyController {
 
     // 根据组合条件查询合同
     @GetMapping("/apply/search")
-    public ResponseEntity<List<Outline>> searchApplys(
+    public ResponseEntity<List<ApplyOutline>> searchApplys(
             @RequestParam(value = "contactName", required = false) String contactName,
             @RequestParam(value = "companyName", required = false) String companyName,
             @RequestParam(value = "targetSoftware", required = false) String targetSoftware
@@ -95,7 +97,7 @@ public class ApplyController {
                 ResponseEntity.badRequest().build();
     }
 
-    @DeleteMapping("/applyu/{applyId}")
+    @DeleteMapping("/apply/{applyId}")
     public ResponseEntity<Void> deleteApplyById(@PathVariable("applyId") String applyId) {
         return applyService.removeApply(applyId) ?
                 ResponseEntity.ok().build() :

@@ -3,10 +3,8 @@ package com.njustc.onlinebiz.apply.service;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import com.njustc.onlinebiz.apply.model.Apply;
-import com.njustc.onlinebiz.apply.model.Outline;
-import com.njustc.onlinebiz.apply.model.Party;
-import com.njustc.onlinebiz.apply.model.Software;
+import com.njustc.onlinebiz.common.model.Apply;
+import com.njustc.onlinebiz.common.model.ApplyOutline;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
@@ -27,26 +25,23 @@ public class MongoApplyService implements ApplyService {
         this.mongoTemplate = mongoTemplate;
     }
 
-    // 创建一个空的委托申请
+    // 创建一份委托申请
     @Override
-    public Apply createApply(Long principalId, Long auditorId) {
-        Apply apply = new Apply();
+    public Apply createApply(Long principalId, Apply apply) {
         apply.setPrincipalId(principalId);
-        apply.setAuditorId(auditorId);
         try {
-            System.out.println("1");
-            return mongoTemplate.insert(apply);
+            return mongoTemplate.insert(apply, Apply.COLLECTION_NAME);
         } catch (Exception e) {
-            log.warn("创建合同失败");
+            log.warn("创建委托申请失败");
             return null;
         }
     }
 
     // 返回所有委托申请信息的概要列表
     @Override
-    public List<Outline> findAllApplys() {
-        Query query = new BasicQuery("{}", Outline.PROJECT_FROM_CONTRACT);
-        return mongoTemplate.find(query, Outline.class, Apply.COLLECTION_NAME);
+    public List<ApplyOutline> findAllApplys() {
+        Query query = new BasicQuery("{}", ApplyOutline.PROJECT_FROM_CONTRACT);
+        return mongoTemplate.find(query, ApplyOutline.class, Apply.COLLECTION_NAME);
     }
 
     // 根据委托申请 id 查询申请的完整信息

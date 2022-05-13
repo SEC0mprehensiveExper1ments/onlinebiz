@@ -1,10 +1,9 @@
 package com.njustc.onlinebiz.contract.controller;
 
-import com.njustc.onlinebiz.contract.model.Contract;
-import com.njustc.onlinebiz.contract.model.Outline;
+import com.njustc.onlinebiz.common.model.Contract;
+import com.njustc.onlinebiz.common.model.ContractOutline;
 import com.njustc.onlinebiz.contract.service.ContractService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +23,18 @@ public class ContractController {
     public ResponseEntity<Contract> createContract(
             @RequestParam("principalId") Long principalId,
             @RequestParam("userId") Long creatorId,
-            @RequestParam("entrustId") String entrustId
+            @RequestParam("applyId") String applyId
     ) {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        Contract contract = contractService.createContract(principalId, creatorId, applyId);
+        if (contract == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(contract);
     }
 
     // 查看系统中所有的合同
     @GetMapping("/contract")
-    public ResponseEntity<List<Outline>> getAllContracts() {
+    public ResponseEntity<List<ContractOutline>> getAllContracts() {
         return ResponseEntity.ok().body(contractService.findAllContracts());
     }
 
@@ -46,7 +49,7 @@ public class ContractController {
 
     // 查看用户自己的所有合同
     @GetMapping("/contract/individual")
-    public ResponseEntity<List<Outline>> getIndividualContracts(@RequestParam("userId") Long userId) {
+    public ResponseEntity<List<ContractOutline>> getIndividualContracts(@RequestParam("userId") Long userId) {
         return ResponseEntity.ok().body(contractService.search().byPrincipalId(userId).getResult());
     }
 
@@ -64,7 +67,7 @@ public class ContractController {
 
     // 根据组合条件查询合同
     @GetMapping("/contract/search")
-    public ResponseEntity<List<Outline>> searchContracts(
+    public ResponseEntity<List<ContractOutline>> searchContracts(
             @RequestParam(value = "contactName", required = false) String contactName,
             @RequestParam(value = "companyName", required = false) String companyName,
             @RequestParam(value = "representativeName", required = false) String representativeName,

@@ -2,25 +2,29 @@ package com.njustc.onlinebiz.contract.service;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import com.njustc.onlinebiz.contract.model.Contract;
-import com.njustc.onlinebiz.contract.model.Outline;
+import com.njustc.onlinebiz.common.model.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.mongodb.core.query.UpdateDefinition;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-// 为了减少实现的复杂性，这里我们先不写接口。如果要把业务类的接口抽象出来，
-// 那还需要一个 ConditionBuilder 的接口，然后为不同的业务类写它的实现。
 @Slf4j
 @Service
 public class MongoContractService implements ContractService {
 
+    private static final String APPLY_SERVICE_URL = "http://onlinebiz-apply";
+
     private final MongoTemplate mongoTemplate;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     public MongoContractService(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
@@ -28,24 +32,53 @@ public class MongoContractService implements ContractService {
 
     // 创建一个空的合同
     @Override
-    public Contract createContract(Long principalId, Long creatorId, String entrustId) {
+    public Contract createContract(Long principalId, Long creatorId, String applyId) {
         Contract contract = new Contract();
         contract.setPrincipalId(principalId);
         contract.setCreatorId(creatorId);
-        contract.setEntrustId(entrustId);
+        contract.setApplyId(applyId);
+        // 从委托申请服务获取委托信息，并提取相关内容放入 Contract 对象
+        if (!initializeFromApply(applyId, contract)) {
+            log.warn("将创建一份空的合同");
+        }
         try {
-            return mongoTemplate.insert(contract);
+            return mongoTemplate.insert(contract, Contract.COLLECTION_NAME);
         } catch (Exception e) {
             log.warn("创建合同失败");
             return null;
         }
     }
 
+    // 从委托申请初始化合同内容
+    private boolean initializeFromApply(String applyId, Contract contract) {
+        Apply apply;
+        try {
+            apply = restTemplate.getForObject(APPLY_SERVICE_URL + "/apply/" + applyId, Apply.class);
+            if (apply == null) {
+                log.warn("获取委托申请信息失败");
+                return false;
+            }
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+            return false;
+        }
+        ContractParty principal = contract.getPrincipal();
+        ApplyParty applyParty = apply.getPrincipal();
+        principal.setCompany(applyParty.getCompanyCH());
+        principal.setAuthorizedRepresentative(applyParty.getContact());
+        principal.setContact(applyParty.getContact());
+        principal.setAddress(applyParty.getAddress());
+        principal.setFax(applyParty.getFax());
+        principal.setPhoneNumber(applyParty.getPhoneNumber());
+        principal.setZipCode(applyParty.getZipCode());
+        return true;
+    }
+
     // 返回 MongoDB 中所有 Contract 对象投影到 Outline 对象的结果
     @Override
-    public List<Outline> findAllContracts() {
-        Query query = new BasicQuery("{}", Outline.PROJECT_FROM_CONTRACT);
-        return mongoTemplate.find(query, Outline.class, Contract.COLLECTION_NAME);
+    public List<ContractOutline> findAllContracts() {
+        Query query = new BasicQuery("{}", ContractOutline.PROJECT_FROM_CONTRACT);
+        return mongoTemplate.find(query, ContractOutline.class, Contract.COLLECTION_NAME);
     }
 
     // 根据合同 id 查询合同的完整信息

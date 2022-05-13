@@ -1,16 +1,16 @@
-package com.njustc.onlinebiz.apply.model;
+package com.njustc.onlinebiz.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-// 代表委托申请的 委托单位
+// 代表委托申请的委托单位
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class Party {
+public class ApplyParty {
 
     // 委托单位名称（英文）
     private String companyEN;

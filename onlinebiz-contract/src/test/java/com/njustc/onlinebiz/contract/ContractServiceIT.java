@@ -1,8 +1,8 @@
 package com.njustc.onlinebiz.contract;
 
-import com.njustc.onlinebiz.contract.model.Contract;
-import com.njustc.onlinebiz.contract.model.Outline;
-import com.njustc.onlinebiz.contract.model.Party;
+import com.njustc.onlinebiz.common.model.Contract;
+import com.njustc.onlinebiz.common.model.ContractOutline;
+import com.njustc.onlinebiz.common.model.ContractParty;
 import com.njustc.onlinebiz.contract.service.ContractService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class ContractServiceIT {
             Assertions.assertNotNull(contracts[i]);
             Assertions.assertEquals((i + 1L), contracts[i].getPrincipalId());
             Assertions.assertEquals(2L, contracts[i].getCreatorId());
-            Assertions.assertEquals("fake-id-" + (i + 1), contracts[i].getEntrustId());
+            Assertions.assertEquals("fake-id-" + (i + 1), contracts[i].getApplyId());
         }
     }
 
@@ -43,7 +43,7 @@ public class ContractServiceIT {
     }
 
     // 乙方都是一样的
-    private final Party trustee = new Party()
+    private final ContractParty trustee = new ContractParty()
             .setCompany("南京大学计算机软件新技术国家重点实验室")
             .setAuthorizedRepresentative("南大授权代表")
             .setSigDate("2022-05-01")
@@ -63,7 +63,7 @@ public class ContractServiceIT {
             contracts[i].setSerialNumber("fake-serial-" + (i + 1));
             contracts[i].setProjectName("项目-" + (i + 1));
             // 甲方信息
-            Party principal = new Party()
+            ContractParty principal = new ContractParty()
                     .setCompany("公司-" + (i + 1))
                     .setAuthorizedRepresentative("授权代表-" + (i + 1))
                     .setSigDate("签订日期-" + (i + 1))
@@ -92,7 +92,7 @@ public class ContractServiceIT {
     @Test
     @Order(4)
     void testFindAllContracts() {
-        List<Outline> result = contractService.findAllContracts();
+        List<ContractOutline> result = contractService.findAllContracts();
         Assertions.assertEquals(3, result.size());
     }
 

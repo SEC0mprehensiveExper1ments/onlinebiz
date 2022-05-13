@@ -1,10 +1,10 @@
 package com.njustc.onlinebiz.apply;
 
 
-import com.njustc.onlinebiz.apply.model.Apply;
-import com.njustc.onlinebiz.apply.model.Outline;
-import com.njustc.onlinebiz.apply.model.Party;
-import com.njustc.onlinebiz.apply.model.Software;
+import com.njustc.onlinebiz.common.model.Apply;
+import com.njustc.onlinebiz.common.model.ApplyOutline;
+import com.njustc.onlinebiz.common.model.ApplyParty;
+import com.njustc.onlinebiz.common.model.Software;
 import com.njustc.onlinebiz.apply.service.ApplyService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +25,13 @@ public class ApplyServiceIT {
     @Order(1)
     void testCreateApplySuccess() {
         // 保存创建的 Apply 对象用于后续测试
-        applys[0] = applyService.createApply(1L, 2L);
-        applys[1] = applyService.createApply(2L, 3L);
-        applys[2] = applyService.createApply(3L, 4L);
+        applys[0] = applyService.createApply(1L, new Apply());
+        applys[1] = applyService.createApply(2L, new Apply());
+        applys[2] = applyService.createApply(3L, new Apply());
         // 检查测试结果
-        for (int i = 1; i < 3; ++i) {
+        for (int i = 0; i < 3; ++i) {
             Assertions.assertNotNull(applys[i]);
             Assertions.assertEquals((i + 1L), applys[i].getPrincipalId());
-            Assertions.assertEquals(2L, applys[i].getPrincipalId());
         }
     }
 
@@ -75,7 +74,7 @@ public class ApplyServiceIT {
                     .setServSoftOherSupport("" + (i + 1))
                     .setNetworkEnv("" + (i + 1));
             // 委托方信息
-            Party principal = new Party()
+            ApplyParty principal = new ApplyParty()
                     .setCompanyEN("测试" + (i + 1))
                     .setCompanyCH("测试" + (i + 1))
                     .setPhoneNumber("测试" + (i + 1))
@@ -110,7 +109,7 @@ public class ApplyServiceIT {
     @Test
     @Order(4)
     void testFindAllContracts() {
-        List<Outline> result = applyService.findAllApplys();
+        List<ApplyOutline> result = applyService.findAllApplys();
         Assertions.assertEquals(3, result.size());
     }
 

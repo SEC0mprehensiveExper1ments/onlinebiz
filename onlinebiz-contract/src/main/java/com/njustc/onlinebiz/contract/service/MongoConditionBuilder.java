@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.contract.service;
 
-import com.njustc.onlinebiz.contract.model.Contract;
-import com.njustc.onlinebiz.contract.model.Outline;
+import com.njustc.onlinebiz.common.model.Contract;
+import com.njustc.onlinebiz.common.model.ContractOutline;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Query;
@@ -66,9 +66,9 @@ public class MongoConditionBuilder implements ConditionBuilder {
         return this;
     }
 
-    public List<Outline> getResult() {
+    public List<ContractOutline> getResult() {
         Query query = new BasicQuery(condition.append("]}").toString());
-        return mongoTemplate.find(query, Outline.class, Contract.COLLECTION_NAME);
+        return mongoTemplate.find(query, ContractOutline.class, Contract.COLLECTION_NAME);
     }
 
     // 把查询参数转换为正则表达式，主要是在字符前后加 ".*" 实现模糊匹配

@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.contract.model;
+package com.njustc.onlinebiz.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,10 +27,10 @@ public class Contract {
     private String projectName;
 
     // 项目委托方（甲方）
-    private Party principal;
+    private ContractParty principal;
 
     // 项目受托方（乙方）
-    private Party trustee;
+    private ContractParty trustee;
 
     // 签订地点
     private String signedAt;
@@ -61,7 +61,7 @@ public class Contract {
     // 创建者的用户 id
     private Long creatorId;
 
-    // 此合同对应的委托 id
-    private String entrustId;
+    // 此合同对应的委托申请 id
+    private String applyId;
 
 }

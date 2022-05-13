@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.apply.model;
+package com.njustc.onlinebiz.common.model;
 
 
 import lombok.AllArgsConstructor;
@@ -21,7 +21,6 @@ public class Apply {
     // 申请 id，由 MongoDB 自动生成
     private String id;
 
-
     /* 按照JS002表格字段命名，
        子项先从左往右，从上至下，递增 */
 
@@ -29,7 +28,7 @@ public class Apply {
     private String[] testType;
 
     // 委托单位信息
-    private Party principal;
+    private ApplyParty principal;
 
     // 软件信息
     private Software testedSoftware;
@@ -71,6 +70,7 @@ public class Apply {
     private String testSerialNumber;
 
     /* 额外维护信息 */
+
     // 委托申请方用户 id
     private Long principalId;
 

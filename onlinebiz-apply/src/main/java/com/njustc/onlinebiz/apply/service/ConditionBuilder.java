@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.apply.service;
 
 
-import com.njustc.onlinebiz.apply.model.Outline;
+import com.njustc.onlinebiz.common.model.ApplyOutline;
 
 import java.util.List;
 
@@ -24,5 +24,5 @@ public interface ConditionBuilder {
     ConditionBuilder byPrincipalId(Long principalId);
 
     // 获取查询结果
-    List<Outline> getResult();
+    List<ApplyOutline> getResult();
 }

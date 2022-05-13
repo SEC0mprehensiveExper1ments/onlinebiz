@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.apply.model;
+package com.njustc.onlinebiz.common.model;
 
 
 import lombok.AllArgsConstructor;

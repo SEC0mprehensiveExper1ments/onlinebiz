@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.user.controller;
 
 import com.njustc.onlinebiz.common.model.User;
-import com.njustc.onlinebiz.user.model.UserDto;
+import com.njustc.onlinebiz.common.model.UserDto;
 import com.njustc.onlinebiz.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

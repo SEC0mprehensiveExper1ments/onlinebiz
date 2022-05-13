@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.contract.model;
+package com.njustc.onlinebiz.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class Outline {
+public class ContractOutline {
 
     // 规定如何从 Contract 对象投影到 Outline 对象的 JSON 字符串
     public static final String PROJECT_FROM_CONTRACT =
