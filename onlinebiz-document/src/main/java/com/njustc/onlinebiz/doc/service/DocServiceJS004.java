@@ -711,7 +711,7 @@ public class DocServiceJS004 {
     try {
       OSSProvider documentOSSProvider = new OSSProvider();
       if (documentOSSProvider.upload(
-          "doc", "JS004", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+          "doc", "JS004.pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
         return "https://oss.syh1en.asia/doc/JS004.pdf";
       } else {
         return "upload failed";
