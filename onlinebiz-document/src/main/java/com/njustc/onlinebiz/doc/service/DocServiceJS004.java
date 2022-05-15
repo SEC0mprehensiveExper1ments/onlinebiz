@@ -5,6 +5,7 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.njustc.onlinebiz.doc.domain.JS004;
+import com.njustc.onlinebiz.doc.mapper.OSSProvider;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import org.springframework.util.ClassUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 
 @Service
@@ -631,7 +634,7 @@ public class DocServiceJS004 {
   }
 
   /** 填充JS004文档 */
-  public boolean fill(JS004 newJson) {
+  public String fill(JS004 newJson) {
     JS004Json = newJson;
     String pdfPath = absolutePath + "tmp/JS004_tmp.pdf";
     System.out.println(absolutePath);
@@ -689,7 +692,7 @@ public class DocServiceJS004 {
       document.close();
     } catch (Exception e) {
       e.printStackTrace();
-      return false;
+      return "unable to generate pdf";
     }
     // 添加图章
     try {
@@ -702,8 +705,20 @@ public class DocServiceJS004 {
       ItextUtils.addImageSeal(pdfPath, sealPath, pageNums, locX, locY, percent);
     } catch (Exception e) {
       e.printStackTrace();
-      return false;
+      return "unable to add seal";
     }
-    return true;
+    // 上传pdf
+    try {
+      OSSProvider documentOSSProvider = new OSSProvider();
+      if (documentOSSProvider.upload(
+          "doc", "JS004", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+        return "https://oss.syh1en.asia/doc/JS004.pdf";
+      } else {
+        return "upload failed";
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      return "minio error";
+    }
   }
 }

@@ -16,7 +16,7 @@ import java.io.IOException;
 public class JsonController {
   @PostMapping("/doc/JS004")
   @ResponseBody
-  public boolean JsonControllerJS004(@RequestBody JS004 newJson) {
+  public String JsonControllerJS004(@RequestBody JS004 newJson) {
     DocServiceJS004 fileJS004 = new DocServiceJS004();
     // System.out.println(newJson.toString());
     return fileJS004.fill(newJson);
