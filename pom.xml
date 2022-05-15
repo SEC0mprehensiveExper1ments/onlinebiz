@@ -33,6 +33,7 @@
         <module>onlinebiz-common</module>
         <module>onlinebiz-test</module>
         <module>onlinebiz-apply</module>
+        <module>onlinebiz-software</module>
     </modules>
 
     <dependencyManagement>
