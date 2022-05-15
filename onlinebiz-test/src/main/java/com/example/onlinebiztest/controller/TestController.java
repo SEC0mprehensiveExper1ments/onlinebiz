@@ -2,7 +2,7 @@ package com.example.onlinebiztest.controller;
 
 import com.example.onlinebiztest.service.TestService;
 import com.njustc.onlinebiz.common.model.Scheme;
-import com.njustc.onlinebiz.common.model.Outline;
+import com.njustc.onlinebiz.common.model.ContractOutline;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,8 +48,11 @@ public class TestController {
     @GetMapping("/test/scheme/individual")
     public ResponseEntity<List<Scheme>> getIndividualTests(@RequestParam("userId") Long userId) {
         List<Scheme> schemes = null;
-        List<Outline> outlines = restTemplate.getForObject("/contract/individual/?id={userId}", List.class);
-        for (Outline outline:outlines
+        List<ContractOutline> outlines = restTemplate.getForObject("/contract/individual/?id={userId}", List.class);
+        if (outlines == null) {
+            return null;
+        }
+        for (ContractOutline outline:outlines
              ) {
             schemes.addAll(testService.search().byContractId(outline.getId()).getResult());
         }
@@ -78,9 +81,12 @@ public class TestController {
         map.put("projectName", projectName);
         map.put("targetSoftware", targetSoftware);
 
-        List<Outline> outlines = restTemplate.getForObject("/contract/search", List.class, map);
+        List<ContractOutline> outlines = restTemplate.getForObject("/contract/search", List.class, map);
         List<Scheme> schemes = null;
-        for (Outline outline:outlines
+        if (outlines == null) {
+            return null;
+        }
+        for (ContractOutline outline:outlines
         ) {
             schemes.addAll(testService.search().byContractId(outline.getId()).getResult());
         }
