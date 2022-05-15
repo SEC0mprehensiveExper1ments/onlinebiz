@@ -53,6 +53,6 @@ public class JS004Test {
                 .setInputYiFang0YouBian("037000");
 
         System.out.println(JSON.toJSONString(newJson));
-        Assertions.assertTrue(docServiceJS004.fill(newJson));
+        Assertions.assertTrue(docServiceJS004.fill(newJson).startsWith("https://"));
     }
 }
