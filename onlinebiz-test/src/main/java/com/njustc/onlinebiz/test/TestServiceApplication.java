@@ -1,4 +1,4 @@
-package com.example.onlinebiztest;
+package com.njustc.onlinebiz.test;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

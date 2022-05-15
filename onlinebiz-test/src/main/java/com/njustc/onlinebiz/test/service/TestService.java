@@ -1,4 +1,4 @@
-package com.example.onlinebiztest.service;
+package com.njustc.onlinebiz.test.service;
 
 import com.njustc.onlinebiz.common.model.Scheme;
 

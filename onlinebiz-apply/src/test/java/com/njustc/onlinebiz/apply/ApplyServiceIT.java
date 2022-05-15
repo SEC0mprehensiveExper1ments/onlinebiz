@@ -19,19 +19,19 @@ public class ApplyServiceIT {
     @Autowired
     ApplyService applyService;
 
-    private static final Apply[] applys = new Apply[3];
+    private static final Apply[] applies = new Apply[3];
 
     @Test
     @Order(1)
     void testCreateApplySuccess() {
         // 保存创建的 Apply 对象用于后续测试
-        applys[0] = applyService.createApply(1L, new Apply());
-        applys[1] = applyService.createApply(2L, new Apply());
-        applys[2] = applyService.createApply(3L, new Apply());
+        applies[0] = applyService.createApply(1L, new Apply());
+        applies[1] = applyService.createApply(2L, new Apply());
+        applies[2] = applyService.createApply(3L, new Apply());
         // 检查测试结果
         for (int i = 0; i < 3; ++i) {
-            Assertions.assertNotNull(applys[i]);
-            Assertions.assertEquals((i + 1L), applys[i].getPrincipalId());
+            Assertions.assertNotNull(applies[i]);
+            Assertions.assertEquals((i + 1L), applies[i].getPrincipalId());
         }
     }
 
@@ -85,24 +85,24 @@ public class ApplyServiceIT {
                     .setCellphoneNumber("测试" + (i + 1))
                     .setEmail("测试" + (i + 1))
                     .setWebsite("测试" + (i + 1));
-            applys[i].setPrincipal(principal);
-            applys[i].setTestedSoftware(testedSoftware);
-            applys[i].setTestType(new String[] {"" + (i + 2), "" + (i + 3)});
-            applys[i].setTestStandard(new String[] {"" + (i + 2), "" + (i + 3)});
-            applys[i].setTechIndex(new String[] {"" + (i + 2), "" + (i + 3)});
-            applys[i].setCheckMaterious(new String[] {"" + (i + 2), "" + (i + 3)});
-            applys[i].setSoftwareMedium("" + (i + 1));
-            applys[i].setDocument("" + (i + 1));
-            applys[i].setSampleHandling("" + (i + 1));
-            applys[i].setExpectedTime("" + (i + 1));
-            applys[i].setSecurityLevel("" + (i + 1));
-            applys[i].setCheckVirus("" + (i + 1));
-            applys[i].setConfirmation("" + (i + 1));
-            applys[i].setAcceptance("" + (i + 1));
-            applys[i].setTestSerialNumber("" + (i + 1));
-            applys[i].setAuditorStage("" + (i + 1));
+            applies[i].setPrincipal(principal);
+            applies[i].setTestedSoftware(testedSoftware);
+            applies[i].setTestType(new String[] {"" + (i + 2), "" + (i + 3)});
+            applies[i].setTestStandard(new String[] {"" + (i + 2), "" + (i + 3)});
+            applies[i].setTechIndex(new String[] {"" + (i + 2), "" + (i + 3)});
+            applies[i].setCheckMaterious(new String[] {"" + (i + 2), "" + (i + 3)});
+            applies[i].setSoftwareMedium("" + (i + 1));
+            applies[i].setDocument("" + (i + 1));
+            applies[i].setSampleHandling("" + (i + 1));
+            applies[i].setExpectedTime("" + (i + 1));
+            applies[i].setSecurityLevel("" + (i + 1));
+            applies[i].setCheckVirus("" + (i + 1));
+            applies[i].setConfirmation("" + (i + 1));
+            applies[i].setAcceptance("" + (i + 1));
+            applies[i].setTestSerialNumber("" + (i + 1));
+            applies[i].setAuditorStage("" + (i + 1));
             // 应当修改成功
-            Assertions.assertTrue(applyService.updateApply(applys[i]));
+            Assertions.assertTrue(applyService.updateApply(applies[i]));
         }
     }
 
@@ -123,7 +123,7 @@ public class ApplyServiceIT {
     @Order(6)
     void testFindContractByIdSuccess() {
         for (int i = 0; i < 3; ++i) {
-            Assertions.assertEquals(applys[i], applyService.findApplyById(applys[i].getId()));
+            Assertions.assertEquals(applies[i], applyService.findApplyById(applies[i].getId()));
         }
     }
 
@@ -143,10 +143,10 @@ public class ApplyServiceIT {
     @Order(9)
     void testFindContractByIdAndPrincipalSuccess() {
         for (int i = 0; i < 3; ++i) {
-            Assertions.assertEquals(applys[i],
+            Assertions.assertEquals(applies[i],
                     applyService.findApplyByIdAndPrincipal(
-                            applys[i].getId(),
-                            applys[i].getPrincipalId()
+                            applies[i].getId(),
+                            applies[i].getPrincipalId()
                     ));
         }
     }
@@ -161,7 +161,7 @@ public class ApplyServiceIT {
     @Order(11)
     void testRemoveContractSuccess() {
         for (int i = 0; i < 3; ++i) {
-            Assertions.assertTrue(applyService.removeApply(applys[i].getId()));
+            Assertions.assertTrue(applyService.removeApply(applies[i].getId()));
         }
     }
 
