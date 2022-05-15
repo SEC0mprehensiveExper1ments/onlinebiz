@@ -12,10 +12,10 @@ import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-public class DocumentOSSProvider {
+public class OSSProvider {
   MinioClient minioClient;
 
-  public DocumentOSSProvider()
+  public OSSProvider()
       throws ServerException, InsufficientDataException, ErrorResponseException, IOException,
           NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException,
           XmlParserException, InternalException {
@@ -30,16 +30,22 @@ public class DocumentOSSProvider {
     }
   }
 
-  public String uploadDocument(String fileName, byte[] fileByte)
-      throws ServerException, InsufficientDataException, ErrorResponseException, IOException,
-          NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException,
-          XmlParserException, InternalException {
-    InputStream fileStream = new ByteArrayInputStream(fileByte);
-    minioClient.putObject(
-        PutObjectArgs.builder().bucket("doc").object(fileName).stream(
-                fileStream, fileByte.length, -1)
-            .contentType("application/pdf")
-            .build());
-    return "https://oss.syh1en.asia/doc/" + fileName;
+  public boolean upload(String bucketName, String objectName, byte[] data, String contentType) {
+    try {
+      // 判断桶是否存在，不存在则先创建桶
+      if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
+        minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+      }
+      // 产生输入流
+      InputStream inputStream = new ByteArrayInputStream(data);
+
+      // 上传文件
+      minioClient.putObject(PutObjectArgs.builder().bucket(bucketName).object(objectName).stream(inputStream, data.length, -1).contentType(contentType).build());
+      return true;
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
   }
+
 }
