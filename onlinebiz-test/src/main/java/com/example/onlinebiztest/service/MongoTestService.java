@@ -80,7 +80,12 @@ public class MongoTestService implements TestService{
                     .set("testType", scheme.getTestType())
                     .set("testCondition", scheme.getTestCondition())
                     .set("testToBeExecuted", scheme.getTestToBeExecuted())
-                    .set("testSample", scheme.getTestSample());
+                    .set("testSample", scheme.getTestSample())
+                    .set("planSchedule", scheme.getPlanSchedule())
+                    .set("designSchedule", scheme.getDesignSchedule())
+                    .set("executeSchedule", scheme.getExecuteSchedule())
+                    .set("evaluateSchedule", scheme.getEvaluateSchedule())
+                    .set("traceability", scheme.getTraceability());
             UpdateResult result = mongoTemplate.updateFirst(query, updateDefinition, Scheme.COLLECTION_NAME);
             return result.wasAcknowledged() && result.getMatchedCount() == 1;
         } catch (Exception e) {
