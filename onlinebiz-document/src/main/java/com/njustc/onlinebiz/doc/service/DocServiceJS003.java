@@ -171,7 +171,7 @@ public class DocServiceJS003 {
       OSSProvider documentOSSProvider = new OSSProvider();
       if (documentOSSProvider.upload(
           "doc", "JS003", byteArrayOutputStream.toByteArray(), "application/pdf")) {
-        return "https://oss.syh1en.asia/" + "doc/" + "JS003";
+        return "https://oss.syh1en.asia/doc/JS003";
       }
       return "upload failed";
     } catch (Exception e) {
