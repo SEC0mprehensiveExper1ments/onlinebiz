@@ -8,42 +8,6 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 @Data
-class SoftwareSubFunction {
-    //子功能名称
-    private String subFunctionName;
-    //功能说明
-    private String description;
-
-    public String getSubFunctionName() {
-        return subFunctionName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-}
-
-@Data
-class SoftwareFunction {
-    //功能项目名称
-    private String functionName;
-    //子功能
-    private List<SoftwareSubFunction> subFunctionList;
-
-    public String getFunctionName() {
-        return functionName;
-    }
-
-    public List<SoftwareSubFunction> getSubFunctionList() {
-        return subFunctionList;
-    }
-
-    public int getSubFunctionListSize() {
-        return subFunctionList.size();
-    }
-}
-
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
@@ -61,7 +25,7 @@ public class SoftwareFunctionList {
     private String version;
 
     //所有软件功能项目(JS003)
-    private List<SoftwareSubFunction> softwareFunctionProject;
+    private List<SoftwareFunction> softwareFunctionProject;
 
     // 委托申请方用户 id
     private Long principalId;
