@@ -80,4 +80,11 @@ public class Apply {
     // 审核阶段
     private String auditorStage;
 
+    /* 员工分配信息 */
+
+    // 分配市场部人员的用户id
+    private String assignedMarketId;
+
+    // 分配测试部人员的用户id
+    private String assignedTestId;
 }
