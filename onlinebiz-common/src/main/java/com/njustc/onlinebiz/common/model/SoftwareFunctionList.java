@@ -25,6 +25,7 @@ public class SoftwareFunctionList {
     private String version;
 
     //所有软件功能项目(JS003)
+    private List<SoftwareFunction> softwareFunctionProject;
 
     // 委托申请方用户 id
     private Long principalId;
