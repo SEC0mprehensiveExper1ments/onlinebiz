@@ -48,7 +48,7 @@ public class TestController {
 
     // 根据组合条件查询测试方案
     @GetMapping("/test/scheme/search")
-    public ResponseEntity<List<Scheme>> searchTests(
+    public ResponseEntity<List<Scheme>> searchSchemes(
             @RequestParam(value = "contactName", required = false) String contactName,
             @RequestParam(value = "companyName", required = false) String companyName,
             @RequestParam(value = "projectName", required = false) String projectName,
