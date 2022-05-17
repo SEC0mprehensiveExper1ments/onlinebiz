@@ -11,8 +11,6 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.mongodb.core.query.UpdateDefinition;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Slf4j
 @Service
 public class MongoTestService implements TestService{
@@ -23,12 +21,11 @@ public class MongoTestService implements TestService{
     }
 
     @Override
-    public Scheme createScheme(String applyId, String contractId) {
-        Scheme scheme = new Scheme();
+    public Scheme createScheme(Long creatorId, String applyId, Scheme scheme) {
+        scheme.setCreatorId(creatorId);
         scheme.setApplyId(applyId);
-        scheme.setContractId(contractId);
         try {
-            return mongoTemplate.insert(scheme);
+            return mongoTemplate.insert(scheme, Scheme.COLLECTION_NAME);
         } catch (Exception e) {
             log.warn("创建测试方案失败");
             return null;
@@ -41,20 +38,10 @@ public class MongoTestService implements TestService{
     }
 
     @Override
-    public Scheme findSchemeByIdAndApply(String schemeId, String applyId) {
+    public Scheme findSchemeByIdAndCreator(String schemeId, Long userId) {
         Scheme scheme = findSchemeById(schemeId);
-        if (scheme != null && applyId.equals(scheme.getApplyId())) {
-            // 的确是该申请对应的测试方案
-            return scheme;
-        }
-        return null;
-    }
-
-    @Override
-    public Scheme findSchemeByIdAndContract(String schemeId, String contractId) {
-        Scheme scheme = findSchemeById(schemeId);
-        if (scheme != null && contractId.equals(scheme.getContractId())) {
-            // 的确是该合同对应的测试方案
+        if (scheme != null && userId.equals(scheme.getCreatorId())) {
+            // 的确是该后台管理人员创建的测试方案
             return scheme;
         }
         return null;
@@ -66,6 +53,7 @@ public class MongoTestService implements TestService{
         try {
             Query query = new BasicQuery("{_id:ObjectId('" + scheme.getId() + "')}");
             UpdateDefinition updateDefinition = new Update()
+                    .set("version", scheme.getVersion())
                     .set("modificationList", scheme.getModificationList())
                     .set("logo", scheme.getLogo())
                     .set("systemSummary", scheme.getSystemSummary())

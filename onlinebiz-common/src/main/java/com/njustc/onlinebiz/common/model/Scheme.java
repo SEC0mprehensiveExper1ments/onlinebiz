@@ -18,6 +18,8 @@ public class Scheme {
     // 合同 id，由 MongoDB 自动生成
     private String id;
 
+    //    版本号
+    private String version;
     //    文档修改记录
     private List<Modification> modificationList;
     //    标识
@@ -61,11 +63,11 @@ public class Scheme {
 
     // 额外维护信息
 
+    // 此测试方案对应的创建者 id
+    private Long creatorId;
+
     // 此测试方案对应的委托申请 id
     private String applyId;
-
-    // 此测试方案对应的委托合同 id
-    private String contractId;
 }
 
 

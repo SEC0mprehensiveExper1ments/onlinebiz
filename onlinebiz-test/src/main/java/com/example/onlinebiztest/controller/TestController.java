@@ -2,17 +2,11 @@ package com.example.onlinebiztest.controller;
 
 import com.example.onlinebiztest.service.TestService;
 import com.njustc.onlinebiz.common.model.Scheme;
-import com.njustc.onlinebiz.common.model.ContractOutline;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -20,19 +14,21 @@ public class TestController {
 
     private final TestService testService;
 
-    @Autowired
-    private RestTemplate restTemplate;
-
     public TestController(TestService testService) {
         this.testService = testService;
     }
 
     @PostMapping("/test/scheme")
     public ResponseEntity<Scheme> createScheme(
-            @RequestParam("applyId") Long applyId,
-            @RequestParam("contractId") Long contractId
+            @RequestParam("userId") Long creatorId,
+            @RequestParam("applyId") String applyId,
+            @RequestBody Scheme scheme
     ) {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        Scheme result = testService.createScheme(creatorId, applyId, scheme);
+        if (result != null) {
+            return ResponseEntity.ok().body(scheme);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     // 查看任意测试方案的详细信息
@@ -44,19 +40,10 @@ public class TestController {
                 ResponseEntity.ok().body(scheme);
     }
 
-    // 查看用户自己的所有测试方案
+    // 查看用户（测试人员）生成的的所有测试方案
     @GetMapping("/test/scheme/individual")
-    public ResponseEntity<List<Scheme>> getIndividualTests(@RequestParam("userId") Long userId) {
-        List<Scheme> schemes = null;
-        List<ContractOutline> outlines = restTemplate.getForObject("/contract/individual/?id={userId}", List.class);
-        if (outlines == null) {
-            return null;
-        }
-        for (ContractOutline outline:outlines
-             ) {
-            schemes.addAll(testService.search().byContractId(outline.getId()).getResult());
-        }
-        return ResponseEntity.ok().body(schemes);
+    public ResponseEntity<List<Scheme>> getIndividualSchemes(@RequestParam("userId") Long userId) {
+        return ResponseEntity.ok().body(testService.search().byCreatorId(userId).getResult());
     }
 
     // 根据组合条件查询测试方案
@@ -64,33 +51,22 @@ public class TestController {
     public ResponseEntity<List<Scheme>> searchTests(
             @RequestParam(value = "contactName", required = false) String contactName,
             @RequestParam(value = "companyName", required = false) String companyName,
-            @RequestParam(value = "representativeName", required = false) String representativeName,
             @RequestParam(value = "projectName", required = false) String projectName,
             @RequestParam(value = "targetSoftware", required = false) String targetSoftware
     ) {
         // 检查条件是否全空
-        if (contactName == null && companyName == null && representativeName == null &&
-                projectName == null && targetSoftware == null) {
+        if (contactName == null && companyName == null && targetSoftware == null) {
             return ResponseEntity.badRequest().build();
         }
         // null 参数会被忽略
-        Map<String, String> map = new HashMap();
-        map.put("contactName", contactName);
-        map.put("companyName", companyName);
-        map.put("representativeName", representativeName);
-        map.put("projectName", projectName);
-        map.put("targetSoftware", targetSoftware);
-
-        List<ContractOutline> outlines = restTemplate.getForObject("/contract/search", List.class, map);
-        List<Scheme> schemes = null;
-        if (outlines == null) {
-            return null;
-        }
-        for (ContractOutline outline:outlines
-        ) {
-            schemes.addAll(testService.search().byContractId(outline.getId()).getResult());
-        }
-        return ResponseEntity.ok().body(schemes);
+        return ResponseEntity.ok().body(
+                testService.search()
+                        .byContact(contactName)
+                        .byCompany(companyName)
+                        .byProjectName(projectName)
+                        .byTargetSoftware(targetSoftware)
+                        .getResult()
+        );
     }
 
     @PostMapping("/test/scheme/{schemeId}")

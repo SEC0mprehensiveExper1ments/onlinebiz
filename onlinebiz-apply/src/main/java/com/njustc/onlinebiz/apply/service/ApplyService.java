@@ -20,7 +20,7 @@ public interface ApplyService {
     // 根据委托申请ID查找委托申请
     Apply findApplyById(String applyId);
 
-    // 根据委托申请ID和委托方ID查找合同
+    // 根据委托申请ID和委托方ID查找委托申请
     Apply findApplyByIdAndPrincipal(String applyId, Long userId);
 
     // 更新委托申请信息，返回是否成功
