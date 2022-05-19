@@ -22,4 +22,5 @@ public class UserDto implements Serializable {
         this.userName = user.getUserName();
         this.userRole = user.getUserRole();
     }
+
 }

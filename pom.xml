@@ -29,10 +29,10 @@
         <module>onlinebiz-user</module>
         <module>onlinebiz-gateway</module>
         <module>onlinebiz-discovery</module>
-        <module>onlinebiz-contract</module>
+<!--        <module>onlinebiz-contract</module>-->
         <module>onlinebiz-common</module>
         <module>onlinebiz-test</module>
-        <module>onlinebiz-apply</module>
+        <module>onlinebiz-entrust</module>
     </modules>
 
     <dependencyManagement>

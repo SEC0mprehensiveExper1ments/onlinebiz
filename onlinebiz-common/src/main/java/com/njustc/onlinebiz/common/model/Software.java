@@ -1,58 +1,19 @@
 package com.njustc.onlinebiz.common.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 
 import java.util.List;
 
-@Data
-class SoftwareSubFunction {
-    //子功能名称
-    private String subFunctionName;
-    //功能说明
-    private String description;
-
-    public String getSubFunctionName() {
-        return subFunctionName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-}
-
-@Data
-class SoftwareFunction {
-    //功能项目名称
-    private String functionName;
-    //子功能
-    private List<SoftwareSubFunction> subFunctionList;
-
-    public String getFunctionName() {
-        return functionName;
-    }
-
-    public List<SoftwareSubFunction> getSubFunctionList() {
-        return subFunctionList;
-    }
-
-    public int getSubFunctionListSize() {
-        return subFunctionList.size();
-    }
-}
-
-// 委托申请测试软件 的 软件信息
+// 委托申请测试软件的软件信息
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Accessors(chain = true)
 public class Software {
 
     // 软件名称
-    private String softwareName;
+    private String name;
 
     // 版本号
     private String version;
@@ -78,11 +39,11 @@ public class Software {
     // 软件代码行数
     private String codeLine;
 
-    // 软件类型     一级选项;二级选项
-    private String softwareType;
+    // 软件类型
+    private String type;
 
     // 客户端操作系统
-    private String[] clientOS;
+    private List<String> clientOS;
 
     // 客户端内存要求
     private String clientMemoryRequirement;
@@ -91,7 +52,7 @@ public class Software {
     private String clientOtherRequirement;
 
     // 服务器端硬件架构
-    private String[] serverHardArch;
+    private List<String> serverHardArch;
 
     // 服务器端硬件内存要求
     private String servHardMemoryRequirement;
@@ -112,17 +73,45 @@ public class Software {
     private String servSoftProgramLang;
 
     // 服务器端软件构架
-    private String[] servSoftArch;
+    private List<String> servSoftArch;
 
     // 服务器端软件中间件
     private String servSoftMiddleware;
 
     // 服务器端软件其他支撑软件
-    private String servSoftOherSupport;
+    private String serverSideOtherSupport;
 
-    // 软件 网络环境
-    private String networkEnv;
+    // 软件网络环境
+    private String networkEnvironment;
 
-    //所有软件功能项目(JS003)
-    private List<SoftwareSubFunction> softwareFunctionProject;
+    // 软件包含的模块
+    private List<Module> modules;
+
+    // 软件功能模块
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Module {
+
+        // 模块名称
+        private String moduleName;
+
+        // 模块功能列表
+        private List<ModuleFunction> functions;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ModuleFunction {
+
+        // 功能名称
+        private String functionName;
+
+        // 功能说明
+        private String functionDescription;
+
+    }
+
 }

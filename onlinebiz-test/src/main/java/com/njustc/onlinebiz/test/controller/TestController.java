@@ -2,7 +2,6 @@ package com.njustc.onlinebiz.test.controller;
 
 import com.njustc.onlinebiz.test.service.TestService;
 import com.njustc.onlinebiz.common.model.Scheme;
-import com.njustc.onlinebiz.common.model.ContractOutline;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
