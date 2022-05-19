@@ -1,6 +1,5 @@
 package com.njustc.onlinebiz.user;
 
-import com.njustc.onlinebiz.common.model.Role;
 import org.junit.jupiter.api.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;

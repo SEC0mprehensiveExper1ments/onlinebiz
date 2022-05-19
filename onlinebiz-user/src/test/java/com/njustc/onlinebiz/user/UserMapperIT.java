@@ -1,6 +1,5 @@
 package com.njustc.onlinebiz.user;
 
-import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.user.mapper.UserMapper;
 import com.njustc.onlinebiz.common.model.User;
 import org.junit.jupiter.api.Assertions;

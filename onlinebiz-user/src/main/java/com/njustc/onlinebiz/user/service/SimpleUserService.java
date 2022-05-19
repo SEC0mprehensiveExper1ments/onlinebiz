@@ -1,6 +1,5 @@
 package com.njustc.onlinebiz.user.service;
 
-import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.user.mapper.UserMapper;
 import com.njustc.onlinebiz.common.model.User;
 import org.springframework.data.redis.core.RedisTemplate;

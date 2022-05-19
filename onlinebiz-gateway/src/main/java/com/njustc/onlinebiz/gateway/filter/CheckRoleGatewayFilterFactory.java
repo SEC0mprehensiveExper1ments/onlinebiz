@@ -1,6 +1,5 @@
 package com.njustc.onlinebiz.gateway.filter;
 
-import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.User;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;

@@ -1,6 +1,5 @@
 package com.example.onlinebiztest.service;
 
-import com.njustc.onlinebiz.common.model.Apply;
 import com.njustc.onlinebiz.common.model.Scheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
