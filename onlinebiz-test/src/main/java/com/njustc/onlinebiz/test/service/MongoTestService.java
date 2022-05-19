@@ -1,4 +1,4 @@
-package com.example.onlinebiztest.service;
+package com.njustc.onlinebiz.test.service;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;

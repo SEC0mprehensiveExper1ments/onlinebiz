@@ -20,7 +20,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <spring.cloud-version>2021.0.1</spring.cloud-version>
-        <mysql.version>8.0.28</mysql.version> <!-- 最新版仍然有一个漏洞-->
+        <mysql.version>8.0.29</mysql.version>
         <mybatis.version>2.2.2</mybatis.version>
     </properties>
 
@@ -29,11 +29,9 @@
         <module>onlinebiz-user</module>
         <module>onlinebiz-gateway</module>
         <module>onlinebiz-discovery</module>
-        <module>onlinebiz-contract</module>
         <module>onlinebiz-common</module>
         <module>onlinebiz-test</module>
-        <module>onlinebiz-apply</module>
-        <module>onlinebiz-software</module>
+        <module>onlinebiz-entrust</module>
     </modules>
 
     <dependencyManagement>

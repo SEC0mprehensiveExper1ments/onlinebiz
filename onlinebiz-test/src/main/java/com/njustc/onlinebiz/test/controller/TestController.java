@@ -1,6 +1,6 @@
-package com.example.onlinebiztest.controller;
+package com.njustc.onlinebiz.test.controller;
 
-import com.example.onlinebiztest.service.TestService;
+import com.njustc.onlinebiz.test.service.TestService;
 import com.njustc.onlinebiz.common.model.Scheme;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

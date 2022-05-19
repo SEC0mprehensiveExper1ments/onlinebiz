@@ -1,4 +1,4 @@
-package com.example.onlinebiztest;
+package com.njustc.onlinebiz.test;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
