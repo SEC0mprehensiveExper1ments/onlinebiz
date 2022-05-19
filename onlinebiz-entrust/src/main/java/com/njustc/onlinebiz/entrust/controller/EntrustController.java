@@ -150,6 +150,16 @@ public class EntrustController {
         entrustService.updateReview(entrustId, review, userId, userRole);
     }
 
+    // 终止委托流程
+    @PostMapping("/entrust/{entrustId}/termination")
+    public void terminateEntrust(
+            @PathVariable("entrustId") String entrustId,
+            @RequestParam("userId") Long userId,
+            @RequestParam("userRole") Role userRole
+    ) {
+        entrustService.terminateEntrust(entrustId, userId, userRole);
+    }
+
     // 修改委托的流程状态
     @PostMapping("/entrust/{entrustId}/status")
     public void updateStatus(

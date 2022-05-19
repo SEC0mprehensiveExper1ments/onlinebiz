@@ -43,7 +43,7 @@ public interface EntrustService {
 
     /**
      * 修改委托申请的内容。该委托所属的客户和管理员可以执行此操作。其中客户只能在委托被拒绝
-     * 之后才能修改；管理员任何时候都可以修改。
+     * 之后才能修改。
      * @param entrustId 要修改的委托ID
      * @param content 修改后的委托内容
      * @param userId 执行此操作的用户ID
@@ -53,7 +53,7 @@ public interface EntrustService {
 
     /**
      * 更新委托对应的市场部人员，只有管理员和市场部主管可以执行此操作。其中市场部主管只能在
-     * 指定阶段执行此操作，管理员任何时候都可以执行。
+     * 指定阶段执行此操作。
      * @param entrustId 要更新的委托ID
      * @param marketingId 对应的市场部人员ID
      * @param userId 执行此操作的用户ID
@@ -63,7 +63,7 @@ public interface EntrustService {
 
     /**
      * 更新委托对应的测试人员，只有管理员和测试部主管可以执行此操作。其中测试部主管只能在
-     * 指定阶段执行此操作，管理员任何时候都可以执行。
+     * 指定阶段执行此操作。
      * @param entrustId 要更新的委托ID
      * @param testerId 对应的测试人员ID
      * @param userId 执行此操作的用户ID
@@ -74,7 +74,7 @@ public interface EntrustService {
     /**
      * 设置委托状态为审核不通过，只有市场部人员、测试部人员和管理员可以执行此操作。其中，
      * 市场部人员只可以在市场部审核阶段执行此操作；测试部人员只可以在测试部审核阶段执行
-     * 此操作；管理员可以在任何时候执行此操作。
+     * 此操作。
      * @param entrustId 要设置的委托ID
      * @param message 不通过的原因
      * @param userId 设置此状态的用户ID，必须符合权限要求
@@ -85,7 +85,7 @@ public interface EntrustService {
     /**
      * 设置委托状态为审核通过，只有市场部人员、测试部人员和管理员可以执行此操作。其中，
      * 市场部人员只可以在市场部审核阶段执行此操作；测试部人员只可以在测试部审核阶段执行
-     * 此操作；管理员可以在任何时候执行此操作。
+     * 此操作。
      * @param entrustId 要设置的委托ID
      * @param userId 设置此状态的用户ID，必须符合委托当前阶段
      * @param userRole 执行此操作的用户角色
@@ -94,7 +94,6 @@ public interface EntrustService {
 
     /**
      * 更新委托申请的评审信息。只有管理员和与该委托相关的测试部、市场部人员可以执行此操作。
-     * 其中除了管理员外只能在各自的评审阶段才可以执行此操作。
      * @param entrustId 要更新的委托ID
      * @param review 更新后的评审内容
      * @param userId 执行此操作的用户ID
@@ -130,6 +129,14 @@ public interface EntrustService {
      * @param userRole 执行此操作的用户角色
      */
     void approveQuote(String entrustId, Long userId, Role userRole);
+
+    /**
+     * 终止委托申请流程。只有客户和管理员可以进行此操作，注意只能在检查报价阶段放弃委托。
+     * @param entrustId 委托ID
+     * @param userId 执行此操作的用户ID
+     * @param userRole 执行此操作的用户角色
+     */
+    void terminateEntrust(String entrustId, Long userId, Role userRole);
 
     /**
      * 更改委托所属的客户，只有管理员可以进行此操作。

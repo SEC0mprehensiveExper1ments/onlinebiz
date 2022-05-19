@@ -188,14 +188,16 @@ public class DefaultEntrustService implements EntrustService {
     @Override
     public void updateReview(String entrustId, EntrustReview review, Long userId, Role userRole) {
         Entrust entrust = findEntrust(entrustId, userId, userRole);
-        EntrustStage currStage = entrust.getStatus().getStage();
-        // 检查委托阶段
-        if (currStage != EntrustStage.MARKETER_AUDITING && currStage != EntrustStage.TESTER_AUDITING) {
-            throw new EntrustInvalidStageException("此阶段不能修改委托评审结果");
+        boolean hasAuth = false;
+        if (userRole == Role.ADMIN) {
+            hasAuth = true;
+        } else if (userRole == Role.MARKETER) {
+            hasAuth = userId.equals(entrust.getMarketerId());
+        } else if (userRole == Role.TESTER) {
+            hasAuth = userId.equals(entrust.getTesterId());
         }
-        // 检查用户权限
-        if (!hasUpdateAuthority(entrust, userId, userRole)) {
-            throw new EntrustPermissionDeniedException("当前阶段无权修改委托评审结果");
+        if (!hasAuth) {
+            throw new EntrustPermissionDeniedException("无权修改委托审核结果");
         }
         if (!entrustDAO.updateReview(entrustId, review)) {
             throw new EntrustDAOFailureException("更新评审结果失败");
@@ -253,6 +255,24 @@ public class DefaultEntrustService implements EntrustService {
         }
         if (!entrustDAO.updateStatus(entrustId, new EntrustStatus(nextStage, null))) {
             throw new EntrustDAOFailureException("同意报价失败");
+        }
+    }
+
+    @Override
+    public void terminateEntrust(String entrustId, Long userId, Role userRole) {
+        Entrust entrust = findEntrust(entrustId, userId, userRole);
+        EntrustStage currStage = entrust.getStatus().getStage();
+        EntrustStage nextStage = EntrustStage.TERMINATED;
+        // 检查阶段
+        if (currStage != EntrustStage.CUSTOMER_CHECK_QUOTE) {
+            throw new EntrustInvalidStageException("此阶段无法终止委托");
+        }
+        // 检查用户权限
+        if (!hasUpdateAuthority(entrust, userId, userRole)) {
+            throw new EntrustPermissionDeniedException("无权终止该委托");
+        }
+        if (!entrustDAO.updateStatus(entrustId, new EntrustStatus(nextStage, null))) {
+            throw new EntrustDAOFailureException("终止委托失败");
         }
     }
 

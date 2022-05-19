@@ -31,6 +31,9 @@ public enum EntrustStage {
     CUSTOMER_DENY_QUOTE,
 
     // 客户接收报价
-    CUSTOMER_ACCEPT_QUOTE
+    CUSTOMER_ACCEPT_QUOTE,
+
+    // 委托终止
+    TERMINATED
 
 }
