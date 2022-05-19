@@ -6,20 +6,13 @@ spring:
     name: onlinebiz-gateway
   cloud:
     gateway:
-      #      允许Ajax跨域请求
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allowedHeaders: "*"
-            allowedMethods: "*"
-      #      使用DiscoveryClient
+      # 使用DiscoveryClient
       discovery:
         locator:
           enabled: true
-      #      配置网关路由
+      # 配置网关路由
       routes:
-        - id: user-management-public
+        - id: user-service-public
           uri: lb://onlinebiz-user
           predicates:
             - name: Path
@@ -31,52 +24,18 @@ spring:
                   - /account/username
                   - /account/password
                   - /account
-        - id: user-management-admin
+                  - /account/search
+                  - /user/{userId}
+
+        - id: user-service-private
           uri: lb://onlinebiz-user
           predicates:
             - name: Path
               args:
                 patterns:
-                  - /account/search
                   - /account/role
           filters:
-            - CheckRole=[admin]
-        - id: contract-management-public
-          uri: lb://onlinebiz-contract
-          predicates:
-            - name: Path
-              args:
-                patterns:
-                  - /contract/individual/**
-        - id: contract-management-internal
-          uri: lb://onlinebiz-contract
-          predicates:
-            - name: Path
-              args:
-                patterns:
-                  - /contract
-                  - /contract/{contractId}
-                  - /contract/search
-          filters:
-            - CheckRole=[admin,marketing]
-        - id: apply-management-public
-          uri: lb://onlinebiz-apply
-          predicates:
-            - name: Path
-              args:
-                patterns:
-                  - /apply/individual/**
-        - id: apply-management-internal
-          uri: lb://onlinebiz-apply
-          predicates:
-            - name: Path
-              args:
-                patterns:
-                  - /apply
-                  - /apply/{applyId}
-                  - /apply/search
-          filters:
-            - CheckRole=[admin,marketing]
+            - AddIdentity
 
 eureka:
   instance:

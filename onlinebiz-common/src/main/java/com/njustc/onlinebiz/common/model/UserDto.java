@@ -20,7 +20,7 @@ public class UserDto implements Serializable {
     public UserDto(User user) {
         this.userId = user.getUserId();
         this.userName = user.getUserName();
-        this.userRole = user.getUserRole();
+        this.userRole = user.getUserRole().toString();
     }
 
 }

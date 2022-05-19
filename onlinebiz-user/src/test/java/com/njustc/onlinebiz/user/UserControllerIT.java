@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.user;
 
+import com.njustc.onlinebiz.common.model.Role;
 import org.junit.jupiter.api.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -27,7 +28,7 @@ public class UserControllerIT {
     public void testLogInWithFakeAccountInURL() {
         // 参数放在 url 上
         client.post()
-                .uri("/login?userName=admin&userPassword=admin")
+                .uri("/login?userName=tester&userPassword=tester")
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -38,7 +39,7 @@ public class UserControllerIT {
         client.post()
                 .uri("/login")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .bodyValue("userName=admin&userPassword=admin")
+                .bodyValue("userName=tester&userPassword=tester")
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -62,7 +63,7 @@ public class UserControllerIT {
     @Order(5)
     public void testUpdateUsernameWhenNotLogIn() {
         client.post()
-                .uri("/account/username?newValue=admin")
+                .uri("/account/username?newValue=tester")
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -70,7 +71,7 @@ public class UserControllerIT {
     @Order(6)
     public void testUpdatePasswordWhenNotLogIn() {
         client.post()
-                .uri("/account/password?oldValue=admin&newValue=admin")
+                .uri("/account/password?oldValue=tester&newValue=tester")
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -96,7 +97,7 @@ public class UserControllerIT {
         client.post()
                 .uri("/register")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .bodyValue("userName=!#admin&userPassword=123")
+                .bodyValue("userName=!#tester&userPassword=123")
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -106,7 +107,7 @@ public class UserControllerIT {
         client.post()
                 .uri("/register")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .bodyValue("userName=admin&userPassword=123")
+                .bodyValue("userName=tester&userPassword=123")
                 .exchange().expectStatus().isOk();
     }
 
@@ -116,7 +117,7 @@ public class UserControllerIT {
         client.post()
                 .uri("/register")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .bodyValue("userName=admin&userPassword=admin")
+                .bodyValue("userName=tester&userPassword=tester")
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -132,20 +133,12 @@ public class UserControllerIT {
     @Order(13)
     public void testLogInWithValidAccount() {
         client.post()
-                .uri("/login?userName=admin&userPassword=123")
+                .uri("/login?userName=tester&userPassword=123")
                 .exchange()
                 .expectAll(
                         resp -> resp.expectStatus().isOk(),
                         resp -> resp.expectCookie().value(sessionCookieName, s -> sessionId = s)
                 );
-    }
-
-    @Test
-    @Order(14)
-    public void testLogInStatusWhenLogIn() {
-        client.get()
-                .uri("/login/status").cookie(sessionCookieName, sessionId)
-                .exchange().expectStatus().isOk();
     }
 
     @Test
@@ -155,7 +148,7 @@ public class UserControllerIT {
                 .uri("/account").cookie(sessionCookieName, sessionId)
                 .exchange().returnResult(String.class).getResponseBody().blockFirst();
         Assertions.assertNotNull(body);
-        Assertions.assertTrue(body.contains("admin"));
+        Assertions.assertTrue(body.contains("tester"));
     }
 
     @Test
@@ -236,7 +229,7 @@ public class UserControllerIT {
     @Order(25)
     public void testUpdatePasswordWhenLogout() {
         client.post()
-                .uri("/account/password?oldValue=abc&newValue=admin").cookie(sessionCookieName, sessionId)
+                .uri("/account/password?oldValue=abc&newValue=tester").cookie(sessionCookieName, sessionId)
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -286,7 +279,7 @@ public class UserControllerIT {
         client.post()
                 .uri("/account/password").cookie(sessionCookieName, sessionId)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .bodyValue("oldValue=abc&newValue=admin")
+                .bodyValue("oldValue=abc&newValue=tester")
                 .exchange().expectStatus().is4xxClientError();
     }
 
@@ -330,30 +323,38 @@ public class UserControllerIT {
     @Order(36)
     public void testUpdateUserRoleWithWrongUserName() {
         client.post()
-                .uri("/account/role?userName=non-existing&newValue=" + Role.MARKETING)
+                .uri("/account/role?userName=non-existing&newValue=" + Role.MARKETER)
                 .exchange().expectStatus().is4xxClientError();
     }
 
     @Test
     @Order(37)
-    public void testUpdateUserRoleShouldSuccess() {
+    public void testUpdateUserRoleShouldFail() {
         client.post()
-                .uri("/account/role?userName=guest&newValue=" + Role.MARKETING)
-                .exchange().expectStatus().isOk();
+                .uri("/account/role?userName=guest&newValue=" + Role.MARKETER + "&userRole=" + Role.CUSTOMER)
+                .exchange().expectStatus().is4xxClientError();
     }
 
     @Test
     @Order(38)
+    public void testUpdateUserRoleShouldSuccess() {
+        client.post()
+                .uri("/account/role?userName=guest&newValue=" + Role.MARKETER + "&userRole=" + Role.ADMIN)
+                .exchange().expectStatus().isOk();
+    }
+
+    @Test
+    @Order(39)
     public void testGetUserAfterChangingRole() {
         String body = client.get()
                 .uri("/account").cookie(sessionCookieName, sessionId)
                 .exchange().returnResult(String.class).getResponseBody().blockFirst();
         Assertions.assertNotNull(body);
-        Assertions.assertTrue(body.contains(Role.MARKETING));
+        Assertions.assertTrue(body.contains(Role.MARKETER.toString()));
     }
 
     @Test
-    @Order(39)
+    @Order(40)
     public void testLogOutAgain() {
         client.post()
                 .uri("/logout").cookie(sessionCookieName, sessionId)
@@ -361,18 +362,18 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(40)
+    @Order(41)
     public void testSearchUserShouldBeEmpty() {
         String body = client
                 .get()
-                .uri("/account/search?userName=admin").cookie(sessionCookieName, sessionId)
+                .uri("/account/search?userName=tester").cookie(sessionCookieName, sessionId)
                 .exchange().returnResult(String.class).getResponseBody().blockFirst();
         Assertions.assertNotNull(body);
         Assertions.assertEquals("[]", body);
     }
 
     @Test
-    @Order(41)
+    @Order(42)
     public void testSearchUserShouldNotBeEmpty() {
         String body = client
                 .get()
@@ -381,4 +382,5 @@ public class UserControllerIT {
         Assertions.assertNotNull(body);
         Assertions.assertNotEquals("[]", body);
     }
+
 }

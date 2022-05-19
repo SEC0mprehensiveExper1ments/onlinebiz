@@ -1,9 +1,9 @@
 package com.njustc.onlinebiz.user.controller;
 
+import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.User;
 import com.njustc.onlinebiz.common.model.UserDto;
 import com.njustc.onlinebiz.user.service.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,10 +26,10 @@ public class UserController {
             @RequestParam("userName") String userName,
             @RequestParam("userPassword") String userPassword
     ) {
-        if (!userService.createUser(userName, userPassword)) {
-            return ResponseEntity.badRequest().build();
+        if (userService.createUser(userName, userPassword)) {
+            return ResponseEntity.ok().build();
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.badRequest().build();
     }
 
     // 登录
@@ -43,14 +43,6 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();
-    }
-
-    // 查看当前登录状态（先留着，后面不用的话再说）
-    @GetMapping("/login/status")
-    public ResponseEntity<Void> getLogInStatus(HttpServletRequest request) {
-        return userService.checkLogIn(request) ?
-                ResponseEntity.ok().build() :
-                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     // 登出
@@ -120,10 +112,21 @@ public class UserController {
     @PostMapping("/account/role")
     public ResponseEntity<Void> changeRole(
             @RequestParam("userName") String userName,
-            @RequestParam("newValue") String userRole
-    ) {
-        return userService.updateUserRole(userName, userRole) ?
+            @RequestParam("newValue") String newValue,
+            @RequestParam("userRole") Role userRole
+            ) {
+        return userService.updateUserRole(userName, newValue, userRole) ?
                 ResponseEntity.ok().build() :
                 ResponseEntity.badRequest().build();
     }
+
+    // 获取指定用户ID的账号信息
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<UserDto> getUser(@PathVariable("userId") Long userId) {
+        User user = userService.getUserByUserId(userId);
+        return user == null ?
+                ResponseEntity.notFound().build() :
+                ResponseEntity.ok(new UserDto(user));
+    }
+
 }

@@ -22,4 +22,5 @@ public class GatewayServiceApplication {
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         return redisTemplate;
     }
+
 }

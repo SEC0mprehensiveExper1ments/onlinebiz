@@ -17,11 +17,12 @@ public class User implements Serializable {
 
     private String userPassword;
 
-    private String userRole;
+    private Role userRole;
 
-    public User(String userName, String userPassword, String userRole) {
+    public User(String userName, String userPassword, Role userRole) {
         this.userName = userName;
         this.userPassword = userPassword;
         this.userRole = userRole;
     }
+
 }

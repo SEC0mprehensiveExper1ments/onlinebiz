@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class SimpleUserServiceConfiguration {
+public class UserServiceConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -21,4 +21,5 @@ public class SimpleUserServiceConfiguration {
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         return redisTemplate;
     }
+
 }

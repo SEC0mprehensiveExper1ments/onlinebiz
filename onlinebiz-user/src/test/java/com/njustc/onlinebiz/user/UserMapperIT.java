@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.user;
 
+import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.user.mapper.UserMapper;
 import com.njustc.onlinebiz.common.model.User;
 import org.junit.jupiter.api.Assertions;
@@ -61,7 +62,7 @@ public class UserMapperIT {
 
         @Test
         public void testUpdateUserRoleFail() {
-            Assertions.assertEquals(0, userMapper.updateUserRoleByUserName("non-existing-userName", Role.CUSTOMER));
+            Assertions.assertEquals(0, userMapper.updateUserRoleByUserName("non-existing-userName", Role.CUSTOMER.toString()));
             Assertions.assertEquals(user, userMapper.selectUserByUserId(user.getUserId()));
         }
 
@@ -97,8 +98,8 @@ public class UserMapperIT {
 
         @Test
         public void testUpdateUserRoleSuccess() {
-            Assertions.assertEquals(1, userMapper.updateUserRoleByUserName(user.getUserName(), Role.MARKETING));
-            Assertions.assertEquals(Role.MARKETING, userMapper.selectUserByUserId(user.getUserId()).getUserRole());
+            Assertions.assertEquals(1, userMapper.updateUserRoleByUserName(user.getUserName(), Role.MARKETER.toString()));
+            Assertions.assertEquals(Role.MARKETER, userMapper.selectUserByUserId(user.getUserId()).getUserRole());
         }
 
         @Test

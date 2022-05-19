@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.user.service;
 
+import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,30 +8,82 @@ import java.util.List;
 
 public interface UserService {
 
-    // 创建一个新用户，成功返回 true，失败返回 false
+    /**
+     * 创建一个新用户
+     * @param userName 用户名
+     * @param userPassword 用户密码
+     * @return 成功返回 true，失败返回 false
+     */
     boolean createUser(String userName, String userPassword);
 
-    // 获取用户的身份信息，成功返回 User 对象，失败返回 null
+    /**
+     * 获取当前登录的用户的信息
+     * @param request 发来的请求对象
+     * @return 如果 request 标志的用户目前处于登录状态，则返回该用户对象；否则返回 null
+     */
     User getCurrentUser(HttpServletRequest request);
 
+    /**
+     * 更新当前登录的用户的用户名
+     * @param userName 更新后的用户名
+     * @param request 对应的 Http 请求
+     * @return 成功返回 true，失败返回 false
+     */
     boolean updateCurrentUserName(String userName, HttpServletRequest request);
 
+    /**
+     * 更新当前登录的用户的用户密码
+     * @param oldPassword 旧的用户密码
+     * @param newPassword 新的用户密码
+     * @param request 对应的 Http 请求
+     * @return 成功返回 true，失败返回 false
+     */
     boolean updateCurrentUserPassword(String oldPassword, String newPassword, HttpServletRequest request);
 
-    // 注销一个用户账号
+    /**
+     * 注销当前登录的用户账号
+     * @param request 对应的 Http 请求
+     * @return 成功返回 true，失败返回 false
+     */
     boolean removeCurrentUser(HttpServletRequest request);
 
-    // 处理登录，需要 request 来操作 session
+    /**
+     * 处理用户登录请求
+     * @param username 用户名
+     * @param password 用户密码
+     * @param request 对应的 Http 请求
+     * @return 成功返回 true，失败返回 false
+     */
     boolean handleLogIn(String username, String password, HttpServletRequest request);
 
+    /**
+     * 处理用户登出请求
+     * @param request 对应的 Http 请求
+     * @return 成功返回 true，失败返回 false
+     */
     boolean handleLogOut(HttpServletRequest request);
 
-    // 检查是否登录
-    boolean checkLogIn(HttpServletRequest request);
-
-    // 根据用户名搜索用户账号
+    /**
+     * 根据用户名搜索用户账号
+     * @param userName 搜索关键字
+     * @return 匹配的用户列表
+     */
     List<User> searchUserByUserName(String userName);
 
-    // 修改某个用户的角色
-    boolean updateUserRole(String userName, String userRole);
+    /**
+     * 修改某个用户的角色
+     * @param userName 要修改的用户名
+     * @param newValue 新的用户角色
+     * @param userRole 执行此操作的用户角色
+     * @return 成功返回 true，失败返回 false
+     */
+    boolean updateUserRole(String userName, String newValue, Role userRole);
+
+    /**
+     * 根据用户ID获取用户信息
+     * @param userId 用户ID
+     * @return 如果存在返回该用户对象，否则返回 null
+     */
+    User getUserByUserId(Long userId);
+
 }
