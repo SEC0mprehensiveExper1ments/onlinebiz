@@ -59,7 +59,7 @@ public class EntrustController {
             @PathVariable("entrustId") String entrustId,
             @RequestParam("userId") Long userId,
             @RequestParam("userRole") Role userRole,
-            @RequestParam("marketingId") Long marketerId
+            @RequestParam("marketerId") Long marketerId
     ) {
         entrustService.updateMarketer(entrustId, marketerId, userId, userRole);
     }

@@ -16,7 +16,7 @@ public class EntrustQuote {
     private String quotationDate;
 
     // 报价有效期
-    private String EffectiveDate;
+    private String effectiveDate;
 
     // 开户银行
     private String bankName;
