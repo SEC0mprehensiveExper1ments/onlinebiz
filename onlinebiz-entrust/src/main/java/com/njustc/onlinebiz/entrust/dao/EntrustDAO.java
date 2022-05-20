@@ -90,6 +90,14 @@ public interface EntrustDAO {
     Boolean updateContent(String entrustId, EntrustContent content);
 
     /**
+     * 更新软件文档评审信息。
+     * @param entrustId 委托ID
+     * @param softwareDocReview 软件文档评审对象
+     * @return 成功返回 true，失败返回 false
+     */
+    Boolean updateSoftwareDocReview(String entrustId, SoftwareDocReview softwareDocReview);
+
+    /**
      * 更新委托评审结果
      * @param entrustId 委托ID
      * @param review 更新后的评审结果

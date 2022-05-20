@@ -186,6 +186,21 @@ public class DefaultEntrustService implements EntrustService {
     }
 
     @Override
+    public void updateSoftwareDocReview(String entrustId, SoftwareDocReview softwareDocReview, Long userId, Role userRole) {
+        Entrust entrust = findEntrust(entrustId, userId, userRole);
+        if (entrust.getStatus().getStage() != EntrustStage.TESTER_AUDITING) {
+            throw new EntrustInvalidStageException("此阶段不能修改软件文档评审信息");
+        }
+        if (userRole != Role.ADMIN && (userRole != Role.TESTER || !userId.equals(entrust.getTesterId()))) {
+            throw new EntrustPermissionDeniedException("无权修改此软件文档评审信息");
+        }
+        if (entrustDAO.updateSoftwareDocReview(entrustId, softwareDocReview)) {
+            return;
+        }
+        throw new EntrustDAOFailureException("更新软件文档评审数据失败");
+    }
+
+    @Override
     public void updateReview(String entrustId, EntrustReview review, Long userId, Role userRole) {
         Entrust entrust = findEntrust(entrustId, userId, userRole);
         boolean hasAuth = false;

@@ -139,6 +139,16 @@ public class EntrustController {
         entrustService.approveQuote(entrustId, userId, userRole);
     }
 
+    @PostMapping("/entrust/{entrustId}/software_doc_review")
+    public void updateSoftwareDocReview(
+            @PathVariable("entrustId") String entrustId,
+            @RequestParam("userId") Long userId,
+            @RequestParam("userRole") Role userRole,
+            @RequestBody SoftwareDocReview softwareDocReview
+    ) {
+        entrustService.updateSoftwareDocReview(entrustId, softwareDocReview, userId, userRole);
+    }
+
     // 修改委托评审结果
     @PostMapping("/entrust/{entrustId}/review")
     public void updateReview(

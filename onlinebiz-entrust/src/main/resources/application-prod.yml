@@ -7,7 +7,7 @@ spring:
   data:
     mongodb:
       host: 124.221.156.98
-      port: 27018
+      port: 27017
       username: root
       password: nAnj1ng_Jia0tong_Univ
       database: onlinebiz

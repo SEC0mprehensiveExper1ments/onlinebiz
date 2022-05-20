@@ -40,7 +40,7 @@ public class UserMapperIT {
 
         @Test
         public void testSelectUserByIdFail() {
-            Assertions.assertNull(userMapper.selectUserByUserId(10L));
+            Assertions.assertNull(userMapper.selectUserByUserId(-1L));
         }
 
         @Test
@@ -50,13 +50,13 @@ public class UserMapperIT {
 
         @Test
         public void testUpdateUserNameFail() {
-            Assertions.assertEquals(0, userMapper.updateUserNameById(10L, "Jack"));
+            Assertions.assertEquals(0, userMapper.updateUserNameById(-1L, "Jack"));
             Assertions.assertEquals(user, userMapper.selectUserByUserId(user.getUserId()));
         }
 
         @Test
         public void testUpdateUserPasswordFail() {
-            Assertions.assertEquals(0, userMapper.updateUserPasswordById(10L, "123"));
+            Assertions.assertEquals(0, userMapper.updateUserPasswordById(-1L, "123"));
             Assertions.assertEquals(user, userMapper.selectUserByUserId(user.getUserId()));
         }
 
@@ -68,7 +68,7 @@ public class UserMapperIT {
 
         @Test
         public void testDeleteUserByIdFail() {
-            Assertions.assertEquals(0, userMapper.deleteUserById(10L));
+            Assertions.assertEquals(0, userMapper.deleteUserById(-1L));
             Assertions.assertEquals(user, userMapper.selectUserByUserId(user.getUserId()));
         }
 

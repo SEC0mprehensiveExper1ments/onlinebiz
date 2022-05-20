@@ -93,6 +93,15 @@ public interface EntrustService {
     void approveContent(String entrustId, Long userId, Role userRole);
 
     /**
+     * 更新委托的软件文档评审数据，只有负责该委托的测试部人员和管理员可以进行此操作。
+     * @param entrustId 软件文档评审所属的委托ID
+     * @param softwareDocReview 修改后的数据对象
+     * @param userId 执行此操作的用户ID
+     * @param userRole 执行此操作的用户角色
+     */
+    void updateSoftwareDocReview(String entrustId, SoftwareDocReview softwareDocReview, Long userId, Role userRole);
+
+    /**
      * 更新委托申请的评审信息。只有管理员和与该委托相关的测试部、市场部人员可以执行此操作。
      * @param entrustId 要更新的委托ID
      * @param review 更新后的评审内容

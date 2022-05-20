@@ -28,6 +28,9 @@ public class Entrust {
     // 委托申请内容
     private EntrustContent content;
 
+    // 软件文档评审
+    private SoftwareDocReview softwareDocReview;
+
     // 委托评审结果
     private EntrustReview review;
 

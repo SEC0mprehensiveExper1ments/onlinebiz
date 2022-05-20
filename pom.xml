@@ -32,6 +32,7 @@
         <module>onlinebiz-common</module>
         <module>onlinebiz-entrust</module>
         <module>onlinebiz-test</module>
+        <module>onlinebiz-contract</module>
     </modules>
 
     <dependencyManagement>
