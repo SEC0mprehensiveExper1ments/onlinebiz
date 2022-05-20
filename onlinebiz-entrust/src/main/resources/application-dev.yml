@@ -1,16 +1,12 @@
 server:
-  port: 9001
+  port: 10001
 
 spring:
   application:
-<<<<<<<< HEAD:onlinebiz-test/src/main/resources/application-dev.yml
-    name: onlinebiz-test
-========
     name: onlinebiz-entrust
->>>>>>>> dev:onlinebiz-entrust/src/main/resources/application-dev.yml
   data:
     mongodb:
-      host: localhost
+      host: 124.222.168.27
       port: 27017
       username: root
       password: nAnj1ng_Jia0tong_Univ
@@ -19,11 +15,7 @@ spring:
 
 eureka:
   instance:
-<<<<<<<< HEAD:onlinebiz-test/src/main/resources/application-dev.yml
-    instance-id: test-service9001
-========
     instance-id: entrust-service10001
->>>>>>>> dev:onlinebiz-entrust/src/main/resources/application-dev.yml
   client:
     fetch-registry: true
     register-with-eureka: true

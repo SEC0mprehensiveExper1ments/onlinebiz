@@ -212,7 +212,7 @@ public class DefaultUserService implements UserService {
         if (userName == null || !userName.matches(USERNAME_PATTERN) || userRole != Role.ADMIN) {
             return false;
         }
-        // 检查用户角色是否存在
+        // 检查新的用户角色是否合法
         Role newRole;
         try {
             newRole = Role.valueOf(newValue);

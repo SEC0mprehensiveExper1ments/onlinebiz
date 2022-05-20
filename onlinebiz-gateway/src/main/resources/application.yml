@@ -18,14 +18,14 @@ spring:
             - name: Path
               args:
                 patterns:
-                  - /login/**
-                  - /logout
-                  - /register
-                  - /account/username
-                  - /account/password
-                  - /account
-                  - /account/search
-                  - /user/{userId}
+                  - /api/login
+                  - /api/logout
+                  - /api/register
+                  - /api/account/username
+                  - /api/account/password
+                  - /api/account
+                  - /api/user/search
+                  - /api/user/{userId}
 
         - id: user-service-private
           uri: lb://onlinebiz-user
@@ -33,7 +33,17 @@ spring:
             - name: Path
               args:
                 patterns:
-                  - /account/role
+                  - /api/account/role
+          filters:
+            - AddIdentity
+
+        - id: entrust-service
+          uri: lb://onlinebiz-entrust
+          predicates:
+            - name: Path
+              args:
+                patterns:
+                  /api/entrust/**
           filters:
             - AddIdentity
 

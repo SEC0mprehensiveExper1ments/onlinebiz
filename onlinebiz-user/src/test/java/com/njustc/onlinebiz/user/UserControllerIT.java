@@ -1,6 +1,9 @@
 package com.njustc.onlinebiz.user;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.UserDto;
 import org.junit.jupiter.api.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -15,13 +18,16 @@ import java.time.Duration;
 public class UserControllerIT {
 
     // 用来发送请求的对象
-    private static final WebTestClient client = WebTestClient.bindToServer().baseUrl("http://localhost:8001").responseTimeout(Duration.ofDays(1)).build();
+    private static final WebTestClient client = WebTestClient.bindToServer().baseUrl("http://localhost:8001/api").responseTimeout(Duration.ofDays(1)).build();
 
     // 从配置文件中读取 cookie 的名称
     private static final String sessionCookieName = "NJUSTC_ONLINEBIZ_SESSION";
 
     // 保存会话 id 用于后面的测试
     private static String sessionId;
+
+    // 保存一位用户信息用于测试
+    private static UserDto userDto;
 
     @Test
     @Order(1)
@@ -139,6 +145,7 @@ public class UserControllerIT {
                         resp -> resp.expectStatus().isOk(),
                         resp -> resp.expectCookie().value(sessionCookieName, s -> sessionId = s)
                 );
+
     }
 
     @Test
@@ -311,12 +318,13 @@ public class UserControllerIT {
 
     @Test
     @Order(35)
-    public void testGetUserAgain() {
+    public void testGetUserAgain() throws JsonProcessingException {
         String body = client.get()
                 .uri("/account").cookie(sessionCookieName, sessionId)
                 .exchange().returnResult(String.class).getResponseBody().blockFirst();
         Assertions.assertNotNull(body);
-        Assertions.assertTrue(body.contains("guest"));
+        userDto = new ObjectMapper().readValue(body, UserDto.class);
+        Assertions.assertEquals("guest", userDto.getUserName());
     }
 
     @Test
@@ -366,7 +374,7 @@ public class UserControllerIT {
     public void testSearchUserShouldBeEmpty() {
         String body = client
                 .get()
-                .uri("/account/search?userName=tester").cookie(sessionCookieName, sessionId)
+                .uri("/user/search?userName=tester").cookie(sessionCookieName, sessionId)
                 .exchange().returnResult(String.class).getResponseBody().blockFirst();
         Assertions.assertNotNull(body);
         Assertions.assertEquals("[]", body);
@@ -377,10 +385,26 @@ public class UserControllerIT {
     public void testSearchUserShouldNotBeEmpty() {
         String body = client
                 .get()
-                .uri("/account/search?userName=guest").cookie(sessionCookieName, sessionId)
+                .uri("/user/search?userName=guest").cookie(sessionCookieName, sessionId)
                 .exchange().returnResult(String.class).getResponseBody().blockFirst();
         Assertions.assertNotNull(body);
         Assertions.assertNotEquals("[]", body);
+    }
+
+    @Test
+    @Order(43)
+    public void testGetUserByIdFail() {
+        client.get().uri("/user/-1").exchange().expectStatus().is4xxClientError();
+    }
+
+    @Test
+    @Order(44)
+    public void testGetUserByIdSuccess() throws JsonProcessingException {
+        String body = client
+                .get().uri("/user/" + userDto.getUserId())
+                .exchange().returnResult(String.class).getResponseBody().blockFirst();
+        UserDto result = new ObjectMapper().readValue(body, UserDto.class);
+        Assertions.assertEquals(result.getUserName(), userDto.getUserName());
     }
 
 }

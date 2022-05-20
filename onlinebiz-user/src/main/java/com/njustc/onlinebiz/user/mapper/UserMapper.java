@@ -47,8 +47,8 @@ public interface UserMapper {
     int updateUserPasswordById(Long userId, String userPassword);
 
     /**
-     * 根据用户ID更新用户角色
-     * @param userName 用户ID
+     * 根据用户名更新用户角色
+     * @param userName 用户名
      * @param userRole 新的用户角色
      * @return 本次操作影响的行数，若成功应当返回 1；失败返回 0
      */

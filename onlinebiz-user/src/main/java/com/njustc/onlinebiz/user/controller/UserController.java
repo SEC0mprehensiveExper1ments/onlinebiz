@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
 
     UserService userService;
@@ -101,20 +102,13 @@ public class UserController {
         return ResponseEntity.ok().body(new UserDto(user));
     }
 
-    // 按用户名查找某个账号
-    @GetMapping("/account/search")
-    public ResponseEntity<List<UserDto>> searchAccount(@RequestParam("userName") String userName) {
-        List<User> userList = userService.searchUserByUserName(userName);
-        return ResponseEntity.ok().body(userList.stream().map(UserDto::new).collect(Collectors.toList()));
-    }
-
     // 修改某个账号的角色
     @PostMapping("/account/role")
     public ResponseEntity<Void> changeRole(
             @RequestParam("userName") String userName,
             @RequestParam("newValue") String newValue,
             @RequestParam("userRole") Role userRole
-            ) {
+    ) {
         return userService.updateUserRole(userName, newValue, userRole) ?
                 ResponseEntity.ok().build() :
                 ResponseEntity.badRequest().build();
@@ -127,6 +121,13 @@ public class UserController {
         return user == null ?
                 ResponseEntity.notFound().build() :
                 ResponseEntity.ok(new UserDto(user));
+    }
+
+    // 按用户名查找某个账号
+    @GetMapping("/user/search")
+    public ResponseEntity<List<UserDto>> searchAccount(@RequestParam("userName") String userName) {
+        List<User> userList = userService.searchUserByUserName(userName);
+        return ResponseEntity.ok().body(userList.stream().map(UserDto::new).collect(Collectors.toList()));
     }
 
 }

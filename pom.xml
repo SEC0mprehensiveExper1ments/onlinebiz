@@ -30,7 +30,6 @@
         <module>onlinebiz-gateway</module>
         <module>onlinebiz-discovery</module>
         <module>onlinebiz-common</module>
-        <module>onlinebiz-test</module>
         <module>onlinebiz-entrust</module>
     </modules>
 
