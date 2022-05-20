@@ -1,9 +1,9 @@
 package com.njustc.onlinebiz.test.controller;
 
-import com.njustc.onlinebiz.test.exception.TestDAOFailureException;
-import com.njustc.onlinebiz.test.exception.TestInvalidStageException;
-import com.njustc.onlinebiz.test.exception.TestNotFoundException;
-import com.njustc.onlinebiz.test.exception.TestPermissionDeniedException;
+import com.njustc.onlinebiz.test.exception.ProjectDAOFailureException;
+import com.njustc.onlinebiz.test.exception.ProjectInvalidStageException;
+import com.njustc.onlinebiz.test.exception.ProjectNotFoundException;
+import com.njustc.onlinebiz.test.exception.ProjectPermissionDeniedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,32 +16,32 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ProjectControllerAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(TestPermissionDeniedException.class)
-    public String handlePermissionDeniedException(TestPermissionDeniedException e) {
+    @ExceptionHandler(ProjectPermissionDeniedException.class)
+    public String handlePermissionDeniedException(ProjectPermissionDeniedException e) {
         log.warn("Permission Denied Exception: " + e.getMessage());
         return e.getMessage();
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(TestDAOFailureException.class)
-    public String handleDAOFailureException(TestDAOFailureException e) {
+    @ExceptionHandler(ProjectDAOFailureException.class)
+    public String handleDAOFailureException(ProjectDAOFailureException e) {
         log.error("DAO Failure Detected: " + e.getMessage());
         return e.getMessage();
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(TestInvalidStageException.class)
-    public String handleInvalidStageException(TestInvalidStageException e) {
+    @ExceptionHandler(ProjectInvalidStageException.class)
+    public String handleInvalidStageException(ProjectInvalidStageException e) {
         log.warn("Invalid Stage Detected: " + e.getMessage());
         return e.getMessage();
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(TestNotFoundException.class)
-    public String handleNotFoundException(TestNotFoundException e) {
+    @ExceptionHandler(ProjectNotFoundException.class)
+    public String handleNotFoundException(ProjectNotFoundException e) {
         log.warn("Test Not Found: " + e.getMessage());
         return e.getMessage();
     }
