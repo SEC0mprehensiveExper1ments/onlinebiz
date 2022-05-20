@@ -1,17 +1,12 @@
-package com.njustc.onlinebiz.test.service;
+package com.njustc.onlinebiz.test.service.schemeService;
 
 import com.njustc.onlinebiz.common.model.Scheme;
 
 
-public interface TestService {
-    /**
-     * 创建一份新的测试方案
-     *
-     * @param creatorId 生成该测试方案的用户，应当为内部员工ID
-     * @param applyId   对应的委托申请ID
-     * @param scheme    传入的JS006文件数据
-     * @return 新创建的测试方案对象，测试方案ID已被正确设置
-     */
+public interface SchemeService {
+
+
+
     Scheme createScheme(Long creatorId, String applyId, Scheme scheme);
 
     // 根据测试方案ID查找测试方案

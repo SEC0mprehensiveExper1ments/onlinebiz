@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.test.service;
+package com.njustc.onlinebiz.test.service.schemeService;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class MongoTestService implements TestService{
+public class MongoSchemeService implements SchemeService {
     private final MongoTemplate mongoTemplate;
 
-    public MongoTestService(MongoTemplate mongoTemplate) {
+    public MongoSchemeService(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 
