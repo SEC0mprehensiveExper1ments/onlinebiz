@@ -1,6 +1,6 @@
 package com.njustc.onlinebiz.test.service.schemeService;
 
-import com.njustc.onlinebiz.common.model.Scheme;
+import com.njustc.onlinebiz.test.model.Scheme;
 
 
 public interface SchemeService {

@@ -1,10 +1,9 @@
 package com.njustc.onlinebiz.test.controller;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.TestProject;
-import com.njustc.onlinebiz.test.service.schemeService.SchemeService;
+import com.njustc.onlinebiz.test.exception.TestPermissionDeniedException;
+import com.njustc.onlinebiz.test.service.projectService.ProjectService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -12,22 +11,23 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class ProjectController {
 
-    private final SchemeService testService;
+    private final ProjectService projectService;
 
-    public ProjectController(SchemeService testService) {
-        this.testService = testService;
+    public ProjectController(ProjectService projectService) {
+        this.projectService = projectService;
     }
 
+
     @PostMapping("/test")
-    public ResponseEntity<TestProject> createTestProject(
+    public String createTestProject(
             @RequestParam("userId") Long userId,
             @RequestParam("userRole") Role userRole
     ) {
-        TestProject result = testService.createTestProject(userId);
-        if (result != null) {
-            return ResponseEntity.ok().body(result);
-        }
-        return ResponseEntity.badRequest().build();
+        /*所有权限管理在controller层实现*/
+        if(userRole!=Role.ADMIN && userRole != Role.MARKETER && userRole!=Role.MARKETING_SUPERVISOR)
+            throw new TestPermissionDeniedException("无权新建测试项目");
+
+        return projectService.createTestProject(userId, userRole);
     }
 
 

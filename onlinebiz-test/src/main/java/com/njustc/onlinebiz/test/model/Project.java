@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.common.model;
+package com.njustc.onlinebiz.test.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,12 +12,15 @@ import lombok.experimental.Accessors;
 /**
  * 测试项目模型，由该模块可以直接索引该测试项目文件
  */
-public class TestProject {
+public class Project {
     // MongoDB 中存放此类型对象的 collection 的名字
     public static final String COLLECTION_NAME = "testProject";
 
-    // 申请 id，由 MongoDB 自动生成
+    // 项目 id，由 MongoDB 自动生成
     private String id;
+
+    // 市场部生成项目人 id
+    private Long creatorId;
 
     // 对应的测试方案 id
     private String testSchemeId;
@@ -42,4 +45,7 @@ public class TestProject {
 
     // 对应的软件文档评审表
     private String softwareDocumentChecklistId;
+
+    // 该项目的状态
+    private boolean isFinished;
 }
