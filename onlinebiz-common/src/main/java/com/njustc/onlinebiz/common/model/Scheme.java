@@ -52,11 +52,11 @@ public class Scheme {
     private String testSample;
     //    制定测试计划
     private Schedule planSchedule;
-    //    设计测试
+    //    设计测试计划
     private Schedule designSchedule;
-    //    执行测试
+    //    执行测试计划
     private Schedule executeSchedule;
-    //    评估测试
+    //    评估测试计划
     private Schedule evaluateSchedule;
     //    需求的可追踪性
     private String traceability;
