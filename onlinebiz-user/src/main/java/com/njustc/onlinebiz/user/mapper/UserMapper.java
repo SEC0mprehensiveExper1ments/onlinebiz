@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.user.mapper;
 
+import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -67,5 +68,12 @@ public interface UserMapper {
      * @return 匹配的用户列表
      */
     List<User> selectUsersWithUserNameLike(String pattern);
+
+    /**
+     * 根据用户角色查询用户
+     * @param userRole 用户角色
+     * @return 查询到的用户列表
+     */
+    List<User> selectUserByUserRole(Role userRole);
 
 }

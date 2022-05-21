@@ -38,4 +38,9 @@
     <select id="selectUsersWithUserNameLike" resultType="User">
         select * from user_account where user_name like #{pattern}
     </select>
+
+    <select id="selectUserByUserRole" resultType="User">
+        select * from user_account where user_role = #{userRole}
+    </select>
+
 </mapper>

@@ -1,6 +1,8 @@
 package com.njustc.onlinebiz.user.service;
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.User;
+import com.njustc.onlinebiz.user.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -28,10 +30,16 @@ public class UserServiceConfiguration {
         return redisTemplate;
     }
 
-    // 启动时创建 root 账号
+    // 启动时创建 admin 账号
     @Bean
-    public ApplicationRunner createAdmin(UserService userService) {
+    public ApplicationRunner createAdmin(UserService userService, UserMapper userMapper) {
         return args -> {
+            // 判断 admin 是否已经存在，如果存在就删掉原来的账号
+            User user = userMapper.selectUserByUserName("admin");
+            if (user != null) {
+                userMapper.deleteUserById(user.getUserId());
+            }
+            // 注册新的 admin 账号
             String passwd = UUID.randomUUID().toString();
             if (!userService.createUser("admin", passwd)) {
                 log.error("Can not create root!");

@@ -407,4 +407,13 @@ public class UserControllerIT {
         Assertions.assertEquals(result.getUserName(), userDto.getUserName());
     }
 
+    @Test
+    @Order(45)
+    public void testSearchUserWithUserRole() {
+        String body = client.get().uri("/user/search?userRole=" + Role.MARKETER)
+                .exchange().returnResult(String.class).getResponseBody().blockFirst();
+        Assertions.assertNotNull(body);
+        Assertions.assertTrue(body.contains("guest"));
+    }
+
 }

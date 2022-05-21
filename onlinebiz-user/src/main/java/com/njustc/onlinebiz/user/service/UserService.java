@@ -71,6 +71,13 @@ public interface UserService {
     List<User> searchUserByUserName(String userName);
 
     /**
+     * 根据用户角色查询用户
+     * @param userRole 要查询的用户角色
+     * @return 匹配的用户列表
+     */
+    List<User> searchUserByUserRole(Role userRole);
+
+    /**
      * 修改某个用户的角色
      * @param userName 要修改的用户名
      * @param newValue 新的用户角色

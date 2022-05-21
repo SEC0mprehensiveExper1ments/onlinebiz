@@ -43,7 +43,17 @@ spring:
             - name: Path
               args:
                 patterns:
-                  /api/entrust/**
+                  - /api/entrust/**
+          filters:
+            - AddIdentity
+
+        - id: contract-service
+          uri: lb://onlinebiz-contract
+          predicates:
+            - name: Path
+              args:
+                patterns:
+                  - /api/contract/**
           filters:
             - AddIdentity
 

@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.util.DigestUtils;
 
+import java.util.List;
+
 // IT 结尾表示一个集成测试。这里使用 @MyBatisTest 会自动 rollback，
 // 并且不会启动 Spring 容器中的无关实例（最好是纯 MyBatis 测试，否则
 // 可能会因为缺少依赖而失败？）
@@ -116,6 +118,18 @@ public class UserMapperIT {
         public void testDeleteUserByIdSuccess() {
             Assertions.assertEquals(1, userMapper.deleteUserById(user.getUserId()));
             Assertions.assertNull(userMapper.selectUserByUserId(user.getUserId()));
+        }
+
+        @Test
+        public void testSearchByUserRoleShouldBeEmpty() {
+            Assertions.assertEquals(0, userMapper.selectUserByUserRole(Role.QA_SUPERVISOR).size());
+        }
+
+        @Test
+        public void testSearchByUserRoleShouldSuccess() {
+            List<User> userList = userMapper.selectUserByUserRole(Role.CUSTOMER);
+            Assertions.assertEquals(1, userList.size());
+            Assertions.assertEquals(user, userList.get(0));
         }
     }
 }

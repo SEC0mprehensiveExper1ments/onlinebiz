@@ -125,8 +125,18 @@ public class UserController {
 
     // 按用户名查找某个账号
     @GetMapping("/user/search")
-    public ResponseEntity<List<UserDto>> searchAccount(@RequestParam("userName") String userName) {
-        List<User> userList = userService.searchUserByUserName(userName);
+    public ResponseEntity<List<UserDto>> searchAccount(
+            @RequestParam(value = "userName", required = false) String userName,
+            @RequestParam(value = "userRole", required = false) Role userRole
+    ) {
+        List<User> userList;
+        if (userName != null) {
+            userList = userService.searchUserByUserName(userName);
+        } else if (userRole != null) {
+            userList = userService.searchUserByUserRole(userRole);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok().body(userList.stream().map(UserDto::new).collect(Collectors.toList()));
     }
 

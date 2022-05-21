@@ -207,6 +207,14 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    public List<User> searchUserByUserRole(Role userRole) {
+        if (userRole == null) {
+            return null;
+        }
+        return userMapper.selectUserByUserRole(userRole);
+    }
+
+    @Override
     public boolean updateUserRole(String userName, String newValue, Role userRole) {
         // 检查参数和权限
         if (userName == null || !userName.matches(USERNAME_PATTERN) || userRole != Role.ADMIN) {
