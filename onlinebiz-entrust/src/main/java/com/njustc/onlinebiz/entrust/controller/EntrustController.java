@@ -202,4 +202,29 @@ public class EntrustController {
         entrustService.removeEntrust(entrustId, userId, userRole);
     }
 
+    // 用于合同管理部分检查流程和人员一致性
+    @GetMapping("/entrust/{entrustId}/check_consistency_with_contract")
+    public Long checkConsistencyWithContract(
+            @PathVariable("entrustId") String entrustId,
+            @RequestParam("userId") Long userId,
+            @RequestParam("userRole") Role userRole
+    ) {
+        return entrustService.checkConsistencyWithContract(entrustId, userId, userRole);
+    }
+
+    // 供合同管理调用此接口来注册合同ID
+    @PostMapping("/entrust/{entrustId}/register_contract")
+    public void registerContract(
+            @PathVariable("entrustId") String entrustId,
+            @RequestParam("contractId") String contractId
+    ) {
+        entrustService.registerContract(entrustId, contractId);
+    }
+
+    // 内部调用获取测试人员ID
+    @GetMapping("/entrust/{entrustId}/get_tester_id")
+    public Long getTesterId(@PathVariable("entrustId") String entrustId) {
+        return entrustService.getTesterId(entrustId);
+    }
+
 }

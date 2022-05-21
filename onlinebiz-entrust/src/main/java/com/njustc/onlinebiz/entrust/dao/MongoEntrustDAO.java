@@ -80,6 +80,12 @@ public class MongoEntrustDAO implements EntrustDAO {
     }
 
     @Override
+    public Boolean updateContractId(String entrustId, String contractId) {
+        Update update = new Update().set("contractId", contractId);
+        return updateFirstWithId(entrustId, update);
+    }
+
+    @Override
     public Boolean updateContent(String entrustId, EntrustContent content) {
         Update update = new Update().set("content", content);
         return updateFirstWithId(entrustId, update);

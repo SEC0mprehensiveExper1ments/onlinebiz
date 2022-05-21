@@ -350,4 +350,35 @@ public class DefaultEntrustService implements EntrustService {
         }
     }
 
+    @Override
+    public Long checkConsistencyWithContract(String entrustId, Long userId, Role userRole) {
+        Entrust entrust = findEntrust(entrustId, userId, userRole);
+        // 检查委托阶段
+        if (entrust.getStatus().getStage() != EntrustStage.CUSTOMER_ACCEPT_QUOTE) {
+            throw new EntrustInvalidStageException("用户没有确认委托报价，不能创建合同");
+        }
+        // 检查角色权限
+        if (userRole != Role.ADMIN && (userRole != Role.MARKETER || !userId.equals(entrust.getMarketerId()))) {
+            throw new EntrustPermissionDeniedException("无权创建此委托对应的合同");
+        }
+        return entrust.getCustomerId();
+    }
+
+    // 假设此接口调用是正确的，因为这是一个内部接口
+    @Override
+    public void registerContract(String entrustId, String contractId) {
+        if (!entrustDAO.updateContractId(entrustId, contractId)) {
+            throw new EntrustDAOFailureException("注册合同ID失败");
+        }
+    }
+
+    @Override
+    public Long getTesterId(String entrustId) {
+        Entrust entrust = entrustDAO.findEntrustById(entrustId);
+        if (entrust == null) {
+            throw new EntrustNotFoundException("该委托不存在");
+        }
+        return entrust.getTesterId();
+    }
+
 }

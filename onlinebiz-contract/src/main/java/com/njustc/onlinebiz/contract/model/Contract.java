@@ -1,5 +1,6 @@
-package com.njustc.onlinebiz.common.model;
+package com.njustc.onlinebiz.contract.model;
 
+import com.njustc.onlinebiz.common.model.PartyDetail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Contract {
 
+    // 合同ID
+    private String id;
+
+    // 负责此合同的市场部人员ID
+    private Long marketerId;
+
+    // 签订此合同的客户ID
+    private Long customerId;
+
+    // 与此合同相关的委托ID
+    private String entrustId;
+
+    // 合同目前的状态
+    private ContractStatus status;
+
     // 合同编号
     private String serialNumber;
 
@@ -17,10 +33,10 @@ public class Contract {
     private String projectName;
 
     // 项目委托方（甲方）
-    private PartyDetail principal;
+    private PartyDetail partyA;
 
     // 项目受托方（乙方）
-    private PartyDetail trustee;
+    private PartyDetail partyB;
 
     // 签订地点
     private String signedAt;
@@ -45,5 +61,8 @@ public class Contract {
 
     // 合同扫描件的文件路径
     private String scannedCopyPath;
+
+    // 合同对应的保密协议
+    private NonDisclosureAgreement nonDisclosureAgreement;
 
 }

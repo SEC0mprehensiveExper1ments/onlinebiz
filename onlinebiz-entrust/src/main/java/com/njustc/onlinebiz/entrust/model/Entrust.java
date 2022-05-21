@@ -22,6 +22,9 @@ public class Entrust {
     // 分配的测试部人员ID
     private Long testerId;
 
+    // 委托对应的合同ID
+    private String contractId;
+
     // 委托状态
     private EntrustStatus status;
 

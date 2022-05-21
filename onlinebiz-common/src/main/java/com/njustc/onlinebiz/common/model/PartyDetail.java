@@ -3,13 +3,11 @@ package com.njustc.onlinebiz.common.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 
 // 委托双方的详细信息
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Accessors(chain = true)
 public class PartyDetail {
 
     // 单位全称（中文）

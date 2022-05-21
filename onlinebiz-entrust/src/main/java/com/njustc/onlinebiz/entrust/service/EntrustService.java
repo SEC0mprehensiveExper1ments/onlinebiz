@@ -174,4 +174,29 @@ public interface EntrustService {
      */
     void removeEntrust(String entrustId, Long userId, Role userRole);
 
+    /**
+     * 检查创建合同的请求和对应的委托是否一致。此接口是留给合同管理服务验证流程和人员正确性的，
+     * 不是对外公开的接口。
+     * @param entrustId 合同关联的委托ID
+     * @param userId 请求创建合同的用户ID
+     * @param userRole 请求创建合同的用户角色
+     * @return 一致则返回委托的客户ID，不一致返回 null
+     */
+    Long checkConsistencyWithContract(String entrustId, Long userId, Role userRole);
+
+    /**
+     * 将合同ID注册到对应的委托对象中，此方法也是内部接口，应当在检查合同和委托的一致性通过后，
+     * 由合同管理服务调用此接口。
+     * @param entrustId 委托ID
+     * @param contractId 合同ID
+     */
+    void registerContract(String entrustId, String contractId);
+
+    /**
+     * 获取委托对应的测试部人员ID，此方法为内部接口。
+     * @param entrustId 委托ID
+     * @return 如果存在返回对应的测试部人员ID，否则返回 null
+     */
+    Long getTesterId(String entrustId);
+
 }
