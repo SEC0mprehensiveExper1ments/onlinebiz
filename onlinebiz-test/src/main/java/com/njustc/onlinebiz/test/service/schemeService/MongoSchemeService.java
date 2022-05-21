@@ -2,7 +2,7 @@ package com.njustc.onlinebiz.test.service.schemeService;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import com.njustc.onlinebiz.common.model.Scheme;
+import com.njustc.onlinebiz.test.model.Scheme;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
