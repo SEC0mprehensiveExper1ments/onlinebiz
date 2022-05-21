@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.test.dao.projectDAO;
+package com.njustc.onlinebiz.test.dao.project;
 
 import com.njustc.onlinebiz.test.model.Project;
 

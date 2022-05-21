@@ -1,8 +1,8 @@
-package com.njustc.onlinebiz.test.controller;
+package com.njustc.onlinebiz.test.controller.project;
 
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.test.model.Project;
-import com.njustc.onlinebiz.test.service.projectService.ProjectService;
+import com.njustc.onlinebiz.test.service.project.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +21,10 @@ public class ProjectController {
     @PostMapping("/test")
     public String createTestProject(
             @RequestParam("userId") Long userId,
-            @RequestParam("userRole") Role userRole
+            @RequestParam("userRole") Role userRole,
+            @RequestParam("entrustId") String entrustId
     ) {
-        return projectService.createTestProject(userId, userRole);
+        return projectService.createTestProject(userId, userRole, entrustId);
     }
 
     @GetMapping("/test/{projectId}")

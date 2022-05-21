@@ -1,9 +1,9 @@
-package com.njustc.onlinebiz.test.controller;
+package com.njustc.onlinebiz.test.controller.project;
 
-import com.njustc.onlinebiz.test.exception.ProjectDAOFailureException;
-import com.njustc.onlinebiz.test.exception.ProjectInvalidStageException;
-import com.njustc.onlinebiz.test.exception.ProjectNotFoundException;
-import com.njustc.onlinebiz.test.exception.ProjectPermissionDeniedException;
+import com.njustc.onlinebiz.test.exception.project.ProjectDAOFailureException;
+import com.njustc.onlinebiz.test.exception.project.ProjectInvalidStageException;
+import com.njustc.onlinebiz.test.exception.project.ProjectNotFoundException;
+import com.njustc.onlinebiz.test.exception.project.ProjectPermissionDeniedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
