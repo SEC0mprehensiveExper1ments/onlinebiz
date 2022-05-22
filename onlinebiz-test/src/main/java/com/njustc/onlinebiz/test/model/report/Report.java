@@ -1,10 +1,13 @@
 package com.njustc.onlinebiz.test.model.report;
 
 import com.njustc.onlinebiz.common.model.PartyDetail;
+import com.njustc.onlinebiz.test.model.TestRecordList;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -59,4 +62,38 @@ public class Report {
   private String approverDate;
   // 报告状态
   private ReportStatus status;
+  // 硬件类别
+  private String hardwareType;
+  // 硬件名称
+  private String hardwareName;
+  // 硬件配置
+  private String hardwareConfig;
+  // 硬件数量
+  private String hardwareNum;
+  // 操作系统-软件名称
+  private String osSoftwareName;
+  // 操作系统-版本
+  private String osVersion;
+  // 软件环境
+  private List<SoftwareEnvironment> softwareEnvironments;
+  // 网络环境
+  private String networkEnvironment;
+  // 测试依据
+  private List<String> testBases;
+  // 参考资料
+  private List<String> referenceMaterials;
+  // 功能性测试
+  private List<TestContent> functionalTests;
+  // 效率测试
+  private List<TestContent> efficiencyTests;
+  // 可移植性测试
+  private List<TestContent> portableTests;
+  // 易用性测试
+  private List<TestContent> usabilityTests;
+  // 可靠性测试
+  private List<TestContent> reliabilityTests;
+  // 可维护性测试
+  private List<TestContent> maintainabilityTests;
+  // 测试执行记录
+  private List<TestRecordList.TestRecord> testRecords;
 }
