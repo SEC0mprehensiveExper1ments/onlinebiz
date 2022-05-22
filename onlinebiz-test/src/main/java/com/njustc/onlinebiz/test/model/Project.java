@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
  */
 public class Project {
     // MongoDB 中存放此类型对象的 collection 的名字
-    public static final String COLLECTION_NAME = "testProject";
+    public static final String COLLECTION_NAME = "project";
 
     // 项目 id，由 MongoDB 自动生成
     private String id;

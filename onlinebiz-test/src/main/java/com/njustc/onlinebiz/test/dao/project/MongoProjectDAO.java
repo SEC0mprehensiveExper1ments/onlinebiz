@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MongoProjectDAO implements ProjectDAO {
 
-    public static final String COLLECTION_NAME = "testProject";
+    public static final String COLLECTION_NAME = "project";
 
     private final MongoTemplate mongoTemplate;
 

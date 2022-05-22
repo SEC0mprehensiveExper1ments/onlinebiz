@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MongoSchemeDAO implements SchemeDAO {
-    public static final String COLLECTION_NAME = "testScheme";
+    public static final String COLLECTION_NAME = "scheme";
 
     private final MongoTemplate mongoTemplate;
 
