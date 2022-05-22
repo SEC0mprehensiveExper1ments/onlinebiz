@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.test.model;
+package com.njustc.onlinebiz.test.model.report;
 
 public enum ReportStage {
   // 未全部提交

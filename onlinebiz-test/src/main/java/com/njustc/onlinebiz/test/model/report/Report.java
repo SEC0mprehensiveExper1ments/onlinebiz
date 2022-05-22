@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.test.model;
+package com.njustc.onlinebiz.test.model.report;
 
 import com.njustc.onlinebiz.common.model.PartyDetail;
 import lombok.AllArgsConstructor;
