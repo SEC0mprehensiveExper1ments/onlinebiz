@@ -10,9 +10,9 @@ public interface ReportService {
   // 由 id 查询报告
   Report findReport(String reportId, Long userId, Role userRole);
 
-  // 更新报告，返回是否更新成功
-  boolean updateReport(Report report, Long userId, Role userRole);
+  // 更新报告
+  void updateReport(String reportId, Report report, Long userId, Role userRole);
 
-  // 删除报告，返回是否删除成功
-  boolean deleteReport(String reportId, Long userId, Role userRole);
+  // 删除报
+  void deleteReport(String reportId, Long userId, Role userRole);
 }
