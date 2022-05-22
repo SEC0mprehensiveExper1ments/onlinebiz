@@ -57,4 +57,6 @@ public class Report {
   private String approver;
   // 批准人日期
   private String approverDate;
+  // 报告状态
+  private ReportStatus status;
 }
