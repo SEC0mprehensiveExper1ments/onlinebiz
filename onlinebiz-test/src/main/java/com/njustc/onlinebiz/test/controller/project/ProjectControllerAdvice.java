@@ -42,7 +42,7 @@ public class ProjectControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProjectNotFoundException.class)
     public String handleNotFoundException(ProjectNotFoundException e) {
-        log.warn("Test Not Found: " + e.getMessage());
+        log.warn("Project Not Found: " + e.getMessage());
         return e.getMessage();
     }
 }
