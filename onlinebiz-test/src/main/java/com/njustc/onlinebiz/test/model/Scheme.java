@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,10 +23,10 @@ public class Scheme {
     private String entrustId;
 
     // 合同内容
-    private SchemeContent schemeContent;
+    private SchemeContent content;
 
     // 此测试方案状态
-    private SchemeStatus schemeStatus;
+    private SchemeStatus status;
 }
 
 
