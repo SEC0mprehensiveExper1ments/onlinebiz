@@ -9,8 +9,8 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-/**
- * 测试项目模型，由该模块可以直接索引该测试项目文件
+/*
+  测试项目模型，由该模块可以直接索引该测试项目文件
  */
 public class Project {
     // MongoDB 中存放此类型对象的 collection 的名字
@@ -26,7 +26,7 @@ public class Project {
     private String testSchemeId;
 
     // 对应的测试用例表 id
-    private String testcaseId;
+    private String testcaseListId;
 
     // 对应的测试记录表 id
     private String testRecordListId;

@@ -13,7 +13,7 @@ public class Scheme {
     // MongoDB 中存放此类型对象的 collection 的名字
     public static final String COLLECTION_NAME = "scheme";
 
-    // 合同 id，由 MongoDB 自动生成
+    // 测试方案 id，由 MongoDB 自动生成
     private String id;
 
     // 此测试方案对应的创建者 id
@@ -22,7 +22,7 @@ public class Scheme {
     // 此测试方案对应的委托 id
     private String entrustId;
 
-    // 合同内容
+    // 测试方案内容
     private SchemeContent content;
 
     // 此测试方案状态
