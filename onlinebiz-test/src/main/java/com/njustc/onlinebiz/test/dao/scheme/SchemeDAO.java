@@ -1,8 +1,8 @@
 package com.njustc.onlinebiz.test.dao.scheme;
 
-import com.njustc.onlinebiz.test.model.Scheme;
-import com.njustc.onlinebiz.test.model.SchemeContent;
-import com.njustc.onlinebiz.test.model.SchemeStatus;
+import com.njustc.onlinebiz.test.model.scheme.Scheme;
+import com.njustc.onlinebiz.test.model.scheme.SchemeContent;
+import com.njustc.onlinebiz.test.model.scheme.SchemeStatus;
 
 public interface SchemeDAO {
     Scheme insertScheme(Scheme scheme);

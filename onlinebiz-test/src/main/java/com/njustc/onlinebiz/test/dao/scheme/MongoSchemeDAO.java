@@ -2,9 +2,9 @@ package com.njustc.onlinebiz.test.dao.scheme;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import com.njustc.onlinebiz.test.model.Scheme;
-import com.njustc.onlinebiz.test.model.SchemeContent;
-import com.njustc.onlinebiz.test.model.SchemeStatus;
+import com.njustc.onlinebiz.test.model.scheme.Scheme;
+import com.njustc.onlinebiz.test.model.scheme.SchemeContent;
+import com.njustc.onlinebiz.test.model.scheme.SchemeStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

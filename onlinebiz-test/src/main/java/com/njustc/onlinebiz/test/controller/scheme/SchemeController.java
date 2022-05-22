@@ -1,14 +1,11 @@
 package com.njustc.onlinebiz.test.controller.scheme;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.model.Scheme;
-import com.njustc.onlinebiz.test.model.SchemeContent;
+import com.njustc.onlinebiz.test.model.scheme.Scheme;
+import com.njustc.onlinebiz.test.model.scheme.SchemeContent;
 import com.njustc.onlinebiz.test.service.scheme.SchemeService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
