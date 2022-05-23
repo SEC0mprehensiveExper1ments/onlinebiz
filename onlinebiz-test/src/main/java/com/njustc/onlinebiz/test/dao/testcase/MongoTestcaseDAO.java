@@ -2,8 +2,8 @@ package com.njustc.onlinebiz.test.dao.testcase;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import com.njustc.onlinebiz.test.model.Testcase;
-import com.njustc.onlinebiz.test.model.TestcaseStatus;
+import com.njustc.onlinebiz.test.model.testcase.Testcase;
+import com.njustc.onlinebiz.test.model.testcase.TestcaseStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

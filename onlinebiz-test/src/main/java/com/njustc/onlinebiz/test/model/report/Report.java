@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.test.model.report;
 
 import com.njustc.onlinebiz.common.model.PartyDetail;
-import com.njustc.onlinebiz.test.model.TestRecordList;
+import com.njustc.onlinebiz.test.model.testrecord.TestRecordList;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

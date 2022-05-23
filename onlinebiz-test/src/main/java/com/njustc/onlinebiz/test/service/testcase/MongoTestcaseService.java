@@ -7,8 +7,8 @@ import com.njustc.onlinebiz.test.exception.scheme.SchemePermissionDeniedExceptio
 import com.njustc.onlinebiz.test.exception.testcase.TestcaseDAOFailureException;
 import com.njustc.onlinebiz.test.exception.testcase.TestcaseNotFoundException;
 import com.njustc.onlinebiz.test.exception.testcase.TestcasePermissionDeniedException;
-import com.njustc.onlinebiz.test.model.Testcase;
-import com.njustc.onlinebiz.test.model.TestcaseStatus;
+import com.njustc.onlinebiz.test.model.testcase.Testcase;
+import com.njustc.onlinebiz.test.model.testcase.TestcaseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;

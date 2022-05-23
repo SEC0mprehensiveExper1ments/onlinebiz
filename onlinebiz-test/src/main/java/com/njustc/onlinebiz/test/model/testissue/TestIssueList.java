@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.test.model;
+package com.njustc.onlinebiz.test.model.testissue;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

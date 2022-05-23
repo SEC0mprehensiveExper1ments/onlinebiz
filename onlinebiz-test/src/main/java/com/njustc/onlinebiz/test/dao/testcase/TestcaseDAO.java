@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.test.dao.testcase;
 
-import com.njustc.onlinebiz.test.model.Testcase;
-import com.njustc.onlinebiz.test.model.TestcaseStatus;
+import com.njustc.onlinebiz.test.model.testcase.Testcase;
+import com.njustc.onlinebiz.test.model.testcase.TestcaseStatus;
 
 import java.util.List;
 
