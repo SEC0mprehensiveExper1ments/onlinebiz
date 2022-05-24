@@ -35,7 +35,7 @@ public class MongoTestcaseDAO implements TestcaseDAO {
 
     @Override
     public boolean updateContent(String testcaseListId, List<Testcase.TestcaseList> content) {
-        Update update = new Update().set("content", content);
+        Update update = new Update().set("testcases", content);
         return updateFirstWithId(testcaseListId, update);
     }
 

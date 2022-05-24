@@ -35,7 +35,7 @@ public class MongoTestRecordDAO implements TestRecordDAO {
 
     @Override
     public boolean updateContent(String testRecordListId, List<TestRecordList.TestRecord> content) {
-        Update update = new Update().set("content", content);
+        Update update = new Update().set("testRecords", content);
         return updateFirstWithId(testRecordListId, update);
     }
 
