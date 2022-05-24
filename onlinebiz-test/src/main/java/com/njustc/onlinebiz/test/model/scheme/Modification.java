@@ -12,12 +12,12 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class Modification{
-    //    版本
+    //    版本号
     private String version;
     //    修改日期
     private Date date;
     //    操作
-    private enum Method{A,M,D}
+    public enum Method{A,M,D}
     Method method;
     //    修订者
     private String modifier;
