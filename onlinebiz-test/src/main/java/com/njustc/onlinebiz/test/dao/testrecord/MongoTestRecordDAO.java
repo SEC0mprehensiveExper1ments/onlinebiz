@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class MongoTestRecordDAO implements TestRecordDAO{
+public class MongoTestRecordDAO implements TestRecordDAO {
     public static final String COLLECTION_NAME = "testRecord";
 
     private final MongoTemplate mongoTemplate;
@@ -24,29 +24,29 @@ public class MongoTestRecordDAO implements TestRecordDAO{
     }
 
     @Override
-    public TestRecordList insertTestRecordList(TestRecordList testRecordList){
+    public TestRecordList insertTestRecordList(TestRecordList testRecordList) {
         return mongoTemplate.insert(testRecordList, COLLECTION_NAME);
     }
 
     @Override
-    public TestRecordList findTestRecordListById(String testRecordListId){
+    public TestRecordList findTestRecordListById(String testRecordListId) {
         return mongoTemplate.findById(testRecordListId, TestRecordList.class);
     }
 
     @Override
-    public boolean updateContent(String testRecordListId, List<TestRecordList.TestRecord> content){
+    public boolean updateContent(String testRecordListId, List<TestRecordList.TestRecord> content) {
         Update update = new Update().set("content", content);
         return updateFirstWithId(testRecordListId, update);
     }
 
     @Override
-    public boolean updateStatus(String testRecordListId, TestRecordStatus status){
+    public boolean updateStatus(String testRecordListId, TestRecordStatus status) {
         Update update = new Update().set("status", status);
         return updateFirstWithId(testRecordListId, update);
     }
 
     @Override
-    public boolean deleteTestRecordList(String testRecordListId){
+    public boolean deleteTestRecordList(String testRecordListId) {
         Query query = new Query().addCriteria(Criteria.where("_id").is(new ObjectId(testRecordListId)));
         DeleteResult result = mongoTemplate.remove(query, COLLECTION_NAME);
         return result.wasAcknowledged() && result.getDeletedCount() == 1;

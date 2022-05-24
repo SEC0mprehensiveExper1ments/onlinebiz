@@ -13,8 +13,9 @@ import java.util.List;
 @RequestMapping("/api")
 public class TestcaseController {
     private final TestcaseService testcaseService;
-    public TestcaseController(TestcaseService testcaseService){
-        this.testcaseService=testcaseService;
+
+    public TestcaseController(TestcaseService testcaseService) {
+        this.testcaseService = testcaseService;
     }
 
     // 查看任意测试用例表的详细信息

@@ -27,7 +27,7 @@ public class MongoProjectService implements ProjectService {
         this.projectDAO = projectDAO;
         this.schemeService = schemeService;
         this.testcaseService = testcaseService;
-        this.testRecordService=testRecordService;
+        this.testRecordService = testRecordService;
     }
 
     @Override
@@ -42,9 +42,9 @@ public class MongoProjectService implements ProjectService {
         /*TODO: 根据其他部分给出的接口新建各表，并将表编号填入testProject中字段*/
         String schemeId = schemeService.createScheme(entrustId, null, userId, userRole);
         project.setTestSchemeId(schemeId);
-        String testcaseId=testcaseService.createTestcaseList(entrustId,null,userId,userRole);
+        String testcaseId = testcaseService.createTestcaseList(entrustId, null, userId, userRole);
         project.setTestcaseListId(testcaseId);
-        String testRecordId=testRecordService.createTestRecordList(entrustId,null,userId,userRole);
+        String testRecordId = testRecordService.createTestRecordList(entrustId, null, userId, userRole);
         project.setTestRecordListId(testRecordId);
 
         return projectDAO.insertProject(project).getId();

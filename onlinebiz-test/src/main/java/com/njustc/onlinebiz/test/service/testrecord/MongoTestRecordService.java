@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class MongoTestRecordService implements TestRecordService{
+public class MongoTestRecordService implements TestRecordService {
     private static final String ENTRUST_SERVICE_URL = "http://onlinebiz-entrust";
     private final RestTemplate restTemplate;
     private final TestRecordDAO testRecordDAO;
@@ -29,7 +29,7 @@ public class MongoTestRecordService implements TestRecordService{
     }
 
     @Override
-    public String createTestRecordList(String entrustId, List<TestRecordList.TestRecord> testRecords, Long userId, Role userRole){
+    public String createTestRecordList(String entrustId, List<TestRecordList.TestRecord> testRecords, Long userId, Role userRole) {
         if (!hasAuthorityToCreate(userRole)) {
             throw new TestRecordPermissionDeniedException("无权新建测试记录表");
         }
@@ -41,7 +41,7 @@ public class MongoTestRecordService implements TestRecordService{
     }
 
     @Override
-    public TestRecordList findTestRecordList(String testRecordListId, Long userId, Role userRole){
+    public TestRecordList findTestRecordList(String testRecordListId, Long userId, Role userRole) {
         TestRecordList testRecordList = testRecordDAO.findTestRecordListById(testRecordListId);
         if (testRecordList == null) {
             throw new TestRecordNotFoundException("该测试记录表不存在");
@@ -53,7 +53,7 @@ public class MongoTestRecordService implements TestRecordService{
     }
 
     @Override
-    public void updateTestRecordList(String testRecordListId, List<TestRecordList.TestRecord> testRecords, Long userId, Role userRole){
+    public void updateTestRecordList(String testRecordListId, List<TestRecordList.TestRecord> testRecords, Long userId, Role userRole) {
         TestRecordList testRecordList = testRecordDAO.findTestRecordListById(testRecordListId);
         if (testRecordList == null) {
             throw new TestRecordNotFoundException("该测试记录表不存在");
@@ -67,7 +67,7 @@ public class MongoTestRecordService implements TestRecordService{
     }
 
     @Override
-    public void removeTestRecordList(String testRecordListId, Long userId, Role userRole){
+    public void removeTestRecordList(String testRecordListId, Long userId, Role userRole) {
         if (userRole != Role.ADMIN) {
             throw new TestRecordPermissionDeniedException("无权删除测试记录表");
         }

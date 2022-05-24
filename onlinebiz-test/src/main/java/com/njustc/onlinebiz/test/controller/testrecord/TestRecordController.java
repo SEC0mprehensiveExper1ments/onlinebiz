@@ -13,8 +13,9 @@ import java.util.List;
 @RequestMapping("/api")
 public class TestRecordController {
     private final TestRecordService testRecordService;
-    public TestRecordController(TestRecordService testRecordService){
-        this.testRecordService=testRecordService;
+
+    public TestRecordController(TestRecordService testRecordService) {
+        this.testRecordService = testRecordService;
     }
 
     // 查看任意测试记录表的详细信息

@@ -29,7 +29,7 @@ public class Testcase {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class TestcaseList{
+    public static class TestcaseList {
         //测试分类
         private String category;
 

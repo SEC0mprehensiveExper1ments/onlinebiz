@@ -29,7 +29,7 @@ public class MongoTestcaseService implements TestcaseService {
     }
 
     @Override
-    public String createTestcaseList(String entrustId, List<Testcase.TestcaseList> testcases, Long userId, Role userRole){
+    public String createTestcaseList(String entrustId, List<Testcase.TestcaseList> testcases, Long userId, Role userRole) {
         if (!hasAuthorityToCreate(userRole)) {
             throw new TestcasePermissionDeniedException("无权新建测试用例表");
         }
@@ -41,7 +41,7 @@ public class MongoTestcaseService implements TestcaseService {
     }
 
     @Override
-    public Testcase findTestcaseList(String testcaseListId, Long userId, Role userRole){
+    public Testcase findTestcaseList(String testcaseListId, Long userId, Role userRole) {
         Testcase testcase = testcaseDAO.findTestcaseListById(testcaseListId);
         if (testcase == null) {
             throw new TestcaseNotFoundException("该测试用例表不存在");
@@ -53,7 +53,7 @@ public class MongoTestcaseService implements TestcaseService {
     }
 
     @Override
-    public void updateTestcaseList(String testcaseListId, List<Testcase.TestcaseList> testcases, Long userId, Role userRole){
+    public void updateTestcaseList(String testcaseListId, List<Testcase.TestcaseList> testcases, Long userId, Role userRole) {
         Testcase testcase = testcaseDAO.findTestcaseListById(testcaseListId);
         if (testcase == null) {
             throw new TestcaseNotFoundException("该测试用例表不存在");
@@ -67,7 +67,7 @@ public class MongoTestcaseService implements TestcaseService {
     }
 
     @Override
-    public void removeTestcaseList(String testcaseListId, Long userId, Role userRole){
+    public void removeTestcaseList(String testcaseListId, Long userId, Role userRole) {
         if (userRole != Role.ADMIN) {
             throw new TestcasePermissionDeniedException("无权删除测试用例表");
         }
