@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.test.controller.testcase;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.model.Testcase;
+import com.njustc.onlinebiz.test.model.testcase.Testcase;
 import com.njustc.onlinebiz.test.service.testcase.TestcaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +13,9 @@ import java.util.List;
 @RequestMapping("/api")
 public class TestcaseController {
     private final TestcaseService testcaseService;
-    public TestcaseController(TestcaseService testcaseService){
-        this.testcaseService=testcaseService;
+
+    public TestcaseController(TestcaseService testcaseService) {
+        this.testcaseService = testcaseService;
     }
 
     // 查看任意测试用例表的详细信息
