@@ -22,6 +22,7 @@
         <spring.cloud-version>2021.0.1</spring.cloud-version>
         <mysql.version>8.0.29</mysql.version>
         <mybatis.version>2.2.2</mybatis.version>
+        <jacoco.version>0.8.8</jacoco.version>
     </properties>
 
     <modules>
@@ -74,5 +75,17 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>

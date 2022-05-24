@@ -20,7 +20,7 @@ public class UserControllerIT {
     // 用来发送请求的对象
     private static final WebTestClient client = WebTestClient.bindToServer().baseUrl("http://localhost:8001/api").responseTimeout(Duration.ofDays(1)).build();
 
-    // 从配置文件中读取 cookie 的名称
+    // 会话ID的cookie名称
     private static final String sessionCookieName = "NJUSTC_ONLINEBIZ_SESSION";
 
     // 保存会话 id 用于后面的测试
@@ -149,7 +149,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(15)
+    @Order(14)
     public void testGetUserWhenLogIn() {
         String body = client.get()
                 .uri("/account").cookie(sessionCookieName, sessionId)
@@ -159,7 +159,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(16)
+    @Order(15)
     public void testUpdateUsernameWithInvalidValue() {
         client.post()
                 .uri("/account/username?newValue=#@$Jack").cookie(sessionCookieName, sessionId)
@@ -167,7 +167,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(17)
+    @Order(16)
     public void testUpdateUsernameWithDuplicatedValue() {
         client.post()
                 .uri("/account/username?newValue=guest").cookie(sessionCookieName, sessionId)
@@ -175,7 +175,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(18)
+    @Order(17)
     public void testUpdateUsernameShouldSuccess() {
         client.post()
                 .uri("/account/username?newValue=David").cookie(sessionCookieName, sessionId)
@@ -183,7 +183,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(19)
+    @Order(18)
     public void testUpdatePasswordWithWrongOldValue() {
         client.post()
                 .uri("/account/password?oldValue=qwer&newValue=abc").cookie(sessionCookieName, sessionId)
@@ -191,7 +191,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(20)
+    @Order(19)
     public void testUpdatePasswordShouldSuccess() {
         client.post()
                 .uri("/account/password?oldValue=123&newValue=abc").cookie(sessionCookieName, sessionId)
@@ -199,7 +199,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(21)
+    @Order(20)
     public void testGetUserConsistent() {
         String body = client.get()
                 .uri("/account").cookie(sessionCookieName, sessionId)
@@ -209,7 +209,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(22)
+    @Order(21)
     public void testLogOutShouldSuccess() {
         client.post()
                 .uri("/logout").cookie(sessionCookieName, sessionId)
@@ -217,7 +217,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(23)
+    @Order(22)
     public void testLogInStatusWhenLogOut() {
         client.get()
                 .uri("/login/status").cookie(sessionCookieName, sessionId)
@@ -225,7 +225,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(24)
+    @Order(23)
     public void testUpdateUsernameWhenLogout() {
         client.post()
                 .uri("/account/username?newValue=Jack").cookie(sessionCookieName, sessionId)
@@ -233,7 +233,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(25)
+    @Order(24)
     public void testUpdatePasswordWhenLogout() {
         client.post()
                 .uri("/account/password?oldValue=abc&newValue=tester").cookie(sessionCookieName, sessionId)
@@ -241,7 +241,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(26)
+    @Order(25)
     public void testRemoveUserWhenLogout() {
         client.delete()
                 .uri("/account").cookie(sessionCookieName, sessionId)
@@ -249,7 +249,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(27)
+    @Order(26)
     public void testLogInWithNewAccount() {
         client.post()
                 .uri("/login?userName=David&userPassword=abc").cookie(sessionCookieName, sessionId)
@@ -257,7 +257,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(28)
+    @Order(27)
     public void testRemoveUserWhenLogIn() {
         client.delete()
                 .uri("/account").cookie(sessionCookieName, sessionId)
@@ -265,7 +265,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(29)
+    @Order(28)
     public void testLogInStatusAfterRemoveUser() {
         client.get()
                 .uri("/login/status").cookie(sessionCookieName, sessionId)
@@ -273,7 +273,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(30)
+    @Order(29)
     public void testUpdateUsernameAfterRemoveUser() {
         client.post()
                 .uri("/account/username?newValue=Jack").cookie(sessionCookieName, sessionId)
@@ -281,7 +281,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(31)
+    @Order(30)
     public void testUpdatePasswordAfterRemoveUser() {
         client.post()
                 .uri("/account/password").cookie(sessionCookieName, sessionId)
@@ -291,7 +291,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(32)
+    @Order(31)
     public void testRemoveAgainAfterRemove() {
         client.delete()
                 .uri("/account").cookie(sessionCookieName, sessionId)
@@ -299,7 +299,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(33)
+    @Order(32)
     public void testGetUserAfterRemoveUser() {
         client.get()
                 .uri("/account").cookie(sessionCookieName, sessionId)
@@ -307,7 +307,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(34)
+    @Order(33)
     public void testLogInAgainWithAnotherAccount() {
         client.post()
                 .uri("/login").cookie(sessionCookieName, sessionId)
@@ -317,7 +317,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(35)
+    @Order(34)
     public void testGetUserAgain() throws JsonProcessingException {
         String body = client.get()
                 .uri("/account").cookie(sessionCookieName, sessionId)
@@ -328,7 +328,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(36)
+    @Order(35)
     public void testUpdateUserRoleWithWrongUserName() {
         client.post()
                 .uri("/account/role?userName=non-existing&newValue=" + Role.MARKETER)
@@ -336,7 +336,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(37)
+    @Order(36)
     public void testUpdateUserRoleShouldFail() {
         client.post()
                 .uri("/account/role?userName=guest&newValue=" + Role.MARKETER + "&userRole=" + Role.CUSTOMER)
@@ -344,7 +344,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(38)
+    @Order(37)
     public void testUpdateUserRoleShouldSuccess() {
         client.post()
                 .uri("/account/role?userName=guest&newValue=" + Role.MARKETER + "&userRole=" + Role.ADMIN)
@@ -352,7 +352,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(39)
+    @Order(38)
     public void testGetUserAfterChangingRole() {
         String body = client.get()
                 .uri("/account").cookie(sessionCookieName, sessionId)
@@ -362,7 +362,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(40)
+    @Order(39)
     public void testLogOutAgain() {
         client.post()
                 .uri("/logout").cookie(sessionCookieName, sessionId)
@@ -370,7 +370,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(41)
+    @Order(40)
     public void testSearchUserShouldBeEmpty() {
         String body = client
                 .get()
@@ -381,7 +381,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(42)
+    @Order(41)
     public void testSearchUserShouldNotBeEmpty() {
         String body = client
                 .get()
@@ -392,13 +392,13 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(43)
+    @Order(42)
     public void testGetUserByIdFail() {
         client.get().uri("/user/-1").exchange().expectStatus().is4xxClientError();
     }
 
     @Test
-    @Order(44)
+    @Order(43)
     public void testGetUserByIdSuccess() throws JsonProcessingException {
         String body = client
                 .get().uri("/user/" + userDto.getUserId())
@@ -408,12 +408,20 @@ public class UserControllerIT {
     }
 
     @Test
-    @Order(45)
-    public void testSearchUserWithUserRole() {
+    @Order(44)
+    public void testSearchUserWithUserRoleExist() {
         String body = client.get().uri("/user/search?userRole=" + Role.MARKETER)
                 .exchange().returnResult(String.class).getResponseBody().blockFirst();
         Assertions.assertNotNull(body);
         Assertions.assertTrue(body.contains("guest"));
+    }
+
+    @Test
+    @Order(45)
+    public void testSearchUserWithUserRoleNotExist() {
+        String body = client.get().uri("/user/search?userRole=" + Role.QA_SUPERVISOR)
+                .exchange().returnResult(String.class).getResponseBody().blockFirst();
+        Assertions.assertEquals("[]", body);
     }
 
 }

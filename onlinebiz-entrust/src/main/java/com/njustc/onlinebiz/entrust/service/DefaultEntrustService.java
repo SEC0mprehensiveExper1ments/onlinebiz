@@ -65,18 +65,26 @@ public class DefaultEntrustService implements EntrustService {
     }
 
     @Override
-    public List<EntrustOutline> findEntrustOutlines(Integer page, Integer pageSize, Long userId, Role userRole) {
+    public PageResult<EntrustOutline> findEntrustOutlines(Integer page, Integer pageSize, Long userId, Role userRole) {
+        long total;
+        List<EntrustOutline> list;
         // 根据用户角色不同，返回不同的结果
         if (userRole == Role.ADMIN || userRole == Role.MARKETING_SUPERVISOR || userRole == Role.TESTING_SUPERVISOR) {
-            return entrustDAO.findAllEntrusts(page, pageSize);
+            total = entrustDAO.countAll();
+            list = entrustDAO.findAllEntrusts(page, pageSize);
         } else if (userRole == Role.CUSTOMER) {
-            return entrustDAO.findEntrustsByCustomerId(userId, page, pageSize);
+            total = entrustDAO.countByCustomerId(userId);
+            list = entrustDAO.findEntrustsByCustomerId(userId, page, pageSize);
         } else if (userRole == Role.MARKETER) {
-            return entrustDAO.findEntrustsByMarketerId(userId, page, pageSize);
+            total = entrustDAO.countByMarketerId(userId);
+            list = entrustDAO.findEntrustsByMarketerId(userId, page, pageSize);
         } else if (userRole == Role.TESTER) {
-            return entrustDAO.findEntrustsByTesterId(userId, page, pageSize);
+            total = entrustDAO.countByTesterId(userId);
+            list = entrustDAO.findEntrustsByTesterId(userId, page, pageSize);
+        } else {
+            throw new EntrustPermissionDeniedException("无权查看委托列表");
         }
-        throw new EntrustPermissionDeniedException("无权查看委托列表");
+        return new PageResult<>(page, pageSize, total, list);
     }
 
     @Override

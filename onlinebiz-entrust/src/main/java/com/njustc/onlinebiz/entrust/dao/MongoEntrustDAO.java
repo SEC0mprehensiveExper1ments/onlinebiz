@@ -44,21 +44,44 @@ public class MongoEntrustDAO implements EntrustDAO {
     }
 
     @Override
+    public long countAll() {
+        return mongoTemplate.count(new Query(), COLLECTION_NAME);
+    }
+
+    @Override
     public List<EntrustOutline> findEntrustsByCustomerId(Long customerId, Integer page, Integer pageSize) {
         Query query = new Query().addCriteria(Criteria.where("customerId").is(customerId));
         return findWithProjection(query, page, pageSize);
     }
 
     @Override
-    public List<EntrustOutline> findEntrustsByMarketerId(Long marketingId, Integer page, Integer pageSize) {
-        Query query = new Query().addCriteria(Criteria.where("marketingId").is(marketingId));
+    public long countByCustomerId(Long customerId) {
+        Query query = new Query().addCriteria(Criteria.where("customerId").is(customerId));
+        return mongoTemplate.count(query, COLLECTION_NAME);
+    }
+
+    @Override
+    public List<EntrustOutline> findEntrustsByMarketerId(Long marketerId, Integer page, Integer pageSize) {
+        Query query = new Query().addCriteria(Criteria.where("marketerId").is(marketerId));
         return findWithProjection(query, page, pageSize);
+    }
+
+    @Override
+    public long countByMarketerId(Long marketerId) {
+        Query query = new Query().addCriteria(Criteria.where("marketerId").is(marketerId));
+        return mongoTemplate.count(query, COLLECTION_NAME);
     }
 
     @Override
     public List<EntrustOutline> findEntrustsByTesterId(Long testerId, Integer page, Integer pageSize) {
         Query query = new Query().addCriteria(Criteria.where("testerId").is(testerId));
         return findWithProjection(query, page, pageSize);
+    }
+
+    @Override
+    public long countByTesterId(Long testerId) {
+        Query query = new Query().addCriteria(Criteria.where("testerId").is(testerId));
+        return mongoTemplate.count(query, COLLECTION_NAME);
     }
 
     @Override

@@ -32,12 +32,25 @@ public interface EntrustDAO {
     List<EntrustOutline> findAllEntrusts(Integer page, Integer pageSize);
 
     /**
+     * 获取总委托数，主要配合分页查询使用
+     * @return 总的委托数目
+     */
+    long countAll();
+
+    /**
      * 根据客户ID查询概要列表，允许设置分页页码和每页记录条数，页码从1开始
      * @param customerId 要查询的客户ID
      * @param page 要查询的页码
      * @param pageSize 每页有多少条记录
      */
     List<EntrustOutline> findEntrustsByCustomerId(Long customerId, Integer page, Integer pageSize);
+
+    /**
+     * 获取某个客户的总委托数目
+     * @param customerId 客户ID
+     * @return 该客户的委托数
+     */
+    long countByCustomerId(Long customerId);
 
     /**
      * 根据市场部人员ID查询概要列表，允许设置分页页码和每页记录条数，页码从1开始
@@ -49,6 +62,13 @@ public interface EntrustDAO {
     List<EntrustOutline> findEntrustsByMarketerId(Long marketingId, Integer page, Integer pageSize);
 
     /**
+     * 获取某个市场部人员的总委托数目
+     * @param marketerId 市场部人员ID
+     * @return 该市场部人员的委托数
+     */
+    long countByMarketerId(Long marketerId);
+
+    /**
      * 根据测试部人员ID查询概要列表，允许设置分页页码和每页记录条数，页码从1开始
      * @param testerId 要查询的测试部人员ID
      * @param page 要查询的页码
@@ -56,6 +76,13 @@ public interface EntrustDAO {
      * @return 返回该页上的委托概要列表
      */
     List<EntrustOutline> findEntrustsByTesterId(Long testerId, Integer page, Integer pageSize);
+
+    /**
+     * 获取某个测试人员的总委托数
+     * @param testerId 测试人员ID
+     * @return 该测试人员的委托数目
+     */
+    long countByTesterId(Long testerId);
 
     /**
      * 更新委托的客户ID
