@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.test.model;
+package com.njustc.onlinebiz.test.model.testissue;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +29,7 @@ public class TestIssueList {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class TestIssue{
+    public static class TestIssue {
         //此条问题序号
         private String testIssueId;
 

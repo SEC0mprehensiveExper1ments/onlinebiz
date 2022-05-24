@@ -2,13 +2,11 @@ package com.njustc.onlinebiz.test.service.testcase;
 
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.test.dao.testcase.TestcaseDAO;
-import com.njustc.onlinebiz.test.exception.scheme.SchemeDAOFailureException;
-import com.njustc.onlinebiz.test.exception.scheme.SchemePermissionDeniedException;
 import com.njustc.onlinebiz.test.exception.testcase.TestcaseDAOFailureException;
 import com.njustc.onlinebiz.test.exception.testcase.TestcaseNotFoundException;
 import com.njustc.onlinebiz.test.exception.testcase.TestcasePermissionDeniedException;
-import com.njustc.onlinebiz.test.model.Testcase;
-import com.njustc.onlinebiz.test.model.TestcaseStatus;
+import com.njustc.onlinebiz.test.model.testcase.Testcase;
+import com.njustc.onlinebiz.test.model.testcase.TestcaseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
@@ -31,7 +29,7 @@ public class MongoTestcaseService implements TestcaseService {
     }
 
     @Override
-    public String createTestcaseList(String entrustId, List<Testcase.TestcaseList> testcases, Long userId, Role userRole){
+    public String createTestcaseList(String entrustId, List<Testcase.TestcaseList> testcases, Long userId, Role userRole) {
         if (!hasAuthorityToCreate(userRole)) {
             throw new TestcasePermissionDeniedException("无权新建测试用例表");
         }
@@ -43,7 +41,7 @@ public class MongoTestcaseService implements TestcaseService {
     }
 
     @Override
-    public Testcase findTestcaseList(String testcaseListId, Long userId, Role userRole){
+    public Testcase findTestcaseList(String testcaseListId, Long userId, Role userRole) {
         Testcase testcase = testcaseDAO.findTestcaseListById(testcaseListId);
         if (testcase == null) {
             throw new TestcaseNotFoundException("该测试用例表不存在");
@@ -55,7 +53,7 @@ public class MongoTestcaseService implements TestcaseService {
     }
 
     @Override
-    public void updateTestcaseList(String testcaseListId, List<Testcase.TestcaseList> testcases, Long userId, Role userRole){
+    public void updateTestcaseList(String testcaseListId, List<Testcase.TestcaseList> testcases, Long userId, Role userRole) {
         Testcase testcase = testcaseDAO.findTestcaseListById(testcaseListId);
         if (testcase == null) {
             throw new TestcaseNotFoundException("该测试用例表不存在");
@@ -69,13 +67,13 @@ public class MongoTestcaseService implements TestcaseService {
     }
 
     @Override
-    public void removeTestcaseList(String testcaseListId, Long userId, Role userRole){
+    public void removeTestcaseList(String testcaseListId, Long userId, Role userRole) {
         if (userRole != Role.ADMIN) {
-            throw new SchemePermissionDeniedException("无权删除测试用例表");
+            throw new TestcasePermissionDeniedException("无权删除测试用例表");
         }
         Testcase testcase = findTestcaseList(testcaseListId, userId, userRole);
         if (!testcaseDAO.deleteTestcaseList(testcase.getId())) {
-            throw new SchemeDAOFailureException("删除测试用例表失败");
+            throw new TestcaseDAOFailureException("删除测试用例表失败");
         }
     }
 

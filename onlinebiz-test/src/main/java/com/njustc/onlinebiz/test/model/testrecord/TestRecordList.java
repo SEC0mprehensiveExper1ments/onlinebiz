@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.test.model;
+package com.njustc.onlinebiz.test.model.testrecord;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +29,7 @@ public class TestRecordList {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class TestRecord{
+    public static class TestRecord {
         //测试分类
         private String category;
 
