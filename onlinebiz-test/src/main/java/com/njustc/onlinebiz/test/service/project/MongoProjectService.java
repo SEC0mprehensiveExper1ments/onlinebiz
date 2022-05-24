@@ -7,6 +7,7 @@ import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.exception.project.ProjectPermissionDeniedException;
 import com.njustc.onlinebiz.test.service.scheme.SchemeService;
 import com.njustc.onlinebiz.test.service.testcase.TestcaseService;
+import com.njustc.onlinebiz.test.service.testrecord.TestRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +18,16 @@ public class MongoProjectService implements ProjectService {
     private final ProjectDAO projectDAO;
     private final SchemeService schemeService;
     private final TestcaseService testcaseService;
+    private final TestRecordService testRecordService;
 
-    public MongoProjectService(ProjectDAO projectDAO, SchemeService schemeService,TestcaseService testcaseService) {
+    public MongoProjectService(ProjectDAO projectDAO,
+                               SchemeService schemeService,
+                               TestcaseService testcaseService,
+                               TestRecordService testRecordService) {
         this.projectDAO = projectDAO;
         this.schemeService = schemeService;
         this.testcaseService = testcaseService;
+        this.testRecordService=testRecordService;
     }
 
     @Override
@@ -38,6 +44,8 @@ public class MongoProjectService implements ProjectService {
         project.setTestSchemeId(schemeId);
         String testcaseId=testcaseService.createTestcaseList(entrustId,null,userId,userRole);
         project.setTestcaseListId(testcaseId);
+        String testRecordId=testRecordService.createTestRecordList(entrustId,null,userId,userRole);
+        project.setTestRecordListId(testRecordId);
 
         return projectDAO.insertProject(project).getId();
     }

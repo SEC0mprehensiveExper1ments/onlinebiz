@@ -2,8 +2,6 @@ package com.njustc.onlinebiz.test.service.testcase;
 
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.test.dao.testcase.TestcaseDAO;
-import com.njustc.onlinebiz.test.exception.scheme.SchemeDAOFailureException;
-import com.njustc.onlinebiz.test.exception.scheme.SchemePermissionDeniedException;
 import com.njustc.onlinebiz.test.exception.testcase.TestcaseDAOFailureException;
 import com.njustc.onlinebiz.test.exception.testcase.TestcaseNotFoundException;
 import com.njustc.onlinebiz.test.exception.testcase.TestcasePermissionDeniedException;
@@ -71,11 +69,11 @@ public class MongoTestcaseService implements TestcaseService {
     @Override
     public void removeTestcaseList(String testcaseListId, Long userId, Role userRole){
         if (userRole != Role.ADMIN) {
-            throw new SchemePermissionDeniedException("无权删除测试用例表");
+            throw new TestcasePermissionDeniedException("无权删除测试用例表");
         }
         Testcase testcase = findTestcaseList(testcaseListId, userId, userRole);
         if (!testcaseDAO.deleteTestcaseList(testcase.getId())) {
-            throw new SchemeDAOFailureException("删除测试用例表失败");
+            throw new TestcaseDAOFailureException("删除测试用例表失败");
         }
     }
 
