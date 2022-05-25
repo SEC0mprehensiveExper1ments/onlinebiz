@@ -1,6 +1,9 @@
 package com.njustc.onlinebiz.user.service;
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.user.exception.UserDBFailureException;
+import com.njustc.onlinebiz.user.exception.UserInvalidArgumentException;
+import com.njustc.onlinebiz.user.exception.UserPermissonDeniedException;
 import com.njustc.onlinebiz.user.mapper.UserMapper;
 import com.njustc.onlinebiz.common.model.User;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -40,41 +43,37 @@ public class DefaultUserService implements UserService {
 
     @Override
     @Transactional
-    public boolean createUser(String userName, String userPassword) {
+    public void createUser(String userName, String userPassword) {
         if (userPassword == null || userName == null || !userName.matches(USERNAME_PATTERN)) {
-            return false;
+            throw new UserInvalidArgumentException("不合法的用户名或密码参数");
         } else if (userMapper.selectUserByUserName(userName) != null) {
             // 用户名已存在
-            return false;
+            throw new UserInvalidArgumentException("用户名重复");
         }
         // 强哈希加密
         String passwordEncoded = passwordEncoder.encode(userPassword);
         User user = new User(userName, passwordEncoded, Role.CUSTOMER);
         try {
-            return userMapper.insertUser(user) == 1;
+            if (userMapper.insertUser(user) != 1) {
+                throw new UserDBFailureException("插入用户失败");
+            }
         } catch (Exception e) {
-            return false;
+            throw new UserDBFailureException("用户名重复");
         }
     }
 
     @Override
     @Transactional
-    public boolean updateCurrentUserName(String userName, HttpServletRequest request) {
+    public void updateCurrentUserName(String userName, HttpServletRequest request) {
         // 检查新用户名的合法性
-        if (userName == null || !userName.matches(USERNAME_PATTERN) ||
-                userMapper.selectUserByUserName(userName) != null) {
-            return false;
+        if (userName == null || !userName.matches(USERNAME_PATTERN)) {
+            throw new UserInvalidArgumentException("用户名参数不合法");
+        } else if (userMapper.selectUserByUserName(userName) != null) {
+            throw new UserInvalidArgumentException("用户名重复");
         }
-        // 检查会话数据
+        // 获取当前用户信息
+        User user = getCurrentUser(request);
         HttpSession session = request.getSession(false);
-        if (session == null) {
-            return false;
-        }
-        User user = (User) redisTemplate.opsForHash().get(SESSION_ID_TO_USER, session.getId());
-        if (user == null) {
-            // 不在登录状态
-            return false;
-        }
         // 更新数据库
         try {
             if (userMapper.updateUserNameById(user.getUserId(), userName) == 1) {
@@ -85,32 +84,26 @@ public class DefaultUserService implements UserService {
                 redisTemplate.opsForHash().put(SESSION_ID_TO_USER, session.getId(), user);
                 // 添加新的用户名到会话ID的映射
                 redisTemplate.opsForHash().put(USERNAME_TO_SESSION_ID, user.getUserName(), session.getId());
-                return true;
+            } else {
+                throw new UserDBFailureException("修改用户名失败");
             }
         } catch (Exception e) {
-            return false;
+            throw new UserInvalidArgumentException("用户名重复");
         }
-        return false;
     }
 
     @Override
-    public boolean updateCurrentUserPassword(String oldPassword, String newPassword, HttpServletRequest request) {
+    public void updateCurrentUserPassword(String oldPassword, String newPassword, HttpServletRequest request) {
         // 检查数据合法性
         if (oldPassword == null || newPassword == null) {
-            return false;
+            throw new UserInvalidArgumentException("新、旧密码均不能为空");
         }
-        // 检查会话数据
+        // 获取当前用户信息
+        User user = getCurrentUser(request);
         HttpSession session = request.getSession(false);
-        if (session == null) {
-            return false;
-        }
-        User user = (User) redisTemplate.opsForHash().get(SESSION_ID_TO_USER, session.getId());
-        if (user == null) {
-            return false;
-        }
         // 检查旧密码是否一致
         if (!passwordEncoder.matches(oldPassword, user.getUserPassword())) {
-            return false;
+            throw new UserPermissonDeniedException("旧密码不正确");
         }
         // 更新数据库
         String newPasswordEncoded = passwordEncoder.encode(newPassword);
@@ -118,32 +111,26 @@ public class DefaultUserService implements UserService {
             // 更新会话数据
             user.setUserPassword(newPasswordEncoded);
             redisTemplate.opsForHash().put(SESSION_ID_TO_USER, session.getId(), user);
-            return true;
+        } else {
+            throw new UserDBFailureException("修改用户密码失败");
         }
-        return false;
     }
 
     @Override
-    public boolean removeCurrentUser(HttpServletRequest request) {
+    public void removeCurrentUser(HttpServletRequest request) {
+        User user = getCurrentUser(request);
         HttpSession session = request.getSession(false);
-        if (session == null) {
-            return false;
-        }
-        User user = (User) redisTemplate.opsForHash().get(SESSION_ID_TO_USER, session.getId());
-        if (user == null) {
-            return false;
-        }
         if (userMapper.deleteUserById(user.getUserId()) == 1) {
             // 删除会话数据和其它映射关系
             redisTemplate.opsForHash().delete(SESSION_ID_TO_USER, session.getId());
             redisTemplate.opsForHash().delete(USERNAME_TO_SESSION_ID, user.getUserName());
-            return true;
+        } else {
+            throw new UserDBFailureException("注销当前用户失败");
         }
-        return false;
     }
 
     @Override
-    public boolean handleLogIn(String userName, String userPassword, HttpServletRequest request) {
+    public void handleLogIn(String userName, String userPassword, HttpServletRequest request) {
         // 判断是否已经登录
         HttpSession session = request.getSession(false);
         if (session == null) {
@@ -156,42 +143,37 @@ public class DefaultUserService implements UserService {
         User user = userMapper.selectUserByUserName(userName);
         if (user == null || !passwordEncoder.matches(userPassword, user.getUserPassword())) {
             // 用户名或密码错误
-            return false;
+            throw new UserPermissonDeniedException("用户名或密码错误");
         }
         // 将用户的基本信息（包括身份）保存在 Redis 中
         redisTemplate.opsForHash().put(SESSION_ID_TO_USER, session.getId(), user);
         // 保存用户名到会话ID的映射关系
         redisTemplate.opsForHash().put(USERNAME_TO_SESSION_ID, user.getUserName(), session.getId());
-        return true;
     }
 
     @Override
-    public boolean handleLogOut(HttpServletRequest request) {
+    public void handleLogOut(HttpServletRequest request) {
         // 判断是否已经登录
+        User user = getCurrentUser(request);
         HttpSession session = request.getSession(false);
-        if (session == null) {
-            // 不在登录状态
-            return false;
-        }
-        User user = (User) redisTemplate.opsForHash().get(SESSION_ID_TO_USER, session.getId());
-        if (user == null) {
-            return false;
-        }
         // 删除会话数据
         redisTemplate.opsForHash().delete(SESSION_ID_TO_USER, session.getId());
         // 删除用户名到会话ID的映射
         redisTemplate.opsForHash().delete(USERNAME_TO_SESSION_ID, user.getUserName());
-        return true;
     }
 
     @Override
     public User getCurrentUser(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null) {
-            return null;
+            throw new UserPermissonDeniedException("尚未登录");
         }
         // 从 Redis 获取用户信息
-        return (User) redisTemplate.opsForHash().get(SESSION_ID_TO_USER, session.getId());
+        User user = (User) redisTemplate.opsForHash().get(SESSION_ID_TO_USER, session.getId());
+        if (user == null) {
+            throw new UserPermissonDeniedException("尚未登录");
+        }
+        return user;
     }
 
     // 暂时不分页，看后续需求
@@ -199,7 +181,7 @@ public class DefaultUserService implements UserService {
     public List<User> searchUserByUserName(String userName) {
         if (userName == null || userName.isBlank()) {
             // 不合法的搜索条件
-            return null;
+            throw new UserInvalidArgumentException("用户名参数不合法");
         }
         // 子串匹配
         String pattern = "%" + userName + "%";
@@ -209,23 +191,25 @@ public class DefaultUserService implements UserService {
     @Override
     public List<User> searchUserByUserRole(Role userRole) {
         if (userRole == null) {
-            return null;
+            throw new UserInvalidArgumentException("用户角色缺失");
         }
         return userMapper.selectUserByUserRole(userRole);
     }
 
     @Override
-    public boolean updateUserRole(String userName, String newValue, Role userRole) {
+    public void updateUserRole(String userName, String newValue, Role userRole) {
         // 检查参数和权限
-        if (userName == null || !userName.matches(USERNAME_PATTERN) || userRole != Role.ADMIN) {
-            return false;
+        if (userName == null || !userName.matches(USERNAME_PATTERN)) {
+            throw new UserInvalidArgumentException("用户名参数不合法");
+        } else if (userRole != Role.ADMIN) {
+            throw new UserPermissonDeniedException("无权修改用户角色");
         }
         // 检查新的用户角色是否合法
         Role newRole;
         try {
             newRole = Role.valueOf(newValue);
         } catch (Exception e) {
-            return false;
+            throw new UserInvalidArgumentException("新角色值不合法");
         }
         // 写入数据库
         if (userMapper.updateUserRoleByUserName(userName, newValue) == 1) {
@@ -238,17 +222,21 @@ public class DefaultUserService implements UserService {
                     redisTemplate.opsForHash().put(SESSION_ID_TO_USER, sessionId, user);
                 }
             }
-            return true;
+        } else {
+            throw new UserDBFailureException("更新用户角色失败");
         }
-        return false;
     }
 
     @Override
     public User getUserByUserId(Long userId) {
         if (userId == null) {
-            return null;
+            throw new UserInvalidArgumentException("用户ID不能为空");
         }
-        return userMapper.selectUserByUserId(userId);
+        User user = userMapper.selectUserByUserId(userId);
+        if (user == null) {
+            throw new UserInvalidArgumentException("不存在的用户ID");
+        }
+        return user;
     }
 
 }

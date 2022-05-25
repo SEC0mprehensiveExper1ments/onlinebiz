@@ -126,7 +126,7 @@ public class UserMapperIT {
         }
 
         @Test
-        public void testSearchByUserRoleShouldSuccess() {
+        public void testSearchByUserRoleShouldNotBeEmpty() {
             List<User> userList = userMapper.selectUserByUserRole(Role.CUSTOMER);
             Assertions.assertEquals(1, userList.size());
             Assertions.assertEquals(user, userList.get(0));

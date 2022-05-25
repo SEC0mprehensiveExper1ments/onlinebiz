@@ -2,10 +2,7 @@ package com.njustc.onlinebiz.entrust.service;
 
 import com.njustc.onlinebiz.common.model.*;
 import com.njustc.onlinebiz.entrust.dao.EntrustDAO;
-import com.njustc.onlinebiz.entrust.exception.EntrustDAOFailureException;
-import com.njustc.onlinebiz.entrust.exception.EntrustInvalidStageException;
-import com.njustc.onlinebiz.entrust.exception.EntrustNotFoundException;
-import com.njustc.onlinebiz.entrust.exception.EntrustPermissionDeniedException;
+import com.njustc.onlinebiz.entrust.exception.*;
 import com.njustc.onlinebiz.entrust.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -66,6 +63,9 @@ public class DefaultEntrustService implements EntrustService {
 
     @Override
     public PageResult<EntrustOutline> findEntrustOutlines(Integer page, Integer pageSize, Long userId, Role userRole) {
+        if (page <= 0 || pageSize <= 0) {
+            throw new EntrustInvalidArgumentException("页号或每页大小必须为正整数");
+        }
         long total;
         List<EntrustOutline> list;
         // 根据用户角色不同，返回不同的结果

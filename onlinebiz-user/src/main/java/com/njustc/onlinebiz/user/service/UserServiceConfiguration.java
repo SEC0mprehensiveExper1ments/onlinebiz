@@ -41,13 +41,11 @@ public class UserServiceConfiguration {
             }
             // 注册新的 admin 账号
             String passwd = UUID.randomUUID().toString();
-            if (!userService.createUser("admin", passwd)) {
-                log.error("Can not create root!");
-                return;
-            }
-            if (!userService.updateUserRole("admin", Role.ADMIN.toString(), Role.ADMIN)) {
-                log.error("Can not change root to admin!");
-                return;
+            try {
+                userService.createUser("admin", passwd);
+                userService.updateUserRole("admin", Role.ADMIN.toString(), Role.ADMIN);
+            } catch (Exception e) {
+                log.error("Failed to create admin: " + e.getMessage());
             }
             log.info("The initial password for 'admin' is: " + passwd);
         };

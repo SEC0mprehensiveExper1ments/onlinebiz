@@ -6,10 +6,6 @@ spring:
     active: dev
   application:
     name: onlinebiz-gateway
-  redis:
-    host: 124.221.156.98
-    database: 0
-    password: nAnj1ng_Jia0tong_Univ
   cloud:
     gateway:
       # 使用DiscoveryClient
