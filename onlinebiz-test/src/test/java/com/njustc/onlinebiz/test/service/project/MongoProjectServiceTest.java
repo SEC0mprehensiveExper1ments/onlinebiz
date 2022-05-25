@@ -1,0 +1,56 @@
+package com.njustc.onlinebiz.test.service.project;
+
+import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.test.exception.project.ProjectNotFoundException;
+import com.njustc.onlinebiz.test.exception.project.ProjectPermissionDeniedException;
+import com.njustc.onlinebiz.test.model.Project;
+import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+@SpringBootTest
+@RunWith(SpringRunner.class)
+class MongoProjectServiceTest {
+
+    @Autowired
+    private ProjectService projectService;
+    private static String projectId1 = null;
+    private static String projectId2 = null;
+    private static String projectId3 = null;
+
+    @Test
+    void createTestProject() {
+        //由质量部（非合法人员）创建项目
+        try {
+            projectService.createTestProject(3L, Role.QA, "E001");
+        } catch (Exception e) {
+            assert (e.getClass().equals(ProjectPermissionDeniedException.class));
+        }
+        //由市场部（合法人员）创建项目
+        projectId1 = projectService.createTestProject(1L, Role.MARKETER, "E001");
+        projectId2 = projectService.createTestProject(1L, Role.MARKETER, "E002");
+        projectId3 = projectService.createTestProject(2L, Role.MARKETING_SUPERVISOR, "E003");
+    }
+
+    @Test
+    void findProject() {
+        Project project = null;
+        //由客户（非合法人员）查看项目
+        try {
+            project = projectService.findProject(projectId1, 4L, Role.CUSTOMER);
+        } catch (Exception e) {
+            assert (e.getClass().equals(ProjectPermissionDeniedException.class));
+        }
+        //由质量部（合法人员）查看项目
+        project = projectService.findProject(projectId1, 3L, Role.QA);
+        assert project.getCreatorId().equals(1L);
+        //查看一个不存在的项目id
+        try {
+            project = projectService.findProject("abc", 3L, Role.QA);
+        } catch (Exception e) {
+            assert (e.getClass().equals(ProjectNotFoundException.class));
+        }
+    }
+}
