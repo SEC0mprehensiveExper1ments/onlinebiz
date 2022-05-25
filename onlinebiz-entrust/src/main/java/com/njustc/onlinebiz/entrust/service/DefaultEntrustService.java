@@ -314,7 +314,8 @@ public class DefaultEntrustService implements EntrustService {
                 return userId.equals(entrust.getCustomerId());
             }
         } else if (userRole == Role.MARKETER) {
-            if (currStage == EntrustStage.MARKETER_AUDITING || currStage == EntrustStage.AUDITING_PASSED) {
+            if (currStage == EntrustStage.MARKETER_AUDITING || currStage == EntrustStage.AUDITING_PASSED
+                    || currStage == EntrustStage.CUSTOMER_DENY_QUOTE) {
                 return userId.equals(entrust.getMarketerId());
             }
         } else if (userRole == Role.TESTER) {
