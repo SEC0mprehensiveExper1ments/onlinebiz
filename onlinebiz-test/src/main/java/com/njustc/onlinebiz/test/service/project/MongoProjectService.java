@@ -49,7 +49,7 @@ public class MongoProjectService implements ProjectService {
         project.setTestId(testerId);
         project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, "等待质量部主管分配质量部员工"));
 
-        /*TODO: 根据其他部分给出的接口新建各表，并将表编号填入testProject中字段，替换null**/
+        /*TODO: 根据其他部分给出的接口新建各表，并将表编号填入testProject中字段，替换null*/
         // 每个文档可以传入projectId，然后根据projectId可进行查找质量部人员Id
 
         // 对应的测试方案 id (006)

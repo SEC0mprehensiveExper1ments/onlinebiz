@@ -63,6 +63,10 @@ class MongoTestcaseServiceTest {
             assert (e.getClass().equals(TestcasePermissionDeniedException.class));
             System.out.println("QA supervisor try to create a testcase table and cause a mistake.");
         }
+        //由市场部员工/主管（合法人员）创建测试用例表
+        TestCaseListId1 = testcaseservice.createTestcaseList("E001", null, 1L, Role.MARKETER);
+        TestCaseListId2 = testcaseservice.createTestcaseList("E002", null, 2L, Role.MARKETER);
+        TestCaseListId3 = testcaseservice.createTestcaseList("E003", null, 3L, Role.MARKETING_SUPERVISOR);
     }
 
     @Test
