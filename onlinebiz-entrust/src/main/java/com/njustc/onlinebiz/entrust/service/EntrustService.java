@@ -3,8 +3,6 @@ package com.njustc.onlinebiz.entrust.service;
 import com.njustc.onlinebiz.common.model.*;
 import com.njustc.onlinebiz.entrust.model.*;
 
-import java.util.List;
-
 /**
  * 委托管理的服务层接口
  */
@@ -33,13 +31,14 @@ public interface EntrustService {
     /**
      * 查看与某个用户相关的所有委托列表。客户、市场部人员和测试部人员都只能看到他们
      * 自己的委托；管理员和主管看到的是所有委托。
-     * @param page 查询结果的页码
+     *
+     * @param page     查询结果的页码
      * @param pageSize 每页有多少条记录
-     * @param userId 执行此操作的用户ID
+     * @param userId   执行此操作的用户ID
      * @param userRole 执行此操作的用户角色
-     * @return 返回该用户可以看到的委托列表
+     * @return 返回该用户可以看到的委托列表，是一个分页结果。
      */
-    List<EntrustOutline> findEntrustOutlines(Integer page, Integer pageSize, Long userId, Role userRole);
+    PageResult<EntrustOutline> findEntrustOutlines(Integer page, Integer pageSize, Long userId, Role userRole);
 
     /**
      * 修改委托申请的内容。该委托所属的客户和管理员可以执行此操作。其中客户只能在委托被拒绝

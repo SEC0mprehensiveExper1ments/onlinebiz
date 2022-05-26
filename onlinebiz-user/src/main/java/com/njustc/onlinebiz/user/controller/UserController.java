@@ -3,8 +3,8 @@ package com.njustc.onlinebiz.user.controller;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.User;
 import com.njustc.onlinebiz.common.model.UserDto;
+import com.njustc.onlinebiz.user.exception.UserInvalidArgumentException;
 import com.njustc.onlinebiz.user.service.UserService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,111 +23,101 @@ public class UserController {
 
     // 注册账号
     @PostMapping("/register")
-    public ResponseEntity<Void> createAccount(
+    public void createAccount(
             @RequestParam("userName") String userName,
             @RequestParam("userPassword") String userPassword
     ) {
-        if (userService.createUser(userName, userPassword)) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.badRequest().build();
+        userService.createUser(userName, userPassword);
     }
 
     // 登录
     @PostMapping("/login")
-    public ResponseEntity<Void> login(
+    public void login(
             @RequestParam("userName") String userName,
             @RequestParam("userPassword") String userPassword,
             HttpServletRequest request
     ) {
-        if (!userService.handleLogIn(userName, userPassword, request)) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok().build();
+        userService.handleLogIn(userName, userPassword, request);
     }
 
     // 登出
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletRequest request) {
-        if (userService.handleLogOut(request)) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.badRequest().build();
+    public void logout(HttpServletRequest request) {
+        userService.handleLogOut(request);
     }
 
     // 修改用户名
     @PostMapping("/account/username")
-    public ResponseEntity<Void> changeUsername(
+    public void changeUsername(
             @RequestParam("newValue") String userName,
             HttpServletRequest request
     ) {
         // 修改用户名
-        if (!userService.updateCurrentUserName(userName, request)) {
-            return ResponseEntity.badRequest().build();
-        }
-        // 成功
-        return ResponseEntity.ok().build();
+        userService.updateCurrentUserName(userName, request);
     }
 
     // 修改密码
     @PostMapping("/account/password")
-    public ResponseEntity<Void> changePassword(
+    public void changePassword(
             @RequestParam("oldValue") String oldPassword,
             @RequestParam("newValue") String newPassword,
             HttpServletRequest request
     ) {
-        if (!userService.updateCurrentUserPassword(oldPassword, newPassword, request)) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok().build();
+        userService.updateCurrentUserPassword(oldPassword, newPassword, request);
     }
 
     // 注销账号
     @DeleteMapping("/account")
-    public ResponseEntity<Void> removeIndividualAccount(HttpServletRequest request) {
-        if (!userService.removeCurrentUser(request)) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok().build();
+    public void removeIndividualAccount(HttpServletRequest request) {
+        userService.removeCurrentUser(request);
     }
 
     // 获取用户自己的账号信息
     @GetMapping("/account")
-    public ResponseEntity<UserDto> getIndividualAccount(HttpServletRequest request) {
+    public UserDto getIndividualAccount(HttpServletRequest request) {
         User user = userService.getCurrentUser(request);
-        if (user == null) {
-            return ResponseEntity.badRequest().build();
+        if (user != null) {
+            // 返回 DTO，这里我们不返回密码，虽然它也是加密的
+            return new UserDto(user);
         }
-        // 返回 DTO，这里我们不返回密码，虽然它也是加密的
-        return ResponseEntity.ok().body(new UserDto(user));
+        return null;
     }
 
     // 修改某个账号的角色
     @PostMapping("/account/role")
-    public ResponseEntity<Void> changeRole(
+    public void changeRole(
             @RequestParam("userName") String userName,
             @RequestParam("newValue") String newValue,
             @RequestParam("userRole") Role userRole
     ) {
-        return userService.updateUserRole(userName, newValue, userRole) ?
-                ResponseEntity.ok().build() :
-                ResponseEntity.badRequest().build();
+        userService.updateUserRole(userName, newValue, userRole);
     }
 
     // 获取指定用户ID的账号信息
     @GetMapping("/user/{userId}")
-    public ResponseEntity<UserDto> getUser(@PathVariable("userId") Long userId) {
+    public UserDto getUser(@PathVariable("userId") Long userId) {
         User user = userService.getUserByUserId(userId);
-        return user == null ?
-                ResponseEntity.notFound().build() :
-                ResponseEntity.ok(new UserDto(user));
+        if (user != null) {
+            return new UserDto(user);
+        }
+        return null;
     }
 
     // 按用户名查找某个账号
     @GetMapping("/user/search")
-    public ResponseEntity<List<UserDto>> searchAccount(@RequestParam("userName") String userName) {
-        List<User> userList = userService.searchUserByUserName(userName);
-        return ResponseEntity.ok().body(userList.stream().map(UserDto::new).collect(Collectors.toList()));
+    public List<UserDto> searchAccount(
+            @RequestParam(value = "userName", required = false) String userName,
+            @RequestParam(value = "userRole", required = false) Role userRole
+    ) {
+        List<User> userList;
+        if (userName != null) {
+            userList = userService.searchUserByUserName(userName);
+        } else if (userRole != null) {
+            userList = userService.searchUserByUserRole(userRole);
+        } else {
+            throw new UserInvalidArgumentException("搜索条件不能全空");
+        }
+        return userList.stream().map(UserDto::new).collect(Collectors.toList());
     }
 
 }

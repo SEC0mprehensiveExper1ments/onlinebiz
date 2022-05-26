@@ -1,40 +1,5 @@
-server:
-  port: 8001
-  servlet:
-    session:
-      timeout: 7d
-      cookie:
-        name: NJUSTC_ONLINEBIZ_SESSION
-        max-age: 7d
-        path: /
-        http-only: true
-
 spring:
-  application:
-    name: onlinebiz-user
   datasource:
     url: jdbc:mysql://124.221.156.98:33060/user_db
-    username: root
-    password: nAnj1ng_Jia0tong_Univ
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  session:
-    store-type: redis
   redis:
-    host: 124.221.156.98
     port: 63790
-    database: 0
-    password: nAnj1ng_Jia0tong_Univ
-  cache:
-    type: redis
-    redis:
-      cache-null-values: true
-      time-to-live: 30m
-
-mybatis:
-  mapper-locations: classpath:mappers/*.xml
-  type-aliases-package: com.njustc.onlinebiz.user.model,com.njustc.onlinebiz.common.model
-  configuration:
-    jdbc-type-for-null: null
-    lazy-loading-enabled: true
-    aggressive-lazy-loading: false
-    map-underscore-to-camel-case: true

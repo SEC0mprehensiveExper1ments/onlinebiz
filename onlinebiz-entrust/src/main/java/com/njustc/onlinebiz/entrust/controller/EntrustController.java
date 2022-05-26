@@ -34,7 +34,7 @@ public class EntrustController {
 
     // 获取委托概要列表
     @GetMapping("/entrust")
-    public List<EntrustOutline> getEntrusts(
+    public PageResult<EntrustOutline> getEntrusts(
             @RequestParam("userId") Long userId,
             @RequestParam("userRole") Role userRole,
             @RequestParam("page") Integer page,

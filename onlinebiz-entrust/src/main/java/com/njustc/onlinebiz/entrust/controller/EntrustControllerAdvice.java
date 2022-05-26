@@ -1,18 +1,14 @@
 package com.njustc.onlinebiz.entrust.controller;
 
-import com.njustc.onlinebiz.entrust.exception.EntrustDAOFailureException;
-import com.njustc.onlinebiz.entrust.exception.EntrustInvalidStageException;
-import com.njustc.onlinebiz.entrust.exception.EntrustNotFoundException;
-import com.njustc.onlinebiz.entrust.exception.EntrustPermissionDeniedException;
+import com.njustc.onlinebiz.entrust.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class EntrustControllerAdvice {
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(EntrustPermissionDeniedException.class)
     public String handlePermissionDeniedException(EntrustPermissionDeniedException e) {
@@ -20,7 +16,6 @@ public class EntrustControllerAdvice {
         return e.getMessage();
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(EntrustDAOFailureException.class)
     public String handleDAOFailureException(EntrustDAOFailureException e) {
@@ -28,7 +23,6 @@ public class EntrustControllerAdvice {
         return e.getMessage();
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EntrustInvalidStageException.class)
     public String handleInvalidStageException(EntrustInvalidStageException e) {
@@ -36,11 +30,17 @@ public class EntrustControllerAdvice {
         return e.getMessage();
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EntrustNotFoundException.class)
     public String handleNotFoundException(EntrustNotFoundException e) {
         log.warn("Entrust Not Found: " + e.getMessage());
+        return e.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(EntrustInvalidArgumentException.class)
+    public String handleInvalidArgumentException(EntrustInvalidArgumentException e) {
+        log.warn("Invalid Argument encountered: " + e.getMessage());
         return e.getMessage();
     }
 
