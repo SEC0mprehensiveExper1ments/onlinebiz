@@ -1,5 +1,7 @@
 package com.njustc.onlinebiz.test.service.testcase;
 
+import com.njustc.onlinebiz.test.exception.project.ProjectPermissionDeniedException;
+import com.thoughtworks.xstream.mapper.Mapper;
 import org.junit.jupiter.api.Test;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.test.exception.testcase.TestcaseDAOFailureException;
@@ -20,10 +22,18 @@ class MongoTestcaseServiceTest {
 
     @Autowired
     private TestcaseService testcaseservice;
-
+    private static String TestCaseListId1 = null;
+    private static String TestCaseListId2 = null;
+    private static String TestCaseListId3 = null;
 
     @Test
     void createTestcaseList() {
+        //由客户（非合法人员）创建测试用例表
+        try {
+            testcaseservice.createTestcaseList("E001", null, 1L, Role.CUSTOMER);
+        } catch (Exception e) {
+            assert (e.getClass().equals(TestcasePermissionDeniedException.class));
+        }
     }
 
     @Test
