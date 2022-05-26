@@ -22,13 +22,37 @@ class MongoProjectServiceTest {
 
     @Test
     void createTestProject() {
-        //由质量部（非合法人员）创建项目
+        //由客户（非合法人员）创建项目
+        try {
+            projectService.createTestProject(123L, Role.CUSTOMER, "E001");
+        } catch (Exception e) {
+            assert (e.getClass().equals(ProjectPermissionDeniedException.class));
+        }
+        //由质量部员工（非合法人员）创建项目
         try {
             projectService.createTestProject(3L, Role.QA, "E001");
         } catch (Exception e) {
             assert (e.getClass().equals(ProjectPermissionDeniedException.class));
         }
-        //由市场部（合法人员）创建项目
+        //由质量部主管（非合法人员）创建项目
+        try {
+            projectService.createTestProject(123L, Role.QA_SUPERVISOR, "E001");
+        } catch (Exception e) {
+            assert (e.getClass().equals(ProjectPermissionDeniedException.class));
+        }
+        //由测试部员工（非合法人员）创建项目
+        try {
+            projectService.createTestProject(123L, Role.TESTER, "E001");
+        } catch (Exception e) {
+            assert (e.getClass().equals(ProjectPermissionDeniedException.class));
+        }
+        //由测试部主管（非合法人员）创建项目
+        try {
+            projectService.createTestProject(123L, Role.TESTING_SUPERVISOR, "E001");
+        } catch (Exception e) {
+            assert (e.getClass().equals(ProjectPermissionDeniedException.class));
+        }
+        //由市场部员工/主管（合法人员）创建项目
         projectId1 = projectService.createTestProject(1L, Role.MARKETER, "E001");
         projectId2 = projectService.createTestProject(1L, Role.MARKETER, "E002");
         projectId3 = projectService.createTestProject(2L, Role.MARKETING_SUPERVISOR, "E003");
@@ -43,9 +67,48 @@ class MongoProjectServiceTest {
         } catch (Exception e) {
             assert (e.getClass().equals(ProjectPermissionDeniedException.class));
         }
-        //由质量部（合法人员）查看项目
+        //由质量部员工（合法人员）查看项目
         project = projectService.findProject(projectId1, 3L, Role.QA);
-        assert project.getCreatorId().equals(1L);
+        assert (project.getCreatorId().equals(1L));
+        project = projectService.findProject(projectId2, 3L, Role.QA);
+        assert (project.getCreatorId().equals(1L));
+        project = projectService.findProject(projectId3, 3L, Role.QA);
+        assert (project.getCreatorId().equals(2L));
+        //由质量部主管（合法人员）查看项目
+        project = projectService.findProject(projectId1, 3L, Role.QA_SUPERVISOR);
+        assert (project.getCreatorId().equals(1L));
+        project = projectService.findProject(projectId2, 3L, Role.QA_SUPERVISOR);
+        assert (project.getCreatorId().equals(1L));
+        project = projectService.findProject(projectId3, 3L, Role.QA_SUPERVISOR);
+        assert (project.getCreatorId().equals(2L));
+        //由市场部员工（合法人员）查看项目
+        project = projectService.findProject(projectId1, 3L, Role.MARKETER);
+        assert (project.getCreatorId().equals(1L));
+        project = projectService.findProject(projectId2, 3L, Role.MARKETER);
+        assert (project.getCreatorId().equals(1L));
+        project = projectService.findProject(projectId3, 3L, Role.MARKETER);
+        assert (project.getCreatorId().equals(2L));
+        //由市场部主管（合法人员）查看项目
+        project = projectService.findProject(projectId1, 3L, Role.MARKETING_SUPERVISOR);
+        assert (project.getCreatorId().equals(1L));
+        project = projectService.findProject(projectId2, 3L, Role.MARKETING_SUPERVISOR);
+        assert (project.getCreatorId().equals(1L));
+        project = projectService.findProject(projectId3, 3L, Role.MARKETING_SUPERVISOR);
+        assert (project.getCreatorId().equals(2L));
+        //由测试部员工（合法人员）查看项目
+        project = projectService.findProject(projectId1, 3L, Role.TESTER);
+        assert (project.getCreatorId().equals(1L));
+        project = projectService.findProject(projectId2, 3L, Role.TESTER);
+        assert (project.getCreatorId().equals(1L));
+        project = projectService.findProject(projectId3, 3L, Role.TESTER);
+        assert (project.getCreatorId().equals(2L));
+        //由测试部主管（合法人员）查看项目
+        project = projectService.findProject(projectId1, 3L, Role.TESTING_SUPERVISOR);
+        assert (project.getCreatorId().equals(1L));
+        project = projectService.findProject(projectId2, 3L, Role.TESTING_SUPERVISOR);
+        assert (project.getCreatorId().equals(1L));
+        project = projectService.findProject(projectId3, 3L, Role.TESTING_SUPERVISOR);
+        assert (project.getCreatorId().equals(2L));
         //查看一个不存在的项目id
         try {
             project = projectService.findProject("abc", 3L, Role.QA);
