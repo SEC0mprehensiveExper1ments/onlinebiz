@@ -33,18 +33,35 @@ class MongoTestcaseServiceTest {
             testcaseservice.createTestcaseList("E001", null, 1L, Role.CUSTOMER);
         } catch (Exception e) {
             assert (e.getClass().equals(TestcasePermissionDeniedException.class));
+            System.out.println("Customer try to create a testcase table and cause a mistake.");
         }
-        //由市场部员工（非合法人员）创建测试用例表
+        //由测试部员工（非合法人员）创建测试用例表
         try {
-            testcaseservice.createTestcaseList("E001", null, 1L, Role.MARKETER);
+            testcaseservice.createTestcaseList("E001", null, 1L, Role.TESTER);
         } catch (Exception e) {
             assert (e.getClass().equals(TestcasePermissionDeniedException.class));
+            System.out.println("Tester try to create a testcase table and cause a mistake.");
         }
-        //由市场部主管（非合法人员）创建测试用例表
+        //由测试部主管（非合法人员）创建测试用例表
         try {
-            testcaseservice.createTestcaseList("E001", null, 1L, Role.MARKETING_SUPERVISOR);
+            testcaseservice.createTestcaseList("E001", null, 1L, Role.TESTING_SUPERVISOR);
         } catch (Exception e) {
             assert (e.getClass().equals(TestcasePermissionDeniedException.class));
+            System.out.println("Testing supervisor try to create a testcase table and cause a mistake.");
+        }
+        //由质量部员工（非合法人员）创建测试用例表
+        try {
+            testcaseservice.createTestcaseList("E001", null, 1L, Role.QA);
+        } catch (Exception e) {
+            assert (e.getClass().equals(TestcasePermissionDeniedException.class));
+            System.out.println("QA try to create a testcase table and cause a mistake.");
+        }
+        //由质量部主管（非合法人员）创建测试用例表
+        try {
+            testcaseservice.createTestcaseList("E001", null, 1L, Role.QA_SUPERVISOR);
+        } catch (Exception e) {
+            assert (e.getClass().equals(TestcasePermissionDeniedException.class));
+            System.out.println("QA supervisor try to create a testcase table and cause a mistake.");
         }
     }
 

@@ -65,8 +65,8 @@ public class MongoProjectService implements ProjectService {
         String testRecordListId = testRecordService.createTestRecordList(entrustId, null, userId, userRole);
         project.setTestRecordListId(testRecordListId);
         // 对应的测试报告检查表 id (010)
-        String testReportCecklistId = null;
-        project.setTestReportCecklistId(testReportCecklistId);
+        String testReportChecklistId = null;
+        project.setTestReportCecklistId(testReportChecklistId);
         // 对应的测试问题清单 id (011)
         String testIssueListId = null;
         project.setTestIssueListId(testIssueListId);
