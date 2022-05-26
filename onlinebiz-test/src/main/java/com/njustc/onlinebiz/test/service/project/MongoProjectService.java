@@ -2,7 +2,7 @@ package com.njustc.onlinebiz.test.service.project;
 
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.test.exception.project.ProjectNotFoundException;
-import com.njustc.onlinebiz.test.model.Project;
+import com.njustc.onlinebiz.test.model.project.Project;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.exception.project.ProjectPermissionDeniedException;
 import com.njustc.onlinebiz.test.service.scheme.SchemeService;

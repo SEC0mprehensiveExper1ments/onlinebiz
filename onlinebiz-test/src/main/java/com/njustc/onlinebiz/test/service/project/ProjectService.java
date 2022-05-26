@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.test.service.project;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.model.Project;
+import com.njustc.onlinebiz.test.model.project.Project;
 
 /**
  * 测试项目服务层接口

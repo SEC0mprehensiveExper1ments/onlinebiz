@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.test.model;
+package com.njustc.onlinebiz.test.model.project;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,33 +19,34 @@ public class Project {
     // 项目 id，由 MongoDB 自动生成
     private String id;
 
-    // 市场部生成项目人 id
-    private Long creatorId;
+    /** 测试项目的基本信息 **/
+    // 测试项目编号
+    private String serialNumber;
+    // 市场部生成项目人(市场部指定员工) id
+    private Long marketId;
+    // 测试部指定员工 id
+    private Long testId;
+    // 质量部指定员工 id
+    private Long qaId;
 
+    /** 测试项目包含的各种表格 **/
     // 对应的测试方案 id
     private String testSchemeId;
-
     // 对应的测试用例表 id
     private String testcaseListId;
-
     // 对应的测试记录表 id
     private String testRecordListId;
-
     // 对应的测试报告 id
     private String testReportId;
-
     // 对应的测试问题清单 id
     private String testIssueListId;
-
     // 对应的工作检查表 id
     private String workChecklistId;
-
     // 对应的测试方案评审表
     private String testSchemeChecklistId;
-
     // 对应的软件文档评审表
     private String softwareDocumentChecklistId;
 
-    // 该项目的状态
-    private boolean isFinished;
+    /** 测试项目状态 **/
+    private ProjectStatus status;
 }
