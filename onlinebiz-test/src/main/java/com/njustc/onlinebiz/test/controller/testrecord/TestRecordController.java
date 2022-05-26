@@ -20,7 +20,7 @@ public class TestRecordController {
 
     // 查看任意测试记录表的详细信息
     @GetMapping("/test/testRecord/{testRecordId}")
-    public TestRecordList getTestcase(
+    public TestRecordList getTestRecord(
             @PathVariable("testRecordId") String testRecordId,
             @RequestParam("userId") Long userId,
             @RequestParam("userRole") Role userRole) {
@@ -40,7 +40,7 @@ public class TestRecordController {
 
     // 删除一份测试记录表
     @DeleteMapping("/test/testRecord/{testRecordId}")
-    public void removeScheme(
+    public void removeTestRecord(
             @PathVariable("testRecordId") String testRecordId,
             @RequestParam("userId") Long userId,
             @RequestParam("userRole") Role userRole
