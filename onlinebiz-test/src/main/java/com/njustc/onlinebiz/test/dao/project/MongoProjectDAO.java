@@ -3,6 +3,7 @@ package com.njustc.onlinebiz.test.dao.project;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.njustc.onlinebiz.test.model.project.Project;
+import com.njustc.onlinebiz.test.model.project.ProjectStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -45,6 +46,12 @@ public class MongoProjectDAO implements ProjectDAO {
         Query query = new Query().addCriteria(Criteria.where("_id").is(new ObjectId(projectId)));
         DeleteResult result = mongoTemplate.remove(query, COLLECTION_NAME);
         return result.wasAcknowledged() && result.getDeletedCount() == 1;
+    }
+
+    @Override
+    public boolean updateStatus(String projectId, ProjectStatus status) {
+        Update update = new Update().set("status", status);
+        return updateFirstWithId(projectId, update);
     }
 
     // 根据测试项目ID更新测试项目，由传入的 Update 对象设置要更新的部分

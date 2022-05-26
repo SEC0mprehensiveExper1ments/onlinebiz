@@ -1,6 +1,7 @@
 package com.njustc.onlinebiz.test.dao.project;
 
 import com.njustc.onlinebiz.test.model.project.Project;
+import com.njustc.onlinebiz.test.model.project.ProjectStatus;
 
 /**
  * 测试项目整体模块的数据访问层接口
@@ -35,4 +36,12 @@ public interface ProjectDAO {
      * @return 成功返回 true，失败返回 false
      * **/
     Boolean deleteProject(String projectId);
+
+    /**
+     * 修改测试项目的状态
+     * @param projectId 委托ID
+     * @param status 修改后的状态
+     * @return 成功返回 true，失败返回 false
+     */
+    boolean updateStatus(String projectId, ProjectStatus status);
 }
