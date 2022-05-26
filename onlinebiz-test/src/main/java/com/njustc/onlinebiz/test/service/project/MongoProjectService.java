@@ -86,6 +86,11 @@ public class MongoProjectService implements ProjectService {
             throw new ProjectPermissionDeniedException("无权查看测试项目");
         }
         Project project = projectDAO.findProjectById(projectId);
+        // 检查阶段
+        ProjectStage curStage = project.getStatus().getStage();
+        if (curStage == ProjectStage.WAIT_FOR_QA) {
+            throw new ProjectInvalidStageException("待分配质量部人员");
+        }
         if (project == null) {
             throw new ProjectNotFoundException("该测试项目不存在");
         }
