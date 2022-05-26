@@ -40,7 +40,7 @@ public class TestcaseController {
 
     // 删除一份测试用例表
     @DeleteMapping("/test/testcase/{testcaseId}")
-    public void removeScheme(
+    public void removeTestcase(
             @PathVariable("testcaseId") String testcaseId,
             @RequestParam("userId") Long userId,
             @RequestParam("userRole") Role userRole
