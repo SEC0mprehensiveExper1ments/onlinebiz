@@ -34,6 +34,18 @@ class MongoTestcaseServiceTest {
         } catch (Exception e) {
             assert (e.getClass().equals(TestcasePermissionDeniedException.class));
         }
+        //由市场部员工（非合法人员）创建测试用例表
+        try {
+            testcaseservice.createTestcaseList("E001", null, 1L, Role.MARKETER);
+        } catch (Exception e) {
+            assert (e.getClass().equals(TestcasePermissionDeniedException.class));
+        }
+        //由市场部主管（非合法人员）创建测试用例表
+        try {
+            testcaseservice.createTestcaseList("E001", null, 1L, Role.MARKETING_SUPERVISOR);
+        } catch (Exception e) {
+            assert (e.getClass().equals(TestcasePermissionDeniedException.class));
+        }
     }
 
     @Test
