@@ -109,6 +109,16 @@ class MongoTestcaseServiceTest {
             assert (e.getClass().equals(TestcasePermissionDeniedException.class));
             System.out.println("Another qa try to check a testcase table and cause a mistake.");
         }
+        //由指派的测试部员工/测试部主管（合法人员）创建测试用例表
+        //测试时在数据库中注入特定的数据，保证entrustId对应的testerId和这里的userId参数是一致的，测试时挂着委托服务测
+        TestCaseListId1 = testcaseservice.createTestcaseList("T001", null, 11L, Role.TESTER);
+        TestCaseListId2 = testcaseservice.createTestcaseList("T002", null, 11L, Role.TESTER);
+        TestCaseListId3 = testcaseservice.createTestcaseList("T003", null, 10L, Role.TESTING_SUPERVISOR);
+        //由指派的质量部员工/质量部主管（合法人员）创建测试用例表
+        //测试时在数据库中注入特定的数据，保证entrustId对应的qaId和这里的userId参数是一致的，测试时挂着委托服务测
+        TestCaseListId1 = testcaseservice.createTestcaseList("T001", null, 111L, Role.QA);
+        TestCaseListId2 = testcaseservice.createTestcaseList("T002", null, 111L, Role.QA);
+        TestCaseListId3 = testcaseservice.createTestcaseList("T003", null, 100L, Role.QA_SUPERVISOR);
     }
 
     @Test
