@@ -264,4 +264,13 @@ public class MongoProjectService implements ProjectService {
         }
         return project.getProjectFormIds();
     }
+
+    @Override
+    public ProjectBaseInfo getProjectBaseInfo(String projectId) {
+        Project project = projectDAO.findProjectById(projectId);
+        if (project == null) {
+            throw new ProjectNotFoundException("该测试项目不存在");
+        }
+        return project.getProjectBaseInfo();
+    }
 }

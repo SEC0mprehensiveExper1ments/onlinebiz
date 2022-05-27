@@ -70,4 +70,11 @@ public interface ProjectService {
      * @return 返回测试项目的表单对象，否则返回null
      * */
     ProjectFormIds getProjectFormIds(String projectId);
+
+    /**
+     * 获取测试项目的基本信息，内部接口，此接口内部不做权限检查，如有需要，请在调用前完成权限检查
+     * @param projectId 待获取的测试项目ID
+     * @return 返回测试项目的基本信息对象，否则返回null
+     * */
+    ProjectBaseInfo getProjectBaseInfo(String projectId);
 }
