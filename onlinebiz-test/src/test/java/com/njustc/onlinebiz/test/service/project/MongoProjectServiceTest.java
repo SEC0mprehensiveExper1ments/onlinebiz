@@ -65,7 +65,7 @@ class MongoProjectServiceTest {
         projectId2 = projectService.createTestProject(1L, Role.MARKETER, "E002");
         projectId3 = projectService.createTestProject(2L, Role.MARKETING_SUPERVISOR, "E003");
         //由非该委托被指派的市场部员工（非合法人员）创建项目
-        //测试时在数据库中注入特定的数据，保证entrustId对应的market而和这里的userId参数是不同的，测试时挂着委托服务测
+        //测试时在数据库中注入特定的数据，保证entrustId对应的marketer和这里的userId参数是不同的，测试时挂着委托服务测
         try {
             projectService.createTestProject(4L, Role.MARKETING_SUPERVISOR, "E001");
         } catch (Exception e) {

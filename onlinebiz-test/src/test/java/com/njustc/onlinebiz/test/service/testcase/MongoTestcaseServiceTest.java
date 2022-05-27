@@ -75,10 +75,39 @@ class MongoTestcaseServiceTest {
     void findTestcaseList() {
         //由客户（非合法人员）查找测试用例表
         try {
-            testcaseservice.findTestcaseList("E001", 1111L, Role.CUSTOMER);
+            testcaseservice.findTestcaseList("T001", 1111L, Role.CUSTOMER);
         } catch (Exception e) {
             assert (e.getClass().equals(TestcasePermissionDeniedException.class));
-            System.out.println("Customer try to create a testcase table and cause a mistake.");
+            System.out.println("Customer try to check a testcase table and cause a mistake.");
+        }
+        //由市场部员工（非合法人员）查找测试用例表
+        try {
+            testcaseservice.findTestcaseList("T001", 1L, Role.MARKETER);
+        } catch (Exception e) {
+            assert (e.getClass().equals(TestcasePermissionDeniedException.class));
+            System.out.println("Marketer try to check a testcase table and cause a mistake.");
+        }
+        //由市场部主管（非合法人员）查找测试用例表
+        try {
+            testcaseservice.findTestcaseList("T001", 2L, Role.MARKETING_SUPERVISOR);
+        } catch (Exception e) {
+            assert (e.getClass().equals(TestcasePermissionDeniedException.class));
+            System.out.println("Marketing supervisor try to check a testcase table and cause a mistake.");
+        }
+        //由非指定的测试部员工（非合法人员）查找测试用例表
+        try {
+            testcaseservice.findTestcaseList("T001", 66L, Role.TESTER);
+        } catch (Exception e) {
+            assert (e.getClass().equals(TestcasePermissionDeniedException.class));
+            System.out.println("Another tester try to check a testcase table and cause a mistake.");
+        }
+        //由非指定的质量部员工（非合法人员）查找测试用例表
+        //测试时在数据库中注入特定的数据，保证testcaseId对应的qaId和这里的userId参数是不同的，测试时挂着委托服务测
+        try {
+            testcaseservice.findTestcaseList("T001", 666L, Role.TESTER);
+        } catch (Exception e) {
+            assert (e.getClass().equals(TestcasePermissionDeniedException.class));
+            System.out.println("Another qa try to check a testcase table and cause a mistake.");
         }
     }
 
