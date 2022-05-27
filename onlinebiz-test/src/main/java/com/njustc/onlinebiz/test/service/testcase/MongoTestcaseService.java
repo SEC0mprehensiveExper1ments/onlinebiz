@@ -84,11 +84,13 @@ public class MongoTestcaseService implements TestcaseService {
 
     private boolean hasAuthorityToCheck(Long userId, Role userRole, Testcase testcase) {
         String entrustId = testcase.getEntrustId();
-        ResponseEntity<Long> responseEntity = restTemplate.getForEntity(ENTRUST_SERVICE_URL + "/api/entrust/{entrustId}/get_testerId", Long.class, entrustId);
-        if (responseEntity.getStatusCode() == HttpStatus.ACCEPTED) {
-            Long testerId = responseEntity.getBody();
-            /*根据调研情况，分配的测试部人员、测试部主管、所有质量部人员、质量部主管均有权限查阅*/
-            return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId)) || userRole == Role.TESTING_SUPERVISOR || userRole == Role.QA || userRole == Role.QA_SUPERVISOR;
+        ResponseEntity<Long> responseEntity1 = restTemplate.getForEntity(ENTRUST_SERVICE_URL + "/api/entrust/{entrustId}/get_testerId", Long.class, entrustId);
+        ResponseEntity<Long> responseEntity2 = restTemplate.getForEntity(ENTRUST_SERVICE_URL + "/api/entrust/{entrustId}/get_qaId", Long.class, entrustId);
+        if (responseEntity1.getStatusCode() == HttpStatus.ACCEPTED && responseEntity2.getStatusCode() == HttpStatus.ACCEPTED) {
+            Long testerId = responseEntity1.getBody();
+            Long qaId = responseEntity2.getBody();
+            /*根据调研情况，分配的测试部人员、测试部主管、分配的质量部人员、质量部主管均有权限查阅*/
+            return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId)) || userRole == Role.TESTING_SUPERVISOR || (userRole == Role.QA && userId.equals(qaId)) || userRole == Role.QA_SUPERVISOR;
         }
         return false;
     }
