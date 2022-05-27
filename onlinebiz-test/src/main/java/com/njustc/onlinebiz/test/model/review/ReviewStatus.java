@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SchemeReviewStatus {
+public class ReviewStatus {
     // 评审表所处的阶段
-    private SchemeReviewStage stage;
+    private ReviewStage stage;
     // 阶段附加消息
     private String message;
 }

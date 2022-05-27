@@ -2,7 +2,7 @@ package com.njustc.onlinebiz.test.dao.review;
 
 
 import com.njustc.onlinebiz.test.model.review.SchemeReview;
-import com.njustc.onlinebiz.test.model.review.SchemeReviewStatus;
+import com.njustc.onlinebiz.test.model.review.ReviewStatus;
 
 /**
  * 测试方案检查表的数据访问层接口
@@ -44,7 +44,7 @@ public interface SchemeReviewDAO {
      * @param status 更新后的状态
      * @return 成功返回 true, 失败返回 false
      * */
-    Boolean updateStatus(String schemeReviewId, SchemeReviewStatus status);
+    Boolean updateStatus(String schemeReviewId, ReviewStatus status);
 
     /**
      * 根据ID删除测试方案检查表

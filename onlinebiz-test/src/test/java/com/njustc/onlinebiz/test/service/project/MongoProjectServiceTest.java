@@ -126,7 +126,7 @@ class MongoProjectServiceTest {
         assert (project.getMarketerId().equals(2L));
         //查看一个不存在的项目id
         try {
-            project = projectService.findProject("abc", 3L, Role.QA);
+            project = projectService.findProject("projectId4", 3L, Role.QA);
         } catch (Exception e) {
             assert (e.getClass().equals(ProjectNotFoundException.class));
             System.out.println("Try to find a project non-existent and cause a mistake.");

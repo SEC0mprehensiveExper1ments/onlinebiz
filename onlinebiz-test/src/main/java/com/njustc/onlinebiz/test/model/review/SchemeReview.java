@@ -22,7 +22,7 @@ public class SchemeReview {
     // 此测试方案对应的方案 id
     private String schemeId;
     // 评审表目前的状态
-    private SchemeReviewStatus status;
+    private ReviewStatus status;
     // 评审表扫描件的文件路径
     private String scannedCopyPath;
     /** 每次会经常更新的部分 **/
@@ -44,7 +44,7 @@ public class SchemeReview {
         // 是否通过
         private boolean passed;
         // 不通过的原因
-        private String nopassReson;
+        private String message;
     }
 
 

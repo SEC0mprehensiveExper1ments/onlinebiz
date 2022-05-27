@@ -8,8 +8,8 @@ import com.njustc.onlinebiz.test.exception.review.ReviewInvalidStageException;
 import com.njustc.onlinebiz.test.exception.review.ReviewNotFoundException;
 import com.njustc.onlinebiz.test.exception.review.ReviewPermissionDeniedException;
 import com.njustc.onlinebiz.test.model.review.SchemeReview;
-import com.njustc.onlinebiz.test.model.review.SchemeReviewStage;
-import com.njustc.onlinebiz.test.model.review.SchemeReviewStatus;
+import com.njustc.onlinebiz.test.model.review.ReviewStage;
+import com.njustc.onlinebiz.test.model.review.ReviewStatus;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         // 创建一份空的检查表
         SchemeReview schemeReview = new SchemeReview();
         schemeReview.setSchemeId(schemeId);
-        schemeReview.setStatus(new SchemeReviewStatus(SchemeReviewStage.NOT_COPY_SAVED, null));
+        schemeReview.setStatus(new ReviewStatus(ReviewStage.NOT_COPY_SAVED, null));
         // 获取检查表ID
         String schemeReviewId = schemeReviewDAO.insertSchemeReview(schemeReview).getId();
         // TODO: 是否需要将测试方案ID注册到测试方案中
@@ -78,9 +78,9 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         if (!origin.getId().equals(schemeReview.getId())) {
             throw new ReviewPermissionDeniedException("测试方案检查表ID不一致");
         }
-        SchemeReviewStage curStage = origin.getStatus().getStage();
+        ReviewStage curStage = origin.getStatus().getStage();
         // 检查测试方案检查表的阶段，如果已上传附件则不能更改
-        if(curStage == SchemeReviewStage.NOT_COPY_SAVED) {
+        if(curStage == ReviewStage.NOT_COPY_SAVED) {
             if (!hasUpdateOrDeleteAuthority(schemeReview, userId, userRole)) {
                 throw new ReviewPermissionDeniedException("无权修改此测试方案检查表");
             }
@@ -126,7 +126,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
             throw new ReviewDAOFailureException("保存扫描文件路径失败");
         }
         // 更新检查表阶段
-        if (!schemeReviewDAO.updateStatus(schemeReviewId, new SchemeReviewStatus(SchemeReviewStage.COPY_SAVED, null))) {
+        if (!schemeReviewDAO.updateStatus(schemeReviewId, new ReviewStatus(ReviewStage.COPY_SAVED, null))) {
             throw new ReviewDAOFailureException("更新检查表状态失败");
         }
     }
@@ -134,9 +134,9 @@ public class MongoSchemeReviewService implements SchemeReviewService {
     @Override
     public Resource getScannedCopy(String schemeReviewId, Long userId, Role userRole) throws IOException {
         SchemeReview schemeReview = findSchemeReview(schemeReviewId, userId, userRole);
-        SchemeReviewStage curStage = schemeReview.getStatus().getStage();
+        ReviewStage curStage = schemeReview.getStatus().getStage();
         // 检查阶段
-        if (curStage != SchemeReviewStage.COPY_SAVED) {
+        if (curStage != ReviewStage.COPY_SAVED) {
             throw new ReviewInvalidStageException("检查表扫描件尚未上传");
         }
         // 检查权限

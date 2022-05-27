@@ -39,7 +39,7 @@ public class Project {
     // 对应的测试记录表 id (009)
     private String testRecordListId;
     // 对应的测试报告检查表 id (010)
-    private String testReportCecklistId;
+    private String testReportChecklistId;
     // 对应的测试问题清单 id (011)
     private String testIssueListId;
     // 对应的工作检查表 id (012)
