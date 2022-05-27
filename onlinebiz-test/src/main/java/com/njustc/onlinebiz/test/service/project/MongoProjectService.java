@@ -16,6 +16,8 @@ import com.njustc.onlinebiz.test.service.testrecord.TestRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Slf4j
 @Service
 public class MongoProjectService implements ProjectService {
@@ -41,6 +43,9 @@ public class MongoProjectService implements ProjectService {
     @Override
     public String createTestProject(Long userId, Role userRole, String entrustId, Long marketerId, Long testerId) {
         if (userRole != Role.ADMIN && userRole != Role.MARKETER && userRole != Role.MARKETING_SUPERVISOR) {
+            throw new ProjectPermissionDeniedException("无权生成新的测试项目");
+        }
+        if (userRole == Role.MARKETER && !Objects.equals(userId, marketerId)) {
             throw new ProjectPermissionDeniedException("无权生成新的测试项目");
         }
         Project project = new Project();

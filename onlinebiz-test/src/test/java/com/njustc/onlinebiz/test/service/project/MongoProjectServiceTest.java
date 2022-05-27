@@ -26,43 +26,50 @@ class MongoProjectServiceTest {
     void createTestProject() {
         //由客户（非合法人员）创建项目
         try {
-            projectService.createTestProject(123L, Role.CUSTOMER, "E001");
+            projectService.createTestProject(1111L, Role.CUSTOMER, "E001", 1L, 11L);
         } catch (Exception e) {
             assert (e.getClass().equals(ProjectPermissionDeniedException.class));
             System.out.println("Customer try to create a project and cause a mistake.");
         }
         //由质量部员工（非合法人员）创建项目
         try {
-            projectService.createTestProject(3L, Role.QA, "E001");
+            projectService.createTestProject(111L, Role.QA, "E001", 1L, 11L);
         } catch (Exception e) {
             assert (e.getClass().equals(ProjectPermissionDeniedException.class));
             System.out.println("QA try to create a project and cause a mistake.");
         }
         //由质量部主管（非合法人员）创建项目
         try {
-            projectService.createTestProject(123L, Role.QA_SUPERVISOR, "E001");
+            projectService.createTestProject(100L, Role.QA_SUPERVISOR, "E001", 1L, 11L);
         } catch (Exception e) {
             assert (e.getClass().equals(ProjectPermissionDeniedException.class));
             System.out.println("QA supervisor try to create a project and cause a mistake.");
         }
         //由测试部员工（非合法人员）创建项目
         try {
-            projectService.createTestProject(123L, Role.TESTER, "E001");
+            projectService.createTestProject(11L, Role.TESTER, "E001", 1L, 11L);
         } catch (Exception e) {
             assert (e.getClass().equals(ProjectPermissionDeniedException.class));
             System.out.println("Tester try to create a project and cause a mistake.");
         }
         //由测试部主管（非合法人员）创建项目
         try {
-            projectService.createTestProject(123L, Role.TESTING_SUPERVISOR, "E001");
+            projectService.createTestProject(10L, Role.TESTING_SUPERVISOR, "E001", 1L, 11L);
         } catch (Exception e) {
             assert (e.getClass().equals(ProjectPermissionDeniedException.class));
             System.out.println("Testing supervisor try to create a project and cause a mistake.");
         }
-        //由市场部员工/主管（合法人员）创建项目
-        projectId1 = projectService.createTestProject(1L, Role.MARKETER, "E001");
-        projectId2 = projectService.createTestProject(1L, Role.MARKETER, "E002");
-        projectId3 = projectService.createTestProject(2L, Role.MARKETING_SUPERVISOR, "E003");
+        //由指定的市场部员工/市场部主管（合法人员）创建项目
+        projectId1 = projectService.createTestProject(1L, Role.MARKETER, "E001", 1L, 11L);
+        projectId2 = projectService.createTestProject(1L, Role.MARKETER, "E002", 1L, 11L);
+        projectId3 = projectService.createTestProject(2L, Role.MARKETING_SUPERVISOR, "E003", 1L, 11L);
+        //由非该委托被指派的市场部员工（非合法人员）创建项目
+        try {
+            projectService.createTestProject(4L, Role.MARKETING_SUPERVISOR, "E001", 1L, 11L);
+        } catch (Exception e) {
+            assert (e.getClass().equals(ProjectPermissionDeniedException.class));
+            System.out.println("Another marketer try to create a project and cause a mistake.");
+        }
     }
 
     @Test
