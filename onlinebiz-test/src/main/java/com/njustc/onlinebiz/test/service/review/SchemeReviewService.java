@@ -12,12 +12,12 @@ public interface SchemeReviewService {
 
     /**
      * 创建一份测试方案检查表，在项目初始阶段生成，由市场部人员(主管)以及管理员来生成，若已有项目已生成测试方案检查表则创建失败
-     * @param schemeId 对应的测试方案ID
-     * @param userId 执行此操作的用户ID
-     * @param userRole 执行此操作的用户角色
+     * @param projectId 对应的测试项目ID
+     * @param qaId 与该表有关的质量部人员ID
+     * @param testerId 与该表有关的测试部人员ID
      * @return 成功返回创建的测试方案检查表ID， 失败返回 null
      * */
-    String createSchemeReview(String schemeId, Long userId, Role userRole);
+    String createSchemeReview(String projectId, Long qaId, Long testerId);
 
     /**
      * 查看具体测试方案检查表内容，只有和该测试方案检查表(也就是和测试项目)有关的测试部人员(主管)以及
@@ -62,6 +62,6 @@ public interface SchemeReviewService {
      * @param userId 执行此操作的用户ID
      * @param userRole 执行此操作的用户角色
      */
-    void removeSchemeReview(String schemeReviewId, Long userId, Role userRole) throws IOException;
+    void removeSchemeReview(String schemeReviewId, Long userId, Role userRole);
 
 }

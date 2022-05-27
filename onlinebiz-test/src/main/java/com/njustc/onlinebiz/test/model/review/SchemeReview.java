@@ -2,6 +2,7 @@ package com.njustc.onlinebiz.test.model.review;
 
 
 
+import com.njustc.onlinebiz.common.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,23 +20,27 @@ public class SchemeReview {
     /** 一般不更新的部分 **/
     // 方案评审表 id，由 MongoDB 自动生成
     private String id;
-    // 此测试方案所属的测试项目 id
+    // 此测试方案所属的测试项目编号 id
     private String projectId;
     // 评审表目前的状态
     private ReviewStatus status;
     // 评审表扫描件的文件路径
     private String scannedCopyPath;
+    // 与评审表相关的质量部人员ID
+    private Long qaId;
+    // 与评审表相关的测试部人员ID
+    private Long testerId;
+
     /** 每次会经常更新的部分 **/
     // 软件名称
     private String softwareName;
     // 版本号
     private String version;
-    // 项目编号
-    private String serialNumber;
     // 测试类型
     private String testType;
     // 各项评审结果
     List<ConclusionRow> conclusions;
+
     /** 评审结果类型的定义 **/
     @Data
     @NoArgsConstructor
