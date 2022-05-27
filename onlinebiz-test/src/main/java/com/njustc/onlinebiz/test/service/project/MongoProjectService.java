@@ -48,6 +48,7 @@ public class MongoProjectService implements ProjectService {
 
     @Override
     public String createTestProject(Long userId, Role userRole, String entrustId) {
+        //非法人员尝试生成项目
         if (userRole != Role.ADMIN && userRole != Role.MARKETER && userRole != Role.MARKETING_SUPERVISOR) {
             throw new ProjectPermissionDeniedException("无权生成新的测试项目");
         }

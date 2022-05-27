@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 /*
   测试项目模型，由该模块可以直接索引该测试项目文件
- */
+*/
 public class Project {
     // MongoDB 中存放此类型对象的 collection 的名字
     public static final String COLLECTION_NAME = "project";
@@ -20,10 +20,10 @@ public class Project {
     private String id;
 
     /** 测试项目的基本信息 **/
-    ProjectBaseInfo projectBaseInfo;
+    private ProjectBaseInfo projectBaseInfo;
 
     /** 测试项目包含的各种表格 **/
-    ProjectFormIds projectFormIds;
+    private ProjectFormIds projectFormIds;
 
     /** 测试项目状态 **/
     private ProjectStatus status;
