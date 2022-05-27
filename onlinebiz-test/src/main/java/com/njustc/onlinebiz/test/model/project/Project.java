@@ -23,9 +23,9 @@ public class Project {
     // 给测试项目对应的委托 id
     private String entrustId;
     // 市场部生成项目人(市场部指定员工) id
-    private Long marketId;
+    private Long marketerId;
     // 测试部指定员工 id
-    private Long testId;
+    private Long testerId;
     // 质量部指定员工 id
     private Long qaId;
 

@@ -45,8 +45,8 @@ public class MongoProjectService implements ProjectService {
         }
         Project project = new Project();
         project.setEntrustId(entrustId);
-        project.setMarketId(marketerId);
-        project.setTestId(testerId);
+        project.setMarketerId(marketerId);
+        project.setTesterId(testerId);
         project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, "等待质量部主管分配质量部员工"));
 
         /*TODO: 根据其他部分给出的接口新建各表，并将表编号填入testProject中字段，替换null*/

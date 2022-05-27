@@ -77,46 +77,46 @@ class MongoProjectServiceTest {
         }
         //由质量部员工（合法人员）查看项目
         project = projectService.findProject(projectId1, 3L, Role.QA);
-        assert (project.getMarketId().equals(1L));
+        assert (project.getMarketerId().equals(1L));
         project = projectService.findProject(projectId2, 3L, Role.QA);
-        assert (project.getMarketId().equals(1L));
+        assert (project.getMarketerId().equals(1L));
         project = projectService.findProject(projectId3, 3L, Role.QA);
-        assert (project.getMarketId().equals(2L));
+        assert (project.getMarketerId().equals(2L));
         //由质量部主管（合法人员）查看项目
         project = projectService.findProject(projectId1, 3L, Role.QA_SUPERVISOR);
-        assert (project.getMarketId().equals(1L));
+        assert (project.getMarketerId().equals(1L));
         project = projectService.findProject(projectId2, 3L, Role.QA_SUPERVISOR);
-        assert (project.getMarketId().equals(1L));
+        assert (project.getMarketerId().equals(1L));
         project = projectService.findProject(projectId3, 3L, Role.QA_SUPERVISOR);
-        assert (project.getMarketId().equals(2L));
+        assert (project.getMarketerId().equals(2L));
         //由市场部员工（合法人员）查看项目
         project = projectService.findProject(projectId1, 3L, Role.MARKETER);
-        assert (project.getMarketId().equals(1L));
+        assert (project.getMarketerId().equals(1L));
         project = projectService.findProject(projectId2, 3L, Role.MARKETER);
-        assert (project.getMarketId().equals(1L));
+        assert (project.getMarketerId().equals(1L));
         project = projectService.findProject(projectId3, 3L, Role.MARKETER);
-        assert (project.getMarketId().equals(2L));
+        assert (project.getMarketerId().equals(2L));
         //由市场部主管（合法人员）查看项目
         project = projectService.findProject(projectId1, 3L, Role.MARKETING_SUPERVISOR);
-        assert (project.getMarketId().equals(1L));
+        assert (project.getMarketerId().equals(1L));
         project = projectService.findProject(projectId2, 3L, Role.MARKETING_SUPERVISOR);
-        assert (project.getMarketId().equals(1L));
+        assert (project.getMarketerId().equals(1L));
         project = projectService.findProject(projectId3, 3L, Role.MARKETING_SUPERVISOR);
-        assert (project.getMarketId().equals(2L));
+        assert (project.getMarketerId().equals(2L));
         //由测试部员工（合法人员）查看项目
         project = projectService.findProject(projectId1, 3L, Role.TESTER);
-        assert (project.getMarketId().equals(1L));
+        assert (project.getMarketerId().equals(1L));
         project = projectService.findProject(projectId2, 3L, Role.TESTER);
-        assert (project.getMarketId().equals(1L));
+        assert (project.getMarketerId().equals(1L));
         project = projectService.findProject(projectId3, 3L, Role.TESTER);
-        assert (project.getMarketId().equals(2L));
+        assert (project.getMarketerId().equals(2L));
         //由测试部主管（合法人员）查看项目
         project = projectService.findProject(projectId1, 3L, Role.TESTING_SUPERVISOR);
-        assert (project.getMarketId().equals(1L));
+        assert (project.getMarketerId().equals(1L));
         project = projectService.findProject(projectId2, 3L, Role.TESTING_SUPERVISOR);
-        assert (project.getMarketId().equals(1L));
+        assert (project.getMarketerId().equals(1L));
         project = projectService.findProject(projectId3, 3L, Role.TESTING_SUPERVISOR);
-        assert (project.getMarketId().equals(2L));
+        assert (project.getMarketerId().equals(2L));
         //查看一个不存在的项目id
         try {
             project = projectService.findProject("abc", 3L, Role.QA);
