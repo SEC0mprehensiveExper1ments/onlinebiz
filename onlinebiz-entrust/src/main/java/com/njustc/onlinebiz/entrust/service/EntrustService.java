@@ -198,4 +198,10 @@ public interface EntrustService {
      */
     Long getTesterId(String entrustId);
 
+    /**
+     * 获取委托对应的数据传输对象，此方法为内部接口。
+     * @param entrustId 委托ID
+     * @return 如果存在返回对应的数据传输对象，否则返回 null
+     */
+    EntrustDto getEntrustDto(String entrustId);
 }

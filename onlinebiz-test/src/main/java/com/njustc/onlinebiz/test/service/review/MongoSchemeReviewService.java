@@ -8,12 +8,12 @@ import com.njustc.onlinebiz.test.exception.review.ReviewInvalidStageException;
 import com.njustc.onlinebiz.test.exception.review.ReviewNotFoundException;
 import com.njustc.onlinebiz.test.exception.review.ReviewPermissionDeniedException;
 import com.njustc.onlinebiz.test.model.review.SchemeReview;
-import com.njustc.onlinebiz.test.model.review.SchemeReviewStage;
-import com.njustc.onlinebiz.test.model.review.SchemeReviewStatus;
+import com.njustc.onlinebiz.test.model.review.ReviewStage;
+import com.njustc.onlinebiz.test.model.review.ReviewStatus;
+import com.njustc.onlinebiz.test.service.project.ProjectService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -26,25 +26,26 @@ public class MongoSchemeReviewService implements SchemeReviewService {
     private static final String ENTRUST_SERVICE = "http://onlinebiz-entrust";
     private static final String SCANNED_COPY_DIR = "~/review/";
     private final SchemeReviewDAO schemeReviewDAO;
-    private final RestTemplate restTemplate;
+    private final ProjectService projectService;
 
-    public MongoSchemeReviewService(SchemeReviewDAO schemeReviewDAO, RestTemplate restTemplate) {
+    public MongoSchemeReviewService(SchemeReviewDAO schemeReviewDAO, ProjectService projectService) {
         this.schemeReviewDAO = schemeReviewDAO;
-        this.restTemplate = restTemplate;
+        this.projectService = projectService;
     }
 
     @Override
-    public String createSchemeReview(String schemeId, Long userId, Role userRole) {
-        if (userRole != Role.ADMIN && userRole != Role.MARKETER && userRole != Role.MARKETING_SUPERVISOR) {
+    public String createSchemeReview(String projectId, Long qaId, Long testerId) {
+/*        if (userRole != Role.ADMIN && userRole != Role.MARKETER && userRole != Role.MARKETING_SUPERVISOR) {
             throw new ReviewPermissionDeniedException("只有负责测试项目的市场部人员或主管可以创建合同");
-        }
+        }*/
         // 创建一份空的检查表
         SchemeReview schemeReview = new SchemeReview();
-        schemeReview.setSchemeId(schemeId);
-        schemeReview.setStatus(new SchemeReviewStatus(SchemeReviewStage.NOT_COPY_SAVED, null));
+        schemeReview.setProjectId(projectId);
+        schemeReview.setQaId(qaId);
+        schemeReview.setTesterId(testerId);
+        schemeReview.setStatus(new ReviewStatus(ReviewStage.NOT_COPY_SAVED, null));
         // 获取检查表ID
         String schemeReviewId = schemeReviewDAO.insertSchemeReview(schemeReview).getId();
-        // TODO: 是否需要将测试方案ID注册到测试方案中
 
         return schemeReviewId;
     }
@@ -68,7 +69,10 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         } else if (userRole == Role.MARKETING_SUPERVISOR || userRole == Role.QA_SUPERVISOR) {
             return true;
         }
-        // TODO: 项目的测试相关人员及质量相关人员可以查看
+        // 质量部和测试部相关人员均可查看
+        else if (userId.equals(schemeReview.getQaId()) || userId.equals(schemeReview.getTesterId())) {
+            return true;
+        }
         return false;
     }
 
@@ -78,9 +82,9 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         if (!origin.getId().equals(schemeReview.getId())) {
             throw new ReviewPermissionDeniedException("测试方案检查表ID不一致");
         }
-        SchemeReviewStage curStage = origin.getStatus().getStage();
+        ReviewStage curStage = origin.getStatus().getStage();
         // 检查测试方案检查表的阶段，如果已上传附件则不能更改
-        if(curStage == SchemeReviewStage.NOT_COPY_SAVED) {
+        if(curStage == ReviewStage.NOT_COPY_SAVED) {
             if (!hasUpdateOrDeleteAuthority(schemeReview, userId, userRole)) {
                 throw new ReviewPermissionDeniedException("无权修改此测试方案检查表");
             }
@@ -99,7 +103,10 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         } else if (userRole == Role.MARKETING_SUPERVISOR || userRole == Role.QA_SUPERVISOR) {
             return true;
         }
-        // TODO: 项目的质量相关人员可以删改
+        // 质量部相关人员可以删改
+        else if (userId.equals(schemeReview.getQaId())) {
+            return true;
+        }
         return false;
     }
 
@@ -126,7 +133,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
             throw new ReviewDAOFailureException("保存扫描文件路径失败");
         }
         // 更新检查表阶段
-        if (!schemeReviewDAO.updateStatus(schemeReviewId, new SchemeReviewStatus(SchemeReviewStage.COPY_SAVED, null))) {
+        if (!schemeReviewDAO.updateStatus(schemeReviewId, new ReviewStatus(ReviewStage.COPY_SAVED, null))) {
             throw new ReviewDAOFailureException("更新检查表状态失败");
         }
     }
@@ -134,9 +141,9 @@ public class MongoSchemeReviewService implements SchemeReviewService {
     @Override
     public Resource getScannedCopy(String schemeReviewId, Long userId, Role userRole) throws IOException {
         SchemeReview schemeReview = findSchemeReview(schemeReviewId, userId, userRole);
-        SchemeReviewStage curStage = schemeReview.getStatus().getStage();
+        ReviewStage curStage = schemeReview.getStatus().getStage();
         // 检查阶段
-        if (curStage != SchemeReviewStage.COPY_SAVED) {
+        if (curStage != ReviewStage.COPY_SAVED) {
             throw new ReviewInvalidStageException("检查表扫描件尚未上传");
         }
         // 检查权限
@@ -155,12 +162,15 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         } else if (userRole == Role.MARKETING_SUPERVISOR || userRole == Role.QA_SUPERVISOR) {
             return true;
         }
-        // TODO: 项目的质量相关人员也可以上传下载
+        // 项目的质量相关人员也可以上传下载
+        else if (userId.equals(schemeReview.getQaId())) {
+            return true;
+        }
         return false;
     }
 
     @Override
-    public void removeSchemeReview(String schemeReviewId, Long userId, Role userRole) throws IOException {
+    public void removeSchemeReview(String schemeReviewId, Long userId, Role userRole) {
         SchemeReview schemeReview = findSchemeReview(schemeReviewId, userId, userRole);
         if (!hasUpdateOrDeleteAuthority(schemeReview, userId, userRole)) {
             throw new ReviewPermissionDeniedException("无权删除此测试检查方案");
