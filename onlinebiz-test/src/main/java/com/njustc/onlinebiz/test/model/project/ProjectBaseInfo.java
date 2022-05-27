@@ -22,7 +22,7 @@ public class ProjectBaseInfo {
     // 质量部指定员工 id
     private Long qaId;
     // 软件名称
-    private String software;
+    private String softwareName;
 
 
 }

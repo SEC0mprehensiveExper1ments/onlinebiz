@@ -2,6 +2,7 @@ package com.njustc.onlinebiz.test.dao.project;
 
 import com.njustc.onlinebiz.test.model.project.Project;
 import com.njustc.onlinebiz.test.model.project.ProjectBaseInfo;
+import com.njustc.onlinebiz.test.model.project.ProjectOutline;
 import com.njustc.onlinebiz.test.model.project.ProjectStatus;
 
 import java.util.List;
@@ -60,7 +61,7 @@ public interface ProjectDAO {
      * @param pageSize 每页有多少条记录
      * @return 返回该页上的测试项目基本信息
      */
-    List<ProjectBaseInfo> findAllProjects(Integer page, Integer pageSize);
+    List<ProjectOutline> findAllProjects(Integer page, Integer pageSize);
 
 
     /**
@@ -76,7 +77,7 @@ public interface ProjectDAO {
      * @param page 要查询的页码
      * @param pageSize 每页有多少条记录
      */
-    List<ProjectBaseInfo> findProjectByMarketerId(Long marketerId, Integer page, Integer pageSize);
+    List<ProjectOutline> findProjectByMarketerId(Long marketerId, Integer page, Integer pageSize);
 
     /**
      * 获取某个测试部员工的总项目数目
@@ -92,7 +93,7 @@ public interface ProjectDAO {
      * @param pageSize 每页有多少条记录
      * @return 返回该页上的项目基本信息
      */
-    List<ProjectBaseInfo> findProjectByTesterId(Long testerId, Integer page, Integer pageSize);
+    List<ProjectOutline> findProjectByTesterId(Long testerId, Integer page, Integer pageSize);
 
     /**
      * 获取某个质量部员工的总项目数目
@@ -108,5 +109,5 @@ public interface ProjectDAO {
      * @param pageSize 每页有多少条记录
      * @return 返回该页上的项目基本信息
      */
-    List<ProjectBaseInfo> findProjectByQaId(Long qaId, Integer page, Integer pageSize);
+    List<ProjectOutline> findProjectByQaId(Long qaId, Integer page, Integer pageSize);
 }

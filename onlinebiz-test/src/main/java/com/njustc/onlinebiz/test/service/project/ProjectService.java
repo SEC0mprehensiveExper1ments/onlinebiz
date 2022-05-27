@@ -2,10 +2,7 @@ package com.njustc.onlinebiz.test.service.project;
 
 import com.njustc.onlinebiz.common.model.PageResult;
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.model.project.Project;
-import com.njustc.onlinebiz.test.model.project.ProjectBaseInfo;
-import com.njustc.onlinebiz.test.model.project.ProjectFormIds;
-import com.njustc.onlinebiz.test.model.project.ProjectStatus;
+import com.njustc.onlinebiz.test.model.project.*;
 
 /**
  * 测试项目服务层接口
@@ -38,7 +35,7 @@ public interface ProjectService {
      * @param userRole 执行此操作的用户角色
      * @return 返回该用户可以看到的测试项目列表，是一个分页结果
      * */
-    PageResult<ProjectBaseInfo> findProjectBaseInfos(Integer page, Integer pageSize, Long userId, Role userRole);
+    PageResult<ProjectOutline> findProjectBaseInfos(Integer page, Integer pageSize, Long userId, Role userRole);
 
     /**
      * 更新测试项目对应的质量部人员，只有管理员和质量部主管可以执行此操作。其中质量部主管只能在

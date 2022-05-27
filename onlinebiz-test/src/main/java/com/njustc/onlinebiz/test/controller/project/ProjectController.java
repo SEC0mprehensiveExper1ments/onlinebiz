@@ -4,6 +4,7 @@ import com.njustc.onlinebiz.common.model.PageResult;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.test.model.project.Project;
 import com.njustc.onlinebiz.test.model.project.ProjectBaseInfo;
+import com.njustc.onlinebiz.test.model.project.ProjectOutline;
 import com.njustc.onlinebiz.test.model.project.ProjectStatus;
 import com.njustc.onlinebiz.test.service.project.ProjectService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class ProjectController {
 
     // 获取测试项目的基本信息列表
     @GetMapping("/test")
-    public PageResult<ProjectBaseInfo> getProjects(
+    public PageResult<ProjectOutline> getProjects(
             @RequestParam("userId") Long userId,
             @RequestParam("userRole") Role userRole,
             @RequestParam("page") Integer page,

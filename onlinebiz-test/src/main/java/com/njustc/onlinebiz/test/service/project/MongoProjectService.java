@@ -70,7 +70,7 @@ public class MongoProjectService implements ProjectService {
         projectBaseInfo.setEntrustId(entrustId);
         projectBaseInfo.setMarketerId(entrustDto.getMarketerId());
         projectBaseInfo.setTesterId(entrustDto.getTesterId());
-        projectBaseInfo.setSoftware(entrustDto.getSoftware());
+        projectBaseInfo.setSoftwareName(entrustDto.getSoftware());
         // 设置项目表格信息
         ProjectFormIds projectFormIds = new ProjectFormIds();
         /*TODO: 根据其他部分给出的接口新建各表，并将表编号填入testProject中字段，替换null*/
@@ -126,12 +126,12 @@ public class MongoProjectService implements ProjectService {
     }
 
     @Override
-    public PageResult<ProjectBaseInfo> findProjectBaseInfos(Integer page, Integer pageSize, Long userId, Role userRole) {
+    public PageResult<ProjectOutline> findProjectBaseInfos(Integer page, Integer pageSize, Long userId, Role userRole) {
         if (page <= 0 || pageSize <= 0) {
             throw new ProjectInvalidArgumentException("页号或每页大小必须为正整数");
         }
         long total;
-        List<ProjectBaseInfo> list;
+        List<ProjectOutline> list;
         // 根据用户角色不同，返回不同结果
         if (userRole == Role.ADMIN || userRole == Role.MARKETING_SUPERVISOR
                 || userRole == Role.QA_SUPERVISOR || userRole == Role.TESTING_SUPERVISOR) {

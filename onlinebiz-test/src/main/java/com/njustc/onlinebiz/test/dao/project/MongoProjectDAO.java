@@ -4,6 +4,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.njustc.onlinebiz.test.model.project.Project;
 import com.njustc.onlinebiz.test.model.project.ProjectBaseInfo;
+import com.njustc.onlinebiz.test.model.project.ProjectOutline;
 import com.njustc.onlinebiz.test.model.project.ProjectStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -67,7 +68,7 @@ public class MongoProjectDAO implements ProjectDAO {
     }
 
     @Override
-    public List<ProjectBaseInfo> findAllProjects(Integer page, Integer pageSize) {
+    public List<ProjectOutline> findAllProjects(Integer page, Integer pageSize) {
         Query query = new Query();
         return findWithProjection(query, page, pageSize);
     }
@@ -79,7 +80,7 @@ public class MongoProjectDAO implements ProjectDAO {
     }
 
     @Override
-    public List<ProjectBaseInfo> findProjectByMarketerId(Long marketerId, Integer page, Integer pageSize) {
+    public List<ProjectOutline> findProjectByMarketerId(Long marketerId, Integer page, Integer pageSize) {
         Query query = new Query().addCriteria(Criteria.where("projectBaseInfo.marketerId").is(marketerId));
         return findWithProjection(query, page, pageSize);
     }
@@ -91,7 +92,7 @@ public class MongoProjectDAO implements ProjectDAO {
     }
 
     @Override
-    public List<ProjectBaseInfo> findProjectByTesterId(Long testerId, Integer page, Integer pageSize) {
+    public List<ProjectOutline> findProjectByTesterId(Long testerId, Integer page, Integer pageSize) {
         Query query = new Query().addCriteria(Criteria.where("projectBaseInfo.testerId").is(testerId));
         return findWithProjection(query, page, pageSize);
     }
@@ -103,18 +104,20 @@ public class MongoProjectDAO implements ProjectDAO {
     }
 
     @Override
-    public List<ProjectBaseInfo> findProjectByQaId(Long qaId, Integer page, Integer pageSize) {
+    public List<ProjectOutline> findProjectByQaId(Long qaId, Integer page, Integer pageSize) {
         Query query = new Query().addCriteria(Criteria.where("projectBaseInfo.qaId").is(qaId));
         return findWithProjection(query, page, pageSize);
     }
 
     // 提取出查询的项目基本信息
-    private List<ProjectBaseInfo> findWithProjection(Query query, Integer page, Integer pageSize) {
+    private List<ProjectOutline> findWithProjection(Query query, Integer page, Integer pageSize) {
         // 设置要取回的字段
+        query.fields().include("_id");
         query.fields().include("projectBaseInfo");
+        query.fields().include("status");
         List<Project> results = findWithPagination(query, page, pageSize);
         // 提取出查询的项目信息
-        return results.stream().map(Project::getProjectBaseInfo).collect(Collectors.toList());
+        return results.stream().map(ProjectOutline::new).collect(Collectors.toList());
     }
 
     // 根据查询条件进行分页查询
