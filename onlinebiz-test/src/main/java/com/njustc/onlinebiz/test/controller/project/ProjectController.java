@@ -30,7 +30,7 @@ public class ProjectController {
         return projectService.createTestProject(userId, userRole, entrustId);
     }
 
-    // 获取测试项目的完整信息
+    // 获取测试项目的基本信息列表
     @GetMapping("/test")
     public PageResult<ProjectBaseInfo> getProjects(
             @RequestParam("userId") Long userId,

@@ -17,13 +17,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @Slf4j
 @Service
 public class MongoProjectService implements ProjectService {
 
-    private static String ENTRUST_SERVICE_URL = "http://onlinebiz-entrust";
+    private static final String ENTRUST_SERVICE_URL = "http://onlinebiz-entrust";
     private final RestTemplate restTemplate;
     private final ProjectDAO projectDAO;
     private final SchemeService schemeService;
@@ -56,8 +57,12 @@ public class MongoProjectService implements ProjectService {
             throw new ProjectDAOFailureException("没有找到项目对应的委托");
         }
         EntrustDto entrustDto = responseEntity.getBody();
+        // 检查entrustDto非空
+        if (entrustDto == null) {
+            throw new ProjectDAOFailureException("entrustDto为空");
+        }
         // 检查创建者匹配
-        if (userRole == Role.MARKETER && userId != entrustDto.getMarketerId()) {
+        if (userRole == Role.MARKETER && !Objects.equals(userId, entrustDto.getMarketerId())) {
             throw new ProjectPermissionDeniedException("市场部人员信息不一致, 创建失败");
         }
         // 设置项目基本信息
@@ -70,7 +75,7 @@ public class MongoProjectService implements ProjectService {
         ProjectFormIds projectFormIds = new ProjectFormIds();
         /*TODO: 根据其他部分给出的接口新建各表，并将表编号填入testProject中字段，替换null*/
         /* 每个文档可以传入projectId，然后根据projectId可进行查找质量部人员Id */
-        /* 如有相互关联表，可在自己的类中注入project service，然后根据其中提供的 getFromIds 找到所要关联的表单 */
+        /* 如有相互关联表，可在自己的类中注入project service，然后根据其中提供的 getFormIds 找到所要关联的表单 */
 
         // 对应的测试方案 id (JS006)
         String testSchemeId = schemeService.createScheme(entrustId, null, userId, userRole);
@@ -192,7 +197,7 @@ public class MongoProjectService implements ProjectService {
     }
 
     @Override
-    public ProjectFormIds getProjectFromIds(String projectId) {
+    public ProjectFormIds getProjectFormIds(String projectId) {
         Project project = projectDAO.findProjectById(projectId);
         if (project == null) {
             throw new ProjectNotFoundException("该测试项目不存在");

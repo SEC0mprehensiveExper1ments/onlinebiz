@@ -72,5 +72,5 @@ public interface ProjectService {
      * @param projectId 待获取的测试项目ID
      * @return 返回测试项目的表单对象，否则返回null
      * */
-    ProjectFormIds getProjectFromIds(String projectId);
+    ProjectFormIds getProjectFormIds(String projectId);
 }
