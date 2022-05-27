@@ -3,7 +3,7 @@ package com.njustc.onlinebiz.test.dao.review;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.njustc.onlinebiz.test.model.review.SchemeReview;
-import com.njustc.onlinebiz.test.model.review.SchemeReviewStatus;
+import com.njustc.onlinebiz.test.model.review.ReviewStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -46,7 +46,7 @@ public class MongoSchemeReviewDAO implements SchemeReviewDAO{
     }
 
     @Override
-    public Boolean updateStatus(String schemeReviewId, SchemeReviewStatus status) {
+    public Boolean updateStatus(String schemeReviewId, ReviewStatus status) {
         Update update = new Update().set("status", status);
         return updateFirstWithId(schemeReviewId, update);
     }
