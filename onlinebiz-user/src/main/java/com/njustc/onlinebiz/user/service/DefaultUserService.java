@@ -137,8 +137,8 @@ public class DefaultUserService implements UserService {
             // 创建 session
             session = request.getSession(true);
         } else if (redisTemplate.opsForHash().get(SESSION_ID_TO_USER, session.getId()) != null) {
-            // 已经登录，清除当前登录信息
-            redisTemplate.opsForHash().delete(SESSION_ID_TO_USER, session.getId());
+            // 已经登录的情况下禁止登录另一个账号
+            throw new UserPermissonDeniedException("请先退出当前账号再登录");
         }
         User user = userMapper.selectUserByUserName(userName);
         if (user == null || !passwordEncoder.matches(userPassword, user.getUserPassword())) {

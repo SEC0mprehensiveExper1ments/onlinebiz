@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.entrust.model;
 
+import com.njustc.onlinebiz.common.model.Software;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,8 +37,14 @@ public class EntrustOutline {
         this.customerId = entrust.getCustomerId();
         this.marketerId = entrust.getMarketerId();
         this.testerId = entrust.getTesterId();
-        this.softwareName = entrust.getContent().getSoftware().getName();
-        this.softwareVersion = entrust.getContent().getSoftware().getVersion();
+        EntrustContent content = entrust.getContent();
+        if (content != null) {
+            Software software = content.getSoftware();
+            if (software != null) {
+                this.softwareName = software.getName();
+                this.softwareVersion = software.getVersion();
+            }
+        }
         this.status = entrust.getStatus();
     }
 
