@@ -390,4 +390,13 @@ public class DefaultEntrustService implements EntrustService {
         return entrust.getTesterId();
     }
 
+    @Override
+    public EntrustDto getEntrustDto(String entrustId) {
+        Entrust entrust = entrustDAO.findEntrustById(entrustId);
+        if (entrust == null) {
+            throw new EntrustNotFoundException("该委托不存在");
+        }
+        return new EntrustDto(entrust);
+    }
+
 }

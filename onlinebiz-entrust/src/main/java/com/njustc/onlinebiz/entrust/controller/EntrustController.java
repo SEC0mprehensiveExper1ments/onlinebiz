@@ -227,4 +227,10 @@ public class EntrustController {
         return entrustService.getTesterId(entrustId);
     }
 
+    // 内部调用获取委托的数据传输对象
+    @GetMapping("/entrust/{entrustId}/get_dto")
+    public EntrustDto getEntrustDto(@PathVariable("entrustId") String entrustId) {
+        return entrustService.getEntrustDto(entrustId);
+    }
+
 }

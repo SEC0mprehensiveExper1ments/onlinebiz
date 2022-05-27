@@ -1,7 +1,9 @@
 package com.njustc.onlinebiz.test.controller.project;
 
+import com.njustc.onlinebiz.common.model.PageResult;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.test.model.project.Project;
+import com.njustc.onlinebiz.test.model.project.ProjectBaseInfo;
 import com.njustc.onlinebiz.test.model.project.ProjectStatus;
 import com.njustc.onlinebiz.test.service.project.ProjectService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +25,20 @@ public class ProjectController {
     public String createTestProject(
             @RequestParam("userId") Long userId,
             @RequestParam("userRole") Role userRole,
-            @RequestParam("entrustId") String entrustId,
-            @RequestParam("marketerId") Long marketerId,
-            @RequestParam("testerId") Long testId
+            @RequestParam("entrustId") String entrustId
+            ) {
+        return projectService.createTestProject(userId, userRole, entrustId);
+    }
+
+    // 获取测试项目的完整信息
+    @GetMapping("/test")
+    public PageResult<ProjectBaseInfo> getProjects(
+            @RequestParam("userId") Long userId,
+            @RequestParam("userRole") Role userRole,
+            @RequestParam("page") Integer page,
+            @RequestParam("pageSize") Integer pageSize
     ) {
-        return projectService.createTestProject(userId, userRole, entrustId, marketerId, testId);
+        return projectService.findProjectBaseInfos(page, pageSize, userId, userRole);
     }
 
     // 获取项目的完整信息

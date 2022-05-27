@@ -19,8 +19,8 @@ public class SchemeReview {
     /** 一般不更新的部分 **/
     // 方案评审表 id，由 MongoDB 自动生成
     private String id;
-    // 此测试方案对应的方案 id
-    private String schemeId;
+    // 此测试方案所属的测试项目 id
+    private String projectId;
     // 评审表目前的状态
     private SchemeReviewStatus status;
     // 评审表扫描件的文件路径
@@ -31,7 +31,7 @@ public class SchemeReview {
     // 版本号
     private String version;
     // 项目编号
-    private String projectId;
+    private String serialNumber;
     // 测试类型
     private String testType;
     // 各项评审结果

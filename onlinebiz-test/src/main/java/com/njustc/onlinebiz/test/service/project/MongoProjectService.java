@@ -1,36 +1,43 @@
 package com.njustc.onlinebiz.test.service.project;
 
+import com.njustc.onlinebiz.common.model.EntrustDto;
+import com.njustc.onlinebiz.common.model.PageResult;
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.exception.project.ProjectDAOFailureException;
-import com.njustc.onlinebiz.test.exception.project.ProjectInvalidStageException;
-import com.njustc.onlinebiz.test.exception.project.ProjectNotFoundException;
-import com.njustc.onlinebiz.test.model.project.Project;
+import com.njustc.onlinebiz.test.exception.project.*;
+import com.njustc.onlinebiz.test.model.project.*;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
-import com.njustc.onlinebiz.test.exception.project.ProjectPermissionDeniedException;
-import com.njustc.onlinebiz.test.model.project.ProjectStage;
-import com.njustc.onlinebiz.test.model.project.ProjectStatus;
 import com.njustc.onlinebiz.test.service.review.SchemeReviewService;
 import com.njustc.onlinebiz.test.service.scheme.SchemeService;
 import com.njustc.onlinebiz.test.service.testcase.TestcaseService;
 import com.njustc.onlinebiz.test.service.testrecord.TestRecordService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+
 
 @Slf4j
 @Service
 public class MongoProjectService implements ProjectService {
 
+    private static String ENTRUST_SERVICE_URL = "http://onlinebiz-entrust";
+    private final RestTemplate restTemplate;
     private final ProjectDAO projectDAO;
     private final SchemeService schemeService;
     private final SchemeReviewService schemeReviewService;
     private final TestcaseService testcaseService;
     private final TestRecordService testRecordService;
 
-    public MongoProjectService(ProjectDAO projectDAO,
+    public MongoProjectService(RestTemplate restTemplate,
+                               ProjectDAO projectDAO,
                                SchemeService schemeService,
                                SchemeReviewService schemeReviewService,
                                TestcaseService testcaseService,
                                TestRecordService testRecordService) {
+        this.restTemplate = restTemplate;
         this.projectDAO = projectDAO;
         this.schemeService = schemeService;
         this.schemeReviewService = schemeReviewService;
@@ -39,43 +46,59 @@ public class MongoProjectService implements ProjectService {
     }
 
     @Override
-    public String createTestProject(Long userId, Role userRole, String entrustId, Long marketerId, Long testerId) {
+    public String createTestProject(Long userId, Role userRole, String entrustId) {
         if (userRole != Role.ADMIN && userRole != Role.MARKETER && userRole != Role.MARKETING_SUPERVISOR) {
             throw new ProjectPermissionDeniedException("无权生成新的测试项目");
         }
-        Project project = new Project();
-        project.setEntrustId(entrustId);
-        project.setMarketId(marketerId);
-        project.setTestId(testerId);
-        project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, "等待质量部主管分配质量部员工"));
+        ResponseEntity<EntrustDto> responseEntity = restTemplate.getForEntity(ENTRUST_SERVICE_URL + "/api/entrust/{entrustId}/get_dto", EntrustDto.class, entrustId);
+        // 检查委托id的有效性
+        if (responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
+            throw new ProjectDAOFailureException("没有找到项目对应的委托");
+        }
+        EntrustDto entrustDto = responseEntity.getBody();
+        // 检查创建者匹配
+        if (userRole == Role.MARKETER && userId != entrustDto.getMarketerId()) {
+            throw new ProjectPermissionDeniedException("市场部人员信息不一致, 创建失败");
+        }
+        // 设置项目基本信息
+        ProjectBaseInfo projectBaseInfo = new ProjectBaseInfo();
+        projectBaseInfo.setEntrustId(entrustId);
+        projectBaseInfo.setMarketerId(entrustDto.getMarketerId());
+        projectBaseInfo.setTesterId(entrustDto.getTesterId());
+        projectBaseInfo.setSoftware(entrustDto.getSoftware());
+        // 设置项目表格信息
+        ProjectFormIds projectFormIds = new ProjectFormIds();
+        /*TODO: 根据其他部分给出的接口新建各表，并将表编号填入testProject中字段，替换null*/
+        /* 每个文档可以传入projectId，然后根据projectId可进行查找质量部人员Id */
+        /* 如有相互关联表，可在自己的类中注入project service，然后根据其中提供的 getFromIds 找到所要关联的表单 */
 
-        /*TODO: 根据其他部分给出的接口新建各表，并将表编号填入testProject中字段，替换null**/
-        // 每个文档可以传入projectId，然后根据projectId可进行查找质量部人员Id
-
-        // 对应的测试方案 id (006)
+        // 对应的测试方案 id (JS006)
         String testSchemeId = schemeService.createScheme(entrustId, null, userId, userRole);
-        project.setTestSchemeId(testSchemeId);
-        // 对应的测试报告 id (007)
+        projectFormIds.setTestSchemeId(testSchemeId);
+        // 对应的测试报告 id (JS007)
         String testReportId = null;
-        project.setTestReportId(testReportId);
-        // 对应的测试用例表 id (008)
+        projectFormIds.setTestReportId(testReportId);
+        // 对应的测试用例表 id (JS008)
         String testcaseListId = testcaseService.createTestcaseList(entrustId, null, userId, userRole);
-        project.setTestcaseListId(testcaseListId);
-        // 对应的测试记录表 id (009)
+        projectFormIds.setTestcaseListId(testcaseListId);
+        // 对应的测试记录表 id (JS009)
         String testRecordListId = testRecordService.createTestRecordList(entrustId, null, userId, userRole);
-        project.setTestRecordListId(testRecordListId);
-        // 对应的测试报告检查表 id (010)
+        projectFormIds.setTestRecordListId(testRecordListId);
+        // 对应的测试报告检查表 id (JS010)
         String testReportCecklistId = null;
-        project.setTestReportCecklistId(testReportCecklistId);
-        // 对应的测试问题清单 id (011)
+        projectFormIds.setTestReportCecklistId(testReportCecklistId);
+        // 对应的测试问题清单 id (JS011)
         String testIssueListId = null;
-        project.setTestIssueListId(testIssueListId);
-        // 对应的工作检查表 id (012)
+        projectFormIds.setTestIssueListId(testIssueListId);
+        // 对应的工作检查表 id (JS012)
         String workChecklistId = null;
-        project.setWorkChecklistId(workChecklistId);
-        // 对应的测试方案评审表 (013)
+        projectFormIds.setWorkChecklistId(workChecklistId);
+        // 对应的测试方案评审表 (JS013)
         String testSchemeChecklistId = schemeReviewService.createSchemeReview(testSchemeId, userId, userRole);
-        project.setTestSchemeChecklistId(testSchemeChecklistId);
+        projectFormIds.setTestSchemeChecklistId(testSchemeChecklistId);
+
+        Project project = new Project().setProjectBaseInfo(projectBaseInfo).setProjectFormIds(projectFormIds);
+        project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, "等待质量部主管分配质量部员工"));
 
         return projectDAO.insertProject(project).getId();
     }
@@ -95,6 +118,37 @@ public class MongoProjectService implements ProjectService {
             throw new ProjectNotFoundException("该测试项目不存在");
         }
         return project;
+    }
+
+    @Override
+    public PageResult<ProjectBaseInfo> findProjectBaseInfos(Integer page, Integer pageSize, Long userId, Role userRole) {
+        if (page <= 0 || pageSize <= 0) {
+            throw new ProjectInvalidArgumentException("页号或每页大小必须为正整数");
+        }
+        long total;
+        List<ProjectBaseInfo> list;
+        // 根据用户角色不同，返回不同结果
+        if (userRole == Role.ADMIN || userRole == Role.MARKETING_SUPERVISOR
+                || userRole == Role.QA_SUPERVISOR || userRole == Role.TESTING_SUPERVISOR) {
+            total = projectDAO.countAll();
+            list = projectDAO.findAllProjects(page, pageSize);
+        }
+        else if (userRole == Role.MARKETER) {
+            total = projectDAO.countByMarketerId(userId);
+            list = projectDAO.findProjectByMarketerId(userId, page, pageSize);
+        }
+        else if (userRole == Role.TESTER) {
+            total = projectDAO.countByTesterId(userId);
+            list = projectDAO.findProjectByTesterId(userId, page, pageSize);
+        }
+        else if (userRole == Role.QA) {
+            total = projectDAO.countByQaId(userId);
+            list = projectDAO.findProjectByQaId(userId, page, pageSize);
+        }
+        else {
+            throw new ProjectPermissionDeniedException("无权查看测试项目列表");
+        }
+        return new PageResult<>(page, pageSize, total, list);
     }
 
     @Override
@@ -135,5 +189,14 @@ public class MongoProjectService implements ProjectService {
         if (!projectDAO.updateStatus(project.getId(), status)) {
             throw new ProjectDAOFailureException("更改测试项目状态失败");
         }
+    }
+
+    @Override
+    public ProjectFormIds getProjectFromIds(String projectId) {
+        Project project = projectDAO.findProjectById(projectId);
+        if (project == null) {
+            throw new ProjectNotFoundException("该测试项目不存在");
+        }
+        return project.getProjectFormIds();
     }
 }
