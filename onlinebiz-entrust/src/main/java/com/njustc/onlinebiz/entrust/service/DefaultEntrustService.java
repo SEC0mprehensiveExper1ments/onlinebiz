@@ -396,7 +396,7 @@ public class DefaultEntrustService implements EntrustService {
         if (entrust == null) {
             throw new EntrustNotFoundException("该委托不存在");
         }
-        return new EntrustDto(entrust);
+        return entrust.toEntrustDto();
     }
 
 }

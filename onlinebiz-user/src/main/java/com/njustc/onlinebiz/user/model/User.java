@@ -1,5 +1,7 @@
-package com.njustc.onlinebiz.common.model;
+package com.njustc.onlinebiz.user.model;
 
+import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,8 +9,8 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class User implements Serializable {
 
     private Long userId;
@@ -23,6 +25,14 @@ public class User implements Serializable {
         this.userName = userName;
         this.userPassword = userPassword;
         this.userRole = userRole;
+    }
+
+    public UserDto toUserDto() {
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        userDto.setUserName(userName);
+        userDto.setUserRole(userRole);
+        return userDto;
     }
 
 }

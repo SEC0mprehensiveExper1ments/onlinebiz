@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.user.service;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.User;
+import com.njustc.onlinebiz.user.model.User;
 import com.njustc.onlinebiz.user.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;

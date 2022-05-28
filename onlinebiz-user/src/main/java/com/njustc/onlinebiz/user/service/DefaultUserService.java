@@ -5,7 +5,7 @@ import com.njustc.onlinebiz.user.exception.UserDBFailureException;
 import com.njustc.onlinebiz.user.exception.UserInvalidArgumentException;
 import com.njustc.onlinebiz.user.exception.UserPermissonDeniedException;
 import com.njustc.onlinebiz.user.mapper.UserMapper;
-import com.njustc.onlinebiz.common.model.User;
+import com.njustc.onlinebiz.user.model.User;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

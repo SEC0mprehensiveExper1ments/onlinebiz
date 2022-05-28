@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.user.controller;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.User;
+import com.njustc.onlinebiz.user.model.User;
 import com.njustc.onlinebiz.common.model.UserDto;
 import com.njustc.onlinebiz.user.exception.UserInvalidArgumentException;
 import com.njustc.onlinebiz.user.service.UserService;
@@ -78,7 +78,7 @@ public class UserController {
         User user = userService.getCurrentUser(request);
         if (user != null) {
             // 返回 DTO，这里我们不返回密码，虽然它也是加密的
-            return new UserDto(user);
+            return user.toUserDto();
         }
         return null;
     }
@@ -98,7 +98,7 @@ public class UserController {
     public UserDto getUser(@PathVariable("userId") Long userId) {
         User user = userService.getUserByUserId(userId);
         if (user != null) {
-            return new UserDto(user);
+            return user.toUserDto();
         }
         return null;
     }
@@ -117,7 +117,7 @@ public class UserController {
         } else {
             throw new UserInvalidArgumentException("搜索条件不能全空");
         }
-        return userList.stream().map(UserDto::new).collect(Collectors.toList());
+        return userList.stream().map(User::toUserDto).collect(Collectors.toList());
     }
 
 }

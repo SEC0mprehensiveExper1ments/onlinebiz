@@ -7,20 +7,14 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserDto implements Serializable {
 
     private Long userId;
 
     private String userName;
 
-    private String userRole;
-
-    public UserDto(User user) {
-        this.userId = user.getUserId();
-        this.userName = user.getUserName();
-        this.userRole = user.getUserRole().toString();
-    }
+    private Role userRole;
 
 }

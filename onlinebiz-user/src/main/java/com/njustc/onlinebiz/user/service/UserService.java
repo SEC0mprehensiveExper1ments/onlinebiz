@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.user.service;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.User;
+import com.njustc.onlinebiz.user.model.User;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

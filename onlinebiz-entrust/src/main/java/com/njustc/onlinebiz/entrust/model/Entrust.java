@@ -1,5 +1,7 @@
 package com.njustc.onlinebiz.entrust.model;
 
+import com.njustc.onlinebiz.common.model.EntrustDto;
+import com.njustc.onlinebiz.common.model.Software;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,5 +41,18 @@ public class Entrust {
 
     // 委托报价
     private EntrustQuote quote;
+
+    public EntrustDto toEntrustDto() {
+        EntrustDto entrustDto = new EntrustDto();
+        if (content != null) {
+            Software software = content.getSoftware();
+            if (software != null) {
+                entrustDto.setSoftware(software.getName());
+            }
+        }
+        entrustDto.setMarketerId(marketerId);
+        entrustDto.setTesterId(testerId);
+        return entrustDto;
+    }
 
 }
