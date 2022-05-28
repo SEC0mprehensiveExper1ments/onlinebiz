@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EntrustDto {
 
+    // 测试部人员ID
+    private Long customerId;
+
     // 市场部生成项目人(市场部指定员工) id
     private Long marketerId;
 
