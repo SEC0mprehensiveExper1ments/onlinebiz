@@ -126,8 +126,8 @@ public class MongoReportService implements ReportService {
         if (report == null) {
             throw new ReportNotFoundException("该测试报告不存在");
         }
-        //TODO:获取委托的客户id
-        if (!(userRole == Role.CUSTOMER)) {
+        //获取委托的客户id
+        if (!(userRole == Role.CUSTOMER && userId.equals(projectService.getProjectBaseInfo(report.getProjectId()).getCustomerId()))) {
             throw new ReportPermissionDeniedException("无权审核测试报告");
         }
         if (report.getStatus().getStage() != ReportStage.QA_PASSED) {
@@ -144,8 +144,8 @@ public class MongoReportService implements ReportService {
         if (report == null) {
             throw new ReportNotFoundException("该测试报告不存在");
         }
-        //TODO:获取委托的客户id
-        if (!(userRole == Role.CUSTOMER)) {
+        //获取委托的客户id
+        if (!(userRole == Role.CUSTOMER && userId.equals(projectService.getProjectBaseInfo(report.getProjectId()).getCustomerId()))) {
             throw new ReportPermissionDeniedException("无权审核测试报告");
         }
         if (report.getStatus().getStage() != ReportStage.QA_PASSED) {
