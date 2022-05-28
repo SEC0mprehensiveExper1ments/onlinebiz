@@ -72,6 +72,7 @@ public class MongoProjectService implements ProjectService {
         projectBaseInfo.setMarketerId(entrustDto.getMarketerId());
         projectBaseInfo.setTesterId(entrustDto.getTesterId());
         projectBaseInfo.setSoftwareName(entrustDto.getSoftware());
+        projectBaseInfo.setCustomerId(entrustDto.getCustomerId());
         // 设置项目表格信息 [在updateStatus中在创建]
 //        ProjectFormIds projectFormIds = new ProjectFormIds();
 //        /* NOT_TODO: 根据其他部分给出的接口新建各表，并将表编号填入testProject中字段，替换null*/

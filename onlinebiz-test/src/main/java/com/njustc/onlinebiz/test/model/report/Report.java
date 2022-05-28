@@ -21,6 +21,13 @@ public class Report {
   // 报告状态
   private ReportStatus status;
 
+  private String entrustId;
+
+  // 测试报告 id，由 MongoDB 自动生成
+  private String id;
+
+  private String projectId;
+
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
