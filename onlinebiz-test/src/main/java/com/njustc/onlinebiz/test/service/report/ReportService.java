@@ -20,7 +20,7 @@ public interface ReportService {
 
     void QADeny(String reportId, String message, Long userId, Role userRole);
 
-    void CustomerApprove(String reportId, Long userId, Role userRole);
+    void customerApprove(String reportId, Long userId, Role userRole);
 
-    void CustomerDeny(String reportId, String message, Long userId, Role userRole);
+    void customerDeny(String reportId, String message, Long userId, Role userRole);
 }
