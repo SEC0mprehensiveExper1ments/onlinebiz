@@ -115,7 +115,7 @@ public class DefaultEntrustService implements EntrustService {
         Entrust entrust = findEntrust(entrustId, userId, userRole);
         // 检查委托阶段
         EntrustStage currStage = entrust.getStatus().getStage();
-        EntrustStage nextStage = EntrustStage.WAIT_FOR_TESTER;
+        EntrustStage nextStage = EntrustStage.MARKETER_AUDITING;
         if (currStage != EntrustStage.WAIT_FOR_MARKETER) {
             throw new EntrustInvalidStageException(("此阶段不能分配市场部人员"));
         }
@@ -134,7 +134,7 @@ public class DefaultEntrustService implements EntrustService {
         Entrust entrust = findEntrust(entrustId, userId, userRole);
         // 检查委托阶段
         EntrustStage currStage = entrust.getStatus().getStage();
-        EntrustStage nextStage = EntrustStage.MARKETER_AUDITING;
+        EntrustStage nextStage = EntrustStage.TESTER_AUDITING;
         if (currStage != EntrustStage.WAIT_FOR_TESTER) {
             throw new EntrustInvalidStageException(("此阶段不能分配测试部人员"));
         }
@@ -178,7 +178,7 @@ public class DefaultEntrustService implements EntrustService {
         EntrustStage currStage = entrust.getStatus().getStage();
         EntrustStage nextStage;
         if (currStage == EntrustStage.MARKETER_AUDITING) {
-            nextStage = EntrustStage.TESTER_AUDITING;
+            nextStage = EntrustStage.WAIT_FOR_TESTER;
         } else if (currStage == EntrustStage.TESTER_AUDITING) {
             nextStage = EntrustStage.AUDITING_PASSED;
         } else {
