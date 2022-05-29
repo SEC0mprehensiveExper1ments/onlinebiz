@@ -150,6 +150,6 @@ public class JS002Test {
                 .setInputCeShiXiangMuBianHao("")
                 .setInputBeiZhu("");
 
-//        Assertions.assertTrue(docServiceJS002.fill(newJson));
+        System.out.println(docServiceJS002.fill(newJson));
     }
 }

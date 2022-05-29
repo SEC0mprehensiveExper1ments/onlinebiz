@@ -6,7 +6,6 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.Software;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.exception.DownloadDAOFailureException;
 import com.njustc.onlinebiz.doc.exception.DownloadNotFoundException;
@@ -83,7 +82,8 @@ public class DocServiceJS002 {
     private static final int maxWidth = 430;      // 最大宽度
     private static final String absolutePath;
     static {
-        absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath() + "/../";
+        // 修复一个Windows下的路径问题，Linux下的情况需部署后具体实践下
+        absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1) + "/../";
         // 在 iText 中每一个单位大小默认近似于点（pt）
         // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
         marginLeft = 65f;
@@ -103,7 +103,7 @@ public class DocServiceJS002 {
      * */
     public String fill(JS002 newJson){
         JS002Json = newJson;
-        String pdfPath = absolutePath + "out/JS002_" + entrustId + " .pdf";
+        String pdfPath = absolutePath + "out/JS002_" + entrustId + ".pdf";
         System.out.println(absolutePath);
         try {
             // 1.新建document对象
