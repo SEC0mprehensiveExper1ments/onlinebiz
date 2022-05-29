@@ -1,4 +1,4 @@
-package com.njustc.onlinebiz.doc.domain;
+package com.njustc.onlinebiz.doc.model;
 
 
 import lombok.AllArgsConstructor;

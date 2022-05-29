@@ -5,8 +5,8 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.njustc.onlinebiz.doc.domain.JS003;
-import com.njustc.onlinebiz.doc.mapper.OSSProvider;
+import com.njustc.onlinebiz.doc.model.JS003;
+import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;

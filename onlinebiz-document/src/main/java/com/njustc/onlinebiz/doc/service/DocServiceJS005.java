@@ -5,7 +5,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.njustc.onlinebiz.doc.domain.JS005;
+import com.njustc.onlinebiz.doc.model.JS005;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.stereotype.Service;
@@ -13,18 +13,19 @@ import org.springframework.util.ClassUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Objects;
 
 @Service
 public class DocServiceJS005 {
 
-    private static float marginLeft;
-    private static float marginRight;
-    private static float marginTop;
-    private static float marginBottom;
-    private static int maxWidth = 430;      // 最大宽度
-    private static String absolutePath;
+    private static final float marginLeft;
+    private static final float marginRight;
+    private static final float marginTop;
+    private static final float marginBottom;
+    private static final int maxWidth = 430;      // 最大宽度
+    private static final String absolutePath;
     static {
-        absolutePath = ClassUtils.getDefaultClassLoader().getResource("font").getPath() + "/../";
+        absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath() + "/../";
         // 在 iText 中每一个单位大小默认近似于点（pt）
         // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
         marginLeft = 85f;

@@ -41,8 +41,8 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         // 创建一份空的检查表
         SchemeReview schemeReview = new SchemeReview();
         schemeReview.setProjectId(projectId);
-        schemeReview.setQaId(qaId);
-        schemeReview.setTesterId(testerId);
+//        schemeReview.setQaId(qaId);
+//        schemeReview.setTesterId(testerId);
         schemeReview.setStatus(new ReviewStatus(ReviewStage.NOT_COPY_SAVED, null));
         // 获取检查表ID
         String schemeReviewId = schemeReviewDAO.insertSchemeReview(schemeReview).getId();
@@ -69,8 +69,16 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         } else if (userRole == Role.MARKETING_SUPERVISOR || userRole == Role.QA_SUPERVISOR) {
             return true;
         }
-        // 质量部和测试部相关人员均可查看
-        else if (userId.equals(schemeReview.getQaId()) || userId.equals(schemeReview.getTesterId())) {
+//        // 质量部和测试部相关人员均可查看
+//        else if (userId.equals(schemeReview.getQaId()) || userId.equals(schemeReview.getTesterId())) {
+//            return true;
+//        }
+        // 质量部相关人员均可查看
+        else if (userId.equals(projectService.getProjectBaseInfo(schemeReview.getProjectId()).getQaId())) {
+            return true;
+        }
+        // 测试部相关人员均可查看
+        else if (userId.equals(projectService.getProjectBaseInfo(schemeReview.getProjectId()).getTesterId())) {
             return true;
         }
         return false;
@@ -104,7 +112,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
             return true;
         }
         // 质量部相关人员可以删改
-        else if (userId.equals(schemeReview.getQaId())) {
+        else if (userId.equals(projectService.getProjectBaseInfo(schemeReview.getProjectId()).getQaId())) {
             return true;
         }
         return false;
@@ -163,7 +171,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
             return true;
         }
         // 项目的质量相关人员也可以上传下载
-        else if (userId.equals(schemeReview.getQaId())) {
+        else if (userId.equals(projectService.getProjectBaseInfo(schemeReview.getProjectId()).getQaId())) {
             return true;
         }
         return false;

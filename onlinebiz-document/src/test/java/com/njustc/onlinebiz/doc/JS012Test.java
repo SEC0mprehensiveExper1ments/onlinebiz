@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.doc;
 
 import com.alibaba.fastjson2.JSON;
-import com.njustc.onlinebiz.doc.domain.JS012;
+import com.njustc.onlinebiz.doc.model.JS012;
 import com.njustc.onlinebiz.doc.service.DocServiceJS012;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

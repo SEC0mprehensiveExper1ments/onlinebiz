@@ -4,8 +4,8 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.njustc.onlinebiz.doc.domain.JS004;
-import com.njustc.onlinebiz.doc.mapper.OSSProvider;
+import com.njustc.onlinebiz.doc.model.JS004;
+import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.stereotype.Service;
@@ -16,16 +16,17 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Objects;
 
 @Service
 public class DocServiceJS004 {
 
-  private static int marginLeft;
-  private static int marginRight;
-  private static int marginTop;
-  private static int maxWidth = 430; // 最大宽度
-  private static int marginBottom;
-  private static String absolutePath;
+  private static final int marginLeft;
+  private static final int marginRight;
+  private static final int marginTop;
+  private static final int maxWidth = 430; // 最大宽度
+  private static final int marginBottom;
+  private static final String absolutePath;
   private static JS004 JS004Json;
   private static Font titlefont1;
   private static Font titlefont2;
@@ -35,7 +36,7 @@ public class DocServiceJS004 {
   private static BaseFont bfHeiTi;
 
   static {
-    absolutePath = ClassUtils.getDefaultClassLoader().getResource("font").getPath() + "/../";
+    absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath() + "/../";
     // System.out.println(absolutePath);       // 输出path: D:/java_project/manage/target/classes/
     // ---> 下面有com, font, out, static
     // 在 iText 中每一个单位大小默认近似于点（pt）

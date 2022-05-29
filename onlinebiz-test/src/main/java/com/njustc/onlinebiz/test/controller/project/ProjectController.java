@@ -74,7 +74,7 @@ public class ProjectController {
         projectService.updateStatus(projectId, status, userId, userRole);
     }
 
-    // 删除一份项目
+    // 删除一份项目 (一般情况不需要)
     @DeleteMapping("/test/{projectId}")
     public void removeProject(
             @PathVariable("projectId") String projectId,

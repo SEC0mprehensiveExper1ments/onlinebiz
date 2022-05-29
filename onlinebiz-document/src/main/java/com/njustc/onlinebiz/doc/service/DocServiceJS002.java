@@ -5,28 +5,85 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.njustc.onlinebiz.doc.domain.JS002;
+import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.Software;
+import com.njustc.onlinebiz.doc.dao.OSSProvider;
+import com.njustc.onlinebiz.doc.exception.DownloadDAOFailureException;
+import com.njustc.onlinebiz.doc.exception.DownloadNotFoundException;
+import com.njustc.onlinebiz.doc.exception.DownloadPermissionDeniedException;
+import com.njustc.onlinebiz.doc.model.JS002;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
+import com.njustc.onlinebiz.entrust.model.Entrust;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class DocServiceJS002 {
 
+    private static final String ENTRUST_SERVICE = "http://onlinebiz-entrust";
+    private final RestTemplate restTemplate;
+    private final OSSProvider ossProvider;
 
-    private static float marginLeft;
-    private static float marginRight;
-    private static float marginTop;
-    private static float marginBottom;
-    private static int maxWidth = 430;      // 最大宽度
-    private static String absolutePath;
+    private String entrustId;
+    public DocServiceJS002(RestTemplate restTemplate,
+                           OSSProvider ossProvider) {
+        this.restTemplate = restTemplate;
+        this.ossProvider = ossProvider;
+    }
+
+    /**
+     * 通过 entrustId 向entrust服务获取对象，以供后续生成文档并下载
+     * @param entrustId 待下载的委托 id
+     * @param userId 操作的用户 id
+     * @param userRole 操作的用户角色
+     * @return 若成功从entrust服务中获得对象，则返回；否则，返回异常信息
+     * */
+    public Entrust getEntrustById(String entrustId, Long userId, Role userRole) {
+        // 调用entrust服务的getEntrust的接口
+        String params = "?userId=" + userId + "&userRole=" + userRole;
+        String url = ENTRUST_SERVICE + "/api/entrust/" + entrustId;
+        ResponseEntity<Entrust> responseEntity = restTemplate.getForEntity(url + params, Entrust.class);
+        // 检查委托 id 及权限的有效性
+        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+            throw new DownloadPermissionDeniedException("无权下载该文件");
+        }
+        else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+            throw new DownloadNotFoundException("未找到该委托ID");
+        }
+        else if (responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
+            throw new DownloadDAOFailureException("其他问题");
+        }
+        Entrust entrust = responseEntity.getBody();
+        this.entrustId = entrustId;
+
+        return entrust;
+    }
+
+
+    /**
+     * 以下是文档生成部分
+     * */
+    //  基础页面设置
+    private static final float marginLeft;
+    private static final float marginRight;
+    private static final float marginTop;
+    private static final float marginBottom;
+    private static final int maxWidth = 430;      // 最大宽度
+    private static final String absolutePath;
     static {
-        absolutePath = ClassUtils.getDefaultClassLoader().getResource("font").getPath() + "/../";
+        absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath() + "/../";
         // 在 iText 中每一个单位大小默认近似于点（pt）
         // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
         marginLeft = 65f;
@@ -35,14 +92,18 @@ public class DocServiceJS002 {
         marginBottom = 65f;
     }
 
-    private static JS002 JS002Json;
+    // 用于接收委托对象
+    private static Entrust entrust;
 
+    private static JS002 JS002Json;
     /**
      * 填充JS002文档
+     * @param newJson JS002对象
+     * @return 返回
      * */
-    public boolean fill(JS002 newJson){
+    public String fill(JS002 newJson){
         JS002Json = newJson;
-        String pdfPath = absolutePath + "out/JS002_out.pdf";
+        String pdfPath = absolutePath + "out/JS002_" + entrustId + " .pdf";
         System.out.println(absolutePath);
         try {
             // 1.新建document对象
@@ -77,9 +138,20 @@ public class DocServiceJS002 {
             document.close();
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return "unable to generate a pdf";
         }
-        return true;
+        // 上传pdf
+        try {
+            if(ossProvider.upload(
+                    "doc", "JS002_" + entrustId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+                return "https://oss.syh1en.asia/doc/JS002_" + entrustId + ".pdf";
+            } else {
+                return "upload failed";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "minio error";
+        }
     }
 
     // 定义全局的字体静态变量
@@ -93,13 +165,15 @@ public class DocServiceJS002 {
     private static Font smallFourBoldFont;
     private static Font smallFourFont;
 
-    private static String singleChoiceBlank = "\u0049";
-    private static String multiChoiceBlank = "\u004E";
-    private static String singleChoiceFilled = "\u004C";
-    private static String multiChoiceFilled = "\u0051";
+    private static final String singleChoiceBlank = "\u0049";
+    private static final String multiChoiceBlank = "\u004E";
+    private static final String singleChoiceFilled = "\u004C";
+    private static final String multiChoiceFilled = "\u0051";
 
-    private static String[] singleChoice = {"\u0049", "\u004C"};      /* 0--Blank, 1--Ticked */
-    private static String[] multiChoice = {"\u004E", "\u0051"};      /* 0--Blank, 1--Ticked */
+    private static final String[] singleChoice = {"\u0049", "\u004C"};      /* 0--Blank, 1--Ticked */
+    private static final String[] multiChoice = {"\u004E", "\u0051"};      /* 0--Blank, 1--Ticked */
+
+    private static final String[] singleChoiceNoCircle = {" ", "\u0050"};        /* 0--Blank, 1--Ticked */
     private static Font sixfont;
     static {
         try {
@@ -321,14 +395,12 @@ public class DocServiceJS002 {
         table.addCell(ItextUtils.createCell("软件介质", textfont, Element.ALIGN_CENTER, 4, 2, 18f,  paddings3, borderWidth));
         cell = ItextUtils.createCell(Element.ALIGN_LEFT, 27, 2, 18f,  paddings, borderWidth);
         phrase = new Phrase();
-        phrase.add(new Chunk("光盘（", textfont));
-        phrase.add(new Chunk(JS002Json.getInputRuanJianJieZhi0GuangPan(), textfont));
-        phrase.add(new Chunk("）      U盘（", textfont));
-        phrase.add(new Chunk(JS002Json.getInputRuanJianJieZhi0UPan(), textfont));
-        phrase.add(new Chunk("）       其它（", textfont));
-        phrase.add(new Chunk(JS002Json.getInputRuanJianJieZhi0QiTa(), textfont));
-        phrase.add(new Chunk("）", textfont));
-        phrase.add(ItextUtils.leastUnderlineChunk(JS002Json.getInputRuanJianJieZhi0QiTaBuChong(), textfont, 10, 0.7f, true));
+        phrase.add(ItextUtils.crossSetFont(new String[]{
+                "光盘（", singleChoiceNoCircle[isTicked(JS002Json.getSingleRuanJianJieZhi0GuangPan())],
+                "）      U盘（", singleChoice[isTicked(JS002Json.getSingleRuanJianJieZhi0UPan())],
+                "）       其它（", singleChoice[isTicked(JS002Json.getSingleRuanJianJieZhi0QiTa())],
+                "）", singleChoice[isTicked(JS002Json.getSingleRuanJianLeiXing0QiTa01())], "其他"}, textfont, symbolfont));
+        phrase.add(ItextUtils.leastUnderlineChunk(JS002Json.getInputRuanJianJieZhi0QiTa(), textfont, 10, 0.7f, true));
         cell.setPhrase(phrase);
         table.addCell(cell);
 

@@ -26,10 +26,10 @@ public class SchemeReview {
     private ReviewStatus status;
     // 评审表扫描件的文件路径
     private String scannedCopyPath;
-    // 与评审表相关的质量部人员ID
-    private Long qaId;
-    // 与评审表相关的测试部人员ID
-    private Long testerId;
+//    // 与评审表相关的质量部人员ID
+//    private Long qaId;
+//    // 与评审表相关的测试部人员ID
+//    private Long testerId;
 
     /** 每次会经常更新的部分 **/
     // 软件名称

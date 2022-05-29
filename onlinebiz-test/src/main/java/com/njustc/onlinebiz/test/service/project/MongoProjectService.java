@@ -52,7 +52,8 @@ public class MongoProjectService implements ProjectService {
         if (userRole != Role.ADMIN && userRole != Role.MARKETER && userRole != Role.MARKETING_SUPERVISOR) {
             throw new ProjectPermissionDeniedException("无权生成新的测试项目");
         }
-        ResponseEntity<EntrustDto> responseEntity = restTemplate.getForEntity(ENTRUST_SERVICE_URL + "/api/entrust/{entrustId}/get_dto", EntrustDto.class, entrustId);
+        String url = ENTRUST_SERVICE_URL + "/api/entrust/" + entrustId + "/get_dto";
+        ResponseEntity<EntrustDto> responseEntity = restTemplate.getForEntity(url, EntrustDto.class);
         // 检查委托id的有效性
         if (responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
             throw new ProjectDAOFailureException("没有找到项目对应的委托");

@@ -78,6 +78,9 @@ public class Software {
     // 服务器端软件中间件
     private String servSoftMiddleware;
 
+    // 服务器端软件数据库
+    private String servSoftDatabase;
+
     // 服务器端软件其他支撑软件
     private String serverSideOtherSupport;
 

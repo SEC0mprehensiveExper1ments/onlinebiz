@@ -1,10 +1,11 @@
-package com.njustc.onlinebiz.doc.mapper;
+package com.njustc.onlinebiz.doc.dao;
 
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.errors.*;
+import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+@Component
 public class OSSProvider {
   MinioClient minioClient;
 
