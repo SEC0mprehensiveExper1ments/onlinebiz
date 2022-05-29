@@ -63,16 +63,16 @@ public class DownloadController {
     return docServiceJS003.fill(newJson);
   }
 
-//  @GetMapping("/doc/JS004/{contractId}")
-//  public String downloadJS004(
-//          @PathVariable("contractId") String contractId,
-//          @RequestParam("userId") Long userId,
-//          @RequestParam("userRole") Role userRole
-//  ) {
-//    Contract contract = docServiceJS004.getContractById(contractId, userId, userRole);
-//    JS004 newJson = new JS004(contract);
-//    return docServiceJS004.fill(newJson);
-//  }
+  @GetMapping("/doc/JS004/{contractId}")
+  public String downloadJS004(
+          @PathVariable("contractId") String contractId,
+          @RequestParam("userId") Long userId,
+          @RequestParam("userRole") Role userRole
+  ) {
+    Contract contract = docServiceJS004.getContractById(contractId, userId, userRole);
+    JS004 newJson = new JS004(contract);
+    return docServiceJS004.fill(newJson);
+  }
 
   @GetMapping("/doc/JS005/{contractId}")
   public String downloadJS005(

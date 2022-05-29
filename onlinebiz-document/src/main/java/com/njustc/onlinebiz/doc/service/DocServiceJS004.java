@@ -4,12 +4,20 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.contract.Contract;
+import com.njustc.onlinebiz.doc.exception.DownloadDAOFailureException;
+import com.njustc.onlinebiz.doc.exception.DownloadNotFoundException;
+import com.njustc.onlinebiz.doc.exception.DownloadPermissionDeniedException;
 import com.njustc.onlinebiz.doc.model.JS004;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,6 +29,48 @@ import java.util.Objects;
 @Service
 public class DocServiceJS004 {
 
+  private static final String CONTRACT_SERVICE = "http://onlinebiz-contract";
+  private final RestTemplate restTemplate;
+  private final OSSProvider ossProvider;
+  private String contracId;
+
+  public DocServiceJS004(RestTemplate restTemplate, OSSProvider ossProvider) {
+    this.restTemplate = restTemplate;
+    this.ossProvider = ossProvider;
+  }
+
+  /**
+   * 通过 contracId 向contract服务获取对象，以供后续生成文档并下载
+   * @param contracId 待下载的合同 id
+   * @param userId 操作的用户 id
+   * @param userRole 操作的用户角色
+   * @return 若成功从contract服务中获得对象，则返回；否则，返回异常信息
+   * */
+  public Contract getContractById(String contracId, Long userId, Role userRole) {
+    // 调用contract服务的getContract的接口
+    String params = "?userId=" + userId + "&userRole=" + userRole;
+    String url = CONTRACT_SERVICE + "/api/contract/" + contracId;
+    ResponseEntity<Contract> responseEntity = restTemplate.getForEntity(url + params, Contract.class);
+    // 检查委托 id 及权限的有效性
+    if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+      throw new DownloadPermissionDeniedException("无权下载该文件");
+    }
+    else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+      throw new DownloadNotFoundException("未找到该委托ID");
+    }
+    else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
+      throw new DownloadDAOFailureException("其他问题");
+    }
+    Contract contract = responseEntity.getBody();
+    this.contracId = contracId;
+
+    return contract;
+  }
+
+
+  /**
+   * 以下是文档生成部分
+   * */
   private static final int marginLeft;
   private static final int marginRight;
   private static final int marginTop;
@@ -36,7 +86,7 @@ public class DocServiceJS004 {
   private static BaseFont bfHeiTi;
 
   static {
-    absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath() + "/../";
+    absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1) + "/../";
     // System.out.println(absolutePath);       // 输出path: D:/java_project/manage/target/classes/
     // ---> 下面有com, font, out, static
     // 在 iText 中每一个单位大小默认近似于点（pt）
@@ -63,6 +113,99 @@ public class DocServiceJS004 {
       e.printStackTrace();
     }
   }
+
+
+  /** 填充JS004文档 */
+  public String fill(JS004 newJson) {
+    JS004Json = newJson;
+    String pdfPath = absolutePath + "out/JS004_" + contracId + ".pdf";
+    System.out.println(absolutePath);
+    try {
+      // 1.新建document对象
+      Document document = new Document(PageSize.A4); // 建立一个Document对象
+      document.setMargins(marginLeft, marginRight, marginTop, marginBottom);
+      // 2.建立一个书写器(Writer)与document对象关联
+      File file = new File(pdfPath);
+      System.out.println(pdfPath);
+      PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+      System.out.println(1);
+      // 2.5 添加页眉/页脚
+      String header = "NST－04－JS004－2011";
+      String[] footer = new String[] {"第 ", " 页 共 ", " 页"};
+      int headerToPage = 1;
+      int footerFromPage = 2;
+      boolean isHaderLine = true;
+      boolean isFooterLine = false;
+      float[] headerLoc = new float[] {document.right() - 5, document.top() + 15};
+      float[] footerLoc =
+              new float[] {(document.left() + document.right()) / 2.0f - 35, document.bottom() - 20};
+      float headLineOff = -5f;
+      float footLineOff = 12f;
+      writer.setPageEvent(
+              new HeaderFooter(
+                      header,
+                      footer,
+                      headerToPage,
+                      footerFromPage,
+                      isHaderLine,
+                      isFooterLine,
+                      headerLoc,
+                      footerLoc,
+                      headLineOff,
+                      footLineOff));
+      // 3.打开文档
+      document.open();
+      // 4.向文档中添加内容
+      generatePageOne(document);
+      document.newPage();
+      generatePageTwo(document);
+      // document.newPage();
+      generatePageThree(document);
+      // document.newPage();
+      generatePageFour(document);
+      document.newPage();
+      generatePageFive(document);
+      // 5.关闭文档
+      document.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return "unable to generate pdf";
+    }
+    // 上传pdf
+    try {
+      OSSProvider documentOSSProvider = new OSSProvider();
+      if (documentOSSProvider.upload(
+              "doc", "JS004_" + contracId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+        deleteOutFile(pdfPath);
+        return "https://oss.syh1en.asia/doc/JS004_" + contracId + ".pdf";
+      } else {
+        deleteOutFile(pdfPath);
+        return "upload failed";
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      deleteOutFile(pdfPath);
+      return "minio error";
+    }
+  }
+
+  /**
+   * 删除中间的out文件
+   * */
+  private void deleteOutFile(String pdfPath) {
+    try {
+      File file = new File(pdfPath);
+      if (file.delete()) {
+        System.out.println(file.getName() + " is deleted!");
+      } else {
+        System.out.println("Delete" + file.getName() + "is failed.");
+      }
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+
 
   /** 生成JS004文档第一页 */
   public static void generatePageOne(Document document) throws Exception {
@@ -634,92 +777,4 @@ public class DocServiceJS004 {
     document.add(table);
   }
 
-  /** 填充JS004文档 */
-  public String fill(JS004 newJson) {
-    JS004Json = newJson;
-    String pdfPath = absolutePath + "tmp/JS004_tmp.pdf";
-    System.out.println(absolutePath);
-    try {
-      // 1.新建document对象
-      Document document = new Document(PageSize.A4); // 建立一个Document对象
-      document.setMargins(marginLeft, marginRight, marginTop, marginBottom);
-      System.out.println(PageSize.A4);
-      System.out.println("document.LeftMargin: " + document.leftMargin());
-      System.out.println("document.Left: " + document.left());
-      System.out.println("document.rightMargin: " + document.rightMargin());
-      System.out.println("document.right: " + document.right());
-      // 2.建立一个书写器(Writer)与document对象关联
-      File file = new File(pdfPath);
-      System.out.println(pdfPath);
-      PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
-      System.out.println(1);
-      // 2.5 添加页眉/页脚
-      String header = "NST－04－JS004－2011";
-      String[] footer = new String[] {"第 ", " 页 共 ", " 页"};
-      int headerToPage = 1;
-      int footerFromPage = 2;
-      boolean isHaderLine = true;
-      boolean isFooterLine = false;
-      float[] headerLoc = new float[] {document.right() - 5, document.top() + 15};
-      float[] footerLoc =
-          new float[] {(document.left() + document.right()) / 2.0f - 35, document.bottom() - 20};
-      float headLineOff = -5f;
-      float footLineOff = 12f;
-      writer.setPageEvent(
-          new HeaderFooter(
-              header,
-              footer,
-              headerToPage,
-              footerFromPage,
-              isHaderLine,
-              isFooterLine,
-              headerLoc,
-              footerLoc,
-              headLineOff,
-              footLineOff));
-      // 3.打开文档
-      document.open();
-      // 4.向文档中添加内容
-      generatePageOne(document);
-      document.newPage();
-      generatePageTwo(document);
-      // document.newPage();
-      generatePageThree(document);
-      // document.newPage();
-      generatePageFour(document);
-      document.newPage();
-      generatePageFive(document);
-      // 5.关闭文档
-      document.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-      return "unable to generate pdf";
-    }
-    // 添加图章
-    try {
-      String[] sealPath =
-          new String[] {absolutePath + "seal/seal_demo.jpg", absolutePath + "seal/seal_demo.jpg"};
-      int[] pageNums = new int[] {5, 5};
-      float[] locX = new float[] {350, 350};
-      float[] locY = new float[] {640, 360};
-      float[] percent = new float[] {1.8f, 1.8f};
-      ItextUtils.addImageSeal(pdfPath, sealPath, pageNums, locX, locY, percent);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return "unable to add seal";
-    }
-    // 上传pdf
-    try {
-      OSSProvider documentOSSProvider = new OSSProvider();
-      if (documentOSSProvider.upload(
-          "doc", "JS004.pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
-        return "https://oss.syh1en.asia/doc/JS004.pdf";
-      } else {
-        return "upload failed";
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-      return "minio error";
-    }
-  }
 }
