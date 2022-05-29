@@ -100,7 +100,7 @@ public class MongoTestcaseService implements TestcaseService {
         ResponseEntity<Long> responseEntity = restTemplate.getForEntity(ENTRUST_SERVICE_URL + "/api/entrust/{entrustId}/get_testerId", Long.class, entrustId);
         if (responseEntity.getStatusCode() == HttpStatus.ACCEPTED) {
             Long testerId = responseEntity.getBody();
-            /*根据调研情况，分配的测试部人员、测试部主管有权限修改*/
+            /*根据调研情况，超级管理员、分配的测试部人员、测试部主管有权限修改*/
             return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId)) || userRole == Role.TESTING_SUPERVISOR;
         }
         return false;

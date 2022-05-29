@@ -1,6 +1,6 @@
 package com.njustc.onlinebiz.gateway.filter;
 
-import com.njustc.onlinebiz.common.model.User;
+import com.njustc.onlinebiz.common.model.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -49,10 +49,10 @@ public class AddIdentityGatewayFilterFactory
             ServerHttpRequest request = exchange.getRequest();
             ServerHttpResponse response = exchange.getResponse();
             // 获取发送请求的用户身份
-            Mono<ResponseEntity<User>> entityMono = requestAccount(exchange.getRequest());
+            Mono<ResponseEntity<UserDto>> entityMono = requestAccount(exchange.getRequest());
             return entityMono.flatMap(entity -> {
                 // 检查响应结果
-                User user;
+                UserDto user;
                 if (entity == null || !entity.getStatusCode().equals(HttpStatus.OK)) {
                     user = null;
                 } else {
@@ -89,7 +89,7 @@ public class AddIdentityGatewayFilterFactory
     }
 
     // 发送请求到用户服务获取当前用户身份
-    private Mono<ResponseEntity<User>> requestAccount(ServerHttpRequest request) {
+    private Mono<ResponseEntity<UserDto>> requestAccount(ServerHttpRequest request) {
         ReactorLoadBalancer<ServiceInstance> loadBalancer = clientFactory.getInstance(USER_SERVICE_ID,
                 ReactorServiceInstanceLoadBalancer.class);
         return loadBalancer.choose().flatMap(response -> {
@@ -104,7 +104,7 @@ public class AddIdentityGatewayFilterFactory
                     cookieMap.addAll(name, list.stream().map(HttpCookie::getValue).collect(Collectors.toList())));
             return webClient
                     .get().uri(uri).cookies(cookies -> cookies.addAll(cookieMap))
-                    .retrieve().toEntity(User.class);
+                    .retrieve().toEntity(UserDto.class);
         });
     }
 

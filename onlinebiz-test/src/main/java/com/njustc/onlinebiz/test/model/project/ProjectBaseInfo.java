@@ -24,5 +24,7 @@ public class ProjectBaseInfo {
     // 软件名称
     private String softwareName;
 
+    //委托对应的客户id
+    private long customerId;
 
 }

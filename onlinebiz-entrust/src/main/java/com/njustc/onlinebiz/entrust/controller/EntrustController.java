@@ -6,8 +6,6 @@ import com.njustc.onlinebiz.entrust.service.EntrustService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * 委托管理的控制类
  */
