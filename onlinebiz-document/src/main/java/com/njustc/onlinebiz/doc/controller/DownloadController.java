@@ -41,8 +41,7 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    // TODO: 添加JS001的链接
-    return null;
+    return docServiceJS001.fill();
   }
 
   @PostMapping("/doc/JS002/{entrustId}")
