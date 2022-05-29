@@ -3,9 +3,9 @@ package com.njustc.onlinebiz.test.service.scheme;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.test.exception.scheme.SchemeNotFoundException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemePermissionDeniedException;
-import com.njustc.onlinebiz.test.model.scheme.Modification;
-import com.njustc.onlinebiz.test.model.scheme.Schedule;
-import com.njustc.onlinebiz.test.model.scheme.SchemeContent;
+import com.njustc.onlinebiz.common.model.test.scheme.Modification;
+import com.njustc.onlinebiz.common.model.test.scheme.Schedule;
+import com.njustc.onlinebiz.common.model.test.scheme.SchemeContent;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 

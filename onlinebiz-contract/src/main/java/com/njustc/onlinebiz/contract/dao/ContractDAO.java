@@ -1,8 +1,8 @@
 package com.njustc.onlinebiz.contract.dao;
 
-import com.njustc.onlinebiz.contract.model.Contract;
-import com.njustc.onlinebiz.contract.model.ContractStatus;
-import com.njustc.onlinebiz.contract.model.NonDisclosureAgreement;
+import com.njustc.onlinebiz.common.model.contract.Contract;
+import com.njustc.onlinebiz.common.model.contract.ContractStatus;
+import com.njustc.onlinebiz.common.model.contract.NonDisclosureAgreement;
 
 /**
  * 合同管理的数据访问层接口

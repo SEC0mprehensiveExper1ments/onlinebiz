@@ -1,9 +1,9 @@
 package com.njustc.onlinebiz.entrust;
 
 import com.njustc.onlinebiz.common.model.Software;
+import com.njustc.onlinebiz.common.model.entrust.*;
 import com.njustc.onlinebiz.entrust.dao.EntrustDAO;
 import com.njustc.onlinebiz.entrust.dao.MongoEntrustDAO;
-import com.njustc.onlinebiz.entrust.model.*;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

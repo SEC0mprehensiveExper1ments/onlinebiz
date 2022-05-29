@@ -1,8 +1,8 @@
 package com.njustc.onlinebiz.test.service.scheme;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.model.scheme.Scheme;
-import com.njustc.onlinebiz.test.model.scheme.SchemeContent;
+import com.njustc.onlinebiz.common.model.test.scheme.Scheme;
+import com.njustc.onlinebiz.common.model.test.scheme.SchemeContent;
 
 
 public interface SchemeService {

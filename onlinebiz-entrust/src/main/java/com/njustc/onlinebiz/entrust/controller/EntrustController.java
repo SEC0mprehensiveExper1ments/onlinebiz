@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.entrust.controller;
 
 import com.njustc.onlinebiz.common.model.*;
-import com.njustc.onlinebiz.entrust.model.*;
+import com.njustc.onlinebiz.common.model.entrust.*;
 import com.njustc.onlinebiz.entrust.service.EntrustService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.test.dao.testrecord;
 
-import com.njustc.onlinebiz.test.model.testrecord.TestRecordList;
-import com.njustc.onlinebiz.test.model.testrecord.TestRecordStatus;
+import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
+import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordStatus;
 
 import java.util.List;
 

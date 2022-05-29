@@ -13,7 +13,7 @@ import com.njustc.onlinebiz.doc.exception.DownloadPermissionDeniedException;
 import com.njustc.onlinebiz.doc.model.JS002;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
-import com.njustc.onlinebiz.entrust.model.Entrust;
+import com.njustc.onlinebiz.common.model.entrust.Entrust;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,6 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -92,14 +91,11 @@ public class DocServiceJS002 {
         marginBottom = 65f;
     }
 
-    // 用于接收委托对象
-    private static Entrust entrust;
-
     private static JS002 JS002Json;
     /**
      * 填充JS002文档
      * @param newJson JS002对象
-     * @return 返回
+     * @return 成功返回OSS链接，失败返回原因
      * */
     public String fill(JS002 newJson){
         JS002Json = newJson;

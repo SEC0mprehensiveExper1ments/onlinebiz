@@ -2,8 +2,8 @@ package com.njustc.onlinebiz.test.dao.review;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import com.njustc.onlinebiz.test.model.review.ReportReview;
-import com.njustc.onlinebiz.test.model.review.ReviewStatus;
+import com.njustc.onlinebiz.common.model.test.review.ReportReview;
+import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

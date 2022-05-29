@@ -2,10 +2,9 @@ package com.njustc.onlinebiz.test.controller.project;
 
 import com.njustc.onlinebiz.common.model.PageResult;
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.model.project.Project;
-import com.njustc.onlinebiz.test.model.project.ProjectBaseInfo;
-import com.njustc.onlinebiz.test.model.project.ProjectOutline;
-import com.njustc.onlinebiz.test.model.project.ProjectStatus;
+import com.njustc.onlinebiz.common.model.test.project.Project;
+import com.njustc.onlinebiz.common.model.test.project.ProjectOutline;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStatus;
 import com.njustc.onlinebiz.test.service.project.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

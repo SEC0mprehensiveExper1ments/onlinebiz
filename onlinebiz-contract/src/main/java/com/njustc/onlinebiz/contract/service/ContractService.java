@@ -1,9 +1,9 @@
 package com.njustc.onlinebiz.contract.service;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.contract.model.Contract;
-import com.njustc.onlinebiz.contract.model.ContractStatus;
-import com.njustc.onlinebiz.contract.model.NonDisclosureAgreement;
+import com.njustc.onlinebiz.common.model.contract.Contract;
+import com.njustc.onlinebiz.common.model.contract.ContractStatus;
+import com.njustc.onlinebiz.common.model.contract.NonDisclosureAgreement;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 

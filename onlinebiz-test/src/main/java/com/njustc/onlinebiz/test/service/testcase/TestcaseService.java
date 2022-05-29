@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.test.service.testcase;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.model.testcase.Testcase;
+import com.njustc.onlinebiz.common.model.test.testcase.Testcase;
 
 import java.util.List;
 

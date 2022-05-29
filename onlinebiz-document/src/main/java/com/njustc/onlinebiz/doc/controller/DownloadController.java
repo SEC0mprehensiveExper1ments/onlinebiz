@@ -1,18 +1,15 @@
 package com.njustc.onlinebiz.doc.controller;
 
-import com.itextpdf.text.DocumentException;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.doc.model.JS002;
-import com.njustc.onlinebiz.doc.model.JS003;
+import com.njustc.onlinebiz.doc.model.JS003.JS003;
 import com.njustc.onlinebiz.doc.service.DocServiceJS001;
 import com.njustc.onlinebiz.doc.service.DocServiceJS002;
 import com.njustc.onlinebiz.doc.service.DocServiceJS003;
 import com.njustc.onlinebiz.doc.model.JS004;
 import com.njustc.onlinebiz.doc.service.DocServiceJS004;
-import com.njustc.onlinebiz.entrust.model.Entrust;
+import com.njustc.onlinebiz.common.model.entrust.Entrust;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
@@ -55,11 +52,15 @@ public class DownloadController {
     return docServiceJS002.fill(newJson);
   }
 
-  @PostMapping("/doc/JS003")
-  public String downloadJS003(@RequestBody JS003 newJson)
-          throws DocumentException, IOException {
-    DocServiceJS003 fileJS003 = new DocServiceJS003();
-    return fileJS003.fillJS003(newJson);
+  @PostMapping("/doc/JS003/{entrustId}")
+  public String downloadJS003(
+          @PathVariable("entrustId") String entrustId,
+          @RequestParam("userId") Long userId,
+          @RequestParam("userRole") Role userRole
+  ){
+    Entrust entrust = docServiceJS003.getEntrustById(entrustId, userId, userRole);
+    JS003 newJson = new JS003(entrust);
+    return docServiceJS003.fill(newJson);
   }
 
   @PostMapping("/doc/JS004")

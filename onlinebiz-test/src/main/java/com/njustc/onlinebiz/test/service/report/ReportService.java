@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.test.service.report;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.model.report.Report;
+import com.njustc.onlinebiz.common.model.test.report.Report;
 
 public interface ReportService {
     // 生成报告

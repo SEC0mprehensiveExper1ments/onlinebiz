@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.test.service.testrecord;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.model.testrecord.TestRecordList;
+import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
 
 import java.util.List;
 

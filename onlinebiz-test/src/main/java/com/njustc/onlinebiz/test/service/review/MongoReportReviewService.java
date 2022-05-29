@@ -1,13 +1,14 @@
 package com.njustc.onlinebiz.test.service.review;
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.review.ReviewStage;
+import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
 import com.njustc.onlinebiz.test.dao.review.ReportReviewDAO;
 import com.njustc.onlinebiz.test.exception.review.ReviewDAOFailureException;
 import com.njustc.onlinebiz.test.exception.review.ReviewInvalidStageException;
 import com.njustc.onlinebiz.test.exception.review.ReviewNotFoundException;
 import com.njustc.onlinebiz.test.exception.review.ReviewPermissionDeniedException;
-import com.njustc.onlinebiz.test.model.review.*;
-import com.njustc.onlinebiz.test.model.review.ReportReview;
+import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;

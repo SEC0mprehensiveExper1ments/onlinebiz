@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.test.dao.report;
 
-import com.njustc.onlinebiz.test.model.report.Report;
-import com.njustc.onlinebiz.test.model.report.ReportStatus;
+import com.njustc.onlinebiz.common.model.test.report.Report;
+import com.njustc.onlinebiz.common.model.test.report.ReportStatus;
 
 public interface ReportDAO {
   Report insertReport(Report report);

@@ -1,9 +1,8 @@
 package com.njustc.onlinebiz.test.dao.project;
 
-import com.njustc.onlinebiz.test.model.project.Project;
-import com.njustc.onlinebiz.test.model.project.ProjectBaseInfo;
-import com.njustc.onlinebiz.test.model.project.ProjectOutline;
-import com.njustc.onlinebiz.test.model.project.ProjectStatus;
+import com.njustc.onlinebiz.common.model.test.project.Project;
+import com.njustc.onlinebiz.common.model.test.project.ProjectOutline;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStatus;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.test.controller.review;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.model.review.SchemeReview;
+import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
 import com.njustc.onlinebiz.test.service.review.SchemeReviewService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;

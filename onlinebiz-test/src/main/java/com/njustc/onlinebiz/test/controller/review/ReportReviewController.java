@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.test.controller.review;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.model.review.ReportReview;
+import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 import com.njustc.onlinebiz.test.service.review.ReportReviewService;
 import org.springframework.web.bind.annotation.*;
 

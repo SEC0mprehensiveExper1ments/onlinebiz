@@ -2,9 +2,9 @@ package com.njustc.onlinebiz.contract.dao;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import com.njustc.onlinebiz.contract.model.Contract;
-import com.njustc.onlinebiz.contract.model.ContractStatus;
-import com.njustc.onlinebiz.contract.model.NonDisclosureAgreement;
+import com.njustc.onlinebiz.common.model.contract.Contract;
+import com.njustc.onlinebiz.common.model.contract.ContractStatus;
+import com.njustc.onlinebiz.common.model.contract.NonDisclosureAgreement;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;

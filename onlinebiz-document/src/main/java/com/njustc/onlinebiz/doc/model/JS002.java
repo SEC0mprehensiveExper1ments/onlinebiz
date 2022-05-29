@@ -4,8 +4,8 @@ package com.njustc.onlinebiz.doc.model;
 
 import com.njustc.onlinebiz.common.model.PartyDetail;
 import com.njustc.onlinebiz.common.model.Software;
-import com.njustc.onlinebiz.entrust.model.Entrust;
-import com.njustc.onlinebiz.entrust.model.EntrustReview;
+import com.njustc.onlinebiz.common.model.entrust.Entrust;
+import com.njustc.onlinebiz.common.model.entrust.EntrustReview;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

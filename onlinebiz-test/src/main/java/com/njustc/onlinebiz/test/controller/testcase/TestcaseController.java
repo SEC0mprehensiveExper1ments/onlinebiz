@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.test.controller.testcase;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.model.testcase.Testcase;
+import com.njustc.onlinebiz.common.model.test.testcase.Testcase;
 import com.njustc.onlinebiz.test.service.testcase.TestcaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

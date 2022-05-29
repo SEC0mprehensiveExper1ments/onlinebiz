@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.test.dao.review;
 
-import com.njustc.onlinebiz.test.model.review.ReviewStatus;
-import com.njustc.onlinebiz.test.model.review.ReportReview;
+import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
+import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 
 public interface ReportReviewDAO {
     /**

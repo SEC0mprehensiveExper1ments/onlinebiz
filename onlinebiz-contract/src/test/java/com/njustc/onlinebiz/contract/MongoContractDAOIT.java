@@ -2,10 +2,10 @@ package com.njustc.onlinebiz.contract;
 
 import com.njustc.onlinebiz.contract.dao.ContractDAO;
 import com.njustc.onlinebiz.contract.dao.MongoContractDAO;
-import com.njustc.onlinebiz.contract.model.Contract;
-import com.njustc.onlinebiz.contract.model.ContractStage;
-import com.njustc.onlinebiz.contract.model.ContractStatus;
-import com.njustc.onlinebiz.contract.model.NonDisclosureAgreement;
+import com.njustc.onlinebiz.common.model.contract.Contract;
+import com.njustc.onlinebiz.common.model.contract.ContractStage;
+import com.njustc.onlinebiz.common.model.contract.ContractStatus;
+import com.njustc.onlinebiz.common.model.contract.NonDisclosureAgreement;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

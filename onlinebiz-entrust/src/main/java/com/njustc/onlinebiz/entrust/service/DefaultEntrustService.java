@@ -1,9 +1,9 @@
 package com.njustc.onlinebiz.entrust.service;
 
 import com.njustc.onlinebiz.common.model.*;
+import com.njustc.onlinebiz.common.model.entrust.*;
 import com.njustc.onlinebiz.entrust.dao.EntrustDAO;
 import com.njustc.onlinebiz.entrust.exception.*;
-import com.njustc.onlinebiz.entrust.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

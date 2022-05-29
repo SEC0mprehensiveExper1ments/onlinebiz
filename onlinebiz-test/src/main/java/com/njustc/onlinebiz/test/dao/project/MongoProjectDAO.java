@@ -2,10 +2,10 @@ package com.njustc.onlinebiz.test.dao.project;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import com.njustc.onlinebiz.test.model.project.Project;
-import com.njustc.onlinebiz.test.model.project.ProjectBaseInfo;
-import com.njustc.onlinebiz.test.model.project.ProjectOutline;
-import com.njustc.onlinebiz.test.model.project.ProjectStatus;
+import com.njustc.onlinebiz.common.model.test.project.Project;
+import com.njustc.onlinebiz.common.model.test.project.ProjectBaseInfo;
+import com.njustc.onlinebiz.common.model.test.project.ProjectOutline;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

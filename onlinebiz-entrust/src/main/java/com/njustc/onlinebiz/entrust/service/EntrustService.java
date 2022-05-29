@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.entrust.service;
 
 import com.njustc.onlinebiz.common.model.*;
-import com.njustc.onlinebiz.entrust.model.*;
+import com.njustc.onlinebiz.common.model.entrust.*;
 
 /**
  * 委托管理的服务层接口

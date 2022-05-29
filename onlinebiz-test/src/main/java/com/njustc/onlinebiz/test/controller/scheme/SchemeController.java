@@ -1,8 +1,8 @@
 package com.njustc.onlinebiz.test.controller.scheme;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.model.scheme.Scheme;
-import com.njustc.onlinebiz.test.model.scheme.SchemeContent;
+import com.njustc.onlinebiz.common.model.test.scheme.Scheme;
+import com.njustc.onlinebiz.common.model.test.scheme.SchemeContent;
 import com.njustc.onlinebiz.test.service.scheme.SchemeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

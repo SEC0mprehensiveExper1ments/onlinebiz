@@ -1,7 +1,7 @@
 package com.njustc.onlinebiz.test.service.review;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.model.review.ReportReview;
+import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 

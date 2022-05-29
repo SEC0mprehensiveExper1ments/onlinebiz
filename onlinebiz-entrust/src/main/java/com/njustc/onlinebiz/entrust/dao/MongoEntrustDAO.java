@@ -2,7 +2,7 @@ package com.njustc.onlinebiz.entrust.dao;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import com.njustc.onlinebiz.entrust.model.*;
+import com.njustc.onlinebiz.common.model.entrust.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

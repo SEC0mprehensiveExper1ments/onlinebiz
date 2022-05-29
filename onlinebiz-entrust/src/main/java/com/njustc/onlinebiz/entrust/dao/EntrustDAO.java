@@ -1,7 +1,6 @@
 package com.njustc.onlinebiz.entrust.dao;
 
-import com.njustc.onlinebiz.entrust.model.*;
-
+import com.njustc.onlinebiz.common.model.entrust.*;
 import java.util.List;
 
 /**
