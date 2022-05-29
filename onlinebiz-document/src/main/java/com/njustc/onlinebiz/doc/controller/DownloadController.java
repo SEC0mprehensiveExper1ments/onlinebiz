@@ -4,6 +4,7 @@ import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.contract.Contract;
 import com.njustc.onlinebiz.doc.model.JS002;
 import com.njustc.onlinebiz.doc.model.JS003.JS003;
+import com.njustc.onlinebiz.doc.model.JS005;
 import com.njustc.onlinebiz.doc.service.*;
 import com.njustc.onlinebiz.doc.model.JS004;
 import com.njustc.onlinebiz.common.model.entrust.Entrust;
@@ -73,16 +74,16 @@ public class DownloadController {
 //    return docServiceJS004.fill(newJson);
 //  }
 
-//  @GetMapping("/doc/JS005/{contractId}")
-//  public String downloadJS005(
-//          @PathVariable("contractId") String contractId,
-//          @RequestParam("userId") Long userId,
-//          @RequestParam("userRole") Role userRole
-//  ) {
-//    Contract contract = docServiceJS005.getContractById(contractId, userId, userRole);
-//    JS004 newJson = new JS004(contract);
-//    return docServiceJS005.fill(newJson);
-//  }
+  @GetMapping("/doc/JS005/{contractId}")
+  public String downloadJS005(
+          @PathVariable("contractId") String contractId,
+          @RequestParam("userId") Long userId,
+          @RequestParam("userRole") Role userRole
+  ) {
+    Contract contract = docServiceJS005.getContractById(contractId, userId, userRole);
+    JS005 newJson = new JS005(contract);
+    return docServiceJS005.fill(newJson);
+  }
 
 
 }
