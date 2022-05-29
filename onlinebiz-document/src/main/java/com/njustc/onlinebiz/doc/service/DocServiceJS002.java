@@ -60,7 +60,7 @@ public class DocServiceJS002 {
         else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
             throw new DownloadNotFoundException("未找到该委托ID");
         }
-        else if (responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
+        else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
             throw new DownloadDAOFailureException("其他问题");
         }
         Entrust entrust = responseEntity.getBody();
@@ -393,9 +393,9 @@ public class DocServiceJS002 {
         phrase = new Phrase();
         phrase.add(ItextUtils.crossSetFont(new String[]{
                 "光盘（", singleChoiceNoCircle[isTicked(JS002Json.getSingleRuanJianJieZhi0GuangPan())],
-                "）      U盘（", singleChoice[isTicked(JS002Json.getSingleRuanJianJieZhi0UPan())],
-                "）       其它（", singleChoice[isTicked(JS002Json.getSingleRuanJianJieZhi0QiTa())],
-                "）", singleChoice[isTicked(JS002Json.getSingleRuanJianLeiXing0QiTa01())], "其他"}, textfont, symbolfont));
+                "）      U盘（", singleChoiceNoCircle[isTicked(JS002Json.getSingleRuanJianJieZhi0UPan())],
+                "）       其它（", singleChoiceNoCircle[isTicked(JS002Json.getSingleRuanJianJieZhi0QiTa())],
+                "）", singleChoiceNoCircle[isTicked(JS002Json.getSingleRuanJianLeiXing0QiTa01())], ""}, textfont, symbolfont));
         phrase.add(ItextUtils.leastUnderlineChunk(JS002Json.getInputRuanJianJieZhi0QiTa(), textfont, 10, 0.7f, true));
         cell.setPhrase(phrase);
         table.addCell(cell);

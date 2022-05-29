@@ -11,8 +11,8 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class ZiGongNeng {
-    private String inputZiGongNengMingCheng;
-    private String inputGongNengShuoMing;
+    private String inputZiGongNengMingCheng = "";
+    private String inputGongNengShuoMing = "";
 
     public String getInputZiGongNengMingCheng() {
         return inputZiGongNengMingCheng;

@@ -59,7 +59,7 @@ public class DocServiceJS003 {
     else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
       throw new DownloadNotFoundException("未找到该委托ID");
     }
-    else if (responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
+    else if (responseEntity.getStatusCode() != HttpStatus.ACCEPTED && responseEntity.getStatusCode() != HttpStatus.OK) {
       throw new DownloadDAOFailureException("其他问题");
     }
     Entrust entrust = responseEntity.getBody();

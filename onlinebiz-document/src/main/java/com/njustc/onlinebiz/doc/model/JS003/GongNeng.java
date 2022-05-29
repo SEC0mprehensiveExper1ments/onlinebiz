@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,8 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class GongNeng {
-    private String inputGongNengMingCheng;
-    private List<ZiGongNeng> inputZiGongNeng;
+    private String inputGongNengMingCheng = "";
+    private List<ZiGongNeng> inputZiGongNeng = new ArrayList<>();
 
     public String getInputGongNengMingCheng() {
         return inputGongNengMingCheng;

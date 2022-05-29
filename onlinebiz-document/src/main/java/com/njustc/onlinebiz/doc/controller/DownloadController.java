@@ -33,15 +33,12 @@ public class DownloadController {
     this.docServiceJS004 = docServiceJS004;
   }
 
-  @PostMapping("/doc/JS001")
-  public String downloadJS001(
-          @RequestParam("userId") Long userId,
-          @RequestParam("userRole") Role userRole
-  ) {
+  @GetMapping("/doc/JS001")
+  public String downloadJS001() {
     return docServiceJS001.fill();
   }
 
-  @PostMapping("/doc/JS002/{entrustId}")
+  @GetMapping("/doc/JS002/{entrustId}")
   public String downloadJS002(
           @PathVariable("entrustId") String entrustId,
           @RequestParam("userId") Long userId,
@@ -52,7 +49,7 @@ public class DownloadController {
     return docServiceJS002.fill(newJson);
   }
 
-  @PostMapping("/doc/JS003/{entrustId}")
+  @GetMapping("/doc/JS003/{entrustId}")
   public String downloadJS003(
           @PathVariable("entrustId") String entrustId,
           @RequestParam("userId") Long userId,
@@ -63,7 +60,7 @@ public class DownloadController {
     return docServiceJS003.fill(newJson);
   }
 
-  @PostMapping("/doc/JS004")
+  @GetMapping("/doc/JS004")
   public String downloadJS005(@RequestBody JS004 newJson) {
     DocServiceJS004 fileJS004 = new DocServiceJS004();
     // System.out.println(newJson.toString());
