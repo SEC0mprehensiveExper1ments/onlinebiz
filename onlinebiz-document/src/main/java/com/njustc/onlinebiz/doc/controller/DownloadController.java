@@ -58,6 +58,7 @@ public class DownloadController {
   ){
     Entrust entrust = docServiceJS003.getEntrustById(entrustId, userId, userRole);
     JS003 newJson = new JS003(entrust);
+
     return docServiceJS003.fill(newJson);
   }
 
