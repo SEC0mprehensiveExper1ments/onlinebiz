@@ -1,13 +1,11 @@
 package com.njustc.onlinebiz.doc.controller;
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.contract.Contract;
 import com.njustc.onlinebiz.doc.model.JS002;
 import com.njustc.onlinebiz.doc.model.JS003.JS003;
-import com.njustc.onlinebiz.doc.service.DocServiceJS001;
-import com.njustc.onlinebiz.doc.service.DocServiceJS002;
-import com.njustc.onlinebiz.doc.service.DocServiceJS003;
+import com.njustc.onlinebiz.doc.service.*;
 import com.njustc.onlinebiz.doc.model.JS004;
-import com.njustc.onlinebiz.doc.service.DocServiceJS004;
 import com.njustc.onlinebiz.common.model.entrust.Entrust;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,16 +19,19 @@ public class DownloadController {
   private final DocServiceJS001 docServiceJS001;
   private final DocServiceJS002 docServiceJS002;
   private final DocServiceJS003 docServiceJS003;
-  private final DocServiceJS003 docServiceJS004;
+  private final DocServiceJS004 docServiceJS004;
+  private final DocServiceJS005 docServiceJS005;
 
   public DownloadController(DocServiceJS001 docServiceJS001,
                             DocServiceJS002 docServiceJS002,
                             DocServiceJS003 docServiceJS003,
-                            DocServiceJS003 docServiceJS004) {
+                            DocServiceJS004 docServiceJS004,
+                            DocServiceJS005 docServiceJS005) {
     this.docServiceJS001 = docServiceJS001;
     this.docServiceJS002 = docServiceJS002;
     this.docServiceJS003 = docServiceJS003;
     this.docServiceJS004 = docServiceJS004;
+    this.docServiceJS005 = docServiceJS005;
   }
 
   @GetMapping("/doc/JS001")
@@ -60,12 +61,27 @@ public class DownloadController {
     return docServiceJS003.fill(newJson);
   }
 
-  @GetMapping("/doc/JS004")
-  public String downloadJS005(@RequestBody JS004 newJson) {
-    DocServiceJS004 fileJS004 = new DocServiceJS004();
-    // System.out.println(newJson.toString());
-    return fileJS004.fill(newJson);
-  }
+//  @GetMapping("/doc/JS004/{contractId}")
+//  public String downloadJS004(
+//          @PathVariable("contractId") String contractId,
+//          @RequestParam("userId") Long userId,
+//          @RequestParam("userRole") Role userRole
+//  ) {
+//    Contract contract = docServiceJS004.getContractById(contractId, userId, userRole);
+//    JS004 newJson = new JS004(contract);
+//    return docServiceJS004.fill(newJson);
+//  }
+
+//  @GetMapping("/doc/JS005/{contractId}")
+//  public String downloadJS005(
+//          @PathVariable("contractId") String contractId,
+//          @RequestParam("userId") Long userId,
+//          @RequestParam("userRole") Role userRole
+//  ) {
+//    Contract contract = docServiceJS005.getContractById(contractId, userId, userRole);
+//    JS004 newJson = new JS004(contract);
+//    return docServiceJS005.fill(newJson);
+//  }
 
 
 }

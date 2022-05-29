@@ -104,11 +104,6 @@ public class DocServiceJS003 {
       // 1.新建document对象
       Document document = new Document(PageSize.A4);// 建立一个Document对象
       document.setMargins(marginLeft, marginRight, marginTop, marginBottom);
-//      System.out.println(PageSize.A4);
-//      System.out.println("document.LeftMargin: " + document.leftMargin());
-//      System.out.println("document.Left: " + document.left());
-//      System.out.println("document.rightMargin: " + document.rightMargin());
-//      System.out.println("document.right: " + document.right());
       // 2.建立一个书写器(Writer)与document对象关联
       File file = new File(pdfPath);
       PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
