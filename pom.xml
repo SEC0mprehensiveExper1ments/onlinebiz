@@ -34,7 +34,7 @@
         <module>onlinebiz-entrust</module>
         <module>onlinebiz-test</module>
         <module>onlinebiz-contract</module>
-<!--        <module>onlinebiz-sample</module>-->
+        <module>onlinebiz-sample</module>
     </modules>
 
     <dependencyManagement>
