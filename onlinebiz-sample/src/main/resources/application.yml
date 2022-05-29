@@ -1,0 +1,24 @@
+server:
+  port: 11391
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: onlinebiz-sample
+  data:
+    mongodb:
+      host: 124.221.156.98
+      username: root
+      password: nAnj1ng_Jia0tong_Univ
+      database: onlinebiz
+      authentication-database: admin
+
+eureka:
+  instance:
+    instance-id: sample-service11391
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
