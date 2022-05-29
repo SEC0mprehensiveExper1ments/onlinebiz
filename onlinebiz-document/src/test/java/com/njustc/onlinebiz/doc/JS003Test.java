@@ -1,8 +1,8 @@
 package com.njustc.onlinebiz.doc;
 
 
-import com.njustc.onlinebiz.doc.model.JS003.GongNeng;
 import com.njustc.onlinebiz.doc.model.JS003.JS003;
+import com.njustc.onlinebiz.doc.model.JS003.GongNeng;
 import com.njustc.onlinebiz.doc.model.JS003.ZiGongNeng;
 import com.njustc.onlinebiz.doc.service.DocServiceJS003;
 import org.junit.jupiter.api.Test;

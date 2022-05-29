@@ -1,11 +1,15 @@
 package com.njustc.onlinebiz.doc.model.JS003;
 
+import com.njustc.onlinebiz.common.model.Software;
 import com.njustc.onlinebiz.common.model.entrust.Entrust;
+import com.njustc.onlinebiz.common.model.Software.Module;
+import com.njustc.onlinebiz.common.model.Software.ModuleFunction;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //@Data
@@ -52,9 +56,9 @@ import java.util.List;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class JS003 {
-  private String inputRuanJianMingCheng;
-  private String inputBanBenHao;
-  private List<GongNeng> inputRuanJianGongNengXiangMu;
+  private String inputRuanJianMingCheng = "";
+  private String inputBanBenHao = "";
+  private List<GongNeng> inputRuanJianGongNengXiangMu = new ArrayList<>();
 
   public String getInputRuanJianMingCheng() {
     return inputRuanJianMingCheng;
@@ -97,7 +101,16 @@ public class JS003 {
   }
 
   public JS003(Entrust entrust) {
-    // TODO:
+    //
+    Software software = entrust.getContent().getSoftware();
+    this.inputRuanJianMingCheng = software.getName();
+    this.inputBanBenHao = software.getVersion();
+    // 软件功能列表
+    List<Module> modules = software.getModules();
+    for (Module module: modules) {
+      GongNeng gongNeng = new GongNeng(module);
+      this.inputRuanJianGongNengXiangMu.add(gongNeng);
+    }
   }
 
 }

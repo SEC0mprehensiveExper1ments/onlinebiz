@@ -1,5 +1,8 @@
 package com.njustc.onlinebiz.doc.model.JS003;
 
+import com.njustc.onlinebiz.common.model.Software;
+import com.njustc.onlinebiz.common.model.Software.Module;
+import com.njustc.onlinebiz.common.model.Software.ModuleFunction;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,8 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public
-class GongNeng {
+public class GongNeng {
     private String inputGongNengMingCheng;
     private List<ZiGongNeng> inputZiGongNeng;
 
@@ -26,5 +28,14 @@ class GongNeng {
 
     public int getZiGongNengSum() {
         return inputZiGongNeng.size();
+    }
+
+    public GongNeng(Module module) {
+        this.inputGongNengMingCheng = module.getModuleName();
+        List<ModuleFunction> functions = module.getFunctions();
+        for(ModuleFunction function: functions) {
+            ZiGongNeng ziGongNeng = new ZiGongNeng(function);
+            this.inputZiGongNeng.add(ziGongNeng);
+        }
     }
 }

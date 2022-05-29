@@ -1,6 +1,15 @@
-spring:
-  application:
-    name: doc-service
-
 server:
   port: 7001
+
+spring:
+  application:
+    name: onlinebiz-document
+
+eureka:
+  instance:
+    instance-id: document-service7001
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
