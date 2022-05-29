@@ -81,11 +81,6 @@ public class DocServiceJS001 {
             // 1.新建document对象
             Document document = new Document(PageSize.A4);// 建立一个Document对象
             document.setMargins(marginLeft, marginRight, marginTop, marginBottom);
-            System.out.println(PageSize.A4);
-            System.out.println("document.LeftMargin: " + document.leftMargin());
-            System.out.println("document.Left: " + document.left());
-            System.out.println("document.rightMargin: " + document.rightMargin());
-            System.out.println("document.right: " + document.right());
             // 2.建立一个书写器(Writer)与document对象关联
             File file = new File(pdfPath);
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
@@ -116,13 +111,32 @@ public class DocServiceJS001 {
         try {
             if(ossProvider.upload(
                     "doc", "JS001_out.pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+                deleteOutFile(pdfPath);
                 return "https://oss.syh1en.asia/doc/JS001_out.pdf";
             } else {
+                deleteOutFile(pdfPath);
                 return "upload failed";
             }
         } catch (Exception e) {
             e.printStackTrace();
+            deleteOutFile(pdfPath);
             return "minio error";
+        }
+    }
+
+    /**
+     * 删除中间的out文件
+     * */
+    private void deleteOutFile(String pdfPath) {
+        try {
+            File file = new File(pdfPath);
+            if (file.delete()) {
+                System.out.println(file.getName() + " is deleted!");
+            } else {
+                System.out.println("Delete" + file.getName() + "is failed.");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -55,7 +55,7 @@ public class MongoProjectService implements ProjectService {
         String url = ENTRUST_SERVICE_URL + "/api/entrust/" + entrustId + "/get_dto";
         ResponseEntity<EntrustDto> responseEntity = restTemplate.getForEntity(url, EntrustDto.class);
         // 检查委托id的有效性
-        if (responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
+        if (responseEntity.getStatusCode() != HttpStatus.ACCEPTED && responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new ProjectDAOFailureException("没有找到项目对应的委托");
         }
         EntrustDto entrustDto = responseEntity.getBody();
