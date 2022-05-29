@@ -1,5 +1,5 @@
 server:
-  port: 10001
+  port: 11101
 
 spring:
   profiles:
@@ -16,7 +16,7 @@ spring:
 
 eureka:
   instance:
-    instance-id: test-service10001
+    instance-id: test-service11101
   client:
     fetch-registry: true
     register-with-eureka: true
