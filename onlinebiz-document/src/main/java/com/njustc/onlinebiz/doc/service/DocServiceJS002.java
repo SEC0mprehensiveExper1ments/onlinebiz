@@ -14,6 +14,7 @@ import com.njustc.onlinebiz.doc.model.JS002;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import com.njustc.onlinebiz.common.model.entrust.Entrust;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,6 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Objects;
 
 @Service
 public class DocServiceJS002 {
@@ -78,12 +78,10 @@ public class DocServiceJS002 {
     private static final float marginRight;
     private static final float marginTop;
     private static final float marginBottom;
-    private static final int maxWidth = 430;      // 最大宽度
-    // private static final String absolutePath;
-    private static final String DOCUMENT_DIR = "~/onlinebiz/onlinebiz-document/";
+
+    @Value("${document-dir}")
+    private String DOCUMENT_DIR;
     static {
-        // 修复一个Windows下的路径问题，Linux下的情况需部署后具体实践下
-        // absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1);
         // 在 iText 中每一个单位大小默认近似于点（pt）
         // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
         marginLeft = 65f;
@@ -92,7 +90,7 @@ public class DocServiceJS002 {
         marginBottom = 65f;
     }
 
-    private static JS002 JS002Json;
+    private JS002 JS002Json;
     /**
      * 填充JS002文档
      * @param newJson JS002对象
@@ -166,15 +164,15 @@ public class DocServiceJS002 {
     }
 
     // 定义全局的字体静态变量
-    private static BaseFont bfSimSun;
-    private static BaseFont bfUnicode;
-    private static Font titlefont;
-    private static Font titlefont2;
-    private  static Font symbolfont;
-    private static Font textfont;
-    private static Font textfontBOLD;
-    private static Font smallFourBoldFont;
-    private static Font smallFourFont;
+    private BaseFont bfSimSun;
+    private BaseFont bfUnicode;
+    private Font titlefont;
+    private Font titlefont2;
+    private  Font symbolfont;
+    private Font textfont;
+    private Font textfontBOLD;
+    private Font smallFourBoldFont;
+    private Font smallFourFont;
 
     private static final String singleChoiceBlank = "\u0049";
     private static final String multiChoiceBlank = "\u004E";
@@ -185,8 +183,13 @@ public class DocServiceJS002 {
     private static final String[] multiChoice = {"\u004E", "\u0051"};      /* 0--Blank, 1--Ticked */
 
     private static final String[] singleChoiceNoCircle = {" ", "\u0050"};        /* 0--Blank, 1--Ticked */
-    private static Font sixfont;
-    static {
+    private Font sixfont;
+
+    /**
+     * 生成JS002文档第一页
+     * */
+    public void generatePageOne(Document document) throws Exception {
+        // 加载字体
         try {
             bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             bfUnicode = BaseFont.createFont(DOCUMENT_DIR + "font/check.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
@@ -202,12 +205,7 @@ public class DocServiceJS002 {
             e.printStackTrace();
         }
 
-    }
 
-    /**
-     * 生成JS002文档第一页
-     * */
-    public static void generatePageOne(Document document) throws Exception {
         // 标题
         Paragraph title = new Paragraph("软件项目委托测试申请书", titlefont);
         title.setAlignment(1); //设置文字居中 0靠左   1，居中     2，靠右

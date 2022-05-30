@@ -13,10 +13,10 @@ import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import com.njustc.onlinebiz.common.model.entrust.Entrust;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
@@ -77,12 +77,10 @@ public class DocServiceJS003 {
   private static final float marginRight;
   private static final float marginTop;
   private static final float marginBottom;
-  private static final int maxWidth = 430;      // 最大宽度
-  // private static final String absolutePath;
-  private static final String DOCUMENT_DIR = "~/onlinebiz/onlinebiz-document/";
+
+  @Value("${document-dir}")
+  private String DOCUMENT_DIR;
   static {
-    // 修复一个Windows下的路径问题，Linux下的情况需部署后具体实践下
-    // absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1);
     // 在 iText 中每一个单位大小默认近似于点（pt）
     // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
     marginLeft = 90f;
@@ -91,7 +89,7 @@ public class DocServiceJS003 {
     marginBottom = 72f;
   }
 
-  private static JS003 JS003Json;
+  private JS003 JS003Json;
   /**
    * 填充JS003文档
    * @param newJson JS003对象
@@ -163,15 +161,17 @@ public class DocServiceJS003 {
     }
   }
 
-  private static Font titlefont1;
-  private static Font titlefont2;
-  private static Font titlefont3;
-  private static Font keyfont;
-  private static Font textfont;
-  private static BaseFont bfChinese;
-  private static BaseFont bfHeiTi;
+  private Font titlefont1;
+  private Font titlefont2;
+  private Font titlefont3;
+  private Font keyfont;
+  private Font textfont;
+  private BaseFont bfChinese;
+  private BaseFont bfHeiTi;
 
-  static {
+
+  public void generatePageOne(Document document) throws Exception {
+    // 加载字体
     try {
       bfChinese =
               BaseFont.createFont(
@@ -187,9 +187,7 @@ public class DocServiceJS003 {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
 
-  public static void generatePageOne(Document document) throws Exception {
     // 标题
     Paragraph title = new Paragraph("委托测试软件功能列表", titlefont1);
     title.setAlignment(1); // 设置文字居中 0靠左   1，居中     2，靠右
@@ -216,42 +214,6 @@ public class DocServiceJS003 {
 
     table.addCell(ItextUtils.createCell("软件功能项目", titlefont2, Element.ALIGN_CENTER, 17, 2, paddings3, borderWidth));
     table.addCell(ItextUtils.createCell("功能说明", titlefont2, Element.ALIGN_CENTER, 15, 2, paddings3, borderWidth));
-
-
-    // System.out.println(newJson.getGongNengSum());
-//    for (int i = 0; i < JS003Json.getGongNengSum(); i++) {
-//      System.out.println(JS003Json.getZiGongNengSum(i));
-//      Chunk gongNengNameChunk = new Chunk(JS00833Json.getGongNengName(i));
-//      gongNengNameChunk.setFont(contentFont);
-//      Paragraph gongNengNameParagraph = new Paragraph(gongNengNameChunk);
-//      PdfPCell gongNengNameCell = new PdfPCell(gongNengNameParagraph);
-//      gongNengNameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-//      gongNengNameCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//      gongNengNameCell.setFixedHeight(30);
-//      gongNengNameCell.setRowspan(JS003Json.getZiGongNengSum(i));
-//      table.addCell(gongNengNameCell);
-//      for (int j = 0; j < JS003Json.getZiGongNengSum(i); j++) {
-//        Chunk ziGongNengNameChunk = new Chunk(JS003Json.getZiGongNengName(i, j));
-//        ziGongNengNameChunk.setFont(contentFont);
-//        Paragraph ziGongNengNameParagraph = new Paragraph(ziGongNengNameChunk);
-//        PdfPCell ziGongNengNameCell = new PdfPCell(ziGongNengNameParagraph);
-//        ziGongNengNameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-//        ziGongNengNameCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//        ziGongNengNameCell.setFixedHeight(30);
-//        ziGongNengNameCell.setColspan(2);
-//        table.addCell(ziGongNengNameCell);
-//
-//        Chunk ziGongNengShuoMingChunk = new Chunk(JS003Json.getZiGongNengShuoMing(i, j));
-//        ziGongNengShuoMingChunk.setFont(contentFont);
-//        Paragraph ziGongNengShuoMingParagraph = new Paragraph(ziGongNengShuoMingChunk);
-//        PdfPCell ziGongNengShuoMingCell = new PdfPCell(ziGongNengShuoMingParagraph);
-//        ziGongNengShuoMingCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-//        ziGongNengShuoMingCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//        ziGongNengShuoMingCell.setFixedHeight(30);
-//        ziGongNengShuoMingCell.setColspan(3);
-//        table.addCell(ziGongNengShuoMingCell);
-//      }
-//    }
 
     //
     for (int i = 0; i < JS003Json.getGongNengSum(); i++) {

@@ -6,6 +6,10 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
@@ -15,7 +19,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
+
 @Service
+@PropertySource("classpath:application.yml")
 public class DocServiceJS001 {
 
     private final OSSProvider ossProvider;
@@ -28,47 +34,22 @@ public class DocServiceJS001 {
      * 以下是文档生成部分
      * */
     //  基础页面设置
-    private static final float marginLeft;
-    private static final float marginRight;
-    private static final float marginTop;
-    private static final float marginBottom;
-    private static final int maxWidth = 430;      // 最大宽度
-    // private static final String absolutePath;
-    private static final String DOCUMENT_DIR = "~/onlinebiz/onlinebiz-document/";
-    static {
-        // 修复一个Windows下的路径问题，Linux下的情况需部署后具体实践下
-        // absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1);
-        // 在 iText 中每一个单位大小默认近似于点（pt）
-        // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
-        marginLeft = 65f;
-        marginRight = 65f;
-        marginTop = 68f;
-        marginBottom = 65f;
-    }
+    // 在 iText 中每一个单位大小默认近似于点（pt）
+    // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
+    private static final float marginLeft = 65f;
+    private static final float marginRight = 65f;
+    private static final float marginTop = 68f;
+    private static final float marginBottom = 65f;
 
-    private static Font titlefont1;
-    private static Font titlefont2;
-    private static Font keyfont;
-    private static Font textfont;
-    private static BaseFont bfChinese;
-    private static BaseFont bfHeiTi;
+    @Value("${document-dir}")
+    private String DOCUMENT_DIR;
 
-    static {
-        try {
-            bfChinese =
-                    BaseFont.createFont(
-                            DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            bfHeiTi =
-                    BaseFont.createFont(
-                            DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            titlefont1 = new Font(bfHeiTi, 29, Font.BOLD);
-            titlefont2 = new Font(bfChinese, 21, Font.NORMAL);
-            keyfont = new Font(bfChinese, 12.5f, Font.BOLD);
-            textfont = new Font(bfChinese, 12f, Font.NORMAL);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    private Font titlefont1;
+    private Font titlefont2;
+    private Font keyfont;
+    private Font textfont;
+    private BaseFont bfChinese;
+    private BaseFont bfHeiTi;
 
 
     /**
@@ -77,7 +58,8 @@ public class DocServiceJS001 {
      * */
     public String fill(){
         String pdfPath = DOCUMENT_DIR + "JS001_out.pdf";
-//        System.out.println(DOCUMENT_DIR);
+        System.out.println(DOCUMENT_DIR);
+        // 创建文档
         try {
             // 1.新建document对象
             Document document = new Document(PageSize.A4);// 建立一个Document对象
@@ -141,7 +123,19 @@ public class DocServiceJS001 {
         }
     }
 
-    public static void generatePageOne(Document document) throws Exception {
+    public void generatePageOne(Document document) throws Exception {
+        // 加载字体
+        try {
+            bfChinese = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            bfHeiTi = BaseFont.createFont(DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            titlefont1 = new Font(bfHeiTi, 29, Font.BOLD);
+            titlefont2 = new Font(bfChinese, 21, Font.NORMAL);
+            keyfont = new Font(bfChinese, 12.5f, Font.BOLD);
+            textfont = new Font(bfChinese, 12f, Font.NORMAL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // 标题
         Paragraph title = new Paragraph("软件项目委托测试提交材料", titlefont2);
         title.setAlignment(1); // 设置文字居中 0靠左   1，居中     2，靠右
