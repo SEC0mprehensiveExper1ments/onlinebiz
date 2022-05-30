@@ -204,4 +204,12 @@ public interface EntrustService {
      * @return 如果存在返回对应的数据传输对象，否则返回 null
      */
     EntrustDto getEntrustDto(String entrustId);
+
+    /**
+     * 将测试项目ID注册到对应的委托对象中，此方法为内部接口。
+     * @param entrustId 委托ID
+     * @param projectId 委托对应的测试项目ID
+     */
+    void registerProject(String entrustId, String projectId);
+
 }

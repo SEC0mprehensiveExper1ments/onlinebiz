@@ -231,4 +231,13 @@ public class EntrustController {
         return entrustService.getEntrustDto(entrustId);
     }
 
+    // 内部调用接口，用于注册测试项目ID到委托中
+    @PostMapping("/entrust/{entrustId}/register_project")
+    public void registerProject(
+            @PathVariable("entrustId") String entrustId,
+            @RequestParam("projectId") String projectId
+    ) {
+        entrustService.registerProject(entrustId, projectId);
+    }
+
 }

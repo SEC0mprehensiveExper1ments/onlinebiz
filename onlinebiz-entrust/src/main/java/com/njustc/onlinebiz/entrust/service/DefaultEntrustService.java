@@ -399,4 +399,11 @@ public class DefaultEntrustService implements EntrustService {
         return entrust.toEntrustDto();
     }
 
+    @Override
+    public void registerProject(String entrustId, String projectId) {
+        if (!entrustDAO.updateProjectId(entrustId, projectId)) {
+            throw new EntrustDAOFailureException("注册测试项目ID失败");
+        }
+    }
+
 }
