@@ -5,7 +5,6 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
 import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList.TestRecord;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.model.JS009;
@@ -41,7 +40,7 @@ public class DocServiceJS009 {
     private static final int marginLeft;
     private static final int marginRight;
     private static final int marginTop;
-    private static final int maxWidth = 430; // 最大宽度
+
     private static final int marginBottom;
 
     @Value("${document-dir}")
@@ -138,41 +137,36 @@ public class DocServiceJS009 {
     public void generatePageOne(Document document) throws Exception {
         // 加载字体
         try {
-            bfChinese =
-                    BaseFont.createFont(
-                            DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            bfHeiTi =
-                    BaseFont.createFont(
-                            DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            bfChinese = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            bfHeiTi = BaseFont.createFont(DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont1 = new Font(bfChinese, 20, Font.NORMAL);
-            titlefont2 = new Font(bfChinese, 12, Font.BOLD);
+            titlefont2 = new Font(bfChinese, 11f, Font.BOLD);
             keyfont = new Font(bfChinese, 10f, Font.BOLD);
-            textfont = new Font(bfChinese, 10f, Font.NORMAL);
+            textfont = new Font(bfChinese, 11f, Font.NORMAL);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-
         // 标题
-        Paragraph title = new Paragraph("测试用例(项目编号)", titlefont1);
+        Paragraph title = new Paragraph("软件测试记录(项目编号)", titlefont1);
         title.setAlignment(1); // 设置文字居中 0靠左   1，居中     2，靠右
         title.setSpacingBefore(0f); // 设置段落上空白
         title.setSpacingAfter(15f); // 设置段落下空白
 
         // 表格
         float tableWidth = document.right()-document.left();
-        float[] widths = new float[60];
+        float[] widths = new float[59];
         // 每一行的各单元的span col数值要达到30
-        Arrays.fill(widths, tableWidth/60);
+        Arrays.fill(widths, tableWidth/59);
         // 行列每个基础单元格为 5mm x 5mm
         PdfPTable table = ItextUtils.createTable(widths, tableWidth);
 
         float[] paddings = new float[]{6f, 6f, 5f, 5f};
         float[] paddings2 = new float[]{12.5f, 12.5f, 5f, 5f};
-        float[] paddings3 = new float[]{4f, 4f, 2f, 2f};        // 上下左右的间距
+        float[] paddings3 = new float[]{4f, 4f, 3f, 3f};        // 上下左右的间距
         float borderWidth = 0.3f;
 
-        table.addCell(ItextUtils.createCell("测试分类", titlefont2, Element.ALIGN_CENTER, 3, 2, paddings3, borderWidth));
+        table.addCell(ItextUtils.createCell("测试分类", titlefont2, Element.ALIGN_CENTER, 3, 2, new float[]{4f, 4f, 4f, 4f}, borderWidth));
         table.addCell(ItextUtils.createCell("序号", titlefont2, Element.ALIGN_CENTER, 2, 2, paddings3, borderWidth));
         table.addCell(ItextUtils.createCell("测试用例设计说明", titlefont2, Element.ALIGN_CENTER, 4, 2, paddings3, borderWidth));
         table.addCell(ItextUtils.createCell("与本测试用例有关的规约说明", titlefont2, Element.ALIGN_CENTER, 7, 2, paddings3, borderWidth));
@@ -184,18 +178,25 @@ public class DocServiceJS009 {
         table.addCell(ItextUtils.createCell("是否与预期结果一致", titlefont2, Element.ALIGN_CENTER, 5, 2, paddings3, borderWidth));
         table.addCell(ItextUtils.createCell("相关的BUG编号", titlefont2, Element.ALIGN_CENTER, 4, 2, paddings3, borderWidth));
         table.addCell(ItextUtils.createCell("用例执行者", titlefont2, Element.ALIGN_CENTER, 4, 2, paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell("执行测试时间", titlefont2, Element.ALIGN_CENTER, 4, 2, paddings3, borderWidth));
+        table.addCell(ItextUtils.createCell("执行测试时间", titlefont2, Element.ALIGN_CENTER, 3, 2, paddings3, borderWidth));
         table.addCell(ItextUtils.createCell("确认人", titlefont2, Element.ALIGN_CENTER, 7, 2, paddings3, borderWidth));
 
         List<TestRecord> testRecords = JS009Json.getTestRecords();
         for (TestRecord testRecord: testRecords) {
-//            table.addCell(ItextUtils.createCell(testRecord.getCategory(), textfont, Element.ALIGN_CENTER, 8, 2, paddings3, borderWidth));
-//            table.addCell(ItextUtils.createCell(testRecord.getTestcaseId(), textfont, Element.ALIGN_CENTER, 8, 2, paddings3, borderWidth));
-//            table.addCell(ItextUtils.createCell(testRecord.getDesignInstruction(), textfont, Element.ALIGN_CENTER, 8, 2, paddings3, borderWidth));
-//            table.addCell(ItextUtils.createCell(testRecord.getStatute(), textfont, Element.ALIGN_CENTER, 8, 2, paddings3, borderWidth));
-//            table.addCell(ItextUtils.createCell(testRecord.getExpectedResult(), textfont, Element.ALIGN_CENTER, 8, 2, paddings3, borderWidth));
-//            table.addCell(ItextUtils.createCell(testRecord.getDesigner(), textfont, Element.ALIGN_CENTER, 8, 2, paddings3, borderWidth));
-//            table.addCell(ItextUtils.createCell(testRecord.getTime(), textfont, Element.ALIGN_CENTER, 12, 2, paddings3, borderWidth));
+            table.addCell(ItextUtils.createCell(testRecord.getCategory(), textfont, Element.ALIGN_CENTER, 3, 2, paddings3, borderWidth));
+            table.addCell(ItextUtils.createCell(testRecord.getTestcaseId(), textfont, Element.ALIGN_CENTER, 2, 2, paddings3, borderWidth));
+            table.addCell(ItextUtils.createCell(testRecord.getDesignInstruction(), textfont, Element.ALIGN_CENTER, 4, 2, paddings3, borderWidth));
+            table.addCell(ItextUtils.createCell(testRecord.getStatute(), textfont, Element.ALIGN_CENTER, 7, 2, paddings3, borderWidth));
+            table.addCell(ItextUtils.createCell(testRecord.getPrerequisites(), textfont, Element.ALIGN_CENTER, 4, 2, paddings3, borderWidth));
+            table.addCell(ItextUtils.createCell(testRecord.getExecutionProcess(), textfont, Element.ALIGN_CENTER, 4, 2, paddings3, borderWidth));
+            table.addCell(ItextUtils.createCell(testRecord.getExpectedResult(), textfont, Element.ALIGN_CENTER, 4, 2, paddings3, borderWidth));
+            table.addCell(ItextUtils.createCell(testRecord.getDesigner(), textfont, Element.ALIGN_CENTER, 4, 2, paddings3, borderWidth));
+            table.addCell(ItextUtils.createCell(testRecord.getActualResult(), textfont, Element.ALIGN_CENTER, 4, 2, paddings3, borderWidth));
+            table.addCell(ItextUtils.createCell(testRecord.getIsConsistent(), textfont, Element.ALIGN_CENTER, 5, 2, paddings3, borderWidth));
+            table.addCell(ItextUtils.createCell(testRecord.getBugId(), textfont, Element.ALIGN_CENTER, 4, 2, paddings3, borderWidth));
+            table.addCell(ItextUtils.createCell(testRecord.getCaseExecutor(), textfont, Element.ALIGN_CENTER, 4, 2, paddings3, borderWidth));
+            table.addCell(ItextUtils.createCell(testRecord.getTime(), textfont, Element.ALIGN_CENTER, 3, 2, paddings3, borderWidth));
+            table.addCell(ItextUtils.createCell(testRecord.getConfirmationPerson(), textfont, Element.ALIGN_CENTER, 7, 2, paddings3, borderWidth));
         }
 
         document.add(title);

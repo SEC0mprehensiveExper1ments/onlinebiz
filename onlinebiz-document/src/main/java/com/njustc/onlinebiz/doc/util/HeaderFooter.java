@@ -35,7 +35,7 @@ public class HeaderFooter extends PdfPageEventHelper {
     static float footFontSize = 9.5f;
     static {
         try {
-            headerBf = BaseFont.createFont("font/heiti.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            headerBf = BaseFont.createFont("font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             footerBf = BaseFont.createFont("font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             headFont = new Font(headerBf, headFontSize, Font.NORMAL);
             feetFont = new Font(footerBf, footFontSize, Font.NORMAL);
