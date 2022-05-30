@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.common.model.test.project;
 
+import com.njustc.onlinebiz.common.model.EntrustDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,5 +25,19 @@ public class ProjectBaseInfo {
 
     //委托对应的客户id
     private long customerId;
+    // 项目编号（手填）
+    private String serialNumber;
+
+    public ProjectBaseInfo(String entrustId, EntrustDto entrustDto) {
+        this.setEntrustId(entrustId);
+        if (entrustDto != null) {
+            this.setMarketerId(entrustDto.getMarketerId());
+            this.setTesterId(entrustDto.getTesterId());
+            this.setSoftwareName(entrustDto.getSoftware());
+            this.setCustomerId(entrustDto.getCustomerId());
+            this.setSerialNumber(entrustDto.getSerialNumber());
+        }
+    }
+
 
 }

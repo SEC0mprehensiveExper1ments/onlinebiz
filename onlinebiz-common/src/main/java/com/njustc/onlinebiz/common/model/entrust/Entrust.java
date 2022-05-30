@@ -56,6 +56,9 @@ public class Entrust {
         entrustDto.setCustomerId(customerId);
         entrustDto.setMarketerId(marketerId);
         entrustDto.setTesterId(testerId);
+        if (review != null) {
+            entrustDto.setSerialNumber(review.getSerialNumber());
+        }
         return entrustDto;
     }
 

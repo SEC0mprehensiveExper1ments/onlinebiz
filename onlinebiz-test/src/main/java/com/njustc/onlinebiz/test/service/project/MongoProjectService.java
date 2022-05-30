@@ -68,48 +68,23 @@ public class MongoProjectService implements ProjectService {
             throw new ProjectPermissionDeniedException("市场部人员信息不一致, 创建失败");
         }
         // 设置项目基本信息
-        ProjectBaseInfo projectBaseInfo = new ProjectBaseInfo();
-        projectBaseInfo.setEntrustId(entrustId);
-        projectBaseInfo.setMarketerId(entrustDto.getMarketerId());
-        projectBaseInfo.setTesterId(entrustDto.getTesterId());
-        projectBaseInfo.setSoftwareName(entrustDto.getSoftware());
-        projectBaseInfo.setCustomerId(entrustDto.getCustomerId());
+        ProjectBaseInfo projectBaseInfo = new ProjectBaseInfo(entrustId, entrustDto);
+
         // 设置项目表格信息 [在updateStatus中在创建]
-//        ProjectFormIds projectFormIds = new ProjectFormIds();
-//        /* NOT_TODO: 根据其他部分给出的接口新建各表，并将表编号填入testProject中字段，替换null*/
-//        /* 每个文档可以传入projectId，然后根据projectId可进行查找质量部人员Id */
-//        /* 如有相互关联表，可在自己的类中注入project service，然后根据其中提供的 getFormIds 找到所要关联的表单 */
-//
-//        // 对应的测试方案 id (JS006)
-//        String testSchemeId = schemeService.createScheme(entrustId, null, userId, userRole);
-//        projectFormIds.setTestSchemeId(testSchemeId);
-//        // 对应的测试报告 id (JS007)
-//        String testReportId = null;
-//        projectFormIds.setTestReportId(testReportId);
-//        // 对应的测试用例表 id (JS008)
-//        String testcaseListId = testcaseService.createTestcaseList(entrustId, null, userId, userRole);
-//        projectFormIds.setTestcaseListId(testcaseListId);
-//        // 对应的测试记录表 id (JS009)
-//        String testRecordListId = testRecordService.createTestRecordList(entrustId, null, userId, userRole);
-//        projectFormIds.setTestRecordListId(testRecordListId);
-//        // 对应的测试报告检查表 id (JS010)
-//        String testReportCecklistId = null;
-//        projectFormIds.setTestReportCecklistId(testReportCecklistId);
-//        // 对应的测试问题清单 id (JS011)
-//        String testIssueListId = null;
-//        projectFormIds.setTestIssueListId(testIssueListId);
-//        // 对应的工作检查表 id (JS012)
-//        String workChecklistId = null;
-//        projectFormIds.setWorkChecklistId(workChecklistId);
-//        // 对应的测试方案评审表 (JS013)
-//        String testSchemeChecklistId = schemeReviewService.createSchemeReview(testSchemeId, userId, userRole);
-//        projectFormIds.setTestSchemeChecklistId(testSchemeChecklistId);
 
         // 只添加了项目的基本信息
         Project project = new Project().setProjectBaseInfo(projectBaseInfo);
         project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, "等待质量部主管分配质量部员工"));
-
-        return projectDAO.insertProject(project).getId();
+        // 获取项目ID
+        String projectId = projectDAO.insertProject(project).getId();
+        // 将项目ID注册到委托对象中
+        String params = "?projectId=" + projectId;
+        url = ENTRUST_SERVICE_URL + "/api/entrust/" + entrustId + "/register_project";
+        ResponseEntity<Void> result = restTemplate.postForEntity(url + params, null, Void.class);
+        if (!result.getStatusCode().equals(HttpStatus.OK)) {
+            throw new InternalError("注册测试项目失败");
+        }
+        return projectId;
     }
 
     // 该函数只是为了在项目分配质量部员工以后，创建项目中各表单，没有做权限/阶段检查，谨慎调用
@@ -227,8 +202,28 @@ public class MongoProjectService implements ProjectService {
         // 生成表格
         createProjectForms(projectId);
         // 更新状态
-        if (!projectDAO.updateStatus(projectId, new ProjectStatus(ProjectStage.IN_PROGRESS, null))) {
+        if (!projectDAO.updateStatus(projectId, new ProjectStatus(ProjectStage.NOT_FILE, null))) {
             throw new ProjectDAOFailureException("更新项目状态失败");
+        }
+    }
+
+    @Override
+    public void fileProject(String projectId, Long userId, Role userRole) {
+        Project project = projectDAO.findProjectById(projectId);
+        // 检查测试项目阶段
+        ProjectStage curStage = project.getStatus().getStage();
+        if (curStage != ProjectStage.NOT_FILE) {
+            throw new ProjectInvalidStageException("此阶段不能归档或项目已归档");
+        }
+        // 检查用户权限
+        ProjectBaseInfo projectBaseInfo = project.getProjectBaseInfo();
+        Long qaId = projectBaseInfo.getQaId();
+        if (userRole != Role.ADMIN && userRole != Role.QA_SUPERVISOR && !Objects.equals(userId, qaId)) {
+            throw new ProjectPermissionDeniedException("无权归档操作");
+        }
+        // 更新状态
+        if (!projectDAO.updateStatus(projectId, new ProjectStatus(ProjectStage.FILED, null))) {
+            throw new ProjectDAOFailureException("归档项目失败");
         }
     }
 

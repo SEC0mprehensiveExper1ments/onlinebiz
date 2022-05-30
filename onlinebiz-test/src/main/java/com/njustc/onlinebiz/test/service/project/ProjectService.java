@@ -48,6 +48,14 @@ public interface ProjectService {
     void updateQa(String projectId, Long qaId, Long userId, Role userRole);
 
     /**
+     * 将项目标记为归档
+     * @param projectId 要更新的委托ID
+     * @param userId 执行此操作的用户ID
+     * @param userRole 执行此操作的用户角色
+     * */
+    void fileProject(String projectId, Long userId, Role userRole);
+
+    /**
      * 删除一个测试项目，此接口正常流程不会使用(仅调试)，只有管理员可操作
      * @param projectId 要删除的测试项目ID
      * @param userId 执行此操作的用户ID

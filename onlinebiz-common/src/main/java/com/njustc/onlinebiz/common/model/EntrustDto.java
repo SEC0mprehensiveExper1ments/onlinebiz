@@ -21,4 +21,7 @@ public class EntrustDto {
     // 软件名称
     private String software;
 
+    // 项目编号（手填）
+    private String serialNumber;
+
 }
