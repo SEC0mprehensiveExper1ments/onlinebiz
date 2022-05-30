@@ -13,6 +13,7 @@ import com.njustc.onlinebiz.doc.model.JS004;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -76,8 +77,9 @@ public class DocServiceJS004 {
   private static final int marginTop;
   private static final int maxWidth = 430; // 最大宽度
   private static final int marginBottom;
-  // private static final String absolutePath;
-  private static final String DOCUMENT_DIR = "~/onlinebiz/onlinebiz-document/";
+
+  @Value("${document-dir}")
+  private String DOCUMENT_DIR;
   private static JS004 JS004Json;
   private static Font titlefont1;
   private static Font titlefont2;
@@ -87,32 +89,12 @@ public class DocServiceJS004 {
   private static BaseFont bfHeiTi;
 
   static {
-    // absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1);
-    // System.out.println(absolutePath);       // 输出path: D:/java_project/manage/target/classes/
-    // ---> 下面有com, font, out, static
     // 在 iText 中每一个单位大小默认近似于点（pt）
     // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
     marginLeft = 90; // 页边距：左
     marginRight = 90; // 页边距：右
     marginTop = 60; // 页边距：上
     marginBottom = 72; // 页边距：下
-  }
-
-  static {
-    try {
-      bfChinese =
-          BaseFont.createFont(
-                  DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-      bfHeiTi =
-          BaseFont.createFont(
-                  DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-      titlefont1 = new Font(bfHeiTi, 29, Font.BOLD);
-      titlefont2 = new Font(bfHeiTi, 16, Font.BOLD);
-      keyfont = new Font(bfChinese, 12.5f, Font.BOLD);
-      textfont = new Font(bfChinese, 12f, Font.NORMAL);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
 
@@ -208,7 +190,24 @@ public class DocServiceJS004 {
 
 
   /** 生成JS004文档第一页 */
-  public static void generatePageOne(Document document) throws Exception {
+  public void generatePageOne(Document document) throws Exception {
+    // 加载字体
+    try{
+      bfChinese =
+              BaseFont.createFont(
+                      DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+      bfHeiTi =
+              BaseFont.createFont(
+                      DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+      titlefont1 = new Font(bfHeiTi, 29, Font.BOLD);
+      titlefont2 = new Font(bfHeiTi, 16, Font.BOLD);
+      keyfont = new Font(bfChinese, 12.5f, Font.BOLD);
+      textfont = new Font(bfChinese, 12f, Font.NORMAL);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+
     // 标题
     Paragraph title = new Paragraph("软件委托测试合同", titlefont1);
     title.setAlignment(1); // 设置文字居中 0靠左   1，居中     2，靠右
@@ -320,7 +319,7 @@ public class DocServiceJS004 {
   }
 
   /** 生成JS004文档第二页 */
-  public static void generatePageTwo(Document document) throws Exception {
+  public void generatePageTwo(Document document) throws Exception {
     Paragraph text1 = new Paragraph();
     text1.setLeading(24f);
     Chunk chunk1 = new Chunk(JS004Json.getInputJiaFang(), textfont);
@@ -390,7 +389,7 @@ public class DocServiceJS004 {
   }
 
   /** 生成JS004文档第三页 */
-  public static void generatePageThree(Document document) throws Exception {
+  public void generatePageThree(Document document) throws Exception {
     Paragraph text1 = new Paragraph();
     text1.setLeading(24f);
     Chunk chunk1 = new Chunk(JS004Json.getInputCeShiFeiYong(), textfont);
@@ -469,7 +468,7 @@ public class DocServiceJS004 {
   }
 
   /** 生成JS004文档第四页 */
-  public static void generatePageFour(Document document) throws Exception {
+  public void generatePageFour(Document document) throws Exception {
     Paragraph text1 = new Paragraph();
     text1.setLeading(24f);
     text1.add(new Chunk("九、验收方法\n", keyfont));
@@ -502,7 +501,7 @@ public class DocServiceJS004 {
   }
 
   /** 生成JS004文档第五页 */
-  public static void generatePageFive(Document document) throws Exception {
+  public void generatePageFive(Document document) throws Exception {
     Paragraph text1 = new Paragraph();
     text1.setLeading(24f);
     text1.add(new Chunk("十二、签章\n", keyfont));

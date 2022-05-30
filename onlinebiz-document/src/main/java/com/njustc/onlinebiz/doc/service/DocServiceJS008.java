@@ -11,6 +11,7 @@ import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.model.JS008;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.client.RestTemplate;
@@ -43,8 +44,9 @@ public class DocServiceJS008 {
     private static final int marginTop;
     private static final int maxWidth = 430; // 最大宽度
     private static final int marginBottom;
-    // private static final String absolutePath;
-    private static final String DOCUMENT_DIR = "~/onlinebiz/onlinebiz-document/";
+
+    @Value("${document-dir}")
+    private String DOCUMENT_DIR;
 
     private static Font titlefont1;
     private static Font titlefont2;
@@ -62,23 +64,6 @@ public class DocServiceJS008 {
         marginRight = 50; // 页边距：右
         marginTop = 20; // 页边距：上
         marginBottom = 60; // 页边距：下
-    }
-
-    static {
-        try {
-            bfChinese =
-                    BaseFont.createFont(
-                            DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            bfHeiTi =
-                    BaseFont.createFont(
-                            DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            titlefont1 = new Font(bfChinese, 20, Font.NORMAL);
-            titlefont2 = new Font(bfChinese, 12, Font.BOLD);
-            keyfont = new Font(bfChinese, 12.5f, Font.BOLD);
-            textfont = new Font(bfChinese, 12f, Font.NORMAL);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private static JS008 JS008Json;
@@ -153,7 +138,24 @@ public class DocServiceJS008 {
         }
     }
 
-    public static void generatePageOne(Document document) throws Exception {
+    public void generatePageOne(Document document) throws Exception {
+        // 加载字体
+        try {
+            bfChinese =
+                    BaseFont.createFont(
+                            DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            bfHeiTi =
+                    BaseFont.createFont(
+                            DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            titlefont1 = new Font(bfChinese, 20, Font.NORMAL);
+            titlefont2 = new Font(bfChinese, 12, Font.BOLD);
+            keyfont = new Font(bfChinese, 12.5f, Font.BOLD);
+            textfont = new Font(bfChinese, 12f, Font.NORMAL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         // 标题
         Paragraph title = new Paragraph("测试用例(项目编号)", titlefont1);
         title.setAlignment(1); // 设置文字居中 0靠左   1，居中     2，靠右

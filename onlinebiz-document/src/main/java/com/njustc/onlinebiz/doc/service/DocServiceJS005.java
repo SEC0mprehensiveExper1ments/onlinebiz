@@ -14,6 +14,7 @@ import com.njustc.onlinebiz.doc.exception.DownloadPermissionDeniedException;
 import com.njustc.onlinebiz.doc.model.JS005;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -76,9 +77,9 @@ public class DocServiceJS005 {
     private static final float marginRight;
     private static final float marginTop;
     private static final float marginBottom;
-    private static final int maxWidth = 430;      // 最大宽度
-    // private static final String absolutePath;
-    private static final String DOCUMENT_DIR = "~/onlinebiz/onlinebiz-document/";
+
+    @Value("${document-dir}")
+    private String DOCUMENT_DIR;
     static {
         // absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1);
         // 在 iText 中每一个单位大小默认近似于点（pt）
@@ -163,10 +164,15 @@ public class DocServiceJS005 {
     }
 
 
-    private static BaseFont bfSimSun;
-    private static Font titlefont;
-    private static Font textfont;
-    static {
+    private BaseFont bfSimSun;
+    private Font titlefont;
+    private Font textfont;
+
+    /**
+     * 生成JS005文档第一页
+     * */
+    public void generatePageOne(Document document) throws Exception {
+        // 加载字体
         try {
             bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont = new Font(bfSimSun, 15.5f, Font.BOLD);
@@ -174,19 +180,11 @@ public class DocServiceJS005 {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
 
-    /**
-     * 生成JS005文档第一页
-     * */
-    public static void generatePageOne(Document document) throws Exception {
+
         // 标题
         Paragraph title = new Paragraph("软件项目委托测试保密协议", titlefont);
         title.setAlignment(1); //设置文字居中 0靠左   1，居中     2，靠右
-//        paragraph.setIndentationLeft(12); //设置左缩进
-//        paragraph.setIndentationRight(12); //设置右缩进
-//        paragraph.setFirstLineIndent(24); //设置首行缩进
-//        paragraph.setLeading(0f); //行间距
         title.setSpacingBefore(-15f); //设置段落上空白
         title.setSpacingAfter(25f); //设置段落下空白
 

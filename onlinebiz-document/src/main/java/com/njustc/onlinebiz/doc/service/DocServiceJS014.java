@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.njustc.onlinebiz.doc.model.JS014;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
@@ -21,10 +22,12 @@ public class DocServiceJS014 {
     private static final float marginRight;
     private static final float marginTop;
     private static final float marginBottom;
-    private static final int maxWidth = 430;      // 最大宽度
-    private static final String absolutePath;
+
+
+    @Value("$document-dir")
+    private String DOCUMENT_DIR;
+
     static {
-        absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath() + "/../";
         // 在 iText 中每一个单位大小默认近似于点（pt）
         // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
         marginLeft = 65f;
@@ -40,8 +43,7 @@ public class DocServiceJS014 {
      * */
     public boolean fill(JS014 newJson) {
         JS014Json = newJson;
-        String pdfPath = absolutePath + "out/JS014_out.pdf";
-        System.out.println(absolutePath);
+        String pdfPath = DOCUMENT_DIR + "out/JS014_out.pdf";
         try {
             // 1.新建document对象
             Document document = new Document(PageSize.A4);// 建立一个Document对象
@@ -85,9 +87,14 @@ public class DocServiceJS014 {
     private static Font titlefont;
     private static Font titlefont2;
     private static Font textfont;
-    static {
+
+    /**
+     * 生成JS014文档第一页
+     * */
+    public void generatePageOne(Document document) throws Exception {
+        // 加载字体
         try {
-            bfSimSun = BaseFont.createFont("font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont = new Font(bfSimSun, 17f, Font.NORMAL);
             titlefont2 = new Font(bfSimSun, 12f, Font.NORMAL);
             textfont = new Font(bfSimSun, 10.5f, Font.NORMAL);
@@ -95,12 +102,7 @@ public class DocServiceJS014 {
             e.printStackTrace();
         }
 
-    }
 
-    /**
-     * 生成JS014文档第一页
-     * */
-    public static void generatePageOne(Document document) throws Exception {
         // 标题
         Paragraph title = new Paragraph("软件文档评审表", titlefont);
         title.setAlignment(1); //设置文字居中 0靠左   1，居中     2，靠右

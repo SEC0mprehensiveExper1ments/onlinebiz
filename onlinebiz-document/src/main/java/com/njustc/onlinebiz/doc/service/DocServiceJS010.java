@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.njustc.onlinebiz.doc.model.JS010;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
@@ -23,8 +24,9 @@ public class DocServiceJS010 {
     private static final float marginTop;
     private static final float marginBottom;
     private static final int maxWidth = 430;      // 最大宽度
-    // private static final String absolutePath;
-    private static final String DOCUMENT_DIR = "~/onlinebiz/onlinebiz-document/";
+
+    @Value("${document-dir}")
+    private String DOCUMENT_DIR;
     static {
         // absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath() + "/../";
         // 在 iText 中每一个单位大小默认近似于点（pt）
@@ -86,7 +88,12 @@ public class DocServiceJS010 {
     private static Font titlefont2;
     private static Font keyfont;
     private static Font textfont;
-    static {
+
+    /**
+     * 生成JS010文档第一页
+     * */
+    public void generatePageOne(Document document) throws Exception {
+        // 加载字体
         try {
             bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont1 = new Font(bfSimSun, 22f, Font.BOLD);
@@ -96,12 +103,8 @@ public class DocServiceJS010 {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
 
-    /**
-     * 生成JS010文档第一页
-     * */
-    public static void generatePageOne(Document document) throws Exception {
+
         // 标题
         Paragraph title = new Paragraph("测 试 报 告 检 查 表", titlefont1);
         title.setAlignment(1); //设置文字居中 0靠左   1，居中     2，靠右
