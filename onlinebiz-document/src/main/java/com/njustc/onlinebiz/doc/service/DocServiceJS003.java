@@ -78,10 +78,11 @@ public class DocServiceJS003 {
   private static final float marginTop;
   private static final float marginBottom;
   private static final int maxWidth = 430;      // 最大宽度
-  private static final String absolutePath;
+  // private static final String absolutePath;
+  private static final String DOCUMENT_DIR = "~/onlinebiz/onlinebiz-document/";
   static {
     // 修复一个Windows下的路径问题，Linux下的情况需部署后具体实践下
-    absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1) + "/../";
+    // absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1);
     // 在 iText 中每一个单位大小默认近似于点（pt）
     // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
     marginLeft = 90f;
@@ -98,8 +99,7 @@ public class DocServiceJS003 {
    * */
   public String fill(JS003 newJson) {
     JS003Json = newJson;
-    String pdfPath = absolutePath + "out/JS003_" + entrustId + ".pdf";
-    System.out.println(absolutePath);
+    String pdfPath = DOCUMENT_DIR + "JS003_" + entrustId + ".pdf";
     try {
       // 1.新建document对象
       Document document = new Document(PageSize.A4);// 建立一个Document对象
@@ -175,10 +175,10 @@ public class DocServiceJS003 {
     try {
       bfChinese =
               BaseFont.createFont(
-                      absolutePath + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                      DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
       bfHeiTi =
               BaseFont.createFont(
-                      absolutePath + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                      DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
       titlefont1 = new Font(bfChinese, 16, Font.BOLD);
       titlefont2 = new Font(bfChinese, 13f, Font.BOLD);
       titlefont3 = new Font(bfChinese, 13.5f, Font.NORMAL);
@@ -221,7 +221,7 @@ public class DocServiceJS003 {
     // System.out.println(newJson.getGongNengSum());
 //    for (int i = 0; i < JS003Json.getGongNengSum(); i++) {
 //      System.out.println(JS003Json.getZiGongNengSum(i));
-//      Chunk gongNengNameChunk = new Chunk(JS003Json.getGongNengName(i));
+//      Chunk gongNengNameChunk = new Chunk(JS00833Json.getGongNengName(i));
 //      gongNengNameChunk.setFont(contentFont);
 //      Paragraph gongNengNameParagraph = new Paragraph(gongNengNameChunk);
 //      PdfPCell gongNengNameCell = new PdfPCell(gongNengNameParagraph);

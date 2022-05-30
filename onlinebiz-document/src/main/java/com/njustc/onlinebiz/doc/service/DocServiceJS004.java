@@ -76,7 +76,8 @@ public class DocServiceJS004 {
   private static final int marginTop;
   private static final int maxWidth = 430; // 最大宽度
   private static final int marginBottom;
-  private static final String absolutePath;
+  // private static final String absolutePath;
+  private static final String DOCUMENT_DIR = "~/onlinebiz/onlinebiz-document/";
   private static JS004 JS004Json;
   private static Font titlefont1;
   private static Font titlefont2;
@@ -86,7 +87,7 @@ public class DocServiceJS004 {
   private static BaseFont bfHeiTi;
 
   static {
-    absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1) + "/../";
+    // absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1);
     // System.out.println(absolutePath);       // 输出path: D:/java_project/manage/target/classes/
     // ---> 下面有com, font, out, static
     // 在 iText 中每一个单位大小默认近似于点（pt）
@@ -101,10 +102,10 @@ public class DocServiceJS004 {
     try {
       bfChinese =
           BaseFont.createFont(
-              absolutePath + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                  DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
       bfHeiTi =
           BaseFont.createFont(
-              absolutePath + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                  DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
       titlefont1 = new Font(bfHeiTi, 29, Font.BOLD);
       titlefont2 = new Font(bfHeiTi, 16, Font.BOLD);
       keyfont = new Font(bfChinese, 12.5f, Font.BOLD);
@@ -118,8 +119,7 @@ public class DocServiceJS004 {
   /** 填充JS004文档 */
   public String fill(JS004 newJson) {
     JS004Json = newJson;
-    String pdfPath = absolutePath + "out/JS004_" + contracId + ".pdf";
-    System.out.println(absolutePath);
+    String pdfPath = DOCUMENT_DIR + "JS004_" + contracId + ".pdf";
     try {
       // 1.新建document对象
       Document document = new Document(PageSize.A4); // 建立一个Document对象
