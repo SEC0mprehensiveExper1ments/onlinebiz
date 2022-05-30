@@ -23,6 +23,12 @@ public class EntrustOutline {
     // 测试部人员ID
     private Long testerId;
 
+    // 对应的合同ID
+    private String contractId;
+
+    // 对应的测试项目ID
+    private String projectId;
+
     // 委托涉及的软件名称
     private String softwareName;
 
@@ -37,6 +43,8 @@ public class EntrustOutline {
         this.customerId = entrust.getCustomerId();
         this.marketerId = entrust.getMarketerId();
         this.testerId = entrust.getTesterId();
+        this.contractId = entrust.getContractId();
+        this.projectId = entrust.getProjectId();
         EntrustContent content = entrust.getContent();
         if (content != null) {
             Software software = content.getSoftware();

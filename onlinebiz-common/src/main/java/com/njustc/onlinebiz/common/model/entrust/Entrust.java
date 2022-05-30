@@ -27,6 +27,9 @@ public class Entrust {
     // 委托对应的合同ID
     private String contractId;
 
+    // 委托对应的测试项目ID
+    private String projectId;
+
     // 委托状态
     private EntrustStatus status;
 

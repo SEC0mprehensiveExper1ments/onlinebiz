@@ -116,6 +116,14 @@ public interface EntrustDAO {
     Boolean updateContractId(String entrustId, String contractId);
 
     /**
+     * 更新委托对应的测试项目ID
+     * @param entrustId 委托ID
+     * @param projectId 对应的测试项目ID
+     * @return 成功返回 true，失败返回 false
+     */
+    Boolean updateProjectId(String entrustId, String projectId);
+
+    /**
      * 更新委托申请
      * @param entrustId 委托ID
      * @param content 更新后的申请内容

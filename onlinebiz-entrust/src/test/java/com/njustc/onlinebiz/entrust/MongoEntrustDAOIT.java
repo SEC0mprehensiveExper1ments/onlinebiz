@@ -344,6 +344,20 @@ public class MongoEntrustDAOIT {
 
     @Test
     @Order(37)
+    public void testUpdateProjectIdNotExist() {
+        Assertions.assertFalse(entrustDAO.updateProjectId(getNonExistId(), "123"));
+    }
+
+    @Test
+    @Order(38)
+    public void testUpdateProjectIdExist() {
+        for (String entrustId : entrustIds) {
+            Assertions.assertTrue(entrustDAO.updateProjectId(entrustId, new ObjectId().toString()));
+        }
+    }
+
+    @Test
+    @Order(37)
     public void testDeleteEntrustNotExist() {
         Assertions.assertFalse(entrustDAO.deleteEntrust(getNonExistId()));
     }
