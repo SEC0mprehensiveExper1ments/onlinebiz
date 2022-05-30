@@ -10,24 +10,24 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class JS013 {
-    private String inputRuanJianMingChen;
-    private String inputBanBenHao;
-    private String inputXiangMuBianHao;
-    private String inputCeShiLeiBie;
-    private String inputTongGuo01;
-    private String inputTongGuo02;
-    private String inputTongGuo03;
-    private String inputTongGuo04;
-    private String inputTongGuo05;
-    private String inputTongGuo06;
-    private String inputTongGuo07;
-    private String inputTongGuo08;
-    private String inputBuTongGuo01;
-    private String inputBuTongGuo02;
-    private String inputBuTongGuo03;
-    private String inputBuTongGuo04;
-    private String inputBuTongGuo05;
-    private String inputBuTongGuo06;
-    private String inputBuTongGuo07;
-    private String inputBuTongGuo08;
+    private String inputRuanJianMingChen = "";
+    private String inputBanBenHao = "";
+    private String inputXiangMuBianHao = "";
+    private String inputCeShiLeiBie = "";
+    private String inputTongGuo01 = "";
+    private String inputTongGuo02 = "";
+    private String inputTongGuo03 = "";
+    private String inputTongGuo04 = "";
+    private String inputTongGuo05 = "";
+    private String inputTongGuo06 = "";
+    private String inputTongGuo07 = "";
+    private String inputTongGuo08 = "";
+    private String inputBuTongGuo01 = "";
+    private String inputBuTongGuo02 = "";
+    private String inputBuTongGuo03 = "";
+    private String inputBuTongGuo04 = "";
+    private String inputBuTongGuo05 = "";
+    private String inputBuTongGuo06 = "";
+    private String inputBuTongGuo07 = "";
+    private String inputBuTongGuo08 = "";
 }

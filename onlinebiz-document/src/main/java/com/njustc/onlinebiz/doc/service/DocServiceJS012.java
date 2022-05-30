@@ -23,9 +23,10 @@ public class DocServiceJS012 {
     private static final float marginTop;
     private static final float marginBottom;
     private static final int maxWidth = 430;      // 最大宽度
-    private static final String absolutePath;
+    // private static final String absolutePath;
+    private static final String DOCUMENT_DIR = "~/onlinebiz/onlinebiz-document/";
     static {
-        absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath() + "/../";
+        // absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath() + "/../";
         // 在 iText 中每一个单位大小默认近似于点（pt）
         // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
         marginLeft = 65f;
@@ -41,8 +42,7 @@ public class DocServiceJS012 {
      * */
     public boolean fill(JS012 newJson) {
         JS012Json = newJson;
-        String pdfPath = absolutePath + "out/JS012_out.pdf";
-        System.out.println(absolutePath);
+        String pdfPath = DOCUMENT_DIR + "JS012_out.pdf";
         try {
             // 1.新建document对象
             Document document = new Document(PageSize.A4);// 建立一个Document对象
@@ -88,7 +88,7 @@ public class DocServiceJS012 {
     private static Font textfont;
     static {
         try {
-            bfSimSun = BaseFont.createFont(absolutePath + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont = new Font(bfSimSun, 17f, Font.BOLD);
             titlefont2 = new Font(bfSimSun, 12f, Font.NORMAL);
             textfont = new Font(bfSimSun, 10.5f, Font.NORMAL);

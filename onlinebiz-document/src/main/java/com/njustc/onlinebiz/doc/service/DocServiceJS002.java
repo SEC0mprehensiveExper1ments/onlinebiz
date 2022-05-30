@@ -79,10 +79,11 @@ public class DocServiceJS002 {
     private static final float marginTop;
     private static final float marginBottom;
     private static final int maxWidth = 430;      // 最大宽度
-    private static final String absolutePath;
+    // private static final String absolutePath;
+    private static final String DOCUMENT_DIR = "~/onlinebiz/onlinebiz-document/";
     static {
         // 修复一个Windows下的路径问题，Linux下的情况需部署后具体实践下
-        absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1) + "/../";
+        // absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1);
         // 在 iText 中每一个单位大小默认近似于点（pt）
         // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
         marginLeft = 65f;
@@ -99,8 +100,8 @@ public class DocServiceJS002 {
      * */
     public String fill(JS002 newJson){
         JS002Json = newJson;
-        String pdfPath = absolutePath + "out/JS002_" + entrustId + ".pdf";
-        System.out.println(absolutePath);
+        String pdfPath = DOCUMENT_DIR + "JS002_" + entrustId + ".pdf";
+//        System.out.println(DOCUMENT_DIR);
         try {
             // 1.新建document对象
             Document document = new Document(PageSize.A4);// 建立一个Document对象
@@ -187,8 +188,8 @@ public class DocServiceJS002 {
     private static Font sixfont;
     static {
         try {
-            bfSimSun = BaseFont.createFont("font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            bfUnicode = BaseFont.createFont("font/check.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            bfUnicode = BaseFont.createFont(DOCUMENT_DIR + "font/check.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             titlefont = new Font(bfSimSun, 17f, Font.BOLD);
             titlefont2 = new Font(bfSimSun, 12f, Font.NORMAL);
             symbolfont = new Font(bfUnicode, 14, Font.NORMAL);
