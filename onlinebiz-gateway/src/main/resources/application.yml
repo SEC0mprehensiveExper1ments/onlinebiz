@@ -59,6 +59,16 @@ spring:
           filters:
             - AddIdentity
 
+        - id: document-service
+          uri: lb://onlinebiz-document
+          predicates:
+            - name: Path
+              args:
+                patterns:
+                  - /api/doc/**
+          filters:
+            - AddIdentity
+
 eureka:
   instance:
     instance-id: gateway8080
