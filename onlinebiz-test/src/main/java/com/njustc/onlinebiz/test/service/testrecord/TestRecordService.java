@@ -8,7 +8,7 @@ import java.util.List;
 public interface TestRecordService {
 
     //创建一份测试记录表
-    String createTestRecordList(String entrustId, List<TestRecordList.TestRecord> testRecords, Long userId, Role userRole);
+    String createTestRecordList(String projectId, String entrustId, List<TestRecordList.TestRecord> testRecords, Long userId, Role userRole);
 
     //根据测试记录表id查找相应测试记录表
     TestRecordList findTestRecordList(String testRecordListId, Long userId, Role userRole);

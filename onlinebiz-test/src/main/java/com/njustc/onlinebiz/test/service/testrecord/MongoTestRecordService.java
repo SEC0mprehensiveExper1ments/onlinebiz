@@ -7,33 +7,30 @@ import com.njustc.onlinebiz.test.exception.testrecord.TestRecordNotFoundExceptio
 import com.njustc.onlinebiz.test.exception.testrecord.TestRecordPermissionDeniedException;
 import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
 import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordStatus;
+import com.njustc.onlinebiz.test.service.project.ProjectService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
 @Slf4j
 @Service
 public class MongoTestRecordService implements TestRecordService {
-    private static final String ENTRUST_SERVICE_URL = "http://onlinebiz-entrust";
-    private final RestTemplate restTemplate;
     private final TestRecordDAO testRecordDAO;
+    private final ProjectService projectService;
 
-    public MongoTestRecordService(RestTemplate restTemplate, MongoTemplate mongoTemplate, TestRecordDAO testRecordDAO) {
-        this.restTemplate = restTemplate;
+    public MongoTestRecordService(ProjectService projectService, TestRecordDAO testRecordDAO) {
+        this.projectService = projectService;
         this.testRecordDAO = testRecordDAO;
     }
 
     @Override
-    public String createTestRecordList(String entrustId, List<TestRecordList.TestRecord> testRecords, Long userId, Role userRole) {
+    public String createTestRecordList(String projectId, String entrustId, List<TestRecordList.TestRecord> testRecords, Long userId, Role userRole) {
         if (!hasAuthorityToCreate(userRole)) {
             throw new TestRecordPermissionDeniedException("无权新建测试记录表");
         }
         TestRecordList testRecordList = new TestRecordList();
+        testRecordList.setProjectId(projectId);
         testRecordList.setEntrustId(entrustId);
         testRecordList.setTestRecords(testRecords);
         testRecordList.setStatus(new TestRecordStatus(true, "需修改"));
@@ -83,24 +80,32 @@ public class MongoTestRecordService implements TestRecordService {
     }
 
     private boolean hasAuthorityToCheck(Long userId, Role userRole, TestRecordList testRecordList) {
-        String entrustId = testRecordList.getEntrustId();
-        ResponseEntity<Long> responseEntity = restTemplate.getForEntity(ENTRUST_SERVICE_URL + "/api/entrust/{entrustId}/get_testerId", Long.class, entrustId);
-        if (responseEntity.getStatusCode() == HttpStatus.ACCEPTED) {
-            Long testerId = responseEntity.getBody();
-            /*根据调研情况，分配的测试部人员、测试部主管、所有质量部人员、质量部主管均有权限查阅*/
-            return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId)) || userRole == Role.TESTING_SUPERVISOR || userRole == Role.QA || userRole == Role.QA_SUPERVISOR;
+        /*根据调研情况，分配的测试部人员、测试部主管、分配的质量部人员、质量部主管均有权限查阅*/
+        if (userId == null || userRole == null) {
+            return false;
+        } else if (userRole == Role.ADMIN) {
+            return true;
+        } else if (userRole == Role.QA_SUPERVISOR || userRole == Role.TESTING_SUPERVISOR) {
+            return true;
         }
+        Long testerId = projectService.getProjectBaseInfo(testRecordList.getProjectId()).getTesterId();
+        Long qaId = projectService.getProjectBaseInfo(testRecordList.getProjectId()).getQaId();
+        if (userRole == Role.TESTER && userId.equals(testerId)) return true;
+        if (userRole == Role.QA && userId.equals(qaId)) return true;
         return false;
     }
 
     private boolean hasAuthorityToFill(Long userId, Role userRole, TestRecordList testRecordList) {
-        String entrustId = testRecordList.getEntrustId();
-        ResponseEntity<Long> responseEntity = restTemplate.getForEntity(ENTRUST_SERVICE_URL + "/api/entrust/{entrustId}/get_testerId", Long.class, entrustId);
-        if (responseEntity.getStatusCode() == HttpStatus.ACCEPTED) {
-            Long testerId = responseEntity.getBody();
-            /*根据调研情况，分配的测试部人员、测试部主管有权限修改*/
-            return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId)) || userRole == Role.TESTING_SUPERVISOR;
+        /*根据调研情况，超级管理员、分配的测试部人员、测试部主管有权限修改*/
+        if (userId == null || userRole == null) {
+            return false;
+        } else if (userRole == Role.ADMIN) {
+            return true;
+        } else if (userRole == Role.TESTING_SUPERVISOR) {
+            return true;
         }
+        Long testerId = projectService.getProjectBaseInfo(testRecordList.getProjectId()).getTesterId();
+        if (userRole == Role.TESTER && userId.equals(testerId)) return true;
         return false;
     }
 }

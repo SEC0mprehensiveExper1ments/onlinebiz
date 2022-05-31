@@ -19,6 +19,8 @@ public class TestRecordList {
     // 此测试方案对应的委托 id
     private String entrustId;
 
+    private String projectId;
+
     //所有软件测试记录
     private List<TestRecord> testRecords;
 

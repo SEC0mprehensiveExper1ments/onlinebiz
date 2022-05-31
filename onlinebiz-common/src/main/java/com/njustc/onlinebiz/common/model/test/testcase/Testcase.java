@@ -19,6 +19,8 @@ public class Testcase {
     // 此测试方案对应的委托 id
     private String entrustId;
 
+    private String projectId;
+
     //所有测试用例记录
     private List<TestcaseList> testcases;
 

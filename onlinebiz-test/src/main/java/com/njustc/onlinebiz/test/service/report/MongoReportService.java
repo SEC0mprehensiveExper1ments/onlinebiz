@@ -13,17 +13,14 @@ import com.njustc.onlinebiz.common.model.test.report.ReportStatus;
 import com.njustc.onlinebiz.test.service.project.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Service
 public class MongoReportService implements ReportService {
-    private final RestTemplate restTemplate;
     private final ReportDAO reportDAO;
     private final ProjectService projectService;
 
-    public MongoReportService(RestTemplate restTemplate, ReportDAO reportDAO, ProjectService projectService) {
-        this.restTemplate = restTemplate;
+    public MongoReportService(ReportDAO reportDAO, ProjectService projectService) {
         this.reportDAO = reportDAO;
         this.projectService = projectService;
     }

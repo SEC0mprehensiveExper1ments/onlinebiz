@@ -8,7 +8,7 @@ import java.util.List;
 public interface TestcaseService {
 
     //创建一份测试用例表
-    String createTestcaseList(String entrustId, List<Testcase.TestcaseList> testcases, Long userId, Role userRole);
+    String createTestcaseList(String projectId, String entrustId, List<Testcase.TestcaseList> testcases, Long userId, Role userRole);
 
     //根据测试用例表id查找相应测试用例表
     Testcase findTestcaseList(String testcaseListId, Long userId, Role userRole);

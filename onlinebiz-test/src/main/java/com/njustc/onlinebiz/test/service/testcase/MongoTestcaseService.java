@@ -7,33 +7,30 @@ import com.njustc.onlinebiz.test.exception.testcase.TestcaseNotFoundException;
 import com.njustc.onlinebiz.test.exception.testcase.TestcasePermissionDeniedException;
 import com.njustc.onlinebiz.common.model.test.testcase.Testcase;
 import com.njustc.onlinebiz.common.model.test.testcase.TestcaseStatus;
+import com.njustc.onlinebiz.test.service.project.ProjectService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
 @Slf4j
 @Service
 public class MongoTestcaseService implements TestcaseService {
-    private static final String ENTRUST_SERVICE_URL = "http://onlinebiz-entrust";
-    private final RestTemplate restTemplate;
     private final TestcaseDAO testcaseDAO;
+    private final ProjectService projectService;
 
-    public MongoTestcaseService(RestTemplate restTemplate, MongoTemplate mongoTemplate, TestcaseDAO testcaseDAO) {
-        this.restTemplate = restTemplate;
+    public MongoTestcaseService(ProjectService projectService, TestcaseDAO testcaseDAO) {
+        this.projectService = projectService;
         this.testcaseDAO = testcaseDAO;
     }
 
     @Override
-    public String createTestcaseList(String entrustId, List<Testcase.TestcaseList> testcases, Long userId, Role userRole) {
+    public String createTestcaseList(String projectId, String entrustId, List<Testcase.TestcaseList> testcases, Long userId, Role userRole) {
         if (!hasAuthorityToCreate(userRole)) {
             throw new TestcasePermissionDeniedException("无权新建测试用例表");
         }
         Testcase testcase = new Testcase();
+        testcase.setProjectId(projectId);
         testcase.setEntrustId(entrustId);
         testcase.setTestcases(testcases);
         testcase.setStatus(new TestcaseStatus(true, "需修改"));
@@ -83,26 +80,32 @@ public class MongoTestcaseService implements TestcaseService {
     }
 
     private boolean hasAuthorityToCheck(Long userId, Role userRole, Testcase testcase) {
-        String entrustId = testcase.getEntrustId();
-        ResponseEntity<Long> responseEntity1 = restTemplate.getForEntity(ENTRUST_SERVICE_URL + "/api/entrust/{entrustId}/get_testerId", Long.class, entrustId);
-        ResponseEntity<Long> responseEntity2 = restTemplate.getForEntity(ENTRUST_SERVICE_URL + "/api/entrust/{entrustId}/get_qaId", Long.class, entrustId);
-        if (responseEntity1.getStatusCode() == HttpStatus.ACCEPTED && responseEntity2.getStatusCode() == HttpStatus.ACCEPTED) {
-            Long testerId = responseEntity1.getBody();
-            Long qaId = responseEntity2.getBody();
-            /*根据调研情况，分配的测试部人员、测试部主管、分配的质量部人员、质量部主管均有权限查阅*/
-            return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId)) || userRole == Role.TESTING_SUPERVISOR || (userRole == Role.QA && userId.equals(qaId)) || userRole == Role.QA_SUPERVISOR;
+        /*根据调研情况，分配的测试部人员、测试部主管、分配的质量部人员、质量部主管均有权限查阅*/
+        if (userId == null || userRole == null) {
+            return false;
+        } else if (userRole == Role.ADMIN) {
+            return true;
+        } else if (userRole == Role.QA_SUPERVISOR || userRole == Role.TESTING_SUPERVISOR) {
+            return true;
         }
+        Long testerId = projectService.getProjectBaseInfo(testcase.getProjectId()).getTesterId();
+        Long qaId = projectService.getProjectBaseInfo(testcase.getProjectId()).getQaId();
+        if (userRole == Role.TESTER && userId.equals(testerId)) return true;
+        if (userRole == Role.QA && userId.equals(qaId)) return true;
         return false;
     }
 
     private boolean hasAuthorityToFill(Long userId, Role userRole, Testcase testcase) {
-        String entrustId = testcase.getEntrustId();
-        ResponseEntity<Long> responseEntity = restTemplate.getForEntity(ENTRUST_SERVICE_URL + "/api/entrust/{entrustId}/get_testerId", Long.class, entrustId);
-        if (responseEntity.getStatusCode() == HttpStatus.ACCEPTED) {
-            Long testerId = responseEntity.getBody();
-            /*根据调研情况，超级管理员、分配的测试部人员、测试部主管有权限修改*/
-            return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId)) || userRole == Role.TESTING_SUPERVISOR;
+        /*根据调研情况，超级管理员、分配的测试部人员、测试部主管有权限修改*/
+        if (userId == null || userRole == null) {
+            return false;
+        } else if (userRole == Role.ADMIN) {
+            return true;
+        } else if (userRole == Role.TESTING_SUPERVISOR) {
+            return true;
         }
+        Long testerId = projectService.getProjectBaseInfo(testcase.getProjectId()).getTesterId();
+        if (userRole == Role.TESTER && userId.equals(testerId)) return true;
         return false;
     }
 
