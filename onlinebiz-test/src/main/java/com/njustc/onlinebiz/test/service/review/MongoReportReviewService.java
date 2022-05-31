@@ -21,7 +21,6 @@ import java.io.IOException;
 
 @Service
 public class MongoReportReviewService implements ReportReviewService {
-    private static final String ENTRUST_SERVICE = "http://onlinebiz-entrust";
     private static final String SCANNED_COPY_DIR = "~/review/";
     private final ReportReviewDAO reportReviewDAO;
     private final RestTemplate restTemplate;
