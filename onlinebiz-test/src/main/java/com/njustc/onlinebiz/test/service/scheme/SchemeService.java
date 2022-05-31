@@ -9,7 +9,7 @@ public interface SchemeService {
 
 
 
-    String createScheme(String entrustId, SchemeContent content, Long userId, Role userRole);
+    String createScheme(String entrustId, SchemeContent content, Long userId, Role userRole, String projectId);
 
     // 根据测试方案ID查找测试方案
     Scheme findScheme(String schemeId, Long userId, Role userRole);
