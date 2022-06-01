@@ -18,4 +18,6 @@ public class SampleCollection {
   private String name;
   // 集合内的样品
   private List<Sample> samples;
+  // 集合的状态
+  private SampleStage stage;
 }
