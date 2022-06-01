@@ -38,6 +38,7 @@ class MongoTestcaseServiceTest {
 
     @Test
     void createTestcaseList() {
+
         //由客户（非合法人员）创建测试用例表
         try {
             testcaseservice.createTestcaseList("P001", "E001", null, 11111L, Role.CUSTOMER);
@@ -73,6 +74,7 @@ class MongoTestcaseServiceTest {
             assert (e.getClass().equals(TestcasePermissionDeniedException.class));
             System.out.println("QA supervisor try to create a testcase table and cause a mistake.");
         }
+
         //由指派的市场部员工/市场部主管（合法人员）创建测试用例表
         String url1 = ENTRUST_SERVICE_URL + "/api/entrust/" + "E001" + "/get_dto";
         ResponseEntity<EntrustDto> responseEntity1 = restTemplate.getForEntity(url1, EntrustDto.class);
@@ -89,6 +91,7 @@ class MongoTestcaseServiceTest {
 
     @Test
     void findTestcaseList() {
+
         //由客户（非合法人员）查找测试用例表
         try {
             testcaseservice.findTestcaseList(TestCaseListId1, 11111L, Role.CUSTOMER);
@@ -124,6 +127,7 @@ class MongoTestcaseServiceTest {
             assert (e.getClass().equals(TestcasePermissionDeniedException.class));
             System.out.println("Another qa try to check a testcase table and cause a mistake.");
         }
+
         //由指派的测试部员工/测试部主管（合法人员）查找测试用例表
         Testcase testcase1 = testcaseDAO.findTestcaseListById(TestCaseListId1);
         String projectId1 = testcase1.getProjectId();
@@ -131,12 +135,14 @@ class MongoTestcaseServiceTest {
         Long testerId1 = pbaseinfo1.getTesterId();
         TestCaseList1 = testcaseservice.findTestcaseList(TestCaseListId1, testerId1, Role.TESTER);
         assert (TestCaseList1.getProjectId().equals(projectId1));
+
         Testcase testcase2 = testcaseDAO.findTestcaseListById(TestCaseListId2);
         String projectId2 = testcase2.getProjectId();
         ProjectBaseInfo pbaseinfo2 = projectService.getProjectBaseInfo(projectId2);
         Long testerId2 = pbaseinfo2.getTesterId();
         TestCaseList2 = testcaseservice.findTestcaseList(TestCaseListId2, testerId2, Role.TESTER);
         assert (TestCaseList2.getProjectId().equals(projectId2));
+
         TestCaseList3 = testcaseservice.findTestcaseList(TestCaseListId3, 2000L, Role.TESTING_SUPERVISOR);
         Testcase testcase3 = testcaseDAO.findTestcaseListById(TestCaseListId3);
         String projectId3 = testcase3.getProjectId();
@@ -145,11 +151,14 @@ class MongoTestcaseServiceTest {
         Long qaId1 = pbaseinfo1.getQaId();
         TestCaseList1 = testcaseservice.findTestcaseList(TestCaseListId1, qaId1, Role.QA);
         assert (TestCaseList1.getProjectId().equals(projectId1));
+
         Long qaId2 = pbaseinfo2.getQaId();
         TestCaseList2 = testcaseservice.findTestcaseList(TestCaseListId2, qaId2, Role.QA);
         assert (TestCaseList2.getProjectId().equals(projectId2));
+
         TestCaseList3 = testcaseservice.findTestcaseList(TestCaseListId3, 3000L, Role.QA_SUPERVISOR);
         assert (TestCaseList3.getProjectId().equals(projectId3));
+
         //尝试寻找不存在的测试用例表
         try {
             testcaseservice.findTestcaseList("T1000", 2000L, Role.TESTING_SUPERVISOR);
@@ -173,6 +182,7 @@ class MongoTestcaseServiceTest {
 
     @Test
     void updateTestcaseList() {
+
         //由客户（非合法人员）修改测试用例表
         try {
             testcaseservice.updateTestcaseList(TestCaseListId1, null, 11111L, Role.CUSTOMER);
@@ -225,6 +235,7 @@ class MongoTestcaseServiceTest {
             assert (e.getClass().equals(TestcasePermissionDeniedException.class));
             System.out.println("Another tester try to update a testcase table and cause a mistake.");
         }
+
         //由指派的测试部人员/测试部主管（合法人员）修改测试用例
         testcaseservice.updateTestcaseList(TestCaseListId1, null, testerId1, Role.TESTER);
         testcaseservice.updateTestcaseList(TestCaseListId1, null, 2000L, Role.TESTING_SUPERVISOR);
@@ -232,6 +243,7 @@ class MongoTestcaseServiceTest {
         Testcase.TestcaseList get = new Testcase.TestcaseList("category", "testcaseId", "designInstruction", "statute", "expectedResult", "designer", "time");
         NewTestcases.add(get);
         testcaseservice.updateTestcaseList(TestCaseListId1, NewTestcases, testerId1, Role.TESTER);
+
         //尝试修改不存在的测试用例表
         //传参为数据库中不存在的testcase编号
         try {
@@ -256,6 +268,7 @@ class MongoTestcaseServiceTest {
 
     @Test
     void removeTestcaseList() {
+
         //由客户（非合法人员）删除测试用例表
         try {
             testcaseservice.removeTestcaseList(TestCaseListId2, 11111L, Role.CUSTOMER);
@@ -305,8 +318,10 @@ class MongoTestcaseServiceTest {
             assert (e.getClass().equals(TestcasePermissionDeniedException.class));
             System.out.println("QA supervisor try to delete a testcase table and cause a mistake.");
         }
+
         //由超级管理员admin（合法人员）删除测试用表
         testcaseservice.removeTestcaseList(TestCaseListId2, 0L, Role.ADMIN);
+
         //尝试删除不存在的测试用例表
         try {
             testcaseservice.removeTestcaseList("T1000", 0L, Role.ADMIN);

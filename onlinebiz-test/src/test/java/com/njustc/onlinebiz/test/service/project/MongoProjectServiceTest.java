@@ -29,6 +29,7 @@ class MongoProjectServiceTest {
 
     @Test
     void createTestProject() {
+
         //由客户（非合法人员）创建项目
         try {
             projectService.createTestProject(11111L, Role.CUSTOMER, "E001");
@@ -64,6 +65,7 @@ class MongoProjectServiceTest {
             assert (e.getClass().equals(ProjectPermissionDeniedException.class));
             System.out.println("Testing supervisor try to create a project and cause a mistake.");
         }
+
         //由指定的市场部员工/市场部主管（合法人员）创建项目
         String url1 = ENTRUST_SERVICE_URL + "/api/entrust/" + "E001" + "/get_dto";
         ResponseEntity<EntrustDto> responseEntity1 = restTemplate.getForEntity(url1, EntrustDto.class);
@@ -80,6 +82,7 @@ class MongoProjectServiceTest {
         }
         projectId2 = projectService.createTestProject(entrustDto2.getMarketerId(), Role.MARKETER, "E002");
         projectId3 = projectService.createTestProject(2000L, Role.MARKETING_SUPERVISOR, "E003");
+
         //由非该委托被指派的市场部员工（非合法人员）创建项目
         Long marketerId = entrustDto1.getMarketerId();
         if(marketerId.equals(1666L)) {
@@ -98,7 +101,7 @@ class MongoProjectServiceTest {
 
     @Test
     void findProject() {
-        Project project = null;
+        Project project;
         //由客户（非合法人员）查看项目
         try {
             project = projectService.findProject(projectId1, 11111L, Role.CUSTOMER);
@@ -106,6 +109,7 @@ class MongoProjectServiceTest {
             assert (e.getClass().equals(ProjectPermissionDeniedException.class));
             System.out.println("Customer try to find a project and cause a mistake.");
         }
+
         //由质量部员工（合法人员）查看项目
         project = projectService.findProject(projectId1, 3001L, Role.QA);
         ProjectBaseInfo pbaseinfo1 = projectService.getProjectBaseInfo(projectId1);
@@ -150,6 +154,7 @@ class MongoProjectServiceTest {
         assert (project.getProjectBaseInfo().getMarketerId().equals(pbaseinfo2.getMarketerId()));
         project = projectService.findProject(projectId3, 2000L, Role.TESTING_SUPERVISOR);
         assert (project.getProjectBaseInfo().getMarketerId().equals(2000L));
+
         //查看一个不存在的项目id
         try {
             project = projectService.findProject("projectId4", 3001L, Role.QA);
