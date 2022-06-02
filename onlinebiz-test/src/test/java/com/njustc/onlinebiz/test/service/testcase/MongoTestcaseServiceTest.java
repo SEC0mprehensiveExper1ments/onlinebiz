@@ -1,9 +1,9 @@
 package com.njustc.onlinebiz.test.service.testcase;
 
 import com.njustc.onlinebiz.common.model.EntrustDto;
+import com.njustc.onlinebiz.common.model.entrust.Entrust;
 import com.njustc.onlinebiz.common.model.test.project.ProjectBaseInfo;
 import com.njustc.onlinebiz.test.dao.testcase.TestcaseDAO;
-import com.njustc.onlinebiz.test.exception.project.ProjectDAOFailureException;
 import com.njustc.onlinebiz.test.service.project.ProjectService;
 import org.junit.jupiter.api.Test;
 import com.njustc.onlinebiz.common.model.Role;
