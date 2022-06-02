@@ -13,7 +13,7 @@ public class SampleCollection {
   // 样品集Id
   private String id;
   // 委托Id
-  private Long entrustId;
+  private String entrustId;
   // 集合的名称
   private String name;
   // 集合内的样品
