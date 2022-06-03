@@ -13,10 +13,10 @@ public enum ProjectStage {
   // 测试方案经质量部审核不通过
   SCHEME_AUDITING_DENIED,
 
-  // 测试方案经质量部审核通过，进行相关测试，测试报告未填写
+  // 测试方案经质量部审核通过，进行相关测试，测试报告填写中
   SCHEME_AUDITING_PASSED,
 
-  // 测试报告已填写，质量部可审核
+  // 测试报告已提交，质量部可审核
   REPORT_AUDITING,
 
   // 测试报告经质量部审核不通过
@@ -25,7 +25,7 @@ public enum ProjectStage {
   // 测试报告经质量部审核通过，待客户确认
   REPORT_QA_PASSED,
 
-  // 测试报告被客户接受，质量部可审计已归档的测试文档
+  // 测试报告被客户接受，质量部可审计测试文档
   REPORT_CUSTOMER_CONFIRM,
 
   // 测试报告被客户不接受
