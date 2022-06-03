@@ -3,7 +3,7 @@ name: Test workflow
 on: [push]
 
 jobs:
-  build:
+  build_test:
     runs-on: ubuntu-latest
 
     steps:
