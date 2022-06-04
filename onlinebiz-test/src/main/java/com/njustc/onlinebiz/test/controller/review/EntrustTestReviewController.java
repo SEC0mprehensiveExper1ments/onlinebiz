@@ -15,7 +15,7 @@ public class EntrustTestReviewController {
     }
 
     //获取检查表详情
-    @PostMapping("/review/entrustTest/{entrustTestReviewId}")
+    @GetMapping("/review/entrustTest/{entrustTestReviewId}")
     public EntrustTestReview getEntrustTestReview(
             @PathVariable("entrustTestReviewId") String entrustTestReviewId,
             @RequestParam("userId") Long userId,
