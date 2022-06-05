@@ -43,7 +43,7 @@ public class SchemeReviewController {
         schemeReviewService.updateSchemeReview(schemeReviewId, schemeReview, userId, userRole);
     }
 
-    // 上传合同扫描件
+    // 上传测试方案评审表扫描件
     @PostMapping("/review/scheme/{schemeReviewId}/upload")
     public void updateScannedCopy(
             @PathVariable("schemeReviewId") String schemeReviewId,
@@ -54,7 +54,7 @@ public class SchemeReviewController {
         schemeReviewService.saveScannedCopy(schemeReviewId, scannedCopy, userId, userRole);
     }
 
-    // 下载合同扫描件
+    // 下载测试方案评审表扫描件
     @GetMapping("/review/scheme/{schemeReviewId}/download")
     public ResponseEntity<Resource> downloadScannedCopy(
             @PathVariable("schemeReviewId") String schemeReviewId,
