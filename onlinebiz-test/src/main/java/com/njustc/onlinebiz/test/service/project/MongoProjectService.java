@@ -103,8 +103,7 @@ public class MongoProjectService implements ProjectService {
         // 创建时，可以取消相关权限检查，可以默认到这一步前面都符合，表单的create函数从上述提供的人员ID参数中，各取所需即可
 
         // 对应的测试方案 id (JS006)
-//         String testSchemeId = schemeService.createScheme(entrustId, null, userId, userRole);
-        String testSchemeId = null;
+        String testSchemeId = schemeService.createScheme(entrustId, null, marketerId, Role.MARKETER, projectId);
         projectFormIds.setTestSchemeId(testSchemeId);
         // 对应的测试报告 id (JS007)
         String testReportId = null;
@@ -118,8 +117,8 @@ public class MongoProjectService implements ProjectService {
         String testRecordListId = null;
         projectFormIds.setTestRecordListId(testRecordListId);
         // 对应的测试报告检查表 id (JS010)
-        String testReportCecklistId = null;
-        projectFormIds.setTestReportCecklistId(testReportCecklistId);
+        String testReportChecklistId = null;
+        projectFormIds.setTestReportCecklistId(testReportChecklistId);
         // 对应的测试问题清单 id (JS011)
         String testIssueListId = null;
         projectFormIds.setTestIssueListId(testIssueListId);

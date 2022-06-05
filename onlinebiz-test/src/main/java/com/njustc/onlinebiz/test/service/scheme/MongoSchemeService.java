@@ -1,7 +1,9 @@
 package com.njustc.onlinebiz.test.service.scheme;
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.project.Project;
 import com.njustc.onlinebiz.test.dao.scheme.SchemeDAO;
+import com.njustc.onlinebiz.test.exception.project.ProjectNotFoundException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemeDAOFailureException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemeInvalidStageException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemeNotFoundException;
@@ -21,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class MongoSchemeService implements SchemeService {
 
-    private static final String ENTRUST_SERVICE_URL = "http://onlinebiz-entrust";
+    private static final String PROJECT_SERVICE_URL = "http://onlinebiz-project";
     private final RestTemplate restTemplate;
     private final SchemeDAO schemeDAO;
 
@@ -96,7 +98,7 @@ public class MongoSchemeService implements SchemeService {
     }
 
     @Override
-    public String createScheme(String entrustId, SchemeContent content, Long userId, Role userRole) {
+    public String createScheme(String entrustId, SchemeContent content, Long userId, Role userRole, String projectId) {
         if (!hasAuthorityToCreate(userRole)) {
             throw new SchemePermissionDeniedException("无权新建测试方案");
         }
@@ -126,25 +128,26 @@ public class MongoSchemeService implements SchemeService {
     }
 
     private boolean hasAuthorityToCheck(Long userId, Role userRole, Scheme scheme) {
-        String entrustId = scheme.getEntrustId();
-        ResponseEntity<Long> responseEntity = restTemplate.getForEntity(ENTRUST_SERVICE_URL + "/api/entrust/{entrustId}/get_testerId", Long.class, entrustId);
-        if (responseEntity.getStatusCode() == HttpStatus.ACCEPTED) {
-            Long testerId = responseEntity.getBody();
-            /*根据调研情况，分配的测试部人员、测试部主管、所有质量部人员、质量部主管均有权限查阅*/
-            return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId)) || userRole == Role.TESTING_SUPERVISOR || userRole == Role.QA || userRole == Role.QA_SUPERVISOR;
+        String projectId = scheme.getProjectId();
+        Project project = restTemplate.getForObject(PROJECT_SERVICE_URL + "/api/project/{projectId}", Project.class, projectId);
+        if (project == null) {
+            throw new ProjectNotFoundException("该项目不存在");
         }
-        return false;
+        Long testerId = project.getProjectBaseInfo().getTesterId();
+            /*根据调研情况，分配的测试部人员、测试部主管、所有质量部人员、质量部主管均有权限查阅*/
+        return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId)) || userRole == Role.TESTING_SUPERVISOR || userRole == Role.QA || userRole == Role.QA_SUPERVISOR;
     }
 
     private boolean hasAuthorityToFill(Long userId, Role userRole, Scheme scheme) {
-        String entrustId = scheme.getEntrustId();
-        ResponseEntity<Long> responseEntity = restTemplate.getForEntity(ENTRUST_SERVICE_URL + "/api/entrust/{entrustId}/get_testerId", Long.class, entrustId);
-        if (responseEntity.getStatusCode() == HttpStatus.ACCEPTED) {
-            Long testerId = responseEntity.getBody();
-            /*根据调研情况，分配的测试部人员、测试部主管有权限修改*/
-            return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId)) || userRole == Role.TESTING_SUPERVISOR;
+        String projectId = scheme.getProjectId();
+        Project project = restTemplate.getForObject(PROJECT_SERVICE_URL + "/api/project/{projectId}", Project.class, projectId);
+        if (project == null) {
+            throw new ProjectNotFoundException("该项目不存在");
         }
-        return false;
+        Long testerId = project.getProjectBaseInfo().getTesterId();
+        /*根据调研情况，分配的测试部人员、测试部主管有权限修改*/
+        return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId)) || userRole == Role.TESTING_SUPERVISOR;
+
     }
 
     private boolean hasAuthorityToRemove(Role userRole) {

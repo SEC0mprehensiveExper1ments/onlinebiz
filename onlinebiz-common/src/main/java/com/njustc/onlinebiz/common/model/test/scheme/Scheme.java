@@ -22,6 +22,9 @@ public class Scheme {
     // 此测试方案对应的委托 id
     private String entrustId;
 
+    // 此测试方案对应的项目 id
+    private String projectId;
+
     // 测试方案内容
     private SchemeContent content;
 
