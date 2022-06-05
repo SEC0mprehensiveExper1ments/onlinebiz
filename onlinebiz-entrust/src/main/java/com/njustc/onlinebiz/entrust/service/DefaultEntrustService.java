@@ -362,6 +362,10 @@ public class DefaultEntrustService implements EntrustService {
     @Override
     public Long checkConsistencyWithContract(String entrustId, Long userId, Role userRole) {
         Entrust entrust = findEntrust(entrustId, userId, userRole);
+        // 检查是否已经有合同了
+        if (entrust.getContractId() != null) {
+            throw new EntrustInvalidStageException("该委托已经创建了一份合同");
+        }
         // 检查委托阶段
         if (entrust.getStatus().getStage() != EntrustStage.CUSTOMER_ACCEPT_QUOTE) {
             throw new EntrustInvalidStageException("用户没有确认委托报价，不能创建合同");

@@ -43,12 +43,13 @@ public class DefaultContractService implements ContractService {
         // 检查委托ID和执行此操作的人员是否一致
         String params = "?userId=" + userId + "&userRole=" + userRole;
         String url = ENTRUST_SERVICE + "/api/entrust/" + entrustId + "/check_consistency_with_contract";
-        ResponseEntity<Long> response = restTemplate.getForEntity(url + params, Long.class);
+        ResponseEntity<Object> response = restTemplate.getForEntity(url + params, Object.class);
         if (!response.getStatusCode().equals(HttpStatus.OK)) {
-            throw new ContractCreateFailureException("该委托不存在或用户与委托不匹配");
+            String errorMessage = (String) response.getBody();
+            throw new ContractCreateFailureException(errorMessage);
         }
         // 获取委托的客户ID
-        Long customerId = response.getBody();
+        Long customerId = (Long) response.getBody();
         Contract contract = new Contract();
         // 执行此操作的用户成为该合同的市场部人员
         contract.setCustomerId(customerId);
