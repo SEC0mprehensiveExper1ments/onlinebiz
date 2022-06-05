@@ -2,6 +2,9 @@ package com.njustc.onlinebiz.test.service.scheme;
 
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.project.Project;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStatus;
+import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.scheme.SchemeDAO;
 import com.njustc.onlinebiz.test.exception.project.ProjectNotFoundException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemeDAOFailureException;
@@ -14,8 +17,6 @@ import com.njustc.onlinebiz.common.model.test.scheme.SchemeStage;
 import com.njustc.onlinebiz.common.model.test.scheme.SchemeStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,10 +27,12 @@ public class MongoSchemeService implements SchemeService {
     private static final String PROJECT_SERVICE_URL = "http://onlinebiz-project";
     private final RestTemplate restTemplate;
     private final SchemeDAO schemeDAO;
+    private final ProjectDAO projectDAO;
 
-    public MongoSchemeService(RestTemplate restTemplate, MongoTemplate mongoTemplate, SchemeDAO schemeDAO) {
+    public MongoSchemeService(RestTemplate restTemplate, MongoTemplate mongoTemplate, SchemeDAO schemeDAO, ProjectDAO projectDAO) {
         this.restTemplate = restTemplate;
         this.schemeDAO = schemeDAO;
+        this.projectDAO = projectDAO;
     }
 
     @Override
@@ -47,6 +50,9 @@ public class MongoSchemeService implements SchemeService {
         }
         if (!schemeDAO.updateContent(schemeId, content) || !schemeDAO.updateStatus(schemeId, new SchemeStatus(SchemeStage.QUALITY_AUDITING, null))) {
             throw new SchemeDAOFailureException("更新测试方案失败");
+        }
+        if (projectDAO.updateStatus(scheme.getProjectId(), new ProjectStatus(ProjectStage.SCHEME_AUDITING, null))) {
+            throw new SchemeDAOFailureException("更新项目状态失败");
         }
     }
 
@@ -66,6 +72,9 @@ public class MongoSchemeService implements SchemeService {
         if (!schemeDAO.updateStatus(schemeId, new SchemeStatus(nextStage, message))) {
             throw new SchemeDAOFailureException("否定测试方案失败");
         }
+        if (projectDAO.updateStatus(scheme.getProjectId(), new ProjectStatus(ProjectStage.SCHEME_AUDITING_DENIED, null))) {
+            throw new SchemeDAOFailureException("更新项目状态失败");
+        }
     }
 
     @Override
@@ -84,6 +93,9 @@ public class MongoSchemeService implements SchemeService {
         if (!schemeDAO.updateStatus(schemeId, new SchemeStatus(nextStage, null))) {
             throw new SchemeDAOFailureException("通过测试方案失败");
         }
+        if (projectDAO.updateStatus(scheme.getProjectId(), new ProjectStatus(ProjectStage.SCHEME_AUDITING_PASSED, null))) {
+            throw new SchemeDAOFailureException("更新项目状态失败");
+        }
     }
 
     @Override
@@ -94,6 +106,9 @@ public class MongoSchemeService implements SchemeService {
         Scheme scheme = findScheme(schemeId, userId, userRole);
         if (!schemeDAO.deleteScheme(scheme.getId())) {
             throw new SchemeDAOFailureException("删除测试方案失败");
+        }
+        if (projectDAO.updateStatus(scheme.getProjectId(), new ProjectStatus(ProjectStage.SCHEME_UNFILLED, null))) {
+            throw new SchemeDAOFailureException("更新项目状态失败");
         }
     }
 
