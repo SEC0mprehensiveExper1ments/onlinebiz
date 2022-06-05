@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReportStatus {
   private ReportStage stage;
-  private String status;
+  private String message;
 }
