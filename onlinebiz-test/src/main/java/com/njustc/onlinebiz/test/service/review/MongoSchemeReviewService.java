@@ -56,7 +56,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         if (schemeReview == null) {
             throw new ReviewNotFoundException("该测试方案检查表不存在: " + schemeReviewId);
         } else if (!hasFindAuthority(schemeReview, userId, userRole)) {
-            throw new ReviewPermissionDeniedException("无权查看该合同");
+            throw new ReviewPermissionDeniedException("无权查看该测试方案检查表");
         }
         return schemeReview;
     }
