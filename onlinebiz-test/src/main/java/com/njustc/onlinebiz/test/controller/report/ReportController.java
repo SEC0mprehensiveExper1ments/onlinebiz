@@ -25,7 +25,7 @@ public class ReportController {
         return reportService.findReport(reportId, userId, userRole);
     }
 
-    // 修改测试报告，并将报告标记为 未全部提交
+    // 修改测试报告，并将报告标记为 测试报告已提交，质量部可审核
     @PostMapping("/test/report/{reportId}/content")
     public void updateReport(
             @PathVariable("reportId") String reportId,
