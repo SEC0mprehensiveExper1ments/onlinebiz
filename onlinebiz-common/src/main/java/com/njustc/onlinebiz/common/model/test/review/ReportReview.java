@@ -17,7 +17,7 @@ public class ReportReview {
     /** 一般不更新的部分 **/
     // 方案评审表 id，由 MongoDB 自动生成
     private String id;
-    // 此测试报告对应的方案 id
+    // 此测试报告对应的报告 id
     private String reportId;
     // 评审表目前的状态
     private ReviewStatus status;
