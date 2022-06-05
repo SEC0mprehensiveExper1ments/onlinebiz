@@ -62,15 +62,15 @@ public class ProjectController {
         projectService.updateQa(projectId, qaId, userId, userRole);
     }
 
-    // 将项目状态更新为已归档
-    @PostMapping("/test/{projectId}/finish")
-    public void fileProject(
-            @PathVariable("projectId") String projectId,
-            @RequestParam("userId") Long userId,
-            @RequestParam("userRole") Role userRole
-    ) {
-        projectService.fileProject(projectId, userId, userRole);
-    }
+//    // 将项目状态更新为已归档
+//    @PostMapping("/test/{projectId}/finish")
+//    public void fileProject(
+//            @PathVariable("projectId") String projectId,
+//            @RequestParam("userId") Long userId,
+//            @RequestParam("userRole") Role userRole
+//    ) {
+//        projectService.fileProject(projectId, userId, userRole);
+//    }
 
     // 更新项目状态 (一般情况不需要)
     @PostMapping("/test/{projectId}/status")

@@ -206,25 +206,25 @@ public class MongoProjectService implements ProjectService {
         }
     }
 
-    @Override
-    public void fileProject(String projectId, Long userId, Role userRole) {
-        Project project = projectDAO.findProjectById(projectId);
-        // 检查测试项目阶段
-        ProjectStage curStage = project.getStatus().getStage();
-        if (curStage != ProjectStage.NOT_FILE) {
-            throw new ProjectInvalidStageException("此阶段不能归档或项目已归档");
-        }
-        // 检查用户权限
-        ProjectBaseInfo projectBaseInfo = project.getProjectBaseInfo();
-        Long qaId = projectBaseInfo.getQaId();
-        if (userRole != Role.ADMIN && userRole != Role.QA_SUPERVISOR && !Objects.equals(userId, qaId)) {
-            throw new ProjectPermissionDeniedException("无权归档操作");
-        }
-        // 更新状态
-        if (!projectDAO.updateStatus(projectId, new ProjectStatus(ProjectStage.FILED, null))) {
-            throw new ProjectDAOFailureException("归档项目失败");
-        }
-    }
+//    @Override
+//    public void fileProject(String projectId, Long userId, Role userRole) {
+//        Project project = projectDAO.findProjectById(projectId);
+//        // 检查测试项目阶段
+//        ProjectStage curStage = project.getStatus().getStage();
+//        if (curStage != ProjectStage.NOT_FILE) {
+//            throw new ProjectInvalidStageException("此阶段不能归档或项目已归档");
+//        }
+//        // 检查用户权限
+//        ProjectBaseInfo projectBaseInfo = project.getProjectBaseInfo();
+//        Long qaId = projectBaseInfo.getQaId();
+//        if (userRole != Role.ADMIN && userRole != Role.QA_SUPERVISOR && !Objects.equals(userId, qaId)) {
+//            throw new ProjectPermissionDeniedException("无权归档操作");
+//        }
+//        // 更新状态
+//        if (!projectDAO.updateStatus(projectId, new ProjectStatus(ProjectStage.FILED, null))) {
+//            throw new ProjectDAOFailureException("归档项目失败");
+//        }
+//    }
 
     @Override
     public void removeProject(String projectId, Long userId, Role userRole) {
