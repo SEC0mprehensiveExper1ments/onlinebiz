@@ -69,11 +69,6 @@ public class MongoReportService implements ReportService {
         if (!reportDAO.updateContent(reportId, content) || !reportDAO.updateStatus(reportId, new ReportStatus(ReportStage.FINISHED, "已修改，待质量部审核"))) {
             throw new ReportDAOFailureException("更新测试报告失败");
         }
-        ProjectStatus projectStatus = new ProjectStatus(ProjectStage.REPORT_AUDITING,"");
-        projectService.updateStatus(report.getProjectId(), projectStatus, 0L,Role.ADMIN);
-        if (projectService.findProject(report.getProjectId(),0L,Role.ADMIN).getStatus().getStage() != ProjectStage.REPORT_AUDITING) {
-            throw new ReportDAOFailureException("更新项目状态失败");
-        }
     }
 
     @Override
@@ -106,10 +101,6 @@ public class MongoReportService implements ReportService {
             throw new ReportDAOFailureException("通过测试报告失败");
         }
         ProjectStatus projectStatus = new ProjectStatus(ProjectStage.REPORT_QA_PASSED,"");
-        projectService.updateStatus(report.getProjectId(), projectStatus, 0L,Role.ADMIN);
-        if (projectService.findProject(report.getProjectId(),0L,Role.ADMIN).getStatus().getStage() != ProjectStage.REPORT_QA_PASSED) {
-            throw new ReportDAOFailureException("更新项目状态失败");
-        }
     }
 
     @Override
@@ -128,10 +119,6 @@ public class MongoReportService implements ReportService {
             throw new ReportDAOFailureException("否定测试报告失败");
         }
         ProjectStatus projectStatus = new ProjectStatus(ProjectStage.REPORT_QA_DENIED,message);
-        projectService.updateStatus(report.getProjectId(), projectStatus, 0L,Role.ADMIN);
-        if (projectService.findProject(report.getProjectId(),0L,Role.ADMIN).getStatus().getStage() != ProjectStage.REPORT_QA_DENIED) {
-            throw new ReportDAOFailureException("更新项目状态失败");
-        }
     }
 
     @Override
