@@ -105,14 +105,14 @@ public class MongoProjectService implements ProjectService {
         // 对应的测试方案 id (JS006)
         String testSchemeId = schemeService.createScheme(entrustId, null, marketerId, Role.MARKETER, projectId);
         projectFormIds.setTestSchemeId(testSchemeId);
-        // 对应的测试报告 id (JS007)
+        // TODO: 对应的测试报告 id (JS007)
         String testReportId = null;
         projectFormIds.setTestReportId(testReportId);
-        // 对应的测试用例表 id (JS008)
+        // TODO: 对应的测试用例表 id (JS008)
 //         String testcaseListId = testcaseService.createTestcaseList(entrustId, null, userId, userRole);
         String testcaseListId = null;
         projectFormIds.setTestcaseListId(testcaseListId);
-        // 对应的测试记录表 id (JS009)
+        // TODO: 对应的测试记录表 id (JS009)
 //        String testRecordListId = testRecordService.createTestRecordList(entrustId, null, userId, userRole);
         String testRecordListId = null;
         projectFormIds.setTestRecordListId(testRecordListId);
@@ -244,9 +244,7 @@ public class MongoProjectService implements ProjectService {
 
     @Override
     public void updateStatus(String projectId, ProjectStatus status, Long userId, Role userRole) {
-        if (userRole != Role.ADMIN) {
-            throw new ProjectPermissionDeniedException("无权更改测试项目状态");
-        }
+        // TODO: 检查权限，检查判断流程是否能流转
         Project project = findProject(projectId, userId, userRole);
         if (!projectDAO.updateStatus(project.getId(), status)) {
             throw new ProjectDAOFailureException("更改测试项目状态失败");
