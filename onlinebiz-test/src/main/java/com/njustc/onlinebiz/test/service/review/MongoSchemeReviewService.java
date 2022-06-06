@@ -2,6 +2,7 @@ package com.njustc.onlinebiz.test.service.review;
 
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
 import com.njustc.onlinebiz.common.model.test.review.ReviewStage;
 import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
 import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
@@ -33,17 +34,12 @@ public class MongoSchemeReviewService implements SchemeReviewService {
 
     @Override
     public String createSchemeReview(String projectId, Long qaId, Long testerId) {
-/*        if (userRole != Role.ADMIN && userRole != Role.MARKETER && userRole != Role.MARKETING_SUPERVISOR) {
-            throw new ReviewPermissionDeniedException("只有负责测试项目的市场部人员或主管可以创建合同");
-        }*/
         // 创建一份空的检查表
         SchemeReview schemeReview = new SchemeReview();
         schemeReview.setProjectId(projectId);
 //        schemeReview.setQaId(qaId);
 //        schemeReview.setTesterId(testerId);
-        schemeReview.setStatus(new ReviewStatus(ReviewStage.NOT_COPY_SAVED, null));
         // 获取检查表ID
-
         return schemeReviewDAO.insertSchemeReview(schemeReview).getId();
     }
 
@@ -63,13 +59,11 @@ public class MongoSchemeReviewService implements SchemeReviewService {
             return false;
         } else if (userRole == Role.ADMIN) {
             return true;
-        } else if (userRole == Role.MARKETING_SUPERVISOR || userRole == Role.QA_SUPERVISOR) {
+        }
+        // 测试部主管 和 质量部主管 都可以查看
+        else if (userRole == Role.TESTING_SUPERVISOR || userRole == Role.QA_SUPERVISOR) {
             return true;
         }
-//        // 质量部和测试部相关人员均可查看
-//        else if (userId.equals(schemeReview.getQaId()) || userId.equals(schemeReview.getTesterId())) {
-//            return true;
-//        }
         // 质量部相关人员均可查看
         else if (userId.equals(projectDAO.findProjectById(schemeReview.getProjectId()).getProjectBaseInfo().getQaId())) {
             return true;
@@ -87,9 +81,9 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         if (!origin.getId().equals(schemeReview.getId())) {
             throw new ReviewPermissionDeniedException("测试方案检查表ID不一致");
         }
-        ReviewStage curStage = origin.getStatus().getStage();
-        // 检查测试方案检查表的阶段，如果已上传附件则不能更改
-        if(curStage == ReviewStage.NOT_COPY_SAVED) {
+        // 检查测试项目的阶段
+        ProjectStage projectStage = projectDAO.findProjectById(origin.getProjectId()).getStatus().getStage();
+        if(projectStage == ProjectStage.SCHEME_AUDITING) {
             if (!hasUpdateOrDeleteAuthority(schemeReview, userId, userRole)) {
                 throw new ReviewPermissionDeniedException("无权修改此测试方案检查表");
             }
@@ -105,7 +99,9 @@ public class MongoSchemeReviewService implements SchemeReviewService {
             return false;
         } else if (userRole == Role.ADMIN) {
             return true;
-        } else if (userRole == Role.MARKETING_SUPERVISOR || userRole == Role.QA_SUPERVISOR) {
+        }
+        // 质量部主管都可以更改
+        else if (userRole == Role.QA_SUPERVISOR) {
             return true;
         }
         // 质量部相关人员可以删改
@@ -118,9 +114,14 @@ public class MongoSchemeReviewService implements SchemeReviewService {
     @Override
     public void saveScannedCopy(String schemeReviewId, MultipartFile scannedCopy, Long userId, Role userRole) throws IOException {
         if (scannedCopy.isEmpty()) {
-            throw new ReviewPermissionDeniedException("不能上传测试方案检查表的扫描件");
+            throw new ReviewPermissionDeniedException("不能上传空的测试方案检查表的扫描件");
         }
         SchemeReview schemeReview = findSchemeReview(schemeReviewId, userId, userRole);
+        // 检查阶段
+        ProjectStage projectStage = projectDAO.findProjectById(schemeReview.getProjectId()).getStatus().getStage();
+        if (projectStage != ProjectStage.SCHEME_AUDITING_PASSED) {
+            throw new ReviewInvalidStageException("项目当前状态不支持该操作");
+        }
         // 检查权限
         if (!hasUploadOrDownloadAuthority(schemeReview, userId, userRole)) {
             throw new ReviewPermissionDeniedException("无权上传测试方案检查表");
@@ -137,19 +138,18 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         if (!schemeReviewDAO.updateScannedCopyPath(schemeReviewId, path)) {
             throw new ReviewDAOFailureException("保存扫描文件路径失败");
         }
-        // 更新检查表阶段
-        if (!schemeReviewDAO.updateStatus(schemeReviewId, new ReviewStatus(ReviewStage.COPY_SAVED, null))) {
-            throw new ReviewDAOFailureException("更新检查表状态失败");
-        }
     }
 
     @Override
     public Resource getScannedCopy(String schemeReviewId, Long userId, Role userRole) throws IOException {
         SchemeReview schemeReview = findSchemeReview(schemeReviewId, userId, userRole);
-        ReviewStage curStage = schemeReview.getStatus().getStage();
+        ProjectStage projectStage = projectDAO.findProjectById(schemeReview.getProjectId()).getStatus().getStage();
         // 检查阶段
-        if (curStage != ReviewStage.COPY_SAVED) {
-            throw new ReviewInvalidStageException("检查表扫描件尚未上传");
+        if (projectStage == ProjectStage.SCHEME_UNFILLED ||
+            projectStage == ProjectStage.SCHEME_AUDITING ||
+            projectStage == ProjectStage.SCHEME_AUDITING_DENIED ||
+            projectStage == ProjectStage.SCHEME_AUDITING_PASSED) {
+            throw new ReviewInvalidStageException("项目当前状态不支持该操作");
         }
         // 检查权限
         if (!hasUploadOrDownloadAuthority(schemeReview, userId, userRole)) {

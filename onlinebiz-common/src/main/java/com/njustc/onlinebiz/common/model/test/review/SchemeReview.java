@@ -21,8 +21,7 @@ public class SchemeReview {
     private String id;
     // 此测试方案所属的测试项目编号 id
     private String projectId;
-    // 评审表目前的状态
-    private ReviewStatus status;
+
     // 评审表扫描件的文件路径
     private String scannedCopyPath;
 //    // 与评审表相关的质量部人员ID
