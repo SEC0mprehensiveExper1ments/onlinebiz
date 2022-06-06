@@ -2,15 +2,15 @@ package com.njustc.onlinebiz.test.service.review;
 
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.review.ReviewStage;
+import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
+import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
+import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.review.SchemeReviewDAO;
 import com.njustc.onlinebiz.test.exception.review.ReviewDAOFailureException;
 import com.njustc.onlinebiz.test.exception.review.ReviewInvalidStageException;
 import com.njustc.onlinebiz.test.exception.review.ReviewNotFoundException;
 import com.njustc.onlinebiz.test.exception.review.ReviewPermissionDeniedException;
-import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
-import com.njustc.onlinebiz.common.model.test.review.ReviewStage;
-import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
-import com.njustc.onlinebiz.test.service.project.ProjectService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -23,14 +23,12 @@ import java.io.IOException;
 @Service
 public class MongoSchemeReviewService implements SchemeReviewService {
 
-    private static final String ENTRUST_SERVICE = "http://onlinebiz-entrust";
     private static final String SCANNED_COPY_DIR = "~/review/";
     private final SchemeReviewDAO schemeReviewDAO;
-    private final ProjectService projectService;
-
-    public MongoSchemeReviewService(SchemeReviewDAO schemeReviewDAO, ProjectService projectService) {
+    private final ProjectDAO projectDAO;
+    public MongoSchemeReviewService(SchemeReviewDAO schemeReviewDAO, ProjectDAO projectDAO) {
         this.schemeReviewDAO = schemeReviewDAO;
-        this.projectService = projectService;
+        this.projectDAO = projectDAO;
     }
 
     @Override
@@ -45,9 +43,8 @@ public class MongoSchemeReviewService implements SchemeReviewService {
 //        schemeReview.setTesterId(testerId);
         schemeReview.setStatus(new ReviewStatus(ReviewStage.NOT_COPY_SAVED, null));
         // 获取检查表ID
-        String schemeReviewId = schemeReviewDAO.insertSchemeReview(schemeReview).getId();
 
-        return schemeReviewId;
+        return schemeReviewDAO.insertSchemeReview(schemeReview).getId();
     }
 
     @Override
@@ -74,11 +71,11 @@ public class MongoSchemeReviewService implements SchemeReviewService {
 //            return true;
 //        }
         // 质量部相关人员均可查看
-        else if (userId.equals(projectService.getProjectBaseInfo(schemeReview.getProjectId()).getQaId())) {
+        else if (userId.equals(projectDAO.findProjectById(schemeReview.getProjectId()).getProjectBaseInfo().getQaId())) {
             return true;
         }
         // 测试部相关人员均可查看
-        else if (userId.equals(projectService.getProjectBaseInfo(schemeReview.getProjectId()).getTesterId())) {
+        else if (userId.equals(projectDAO.findProjectById(schemeReview.getProjectId()).getProjectBaseInfo().getTesterId())) {
             return true;
         }
         return false;
@@ -112,7 +109,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
             return true;
         }
         // 质量部相关人员可以删改
-        else if (userId.equals(projectService.getProjectBaseInfo(schemeReview.getProjectId()).getQaId())) {
+        else if (userId.equals(projectDAO.findProjectById(schemeReview.getProjectId()).getProjectBaseInfo().getQaId())) {
             return true;
         }
         return false;
@@ -171,7 +168,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
             return true;
         }
         // 项目的质量相关人员也可以上传下载
-        else if (userId.equals(projectService.getProjectBaseInfo(schemeReview.getProjectId()).getQaId())) {
+        else if (userId.equals(projectDAO.findProjectById(schemeReview.getProjectId()).getProjectBaseInfo().getQaId())) {
             return true;
         }
         return false;
