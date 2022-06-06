@@ -21,7 +21,7 @@ public class ReportReviewController {
     }
 
     //获取检查表详情
-    @PostMapping("/review/report/{reportReviewId}")
+    @GetMapping("/review/report/{reportReviewId}")
     public ReportReview getReportReview(
             @PathVariable("reportReviewId") String reportReviewId,
             @RequestParam("userId") Long userId,

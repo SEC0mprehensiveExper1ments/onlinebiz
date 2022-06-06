@@ -23,7 +23,7 @@ public class SchemeReviewController {
     // 创建接口为测试项目内部调用
 
     // 获取检查表详情
-    @PostMapping("/review/scheme/{schemeReviewId}")
+    @GetMapping("/review/scheme/{schemeReviewId}")
     public SchemeReview getSchemeReview(
             @PathVariable("schemeReviewId") String schemeReviewId,
             @RequestParam("userId") Long userId,
