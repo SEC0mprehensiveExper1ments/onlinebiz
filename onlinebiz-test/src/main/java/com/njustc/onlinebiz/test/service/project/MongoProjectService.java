@@ -200,10 +200,6 @@ public class MongoProjectService implements ProjectService {
         }
         // 生成表格
         createProjectForms(projectId);
-        // 更新状态
-        if (!projectDAO.updateStatus(projectId, new ProjectStatus(ProjectStage.SCHEME_UNFILLED, null))) {
-            throw new ProjectDAOFailureException("更新项目状态失败");
-        }
     }
 
 //    @Override
