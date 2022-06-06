@@ -48,8 +48,9 @@ public class MongoProjectDAO implements ProjectDAO {
 
     @Override
     public Boolean updateFormIds(String projectId, ProjectFormIds projectFormIds) {
-        // TODO:
-        return null;
+        Project project = findProjectById(projectId);
+        Update update = new Update().set("projectFormIds", projectFormIds);
+        return updateFirstWithId(projectId, update);
     }
 
     @Override
