@@ -19,7 +19,7 @@ public interface ProjectService {
     String createTestProject(Long userId, Role userRole, String entrustId);
 
     /**
-     * 查看一份测试项目的完整信息。所有后台管理人员均可以执行此操作。
+     * 查看一份测试项目的完整信息。所有后台管理人员均可以执行此操作。注意当质量部人员未分配时，无法获取project对象
      * @param projectId 要查看的测试方案 ID
      * @param userId 执行此操作的用户 ID
      * @param userRole 执行此操作的用户角色
@@ -29,13 +29,14 @@ public interface ProjectService {
 
     /**
      * 查看与某个用户相关的所有测试项目列表。各个部门员工都只能看到他们自己的，主管和ADMIN可以看到所有的
+     * 注意如果还未分配质量部人员，则无法得到该项目的Project的对象，此时可以通过findProjectOutlines可以查看
      * @param page 查询结果的页码
      * @param pageSize 每页有多少条记录
      * @param userId 执行此操作的用户ID
      * @param userRole 执行此操作的用户角色
      * @return 返回该用户可以看到的测试项目列表，是一个分页结果
      * */
-    PageResult<ProjectOutline> findProjectBaseInfos(Integer page, Integer pageSize, Long userId, Role userRole);
+    PageResult<ProjectOutline> findProjectOutlines(Integer page, Integer pageSize, Long userId, Role userRole);
 
     /**
      * 更新测试项目对应的质量部人员，只有管理员和质量部主管可以执行此操作。其中质量部主管只能在
@@ -47,14 +48,6 @@ public interface ProjectService {
      */
     void updateQa(String projectId, Long qaId, Long userId, Role userRole);
 
-//    /**
-//     * 将项目标记为归档
-//     * @param projectId 要更新的委托ID
-//     * @param userId 执行此操作的用户ID
-//     * @param userRole 执行此操作的用户角色
-//     * */
-//    void fileProject(String projectId, Long userId, Role userRole);
-
     /**
      * 删除一个测试项目，此接口正常流程不会使用(仅调试)，只有管理员可操作
      * @param projectId 要删除的测试项目ID
@@ -64,7 +57,7 @@ public interface ProjectService {
     void removeProject(String projectId, Long userId, Role userRole);
 
     /**
-     * 更改测试项目的状态，包括设置测试项目当前所处阶段和附加的说明信息。只有管理员可以执行此操作。
+     * 更改测试项目的状态，包括设置测试项目当前所处阶段和附加的说明信息.
      * @param projectId 要更改的测试项目ID
      * @param status 更改后的新状态
      * @param userId 执行此操作的用户ID

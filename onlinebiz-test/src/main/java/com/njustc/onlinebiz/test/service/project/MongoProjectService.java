@@ -70,9 +70,8 @@ public class MongoProjectService implements ProjectService {
         // 设置项目基本信息
         ProjectBaseInfo projectBaseInfo = new ProjectBaseInfo(entrustId, entrustDto);
 
-        // 设置项目表格信息 [在updateStatus中在创建]
-
-        // 只添加了项目的基本信息
+        // 设置项目表格信息 [在updateQa中在创建]
+        // 只添加了项目的基本信息，并将项目状态初始化设置为 WAIT_FOR_QA
         Project project = new Project().setProjectBaseInfo(projectBaseInfo);
         project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, "等待质量部主管分配质量部员工"));
         // 获取项目ID
@@ -87,8 +86,56 @@ public class MongoProjectService implements ProjectService {
         return projectId;
     }
 
+    @Override
+    public Project findProject(String projectId, Long userId, Role userRole) {
+        if (userRole == Role.CUSTOMER) {
+            throw new ProjectPermissionDeniedException("无权查看测试项目");
+        }
+        Project project = projectDAO.findProjectById(projectId);
+        // 检查阶段
+        ProjectStage curStage = project.getStatus().getStage();
+        if (curStage == ProjectStage.WAIT_FOR_QA) {
+            throw new ProjectInvalidStageException("待分配质量部人员");
+        }
+        if (project == null) {
+            throw new ProjectNotFoundException("该测试项目不存在");
+        }
+        return project;
+    }
+
+    @Override
+    public PageResult<ProjectOutline> findProjectOutlines(Integer page, Integer pageSize, Long userId, Role userRole) {
+        if (page <= 0 || pageSize <= 0) {
+            throw new ProjectInvalidArgumentException("页号或每页大小必须为正整数");
+        }
+        long total;
+        List<ProjectOutline> list;
+        // 根据用户角色不同，返回不同结果
+        if (userRole == Role.ADMIN || userRole == Role.MARKETING_SUPERVISOR
+                || userRole == Role.QA_SUPERVISOR || userRole == Role.TESTING_SUPERVISOR) {
+            total = projectDAO.countAll();
+            list = projectDAO.findAllProjects(page, pageSize);
+        }
+        else if (userRole == Role.MARKETER) {
+            total = projectDAO.countByMarketerId(userId);
+            list = projectDAO.findProjectByMarketerId(userId, page, pageSize);
+        }
+        else if (userRole == Role.TESTER) {
+            total = projectDAO.countByTesterId(userId);
+            list = projectDAO.findProjectByTesterId(userId, page, pageSize);
+        }
+        else if (userRole == Role.QA) {
+            total = projectDAO.countByQaId(userId);
+            list = projectDAO.findProjectByQaId(userId, page, pageSize);
+        }
+        else {
+            throw new ProjectPermissionDeniedException("无权查看测试项目列表");
+        }
+        return new PageResult<>(page, pageSize, total, list);
+    }
+
     // 该函数只是为了在项目分配质量部员工以后，创建项目中各表单，没有做权限/阶段检查，谨慎调用
-    private void createProjectForms(String projectId) {
+    private Boolean createProjectForms(String projectId) {
         Project project = projectDAO.findProjectById(projectId);
         ProjectBaseInfo projectBaseInfo = project.getProjectBaseInfo();
         String entrustId = projectBaseInfo.getEntrustId();
@@ -130,56 +177,8 @@ public class MongoProjectService implements ProjectService {
         String testSchemeChecklistId = schemeReviewService.createSchemeReview(projectId, qaId, testerId);
         projectFormIds.setTestSchemeChecklistId(testSchemeChecklistId);
 
-        project.setProjectFormIds(projectFormIds);
-        project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, "等待质量部主管分配质量部员工"));
-    }
-
-    @Override
-    public Project findProject(String projectId, Long userId, Role userRole) {
-        if (userRole == Role.CUSTOMER) {
-            throw new ProjectPermissionDeniedException("无权查看测试项目");
-        }
-        Project project = projectDAO.findProjectById(projectId);
-        // 检查阶段
-        ProjectStage curStage = project.getStatus().getStage();
-        if (curStage == ProjectStage.WAIT_FOR_QA) {
-            throw new ProjectInvalidStageException("待分配质量部人员");
-        }
-        if (project == null) {
-            throw new ProjectNotFoundException("该测试项目不存在");
-        }
-        return project;
-    }
-
-    @Override
-    public PageResult<ProjectOutline> findProjectBaseInfos(Integer page, Integer pageSize, Long userId, Role userRole) {
-        if (page <= 0 || pageSize <= 0) {
-            throw new ProjectInvalidArgumentException("页号或每页大小必须为正整数");
-        }
-        long total;
-        List<ProjectOutline> list;
-        // 根据用户角色不同，返回不同结果
-        if (userRole == Role.ADMIN || userRole == Role.MARKETING_SUPERVISOR
-                || userRole == Role.QA_SUPERVISOR || userRole == Role.TESTING_SUPERVISOR) {
-            total = projectDAO.countAll();
-            list = projectDAO.findAllProjects(page, pageSize);
-        }
-        else if (userRole == Role.MARKETER) {
-            total = projectDAO.countByMarketerId(userId);
-            list = projectDAO.findProjectByMarketerId(userId, page, pageSize);
-        }
-        else if (userRole == Role.TESTER) {
-            total = projectDAO.countByTesterId(userId);
-            list = projectDAO.findProjectByTesterId(userId, page, pageSize);
-        }
-        else if (userRole == Role.QA) {
-            total = projectDAO.countByQaId(userId);
-            list = projectDAO.findProjectByQaId(userId, page, pageSize);
-        }
-        else {
-            throw new ProjectPermissionDeniedException("无权查看测试项目列表");
-        }
-        return new PageResult<>(page, pageSize, total, list);
+        // 更新测试项目的formIds
+        return projectDAO.updateFormIds(projectId, projectFormIds);
     }
 
     @Override
@@ -199,28 +198,10 @@ public class MongoProjectService implements ProjectService {
             throw new ProjectDAOFailureException("更新质量部人员失败");
         }
         // 生成表格
-        createProjectForms(projectId);
+        if (!createProjectForms(projectId)) {
+            throw new ProjectDAOFailureException("创建各测试表单失败");
+        }
     }
-
-//    @Override
-//    public void fileProject(String projectId, Long userId, Role userRole) {
-//        Project project = projectDAO.findProjectById(projectId);
-//        // 检查测试项目阶段
-//        ProjectStage curStage = project.getStatus().getStage();
-//        if (curStage != ProjectStage.NOT_FILE) {
-//            throw new ProjectInvalidStageException("此阶段不能归档或项目已归档");
-//        }
-//        // 检查用户权限
-//        ProjectBaseInfo projectBaseInfo = project.getProjectBaseInfo();
-//        Long qaId = projectBaseInfo.getQaId();
-//        if (userRole != Role.ADMIN && userRole != Role.QA_SUPERVISOR && !Objects.equals(userId, qaId)) {
-//            throw new ProjectPermissionDeniedException("无权归档操作");
-//        }
-//        // 更新状态
-//        if (!projectDAO.updateStatus(projectId, new ProjectStatus(ProjectStage.FILED, null))) {
-//            throw new ProjectDAOFailureException("归档项目失败");
-//        }
-//    }
 
     @Override
     public void removeProject(String projectId, Long userId, Role userRole) {
@@ -239,10 +220,69 @@ public class MongoProjectService implements ProjectService {
     }
 
     @Override
-    public void updateStatus(String projectId, ProjectStatus status, Long userId, Role userRole) {
-        // TODO: 检查权限，检查判断流程是否能流转
+    public void updateStatus(String projectId, ProjectStatus nextStatus, Long userId, Role userRole) {
         Project project = findProject(projectId, userId, userRole);
-        if (!projectDAO.updateStatus(project.getId(), status)) {
+
+        switch (project.getStatus().getStage()) {
+            case WAIT_FOR_QA:               // 等待分配质量人员（所有表不能改）, next: SCHEME_UNFILLED
+                if (nextStatus.getStage() != ProjectStage.SCHEME_UNFILLED) {
+                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
+                }
+                break;
+            case SCHEME_UNFILLED:           // 测试方案未填写, next: SCHEME_AUDITING
+            case SCHEME_AUDITING_DENIED:    // 测试方案经质量部审核不通过, next: SCHEME_AUDITING
+                if (nextStatus.getStage() != ProjectStage.SCHEME_AUDITING) {
+                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
+                }
+                break;
+            case SCHEME_AUDITING:           // 测试方案已提交，质量部可审核, next: SCHEME_AUDITING_DENIED 或 SCHEME_AUDITING_PASSED
+                if (nextStatus.getStage() != ProjectStage.SCHEME_AUDITING_DENIED && nextStatus.getStage() != ProjectStage.SCHEME_AUDITING_PASSED) {
+                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
+                }
+                break;
+            case SCHEME_AUDITING_PASSED:    // 测试方案经质量部审核通过, next: SCHEME_REVIEW_UPLOADED
+                if (nextStatus.getStage() != ProjectStage.SCHEME_REVIEW_UPLOADED) {
+                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
+                }
+                break;
+            case SCHEME_REVIEW_UPLOADED:    // 测试方案评审表已上传，进行相关测试，测试报告填写中, next: REPORT_AUDITING, 测试报告提交触发
+            case REPORT_QA_DENIED:          // 测试报告经质量部审核不通过, next: REPORT_AUDITING,测试报告提交时触发
+            case REPORT_CUSTOMER_REJECT:    // 测试报告被客户不接受, next: REPORT_AUDITING
+                if (nextStatus.getStage() != ProjectStage.REPORT_AUDITING) {
+                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
+                }
+                break;
+            case REPORT_AUDITING:           // 测试报告已提交，质量部可审核, next: REPORT_QA_DENIED 或 REPORT_QA_PASSED
+                if (nextStatus.getStage() != ProjectStage.REPORT_QA_DENIED && nextStatus.getStage() != ProjectStage.REPORT_QA_PASSED) {
+                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
+                }
+                break;
+            case REPORT_QA_PASSED:          // 测试报告经质量部审核通过，待上传测试报告检查表并签发测试报告, next: REPORT_WAIT_CUSTOMER
+                if (nextStatus.getStage() != ProjectStage.REPORT_WAIT_CUSTOMER) {
+                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
+                }
+                break;
+            case REPORT_WAIT_CUSTOMER:      // 测试报告已签发，待客户接受, next: REPORT_CUSTOMER_CONFIRM 或 REPORT_CUSTOMER_REJECT
+                if (nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_CONFIRM && nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_REJECT) {
+                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
+                }
+                break;
+            case REPORT_CUSTOMER_CONFIRM:   // 测试报告被客户接受，质量部可审计测试文档, next: QA_ALL_REJECTED 或 QA_ALL_PASSED
+                if (nextStatus.getStage() != ProjectStage.QA_ALL_REJECTED && nextStatus.getStage() != ProjectStage.QA_ALL_PASSED) {
+                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
+                }
+                break;
+            case QA_ALL_REJECTED:           // 质量部审计测试文档不合格, next: REPORT_CUSTOMER_CONFIRM
+                if (nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_CONFIRM) {
+                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
+                }
+                break;
+            case QA_ALL_PASSED:             // 质量部审计测试文档合格，完成（无可填，全可看）
+                throw new ProjectInvalidStageException("项目已结项");
+            default:
+                throw new ProjectInvalidArgumentException("无法解析该状态");
+        }
+        if (!projectDAO.updateStatus(project.getId(), nextStatus)) {
             throw new ProjectDAOFailureException("更改测试项目状态失败");
         }
     }
