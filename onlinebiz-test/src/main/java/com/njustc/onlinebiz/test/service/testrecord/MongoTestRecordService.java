@@ -1,13 +1,13 @@
 package com.njustc.onlinebiz.test.service.testrecord;
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
+import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordStatus;
+import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.testrecord.TestRecordDAO;
 import com.njustc.onlinebiz.test.exception.testrecord.TestRecordDAOFailureException;
 import com.njustc.onlinebiz.test.exception.testrecord.TestRecordNotFoundException;
 import com.njustc.onlinebiz.test.exception.testrecord.TestRecordPermissionDeniedException;
-import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
-import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordStatus;
-import com.njustc.onlinebiz.test.service.project.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +17,11 @@ import java.util.List;
 @Service
 public class MongoTestRecordService implements TestRecordService {
     private final TestRecordDAO testRecordDAO;
-    private final ProjectService projectService;
+    private final ProjectDAO projectDAO;
 
-    public MongoTestRecordService(ProjectService projectService, TestRecordDAO testRecordDAO) {
-        this.projectService = projectService;
+    public MongoTestRecordService(TestRecordDAO testRecordDAO, ProjectDAO projectDAO) {
         this.testRecordDAO = testRecordDAO;
+        this.projectDAO = projectDAO;
     }
 
     @Override
@@ -88,8 +88,8 @@ public class MongoTestRecordService implements TestRecordService {
         } else if (userRole == Role.QA_SUPERVISOR || userRole == Role.TESTING_SUPERVISOR) {
             return true;
         }
-        Long testerId = projectService.getProjectBaseInfo(testRecordList.getProjectId()).getTesterId();
-        Long qaId = projectService.getProjectBaseInfo(testRecordList.getProjectId()).getQaId();
+        Long testerId = projectDAO.findProjectById(testRecordList.getProjectId()).getProjectBaseInfo().getTesterId();
+        Long qaId = projectDAO.findProjectById(testRecordList.getProjectId()).getProjectBaseInfo().getQaId();
         if (userRole == Role.TESTER && userId.equals(testerId)) return true;
         if (userRole == Role.QA && userId.equals(qaId)) return true;
         return false;
@@ -104,7 +104,7 @@ public class MongoTestRecordService implements TestRecordService {
         } else if (userRole == Role.TESTING_SUPERVISOR) {
             return true;
         }
-        Long testerId = projectService.getProjectBaseInfo(testRecordList.getProjectId()).getTesterId();
+        Long testerId = projectDAO.findProjectById(testRecordList.getProjectId()).getProjectBaseInfo().getTesterId();
         if (userRole == Role.TESTER && userId.equals(testerId)) return true;
         return false;
     }
