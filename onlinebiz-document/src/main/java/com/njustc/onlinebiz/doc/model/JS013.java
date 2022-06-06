@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.doc.model;
 
+import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,4 +31,8 @@ public class JS013 {
     private String inputBuTongGuo06 = "";
     private String inputBuTongGuo07 = "";
     private String inputBuTongGuo08 = "";
+
+    public JS013(SchemeReview schemeReview) {
+        // TODO: 格式转换
+    }
 }

@@ -2,6 +2,10 @@ package com.njustc.onlinebiz.doc.controller;
 
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.contract.Contract;
+import com.njustc.onlinebiz.common.model.test.review.EntrustTestReview;
+import com.njustc.onlinebiz.common.model.test.review.ReportReview;
+import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
+import com.njustc.onlinebiz.common.model.test.testcase.Testcase;
 import com.njustc.onlinebiz.common.model.test.testissue.TestIssueList;
 import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
 import com.njustc.onlinebiz.doc.model.*;
@@ -25,28 +29,47 @@ public class DownloadController {
   private final DocServiceJS003 docServiceJS003;
   private final DocServiceJS004 docServiceJS004;
   private final DocServiceJS005 docServiceJS005;
+  private final DocServiceJS008 docServiceJS008;
   private final DocServiceJS009 docServiceJS009;
+  private final DocServiceJS010 docServiceJS010;
   private final DocServiceJS011 docServiceJS011;
+  private final DocServiceJS012 docServiceJS012;
+  private final DocServiceJS013 docServiceJS013;
+  private final DocServiceJS014 docServiceJS014;
 
   public DownloadController(DocServiceJS001 docServiceJS001,
                             DocServiceJS002 docServiceJS002,
                             DocServiceJS003 docServiceJS003,
                             DocServiceJS004 docServiceJS004,
-                            DocServiceJS005 docServiceJS005, DocServiceJS009 docServiceJS009, DocServiceJS011 docServiceJS011) {
+                            DocServiceJS005 docServiceJS005,
+                            DocServiceJS008 docServiceJS008,
+                            DocServiceJS009 docServiceJS009,
+                            DocServiceJS010 docServiceJS010,
+                            DocServiceJS011 docServiceJS011,
+                            DocServiceJS012 docServiceJS012,
+                            DocServiceJS013 docServiceJS013,
+                            DocServiceJS014 docServiceJS014) {
     this.docServiceJS001 = docServiceJS001;
     this.docServiceJS002 = docServiceJS002;
     this.docServiceJS003 = docServiceJS003;
     this.docServiceJS004 = docServiceJS004;
     this.docServiceJS005 = docServiceJS005;
+    this.docServiceJS008 = docServiceJS008;
     this.docServiceJS009 = docServiceJS009;
+    this.docServiceJS010 = docServiceJS010;
     this.docServiceJS011 = docServiceJS011;
+    this.docServiceJS012 = docServiceJS012;
+    this.docServiceJS013 = docServiceJS013;
+    this.docServiceJS014 = docServiceJS014;
   }
 
+  // JS001 文档下载接口
   @GetMapping("/doc/JS001")
   public String downloadJS001() {
     return docServiceJS001.fill();
   }
 
+  // JS002 文档下载接口
   @GetMapping("/doc/JS002/{entrustId}")
   public String downloadJS002(
           @PathVariable("entrustId") String entrustId,
@@ -58,6 +81,7 @@ public class DownloadController {
     return docServiceJS002.fill(newJson);
   }
 
+  // JS003 文档下载接口
   @GetMapping("/doc/JS003/{entrustId}")
   public String downloadJS003(
           @PathVariable("entrustId") String entrustId,
@@ -70,6 +94,7 @@ public class DownloadController {
     return docServiceJS003.fill(newJson);
   }
 
+  // JS004 文档下载接口
   @GetMapping("/doc/JS004/{contractId}")
   public String downloadJS004(
           @PathVariable("contractId") String contractId,
@@ -81,6 +106,7 @@ public class DownloadController {
     return docServiceJS004.fill(newJson);
   }
 
+  // JS005 文档下载接口
   @GetMapping("/doc/JS005/{contractId}")
   public String downloadJS005(
           @PathVariable("contractId") String contractId,
@@ -92,7 +118,93 @@ public class DownloadController {
     return docServiceJS005.fill(newJson);
   }
 
-  // 测试用，非生产接口
+  // JS008 文档下载接口
+  @GetMapping("/doc/JS008/{testcaseId}")
+  public String downloadJS008(
+          @PathVariable("testcaseId") String testcaseId,
+          @RequestParam("userId") Long userId,
+          @RequestParam("userRole") Role userRole
+  ) {
+    Testcase testcase = docServiceJS008.getReportReview(testcaseId, userId, userRole);
+    JS008 newJson = new JS008(testcase);
+    return docServiceJS008.fill(newJson);
+  }
+
+  // JS009 文档下载接口
+  @GetMapping("/doc/JS009/{testRecordId}")
+  public String downloadJS009(
+          @PathVariable("testRecordId") String testRecordId,
+          @RequestParam("userId") Long userId,
+          @RequestParam("userRole") Role userRole
+  ) {
+    TestRecordList testRecordList = docServiceJS009.getTestRecordList(testRecordId, userId, userRole);
+    JS009 newJson = new JS009(testRecordList);
+    return docServiceJS009.fill(newJson);
+  }
+
+  // JS010 文档下载接口
+  @GetMapping("/doc/JS010/{reportReviewId}")
+  public String downloadJS010(
+          @PathVariable("reportReviewId") String reportReviewId,
+          @RequestParam("userId") Long userId,
+          @RequestParam("userRole") Role userRole
+  ) {
+    ReportReview reportReview = docServiceJS010.getReportReview(reportReviewId, userId, userRole);
+    JS010 newJson = new JS010(reportReview);
+    return docServiceJS010.fill(newJson);
+  }
+
+  // JS011 文档下载接口
+  @GetMapping("/doc/JS011/{testIssueId}")
+  public String downloadJS011(
+          @PathVariable("testIssueId") String testIssueId,
+          @RequestParam("userId") Long userId,
+          @RequestParam("userRole") Role userRole
+  ) {
+    TestIssueList testIssueList = docServiceJS011.getTestIssueList(testIssueId, userId, userRole);
+    JS011 newJson = new JS011(testIssueList);
+    return docServiceJS011.fill(newJson);
+  }
+
+  // JS012 文档下载接口
+  @GetMapping("/doc/JS012/{entrustTestReviewId}")
+  public String downloadJS012(
+          @PathVariable("entrustTestReviewId") String entrustTestReviewId,
+          @RequestParam("userId") Long userId,
+          @RequestParam("userRole") Role userRole
+  ) {
+    EntrustTestReview entrustTestReview = docServiceJS012.getEntrustTestReview(entrustTestReviewId, userId, userRole);
+    JS012 newJson = new JS012(entrustTestReview);
+    return docServiceJS012.fill(newJson);
+  }
+
+  // JS013 文档下载接口
+  @GetMapping("/doc/JS013/{schemeReviewId}")
+  public String downloadJS013(
+          @PathVariable("schemeReviewId") String schemeReviewId,
+          @RequestParam("userId") Long userId,
+          @RequestParam("userRole") Role userRole
+  ) {
+    SchemeReview schemeReview = docServiceJS013.getSchemeReview(schemeReviewId, userId, userRole);
+    JS013 newJson = new JS013(schemeReview);
+    return docServiceJS013.fill(newJson);
+  }
+
+  // JS014 文档下载接口
+  @GetMapping("/doc/JS014/{entrustId}")
+  public String downloadJS014(
+          @PathVariable("entrustId") String entrustId,
+          @RequestParam("userId") Long userId,
+          @RequestParam("userRole") Role userRole
+  ) {
+    Entrust entrust = docServiceJS014.getEntrust(entrustId, userId, userRole);
+    JS014 newJson = new JS014(entrust);
+    return docServiceJS014.fill(newJson);
+  }
+
+
+
+  // 下面接口未测试用，非生产接口
   @GetMapping("/doc/JS009")
   public String downloadJS009(
   ) {

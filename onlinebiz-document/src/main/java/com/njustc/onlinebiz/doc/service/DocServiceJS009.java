@@ -5,14 +5,20 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
 import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList.TestRecord;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
+import com.njustc.onlinebiz.doc.exception.DownloadDAOFailureException;
+import com.njustc.onlinebiz.doc.exception.DownloadNotFoundException;
+import com.njustc.onlinebiz.doc.exception.DownloadPermissionDeniedException;
 import com.njustc.onlinebiz.doc.model.JS009;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
@@ -21,18 +27,48 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class DocServiceJS009 {
+
+    private static final String TEST_SERVICE = "http://onlinebiz-test";
     private final RestTemplate restTemplate;
     private final OSSProvider ossProvider;
-    private String testRecordsId;
+    private String testRecordId;
 
     public DocServiceJS009(RestTemplate restTemplate, OSSProvider ossProvider) {
         this.restTemplate = restTemplate;
         this.ossProvider = ossProvider;
     }
+
+    /**
+     * 通过 testRecordId 向test服务获取对象，以供后续生成文档并下载
+     * @param testRecordId 待下载的测试记录表 id
+     * @param userId 操作的用户 id
+     * @param userRole 操作的用户角色
+     * @return 若成功从test服务中获得对象，则返回；否则，返回异常信息
+     * */
+    public TestRecordList getTestRecordList(String testRecordId, Long userId, Role userRole) {
+        // 调用test服务的getTestRecord接口
+        String params = "?userId=" + userId + "&userRole=" + userRole;
+        String url = TEST_SERVICE + "/api/test/testRecord/" + testRecordId;
+        ResponseEntity<TestRecordList> responseEntity = restTemplate.getForEntity(url + params, TestRecordList.class);
+        // 检查测试记录表 id 及权限有效性
+        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+            throw new DownloadPermissionDeniedException("无权下载该文件");
+        }
+        else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+            throw new DownloadNotFoundException("未找到该测试记录表ID");
+        }
+        else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
+            throw new DownloadDAOFailureException("其他问题");
+        }
+        TestRecordList testRecordList = responseEntity.getBody();
+        this.testRecordId =  testRecordId;
+
+        return testRecordList;
+    }
+
 
     /**
      * 以下是文档生成部分
@@ -48,10 +84,8 @@ public class DocServiceJS009 {
 
     private static Font titlefont1;
     private static Font titlefont2;
-    private static Font keyfont;
     private static Font textfont;
     private static BaseFont bfChinese;
-    private static BaseFont bfHeiTi;
 
     static {
         // absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1) + "/../";
@@ -68,7 +102,7 @@ public class DocServiceJS009 {
     /** 填充JS000文档 */
     public String fill(JS009 newJson) {
         JS009Json = newJson;
-        String pdfPath = DOCUMENT_DIR + "JS009_" + testRecordsId + ".pdf";
+        String pdfPath = DOCUMENT_DIR + "JS009_" + testRecordId + ".pdf";
         try {
             // 1.新建document对象
             Rectangle pageSizeJS008 = new RectangleReadOnly(841.8F, 595.2F);
@@ -103,9 +137,9 @@ public class DocServiceJS009 {
         // 上传pdf
         try {
             if(ossProvider.upload(
-                    "doc", "JS009_" + testRecordsId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+                    "doc", "JS009_" + testRecordId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
                 // deleteOutFile(pdfPath);
-                return "https://oss.syh1en.asia/doc/JS009_" + testRecordsId + ".pdf";
+                return "https://oss.syh1en.asia/doc/JS009_" + testRecordId + ".pdf";
             } else {
                 deleteOutFile(pdfPath);
                 return "upload failed";
@@ -138,10 +172,9 @@ public class DocServiceJS009 {
         // 加载字体
         try {
             bfChinese = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            bfHeiTi = BaseFont.createFont(DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            // bfHeiTi = BaseFont.createFont(DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont1 = new Font(bfChinese, 20, Font.NORMAL);
             titlefont2 = new Font(bfChinese, 11f, Font.BOLD);
-            keyfont = new Font(bfChinese, 10f, Font.BOLD);
             textfont = new Font(bfChinese, 11f, Font.NORMAL);
         } catch (Exception e) {
             e.printStackTrace();
@@ -161,8 +194,6 @@ public class DocServiceJS009 {
         // 行列每个基础单元格为 5mm x 5mm
         PdfPTable table = ItextUtils.createTable(widths, tableWidth);
 
-        float[] paddings = new float[]{6f, 6f, 5f, 5f};
-        float[] paddings2 = new float[]{12.5f, 12.5f, 5f, 5f};
         float[] paddings3 = new float[]{4f, 4f, 3f, 3f};        // 上下左右的间距
         float borderWidth = 0.3f;
 
