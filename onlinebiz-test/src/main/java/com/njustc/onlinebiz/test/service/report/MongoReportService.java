@@ -1,18 +1,16 @@
 package com.njustc.onlinebiz.test.service.report;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
-import com.njustc.onlinebiz.common.model.test.project.ProjectStatus;
+import com.njustc.onlinebiz.common.model.test.report.Report;
+import com.njustc.onlinebiz.common.model.test.report.ReportStage;
+import com.njustc.onlinebiz.common.model.test.report.ReportStatus;
+import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.report.ReportDAO;
 import com.njustc.onlinebiz.test.exception.report.ReportDAOFailureException;
 import com.njustc.onlinebiz.test.exception.report.ReportInvalidStageException;
 import com.njustc.onlinebiz.test.exception.report.ReportNotFoundException;
 import com.njustc.onlinebiz.test.exception.report.ReportPermissionDeniedException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemeDAOFailureException;
-import com.njustc.onlinebiz.common.model.test.report.Report;
-import com.njustc.onlinebiz.common.model.test.report.ReportStage;
-import com.njustc.onlinebiz.common.model.test.report.ReportStatus;
-import com.njustc.onlinebiz.test.service.project.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +18,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class MongoReportService implements ReportService {
     private final ReportDAO reportDAO;
-    private final ProjectService projectService;
+    private final ProjectDAO projectDAO;
 
-    public MongoReportService(ReportDAO reportDAO, ProjectService projectService) {
+    public MongoReportService(ReportDAO reportDAO, ProjectDAO projectDAO) {
         this.reportDAO = reportDAO;
-        this.projectService = projectService;
+        this.projectDAO = projectDAO;
     }
 
     @Override
@@ -100,7 +98,6 @@ public class MongoReportService implements ReportService {
         if (!reportDAO.updateStatus(reportId, new ReportStatus(ReportStage.QA_PASSED, "质量部已通过"))) {
             throw new ReportDAOFailureException("通过测试报告失败");
         }
-        ProjectStatus projectStatus = new ProjectStatus(ProjectStage.REPORT_QA_PASSED,"");
     }
 
     @Override
@@ -118,7 +115,6 @@ public class MongoReportService implements ReportService {
         if (!reportDAO.updateStatus(reportId, new ReportStatus(ReportStage.QA_REJECTED, message))) {
             throw new ReportDAOFailureException("否定测试报告失败");
         }
-        ProjectStatus projectStatus = new ProjectStatus(ProjectStage.REPORT_QA_DENIED,message);
     }
 
     @Override
@@ -128,7 +124,7 @@ public class MongoReportService implements ReportService {
             throw new ReportNotFoundException("该测试报告不存在");
         }
         //获取委托的客户id
-        if (!(userRole == Role.CUSTOMER && userId.equals(projectService.getProjectBaseInfo(report.getProjectId()).getCustomerId()))) {
+        if (!(userRole == Role.CUSTOMER && userId.equals(projectDAO.findProjectById(report.getProjectId()).getProjectBaseInfo().getCustomerId()))) {
             throw new ReportPermissionDeniedException("无权审核测试报告");
         }
         if (report.getStatus().getStage() != ReportStage.QA_PASSED) {
@@ -146,7 +142,7 @@ public class MongoReportService implements ReportService {
             throw new ReportNotFoundException("该测试报告不存在");
         }
         //获取委托的客户id
-        if (!(userRole == Role.CUSTOMER && userId.equals(projectService.getProjectBaseInfo(report.getProjectId()).getCustomerId()))) {
+        if (!(userRole == Role.CUSTOMER && userId.equals(projectDAO.findProjectById(report.getProjectId()).getProjectBaseInfo().getCustomerId()))) {
             throw new ReportPermissionDeniedException("无权审核测试报告");
         }
         if (report.getStatus().getStage() != ReportStage.QA_PASSED) {
@@ -166,8 +162,8 @@ public class MongoReportService implements ReportService {
             return true;
         }
         //项目的测试相关人员及质量相关人员可以查看
-        Long testerId = projectService.getProjectBaseInfo(report.getProjectId()).getTesterId();
-        Long qaId = projectService.getProjectBaseInfo(report.getProjectId()).getQaId();
+        Long testerId = projectDAO.findProjectById(report.getProjectId()).getProjectBaseInfo().getTesterId();
+        Long qaId = projectDAO.findProjectById(report.getProjectId()).getProjectBaseInfo().getQaId();
         if (userRole == Role.TESTER && userId.equals(testerId)) return true;
         if (userRole == Role.QA && userId.equals(qaId)) return true;
         return false;
@@ -182,7 +178,7 @@ public class MongoReportService implements ReportService {
             return true;
         }
         //项目的测试相关人员可以修改
-        Long testerId = projectService.getProjectBaseInfo(report.getProjectId()).getTesterId();
+        Long testerId = projectDAO.findProjectById(report.getProjectId()).getProjectBaseInfo().getTesterId();
         if (userRole == Role.TESTER && userId.equals(testerId)) return true;
         return false;
     }
@@ -196,7 +192,7 @@ public class MongoReportService implements ReportService {
             return true;
         }
         //项目的质量部相关人员可以审核
-        Long qaId = projectService.getProjectBaseInfo(report.getProjectId()).getQaId();
+        Long qaId = projectDAO.findProjectById(report.getProjectId()).getProjectBaseInfo().getQaId();
         if (userRole == Role.QA && userId.equals(qaId)) return true;
         return false;
     }
