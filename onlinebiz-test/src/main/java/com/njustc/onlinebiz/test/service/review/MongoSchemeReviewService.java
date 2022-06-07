@@ -3,8 +3,6 @@ package com.njustc.onlinebiz.test.service.review;
 
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
-import com.njustc.onlinebiz.common.model.test.review.ReviewStage;
-import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
 import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.review.SchemeReviewDAO;
