@@ -6,6 +6,7 @@ import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.project.*;
 import com.njustc.onlinebiz.test.exception.project.*;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
+import com.njustc.onlinebiz.test.service.report.ReportService;
 import com.njustc.onlinebiz.test.service.review.SchemeReviewService;
 import com.njustc.onlinebiz.test.service.scheme.SchemeService;
 import com.njustc.onlinebiz.test.service.testcase.TestcaseService;
@@ -31,19 +32,21 @@ public class MongoProjectService implements ProjectService {
     private final SchemeReviewService schemeReviewService;
     private final TestcaseService testcaseService;
     private final TestRecordService testRecordService;
+    private final ReportService reportService;
 
     public MongoProjectService(RestTemplate restTemplate,
                                ProjectDAO projectDAO,
                                SchemeService schemeService,
                                SchemeReviewService schemeReviewService,
                                TestcaseService testcaseService,
-                               TestRecordService testRecordService) {
+                               TestRecordService testRecordService, ReportService reportService) {
         this.restTemplate = restTemplate;
         this.projectDAO = projectDAO;
         this.schemeService = schemeService;
         this.schemeReviewService = schemeReviewService;
         this.testcaseService = testcaseService;
         this.testRecordService = testRecordService;
+        this.reportService = reportService;
     }
 
     @Override
@@ -152,8 +155,7 @@ public class MongoProjectService implements ProjectService {
         // 对应的测试方案 id (JS006)
         String testSchemeId = schemeService.createScheme(entrustId, null, marketerId, Role.MARKETER, projectId);
         projectFormIds.setTestSchemeId(testSchemeId);
-        // TODO: 对应的测试报告 id (JS007)
-        String testReportId = null;
+        String testReportId = reportService.createReport(projectId, entrustId, null, marketerId, Role.MARKETER);
         projectFormIds.setTestReportId(testReportId);
         // TODO: 对应的测试用例表 id (JS008)
 //         String testcaseListId = testcaseService.createTestcaseList(entrustId, null, userId, userRole);
