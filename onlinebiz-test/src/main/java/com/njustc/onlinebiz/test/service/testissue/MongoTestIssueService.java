@@ -2,11 +2,11 @@ package com.njustc.onlinebiz.test.service.testissue;
 
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.testissue.TestIssueList;
+import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.testissue.TestIssueDAO;
 import com.njustc.onlinebiz.test.exception.testissue.TestIssueDAOFailureException;
 import com.njustc.onlinebiz.test.exception.testissue.TestIssueNotFoundException;
 import com.njustc.onlinebiz.test.exception.testissue.TestIssuePermissionDeniedException;
-import com.njustc.onlinebiz.test.service.project.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +16,11 @@ import java.util.List;
 @Service
 public class MongoTestIssueService implements TestIssueService {
     private final TestIssueDAO testIssueDAO;
-    private final ProjectService projectService;
+    private final ProjectDAO projectDAO;
 
-    public MongoTestIssueService(ProjectService projectService, TestIssueDAO testIssueDAO) {
-        this.projectService = projectService;
+    public MongoTestIssueService(TestIssueDAO testIssueDAO, ProjectDAO projectDAO) {
         this.testIssueDAO = testIssueDAO;
+        this.projectDAO = projectDAO;
     }
 
     @Override
@@ -86,8 +86,8 @@ public class MongoTestIssueService implements TestIssueService {
         } else if (userRole == Role.QA_SUPERVISOR || userRole == Role.TESTING_SUPERVISOR) {
             return true;
         }
-        Long testerId = projectService.getProjectBaseInfo(testIssueList.getProjectId()).getTesterId();
-        Long qaId = projectService.getProjectBaseInfo(testIssueList.getProjectId()).getQaId();
+        Long testerId = projectDAO.findProjectById(testIssueList.getProjectId()).getProjectBaseInfo().getTesterId();
+        Long qaId = projectDAO.findProjectById(testIssueList.getProjectId()).getProjectBaseInfo().getQaId();
         if (userRole == Role.TESTER && userId.equals(testerId)) return true;
         if (userRole == Role.QA && userId.equals(qaId)) return true;
         return false;
@@ -102,7 +102,7 @@ public class MongoTestIssueService implements TestIssueService {
         } else if (userRole == Role.TESTING_SUPERVISOR) {
             return true;
         }
-        Long testerId = projectService.getProjectBaseInfo(testIssueList.getProjectId()).getTesterId();
+        Long testerId = projectDAO.findProjectById(testIssueList.getProjectId()).getProjectBaseInfo().getTesterId();
         if (userRole == Role.TESTER && userId.equals(testerId)) return true;
         return false;
     }
