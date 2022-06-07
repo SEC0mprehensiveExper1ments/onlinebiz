@@ -1,10 +1,12 @@
 package com.njustc.onlinebiz.test.service.testrecord;
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
 import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.testrecord.TestRecordDAO;
 import com.njustc.onlinebiz.test.exception.testrecord.TestRecordDAOFailureException;
+import com.njustc.onlinebiz.test.exception.testrecord.TestRecordInvalidStageException;
 import com.njustc.onlinebiz.test.exception.testrecord.TestRecordNotFoundException;
 import com.njustc.onlinebiz.test.exception.testrecord.TestRecordPermissionDeniedException;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +46,13 @@ public class MongoTestRecordService implements TestRecordService {
         if (!hasAuthorityToCheck(userId, userRole, testRecordList)) {
             throw new TestRecordPermissionDeniedException("无权查看该测试记录表");
         }
+
+        ProjectStage projectStage = projectDAO.findProjectById(testRecordList.getProjectId()).getStatus().getStage();
+        if (projectStage == ProjectStage.WAIT_FOR_QA || projectStage == ProjectStage.SCHEME_UNFILLED ||
+                projectStage == ProjectStage.SCHEME_AUDITING || projectStage == ProjectStage.SCHEME_AUDITING_DENIED) {
+            throw new TestRecordInvalidStageException("此阶段不可查看测试记录表");
+        }
+
         return testRecordList;
     }
 
@@ -56,6 +65,13 @@ public class MongoTestRecordService implements TestRecordService {
         if (!hasAuthorityToFill(userId, userRole, testRecordList)) {
             throw new TestRecordPermissionDeniedException("无权查看该测试记录表");
         }
+
+        ProjectStage projectStage = projectDAO.findProjectById(testRecordList.getProjectId()).getStatus().getStage();
+        if (!(projectStage == ProjectStage.SCHEME_REVIEW_UPLOADED || projectStage == ProjectStage.REPORT_QA_DENIED ||
+                projectStage == ProjectStage.REPORT_CUSTOMER_REJECT || projectStage == ProjectStage.QA_ALL_REJECTED)) {
+            throw new TestRecordInvalidStageException("此阶段不可修改测试记录表");
+        }
+
         if (!testRecordDAO.updateContent(testRecordListId, testRecords)) {
             throw new TestRecordDAOFailureException("更新测试记录表失败");
         }

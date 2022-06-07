@@ -1,10 +1,12 @@
 package com.njustc.onlinebiz.test.service.testissue;
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
 import com.njustc.onlinebiz.common.model.test.testissue.TestIssueList;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.testissue.TestIssueDAO;
 import com.njustc.onlinebiz.test.exception.testissue.TestIssueDAOFailureException;
+import com.njustc.onlinebiz.test.exception.testissue.TestIssueInvalidStageException;
 import com.njustc.onlinebiz.test.exception.testissue.TestIssueNotFoundException;
 import com.njustc.onlinebiz.test.exception.testissue.TestIssuePermissionDeniedException;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +46,13 @@ public class MongoTestIssueService implements TestIssueService {
         if (!hasAuthorityToCheck(userId, userRole, testIssueList)) {
             throw new TestIssuePermissionDeniedException("无权查看该测试问题清单");
         }
+
+        ProjectStage projectStage = projectDAO.findProjectById(testIssueList.getProjectId()).getStatus().getStage();
+        if (projectStage == ProjectStage.WAIT_FOR_QA || projectStage == ProjectStage.SCHEME_UNFILLED ||
+                projectStage == ProjectStage.SCHEME_AUDITING || projectStage == ProjectStage.SCHEME_AUDITING_DENIED) {
+            throw new TestIssueInvalidStageException("此阶段不可查看测试问题清单");
+        }
+
         return testIssueList;
     }
 
@@ -56,6 +65,13 @@ public class MongoTestIssueService implements TestIssueService {
         if (!hasAuthorityToFill(userId, userRole, testIssueList)) {
             throw new TestIssuePermissionDeniedException("无权查看该测试问题清单");
         }
+
+        ProjectStage projectStage = projectDAO.findProjectById(testIssueList.getProjectId()).getStatus().getStage();
+        if (!(projectStage == ProjectStage.SCHEME_REVIEW_UPLOADED || projectStage == ProjectStage.REPORT_QA_DENIED ||
+                projectStage == ProjectStage.REPORT_CUSTOMER_REJECT || projectStage == ProjectStage.QA_ALL_REJECTED)) {
+            throw new TestIssueInvalidStageException("此阶段不可修改测试问题清单");
+        }
+
         if (!testIssueDAO.updateContent(testIssueListId, testIssues)) {
             throw new TestIssueDAOFailureException("更新测试问题清单失败");
         }

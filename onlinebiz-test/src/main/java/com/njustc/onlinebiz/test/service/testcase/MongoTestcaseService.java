@@ -1,10 +1,12 @@
 package com.njustc.onlinebiz.test.service.testcase;
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
 import com.njustc.onlinebiz.common.model.test.testcase.Testcase;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.testcase.TestcaseDAO;
 import com.njustc.onlinebiz.test.exception.testcase.TestcaseDAOFailureException;
+import com.njustc.onlinebiz.test.exception.testcase.TestcaseInvalidStageException;
 import com.njustc.onlinebiz.test.exception.testcase.TestcaseNotFoundException;
 import com.njustc.onlinebiz.test.exception.testcase.TestcasePermissionDeniedException;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +45,13 @@ public class MongoTestcaseService implements TestcaseService {
         if (!hasAuthorityToCheck(userId, userRole, testcase)) {
             throw new TestcasePermissionDeniedException("无权查看该测试用例表");
         }
+
+        ProjectStage projectStage = projectDAO.findProjectById(testcase.getProjectId()).getStatus().getStage();
+        if (projectStage == ProjectStage.WAIT_FOR_QA || projectStage == ProjectStage.SCHEME_UNFILLED ||
+                projectStage == ProjectStage.SCHEME_AUDITING || projectStage == ProjectStage.SCHEME_AUDITING_DENIED) {
+            throw new TestcaseInvalidStageException("此阶段不可查看测试用例表");
+        }
+
         return testcase;
     }
 
@@ -55,6 +64,13 @@ public class MongoTestcaseService implements TestcaseService {
         if (!hasAuthorityToFill(userId, userRole, testcase)) {
             throw new TestcasePermissionDeniedException("无权查看该测试用例表");
         }
+
+        ProjectStage projectStage = projectDAO.findProjectById(testcase.getProjectId()).getStatus().getStage();
+        if (!(projectStage == ProjectStage.SCHEME_REVIEW_UPLOADED || projectStage == ProjectStage.REPORT_QA_DENIED ||
+                projectStage == ProjectStage.REPORT_CUSTOMER_REJECT || projectStage == ProjectStage.QA_ALL_REJECTED)) {
+            throw new TestcaseInvalidStageException("此阶段不可修改测试用例表");
+        }
+
         if (!testcaseDAO.updateContent(testcaseListId, testcases)) {
             throw new TestcaseDAOFailureException("更新测试用例表失败");
         }
