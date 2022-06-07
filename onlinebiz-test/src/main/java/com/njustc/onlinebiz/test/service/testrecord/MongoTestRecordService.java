@@ -2,7 +2,6 @@ package com.njustc.onlinebiz.test.service.testrecord;
 
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
-import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordStatus;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.testrecord.TestRecordDAO;
 import com.njustc.onlinebiz.test.exception.testrecord.TestRecordDAOFailureException;
@@ -33,7 +32,6 @@ public class MongoTestRecordService implements TestRecordService {
         testRecordList.setProjectId(projectId);
         testRecordList.setEntrustId(entrustId);
         testRecordList.setTestRecords(testRecords);
-        testRecordList.setStatus(new TestRecordStatus(true, "需修改"));
         return testRecordDAO.insertTestRecordList(testRecordList).getId();
     }
 
@@ -58,7 +56,7 @@ public class MongoTestRecordService implements TestRecordService {
         if (!hasAuthorityToFill(userId, userRole, testRecordList)) {
             throw new TestRecordPermissionDeniedException("无权查看该测试记录表");
         }
-        if (!testRecordDAO.updateContent(testRecordListId, testRecords) || !testRecordDAO.updateStatus(testRecordListId, new TestRecordStatus(true, null))) {
+        if (!testRecordDAO.updateContent(testRecordListId, testRecords)) {
             throw new TestRecordDAOFailureException("更新测试记录表失败");
         }
     }
