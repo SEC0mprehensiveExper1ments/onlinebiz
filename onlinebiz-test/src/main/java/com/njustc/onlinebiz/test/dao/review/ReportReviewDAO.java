@@ -1,6 +1,5 @@
 package com.njustc.onlinebiz.test.dao.review;
 
-import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
 import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 
 public interface ReportReviewDAO {
@@ -32,14 +31,6 @@ public interface ReportReviewDAO {
      * @param path 更新后的扫描件的路径
      * */
     Boolean updateScannedCopyPath(String reportReviewId, String path);
-
-    /**
-     * 更新测试报告检查表的状态
-     * @param reportReviewId 要更新的测试报告检查表的ID
-     * @param status 更新后的状态
-     * @return 成功返回 true, 失败返回 false
-     * */
-    Boolean updateStatus(String reportReviewId, ReviewStatus status);
 
     /**
      * 根据ID删除测试报告检查表
