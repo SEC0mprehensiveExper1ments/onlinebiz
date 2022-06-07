@@ -4,12 +4,9 @@ import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.project.Project;
 import com.njustc.onlinebiz.common.model.test.scheme.Scheme;
 import com.njustc.onlinebiz.common.model.test.scheme.SchemeContent;
-import com.njustc.onlinebiz.common.model.test.scheme.SchemeStage;
-import com.njustc.onlinebiz.common.model.test.scheme.SchemeStatus;
 import com.njustc.onlinebiz.test.dao.scheme.SchemeDAO;
 import com.njustc.onlinebiz.test.exception.project.ProjectNotFoundException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemeDAOFailureException;
-import com.njustc.onlinebiz.test.exception.scheme.SchemeInvalidStageException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemeNotFoundException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemePermissionDeniedException;
 import lombok.extern.slf4j.Slf4j;
@@ -38,48 +35,8 @@ public class MongoSchemeService implements SchemeService {
         if (!hasAuthorityToFill(userId, userRole, scheme)) {
             throw new SchemePermissionDeniedException("无权修改该测试方案");
         }
-        if (scheme.getStatus().getStage() == SchemeStage.QUALITY_AUDITING ||
-                scheme.getStatus().getStage() == SchemeStage.AUDITING_PASSED) {
-            throw new SchemeInvalidStageException("此阶段不能修改测设方案");
-        }
-        if (!schemeDAO.updateContent(schemeId, content) || !schemeDAO.updateStatus(schemeId, new SchemeStatus(SchemeStage.QUALITY_AUDITING, null))) {
+        if (!schemeDAO.updateContent(schemeId, content)) {
             throw new SchemeDAOFailureException("更新测试方案失败");
-        }
-    }
-
-    @Override
-    public void denyContent(String schemeId, String message, Long userId, Role userRole) {
-        Scheme scheme = schemeDAO.findSchemeById(schemeId);
-        if (scheme == null) {
-            throw new SchemeNotFoundException("该测试方案不存在");
-        }
-        if (!hasAuthorityToAudit(userRole)) {
-            throw new SchemePermissionDeniedException("无权审核测试方案");
-        }
-        if (scheme.getStatus().getStage() != SchemeStage.QUALITY_AUDITING) {
-            throw new SchemeInvalidStageException("此阶段不能审核测设方案");
-        }
-        SchemeStage nextStage = SchemeStage.AUDITING_DENIED;
-        if (!schemeDAO.updateStatus(schemeId, new SchemeStatus(nextStage, message))) {
-            throw new SchemeDAOFailureException("否定测试方案失败");
-        }
-    }
-
-    @Override
-    public void approveContent(String schemeId, Long userId, Role userRole) {
-        Scheme scheme = schemeDAO.findSchemeById(schemeId);
-        if (scheme == null) {
-            throw new SchemeNotFoundException("该测试方案不存在");
-        }
-        if (!hasAuthorityToAudit(userRole)) {
-            throw new SchemePermissionDeniedException("无权审核测试方案");
-        }
-        if (scheme.getStatus().getStage() != SchemeStage.QUALITY_AUDITING) {
-            throw new SchemeInvalidStageException("此阶段不能审核测设方案");
-        }
-        SchemeStage nextStage = SchemeStage.AUDITING_PASSED;
-        if (!schemeDAO.updateStatus(schemeId, new SchemeStatus(nextStage, null))) {
-            throw new SchemeDAOFailureException("通过测试方案失败");
         }
     }
 
@@ -103,7 +60,6 @@ public class MongoSchemeService implements SchemeService {
         scheme.setCreatorId(userId);
         scheme.setEntrustId(entrustId);
         scheme.setContent(content);
-        scheme.setStatus(new SchemeStatus(SchemeStage.UNFILLED, "等待填写测试方案"));
         return schemeDAO.insertScheme(scheme).getId();
     }
 
@@ -151,7 +107,4 @@ public class MongoSchemeService implements SchemeService {
         return userRole == Role.ADMIN;
     }
 
-    private boolean hasAuthorityToAudit(Role userRole) {
-        return userRole == Role.QA || userRole == Role.QA_SUPERVISOR;
-    }
 }
