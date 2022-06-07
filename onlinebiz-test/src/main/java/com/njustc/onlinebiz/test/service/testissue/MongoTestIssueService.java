@@ -1,12 +1,11 @@
 package com.njustc.onlinebiz.test.service.testissue;
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.testissue.TestIssueList;
 import com.njustc.onlinebiz.test.dao.testissue.TestIssueDAO;
 import com.njustc.onlinebiz.test.exception.testissue.TestIssueDAOFailureException;
 import com.njustc.onlinebiz.test.exception.testissue.TestIssueNotFoundException;
 import com.njustc.onlinebiz.test.exception.testissue.TestIssuePermissionDeniedException;
-import com.njustc.onlinebiz.common.model.test.testissue.TestIssueList;
-import com.njustc.onlinebiz.common.model.test.testissue.TestIssueStatus;
 import com.njustc.onlinebiz.test.service.project.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +32,6 @@ public class MongoTestIssueService implements TestIssueService {
         testIssueList.setProjectId(projectId);
         testIssueList.setEntrustId(entrustId);
         testIssueList.setTestIssues(testIssues);
-        testIssueList.setStatus(new TestIssueStatus(true, "需修改"));
         return testIssueDAO.insertTestIssueList(testIssueList).getId();
     }
 
@@ -58,7 +56,7 @@ public class MongoTestIssueService implements TestIssueService {
         if (!hasAuthorityToFill(userId, userRole, testIssueList)) {
             throw new TestIssuePermissionDeniedException("无权查看该测试问题清单");
         }
-        if (!testIssueDAO.updateContent(testIssueListId, testIssues) || !testIssueDAO.updateStatus(testIssueListId, new TestIssueStatus(true, null))) {
+        if (!testIssueDAO.updateContent(testIssueListId, testIssues)) {
             throw new TestIssueDAOFailureException("更新测试问题清单失败");
         }
     }
