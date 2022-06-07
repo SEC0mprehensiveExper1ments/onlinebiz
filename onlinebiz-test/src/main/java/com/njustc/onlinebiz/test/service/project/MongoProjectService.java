@@ -12,6 +12,7 @@ import com.njustc.onlinebiz.test.service.review.ReportReviewService;
 import com.njustc.onlinebiz.test.service.review.SchemeReviewService;
 import com.njustc.onlinebiz.test.service.scheme.SchemeService;
 import com.njustc.onlinebiz.test.service.testcase.TestcaseService;
+import com.njustc.onlinebiz.test.service.testissue.TestIssueService;
 import com.njustc.onlinebiz.test.service.testrecord.TestRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,13 +38,14 @@ public class MongoProjectService implements ProjectService {
     private final ReportService reportService;
     private final EntrustTestReviewService entrustTestReviewService;
     private final ReportReviewService reportReviewService;
+    private final TestIssueService testIssueService;
 
     public MongoProjectService(RestTemplate restTemplate,
                                ProjectDAO projectDAO,
                                SchemeService schemeService,
                                SchemeReviewService schemeReviewService,
                                TestcaseService testcaseService,
-                               TestRecordService testRecordService, ReportService reportService, EntrustTestReviewService entrustTestReviewService, ReportReviewService reportReviewService) {
+                               TestRecordService testRecordService, ReportService reportService, EntrustTestReviewService entrustTestReviewService, ReportReviewService reportReviewService, TestIssueService testIssueService) {
         this.restTemplate = restTemplate;
         this.projectDAO = projectDAO;
         this.schemeService = schemeService;
@@ -53,6 +55,7 @@ public class MongoProjectService implements ProjectService {
         this.reportService = reportService;
         this.entrustTestReviewService = entrustTestReviewService;
         this.reportReviewService = reportReviewService;
+        this.testIssueService = testIssueService;
     }
 
     @Override
@@ -163,22 +166,18 @@ public class MongoProjectService implements ProjectService {
         projectFormIds.setTestSchemeId(testSchemeId);
         String testReportId = reportService.createReport(projectId, entrustId, null, marketerId, Role.MARKETER);
         projectFormIds.setTestReportId(testReportId);
-        // TODO: 对应的测试用例表 id (JS008)
-//         String testcaseListId = testcaseService.createTestcaseList(entrustId, null, userId, userRole);
-        String testcaseListId = null;
+        String testcaseListId = testcaseService.createTestcaseList(projectId, entrustId, null, marketerId, Role.MARKETER);
         projectFormIds.setTestcaseListId(testcaseListId);
-        // TODO: 对应的测试记录表 id (JS009)
-//        String testRecordListId = testRecordService.createTestRecordList(entrustId, null, userId, userRole);
-        String testRecordListId = null;
+        String testRecordListId = testRecordService.createTestRecordList(projectId, entrustId, null, marketerId, Role.MARKETER);
         projectFormIds.setTestRecordListId(testRecordListId);
         // 对应的测试报告检查表 id (JS010)
-        String testReportChecklistId = reportReviewService.createReportReview(projectId, 0L, Role.MARKETER);
+        String testReportChecklistId = reportReviewService.createReportReview(projectId, marketerId, Role.MARKETER);
         projectFormIds.setTestReportCecklistId(testReportChecklistId);
         // 对应的测试问题清单 id (JS011)
-        String testIssueListId = null;
+        String testIssueListId = testIssueService.createTestIssueList(projectId, entrustId, null, marketerId, Role.MARKETER);
         projectFormIds.setTestIssueListId(testIssueListId);
         // 对应的工作检查表 id (JS012)
-        String workChecklistId = entrustTestReviewService.createEntrustTestReview(projectId, 0L, Role.MARKETER);
+        String workChecklistId = entrustTestReviewService.createEntrustTestReview(projectId, marketerId, Role.MARKETER);
         projectFormIds.setWorkChecklistId(workChecklistId);
         // 对应的测试方案评审表 (JS013)
         /** 可以参考这个示例 **/
