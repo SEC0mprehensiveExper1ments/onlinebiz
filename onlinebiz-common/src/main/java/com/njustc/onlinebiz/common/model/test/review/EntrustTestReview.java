@@ -20,8 +20,6 @@ public class EntrustTestReview {
     private String id;
     // 对应的项目 id
     private String projectId;
-    // 项目工作检查表目前的状态
-    private ReviewStatus status;
     /** 每次会经常更新的部分 **/
     // 软件名称
     private String softwareName;

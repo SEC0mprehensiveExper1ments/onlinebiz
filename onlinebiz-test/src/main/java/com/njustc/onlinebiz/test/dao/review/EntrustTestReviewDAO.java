@@ -1,7 +1,6 @@
 package com.njustc.onlinebiz.test.dao.review;
 
 import com.njustc.onlinebiz.common.model.test.review.EntrustTestReview;
-import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
 
 public interface EntrustTestReviewDAO {
     /**
@@ -25,14 +24,6 @@ public interface EntrustTestReviewDAO {
      * @return 成功后返回 true，失败返回 false
      * */
     Boolean updateEntrustTestReview(String entrustTestReviewId, EntrustTestReview entrustTestReview);
-
-    /**
-     * 更新工作检查表的状态
-     * @param entrustTestReviewId 要更新的工作检查表的ID
-     * @param status 更新后的状态
-     * @return 成功返回 true, 失败返回 false
-     * */
-    Boolean updateStatus(String entrustTestReviewId, ReviewStatus status);
 
     /**
      * 根据ID删除工作检查表
