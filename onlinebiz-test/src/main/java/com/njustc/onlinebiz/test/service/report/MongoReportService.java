@@ -1,10 +1,12 @@
 package com.njustc.onlinebiz.test.service.report;
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
 import com.njustc.onlinebiz.common.model.test.report.Report;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.report.ReportDAO;
 import com.njustc.onlinebiz.test.exception.report.ReportDAOFailureException;
+import com.njustc.onlinebiz.test.exception.report.ReportInvalidStageException;
 import com.njustc.onlinebiz.test.exception.report.ReportNotFoundException;
 import com.njustc.onlinebiz.test.exception.report.ReportPermissionDeniedException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemeDAOFailureException;
@@ -43,6 +45,13 @@ public class MongoReportService implements ReportService {
         if (!hasAuthorityToCheck(report, userId, userRole)) {
             throw new ReportPermissionDeniedException("无权查看测试报告");
         }
+
+        ProjectStage projectStage = projectDAO.findProjectById(report.getProjectId()).getStatus().getStage();
+        if (projectStage == ProjectStage.WAIT_FOR_QA || projectStage == ProjectStage.SCHEME_UNFILLED ||
+                projectStage == ProjectStage.SCHEME_AUDITING || projectStage == ProjectStage.SCHEME_AUDITING_DENIED) {
+            throw new ReportInvalidStageException("此阶段不可查看测试报告");
+        }
+
         return report;
     }
 
@@ -55,6 +64,13 @@ public class MongoReportService implements ReportService {
         if (!hasAuthorityToFill(report, userId, userRole)) {
             throw new ReportPermissionDeniedException("无权修改测试报告");
         }
+
+        ProjectStage projectStage = projectDAO.findProjectById(report.getProjectId()).getStatus().getStage();
+        if (!(projectStage == ProjectStage.SCHEME_REVIEW_UPLOADED || projectStage == ProjectStage.REPORT_QA_DENIED ||
+                projectStage == ProjectStage.REPORT_CUSTOMER_REJECT || projectStage == ProjectStage.QA_ALL_REJECTED)) {
+            throw new ReportInvalidStageException("此阶段不可修改测试报告");
+        }
+
         if (!reportDAO.updateContent(reportId, content)){
             throw new ReportDAOFailureException("更新测试报告失败");
         }
