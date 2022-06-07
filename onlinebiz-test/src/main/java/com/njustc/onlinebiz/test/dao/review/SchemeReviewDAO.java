@@ -2,7 +2,6 @@ package com.njustc.onlinebiz.test.dao.review;
 
 
 import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
-import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
 
 /**
  * 测试方案检查表的数据访问层接口
@@ -37,14 +36,6 @@ public interface SchemeReviewDAO {
      * @param path 更新后的扫描件的路径
      * */
     Boolean updateScannedCopyPath(String schemeReviewId, String path);
-
-    /**
-     * 更新测试方案检查表的状态
-     * @param schemeReviewId 要更新的测试方案检查表的ID
-     * @param status 更新后的状态
-     * @return 成功返回 true, 失败返回 false
-     * */
-    Boolean updateStatus(String schemeReviewId, ReviewStatus status);
 
     /**
      * 根据ID删除测试方案检查表

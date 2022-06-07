@@ -3,7 +3,6 @@ package com.njustc.onlinebiz.test.dao.review;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
-import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -42,12 +41,6 @@ public class MongoSchemeReviewDAO implements SchemeReviewDAO{
     @Override
     public Boolean updateScannedCopyPath(String schemeReviewId, String path) {
         Update update = new Update().set("scannedCopyPath", path);
-        return updateFirstWithId(schemeReviewId, update);
-    }
-
-    @Override
-    public Boolean updateStatus(String schemeReviewId, ReviewStatus status) {
-        Update update = new Update().set("status", status);
         return updateFirstWithId(schemeReviewId, update);
     }
 
