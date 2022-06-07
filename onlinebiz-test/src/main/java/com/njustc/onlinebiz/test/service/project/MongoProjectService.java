@@ -8,6 +8,7 @@ import com.njustc.onlinebiz.test.exception.project.*;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.service.report.ReportService;
 import com.njustc.onlinebiz.test.service.review.EntrustTestReviewService;
+import com.njustc.onlinebiz.test.service.review.ReportReviewService;
 import com.njustc.onlinebiz.test.service.review.SchemeReviewService;
 import com.njustc.onlinebiz.test.service.scheme.SchemeService;
 import com.njustc.onlinebiz.test.service.testcase.TestcaseService;
@@ -35,13 +36,14 @@ public class MongoProjectService implements ProjectService {
     private final TestRecordService testRecordService;
     private final ReportService reportService;
     private final EntrustTestReviewService entrustTestReviewService;
+    private final ReportReviewService reportReviewService;
 
     public MongoProjectService(RestTemplate restTemplate,
                                ProjectDAO projectDAO,
                                SchemeService schemeService,
                                SchemeReviewService schemeReviewService,
                                TestcaseService testcaseService,
-                               TestRecordService testRecordService, ReportService reportService, EntrustTestReviewService entrustTestReviewService) {
+                               TestRecordService testRecordService, ReportService reportService, EntrustTestReviewService entrustTestReviewService, ReportReviewService reportReviewService) {
         this.restTemplate = restTemplate;
         this.projectDAO = projectDAO;
         this.schemeService = schemeService;
@@ -50,6 +52,7 @@ public class MongoProjectService implements ProjectService {
         this.testRecordService = testRecordService;
         this.reportService = reportService;
         this.entrustTestReviewService = entrustTestReviewService;
+        this.reportReviewService = reportReviewService;
     }
 
     @Override
@@ -169,7 +172,7 @@ public class MongoProjectService implements ProjectService {
         String testRecordListId = null;
         projectFormIds.setTestRecordListId(testRecordListId);
         // 对应的测试报告检查表 id (JS010)
-        String testReportChecklistId = null;
+        String testReportChecklistId = reportReviewService.createReportReview(projectId, 0L, Role.MARKETER);
         projectFormIds.setTestReportCecklistId(testReportChecklistId);
         // 对应的测试问题清单 id (JS011)
         String testIssueListId = null;
