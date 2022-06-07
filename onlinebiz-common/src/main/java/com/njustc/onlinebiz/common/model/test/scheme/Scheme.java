@@ -27,9 +27,6 @@ public class Scheme {
 
     // 测试方案内容
     private SchemeContent content;
-
-    // 此测试方案状态
-    private SchemeStatus status;
 }
 
 

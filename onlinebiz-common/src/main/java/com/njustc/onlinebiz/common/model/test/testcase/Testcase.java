@@ -24,9 +24,6 @@ public class Testcase {
     //所有测试用例记录
     private List<TestcaseList> testcases;
 
-    //测试用例表状态
-    private TestcaseStatus status;
-
     //一条测试用例记录
     @Data
     @NoArgsConstructor
