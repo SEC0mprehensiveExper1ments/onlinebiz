@@ -55,17 +55,10 @@ public class JS012Test {
                 .setInputQueRen091("")
                 .setInputQueRen092("")
                 .setInputQueRen093("");
-//                .setInputQueRen0101("")
-//                .setInputQueRen0102("")
-//                .setInputQueRen0103("")
-//                .setInputQueRen0104("")
-//                .setInputQueRen0105("")
-//                .setInputQueRen0106("")
-//                .setInputQueRen0107("")
-//                .setInputQueRen0108("");
 
-        System.out.println(JSON.toJSONString(newJson));
-        Assertions.assertTrue(docServiceJS012.fill(newJson));
+
+
+        System.out.println(docServiceJS012.fill(newJson));
     }
 
 }
