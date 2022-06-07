@@ -18,8 +18,6 @@ public class Report {
   public static final String COLLECTION_NAME = "testReport";
   // 报告内容
   private ReportContent content;
-  // 报告状态
-  private ReportStatus status;
 
   private String entrustId;
 
