@@ -3,7 +3,6 @@ package com.njustc.onlinebiz.test.dao.review;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.njustc.onlinebiz.common.model.test.review.EntrustTestReview;
-import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -40,12 +39,6 @@ public class MongoEntrustTestReviewDAO implements EntrustTestReviewDAO {
                 .set("mainTester", entrustTestReview.getMainTester())
                 .set("finishDate", entrustTestReview.getFinishDate())
                 .set("conclusions", entrustTestReview.getConclusions());
-        return updateFirstWithId(entrustTestReviewId, update);
-    }
-
-    @Override
-    public Boolean updateStatus(String entrustTestReviewId, ReviewStatus status) {
-        Update update = new Update().set("status", status);
         return updateFirstWithId(entrustTestReviewId, update);
     }
 
