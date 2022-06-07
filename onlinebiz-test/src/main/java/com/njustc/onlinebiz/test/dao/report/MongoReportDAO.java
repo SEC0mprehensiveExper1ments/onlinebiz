@@ -3,7 +3,6 @@ package com.njustc.onlinebiz.test.dao.report;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.njustc.onlinebiz.common.model.test.report.Report;
-import com.njustc.onlinebiz.common.model.test.report.ReportStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -33,12 +32,6 @@ public class MongoReportDAO implements ReportDAO {
   @Override
   public boolean updateContent(String id, Report.ReportContent content) {
     Update update = new Update().set("content", content);
-    return updateFirstWithId(id, update);
-  }
-
-  @Override
-  public boolean updateStatus(String id, ReportStatus status) {
-    Update update = new Update().set("status", status);
     return updateFirstWithId(id, update);
   }
 
