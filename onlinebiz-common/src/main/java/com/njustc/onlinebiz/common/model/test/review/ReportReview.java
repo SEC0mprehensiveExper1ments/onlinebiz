@@ -19,8 +19,6 @@ public class ReportReview {
     private String id;
     // 此测试报告对应的报告 id
     private String reportId;
-    // 评审表目前的状态
-    private ReviewStatus status;
     // 评审表扫描件的文件路径
     private String scannedCopyPath;
     /** 每次会经常更新的部分 **/
