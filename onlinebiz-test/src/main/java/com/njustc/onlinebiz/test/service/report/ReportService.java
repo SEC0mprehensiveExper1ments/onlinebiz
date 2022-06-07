@@ -15,12 +15,4 @@ public interface ReportService {
 
     // 删除报告
     void deleteReport(String reportId, Long userId, Role userRole);
-
-    void QAApprove(String reportId, Long userId, Role userRole);
-
-    void QADeny(String reportId, String message, Long userId, Role userRole);
-
-    void customerApprove(String reportId, Long userId, Role userRole);
-
-    void customerDeny(String reportId, String message, Long userId, Role userRole);
 }
