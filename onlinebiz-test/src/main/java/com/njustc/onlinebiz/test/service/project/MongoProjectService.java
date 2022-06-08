@@ -1,11 +1,12 @@
 package com.njustc.onlinebiz.test.service.project;
 
+import com.google.gson.Gson;
 import com.njustc.onlinebiz.common.model.EntrustDto;
 import com.njustc.onlinebiz.common.model.PageResult;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.project.*;
-import com.njustc.onlinebiz.test.exception.project.*;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
+import com.njustc.onlinebiz.test.exception.project.*;
 import com.njustc.onlinebiz.test.service.report.ReportService;
 import com.njustc.onlinebiz.test.service.review.EntrustTestReviewService;
 import com.njustc.onlinebiz.test.service.review.ReportReviewService;
@@ -15,11 +16,16 @@ import com.njustc.onlinebiz.test.service.testcase.TestcaseService;
 import com.njustc.onlinebiz.test.service.testissue.TestIssueService;
 import com.njustc.onlinebiz.test.service.testrecord.TestRecordService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import okhttp3.JavaNetCookieJar;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.ResponseBody;
+import okhttp3.internal.Util;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,8 +34,6 @@ import java.util.Objects;
 @Service
 public class MongoProjectService implements ProjectService {
 
-    private static final String ENTRUST_SERVICE_URL = "http://onlinebiz-entrust";
-    private final RestTemplate restTemplate;
     private final ProjectDAO projectDAO;
     private final SchemeService schemeService;
     private final SchemeReviewService schemeReviewService;
@@ -40,13 +44,11 @@ public class MongoProjectService implements ProjectService {
     private final ReportReviewService reportReviewService;
     private final TestIssueService testIssueService;
 
-    public MongoProjectService(RestTemplate restTemplate,
-                               ProjectDAO projectDAO,
+    public MongoProjectService(ProjectDAO projectDAO,
                                SchemeService schemeService,
                                SchemeReviewService schemeReviewService,
                                TestcaseService testcaseService,
                                TestRecordService testRecordService, ReportService reportService, EntrustTestReviewService entrustTestReviewService, ReportReviewService reportReviewService, TestIssueService testIssueService) {
-        this.restTemplate = restTemplate;
         this.projectDAO = projectDAO;
         this.schemeService = schemeService;
         this.schemeReviewService = schemeReviewService;
@@ -64,13 +66,20 @@ public class MongoProjectService implements ProjectService {
         if (userRole != Role.ADMIN && userRole != Role.MARKETER && userRole != Role.MARKETING_SUPERVISOR) {
             throw new ProjectPermissionDeniedException("无权生成新的测试项目");
         }
-        String url = ENTRUST_SERVICE_URL + "/api/entrust/" + entrustId + "/get_dto";
-        ResponseEntity<EntrustDto> responseEntity = restTemplate.getForEntity(url, EntrustDto.class);
-        // 检查委托id的有效性
-        if (responseEntity.getStatusCode() != HttpStatus.ACCEPTED && responseEntity.getStatusCode() != HttpStatus.OK) {
-            throw new ProjectDAOFailureException("没有找到项目对应的委托");
+        EntrustDto entrustDto = null;
+        try {
+            CookieManager cookieManager = new CookieManager();
+            cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+            OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(new JavaNetCookieJar(cookieManager)).build();
+            Request login = new Request.Builder().url("http://124.222.168.27:8080/api/login/?userName=admin&userPassword=639d0125-fbdc-4494-8263-429df21daa2c").post(Util.EMPTY_REQUEST).build();
+            Request request = new Request.Builder().url("http://124.222.168.27:8080/api/entrust/" + entrustId + "/get_dto").build();
+            okHttpClient.newCall(login).execute();
+            ResponseBody responseBody = okHttpClient.newCall(request).execute().body();
+            Gson gson = new Gson();
+            entrustDto = gson.fromJson(responseBody.string(), EntrustDto.class);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        EntrustDto entrustDto = responseEntity.getBody();
         // 检查entrustDto非空
         if (entrustDto == null) {
             throw new ProjectDAOFailureException("entrustDto为空");
@@ -89,11 +98,18 @@ public class MongoProjectService implements ProjectService {
         // 获取项目ID
         String projectId = projectDAO.insertProject(project).getId();
         // 将项目ID注册到委托对象中
-        String params = "?projectId=" + projectId;
-        url = ENTRUST_SERVICE_URL + "/api/entrust/" + entrustId + "/register_project";
-        ResponseEntity<Void> result = restTemplate.postForEntity(url + params, null, Void.class);
-        if (!result.getStatusCode().equals(HttpStatus.OK)) {
-            throw new InternalError("注册测试项目失败");
+        try {
+            CookieManager cookieManager = new CookieManager();
+            cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+            OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(new JavaNetCookieJar(cookieManager)).build();
+            Request login = new Request.Builder().url("http://124.222.168.27:8080/api/login/?userName=admin&userPassword=639d0125-fbdc-4494-8263-429df21daa2c").post(Util.EMPTY_REQUEST).build();
+            Request request = new Request.Builder().url("http://124.222.168.27:8080/api/entrust/" + entrustId + "/register_project" + "?projectId=" + projectId).post(Util.EMPTY_REQUEST).build();
+            okHttpClient.newCall(login).execute();
+            if (okHttpClient.newCall(request).execute().code() != 200) {
+                throw new ProjectDAOFailureException("注册项目失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return projectId;
     }
