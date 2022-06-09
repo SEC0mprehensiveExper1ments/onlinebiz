@@ -9,9 +9,8 @@ import com.njustc.onlinebiz.common.model.contract.ContractStatus;
 import com.njustc.onlinebiz.common.model.contract.NonDisclosureAgreement;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,16 +39,15 @@ public class DefaultContractService implements ContractService {
         if (userRole != Role.ADMIN && userRole != Role.MARKETER) {
             throw new ContractPermissionDeniedException("只有负责此委托的市场部人员和管理员可以创建合同");
         }
-        // 检查委托ID和执行此操作的人员是否一致
+        // 检查委托ID和执行此操作的人员是否一致，并获取委托的客户ID
         String params = "?userId=" + userId + "&userRole=" + userRole;
         String url = ENTRUST_SERVICE + "/api/entrust/" + entrustId + "/check_consistency_with_contract";
-        ResponseEntity<Object> response = restTemplate.getForEntity(url + params, Object.class);
-        if (!response.getStatusCode().equals(HttpStatus.OK)) {
-            String errorMessage = (String) response.getBody();
-            throw new ContractCreateFailureException(errorMessage);
+        Long customerId;
+        try {
+            customerId = restTemplate.getForObject(url + params, Long.class);
+        } catch (HttpClientErrorException e) {
+            throw new ContractCreateFailureException(e.getResponseBodyAsString());
         }
-        // 获取委托的客户ID
-        Long customerId = (Long) response.getBody();
         Contract contract = new Contract();
         // 执行此操作的用户成为该合同的市场部人员
         contract.setCustomerId(customerId);
@@ -61,9 +59,10 @@ public class DefaultContractService implements ContractService {
         // 将合同ID注册到委托对象中
         params = "?contractId=" + contractId;
         url = ENTRUST_SERVICE + "/api/entrust/" + entrustId + "/register_contract";
-        ResponseEntity<Void> result = restTemplate.postForEntity(url + params, null, Void.class);
-        if (!result.getStatusCode().equals(HttpStatus.OK)) {
-            throw new InternalError("注册合同ID失败");
+        try {
+            restTemplate.postForEntity(url + params, null, Void.class);
+        } catch (HttpClientErrorException e) {
+            throw new InternalError("注册合同ID失败：" + e.getResponseBodyAsString());
         }
         return contractId;
     }
@@ -256,7 +255,7 @@ public class DefaultContractService implements ContractService {
             throw new ContractPermissionDeniedException("扫描件文件名不能为空");
         }
         String suffix = originalFilename.substring(originalFilename.lastIndexOf('.'));
-        String path = SCANNED_COPY_DIR + contractId + "." + suffix;
+        String path = SCANNED_COPY_DIR + contractId + suffix;
         scannedCopy.transferTo(new File(path));
         // 将路径保存到合同对象中
         if (!contractDAO.updateScannedCopyPath(contractId, path)) {

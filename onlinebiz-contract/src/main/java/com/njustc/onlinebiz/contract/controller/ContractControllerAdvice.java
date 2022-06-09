@@ -59,6 +59,7 @@ public class ContractControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleInternalError(InternalError error) {
         log.error("Internal Error: " + error.getMessage());
+        error.printStackTrace();
         return error.getMessage();
     }
 
@@ -67,6 +68,7 @@ public class ContractControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleIOException(IOException e) {
         log.warn("IO Exception: " + e.getMessage());
+        e.printStackTrace();
         return e.getMessage();
     }
 
