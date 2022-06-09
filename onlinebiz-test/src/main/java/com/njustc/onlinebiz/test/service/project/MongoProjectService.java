@@ -71,7 +71,7 @@ public class MongoProjectService implements ProjectService {
             CookieManager cookieManager = new CookieManager();
             cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
             OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(new JavaNetCookieJar(cookieManager)).build();
-            Request login = new Request.Builder().url("http://124.222.168.27:8080/api/login/?userName=admin&userPassword=639d0125-fbdc-4494-8263-429df21daa2c").post(Util.EMPTY_REQUEST).build();
+            Request login = new Request.Builder().url("http://124.222.168.27:8080/api/login/?userName=BackEndAdm1n&userPassword=123456Adm1n").post(Util.EMPTY_REQUEST).build();
             Request request = new Request.Builder().url("http://124.222.168.27:8080/api/entrust/" + entrustId + "/get_dto").build();
             okHttpClient.newCall(login).execute();
             ResponseBody responseBody = okHttpClient.newCall(request).execute().body();
@@ -102,7 +102,7 @@ public class MongoProjectService implements ProjectService {
             CookieManager cookieManager = new CookieManager();
             cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
             OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(new JavaNetCookieJar(cookieManager)).build();
-            Request login = new Request.Builder().url("http://124.222.168.27:8080/api/login/?userName=admin&userPassword=639d0125-fbdc-4494-8263-429df21daa2c").post(Util.EMPTY_REQUEST).build();
+            Request login = new Request.Builder().url("http://124.222.168.27:8080/api/login/?userName=BackEndAdm1n&userPassword=123456Adm1n").post(Util.EMPTY_REQUEST).build();
             Request request = new Request.Builder().url("http://124.222.168.27:8080/api/entrust/" + entrustId + "/register_project" + "?projectId=" + projectId).post(Util.EMPTY_REQUEST).build();
             okHttpClient.newCall(login).execute();
             if (okHttpClient.newCall(request).execute().code() != 200) {
