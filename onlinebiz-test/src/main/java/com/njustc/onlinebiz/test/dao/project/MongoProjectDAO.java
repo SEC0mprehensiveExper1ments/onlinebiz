@@ -2,10 +2,7 @@ package com.njustc.onlinebiz.test.dao.project;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import com.njustc.onlinebiz.common.model.test.project.Project;
-import com.njustc.onlinebiz.common.model.test.project.ProjectBaseInfo;
-import com.njustc.onlinebiz.common.model.test.project.ProjectOutline;
-import com.njustc.onlinebiz.common.model.test.project.ProjectStatus;
+import com.njustc.onlinebiz.common.model.test.project.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -46,6 +43,13 @@ public class MongoProjectDAO implements ProjectDAO {
         ProjectBaseInfo projectBaseInfo = project.getProjectBaseInfo();
         projectBaseInfo.setQaId(qaId);
         Update update = new Update().set("projectBaseInfo", projectBaseInfo);
+        return updateFirstWithId(projectId, update);
+    }
+
+    @Override
+    public Boolean updateFormIds(String projectId, ProjectFormIds projectFormIds) {
+        Project project = findProjectById(projectId);
+        Update update = new Update().set("projectFormIds", projectFormIds);
         return updateFirstWithId(projectId, update);
     }
 

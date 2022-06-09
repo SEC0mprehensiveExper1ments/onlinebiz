@@ -1,6 +1,7 @@
 package com.njustc.onlinebiz.test.dao.project;
 
 import com.njustc.onlinebiz.common.model.test.project.Project;
+import com.njustc.onlinebiz.common.model.test.project.ProjectFormIds;
 import com.njustc.onlinebiz.common.model.test.project.ProjectOutline;
 import com.njustc.onlinebiz.common.model.test.project.ProjectStatus;
 
@@ -32,6 +33,14 @@ public interface ProjectDAO {
      * @return 成功返回true，失败返回false
      * **/
     Boolean updateQaId(String projectId, Long qaId);
+
+    /**
+     * 更新测试项目的表单ids
+     * @param projectId 要更新的测试项目ID
+     * @param projectFormIds 更新的表单ids
+     * @return 成功返回true，失败返回false
+     * */
+    Boolean updateFormIds(String projectId, ProjectFormIds projectFormIds);
 
     /**
      * 删除指定的测试项目

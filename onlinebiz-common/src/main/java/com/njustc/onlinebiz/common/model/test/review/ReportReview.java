@@ -13,14 +13,12 @@ import java.util.List;
 @Accessors(chain = true)
 public class ReportReview {
     // MongoDB 中存放此类型对象的 collection 的名字
-    public static final String COLLECTION_NAME = "schemeAudit";
+    public static final String COLLECTION_NAME = "reportAudit";
     /** 一般不更新的部分 **/
     // 方案评审表 id，由 MongoDB 自动生成
     private String id;
-    // 此测试报告对应的方案 id
+    // 此测试报告对应的报告 id
     private String reportId;
-    // 评审表目前的状态
-    private ReviewStatus status;
     // 评审表扫描件的文件路径
     private String scannedCopyPath;
     /** 每次会经常更新的部分 **/
@@ -29,7 +27,7 @@ public class ReportReview {
     // 委托单位
     private String principal;
     // 各项评审结果
-    List<SchemeReview.ConclusionRow> conclusions;
+    List<ReportReview.ConclusionRow> conclusions;
     /** 评审结果类型的定义 **/
     @Data
     @NoArgsConstructor

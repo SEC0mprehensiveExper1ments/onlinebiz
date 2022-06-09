@@ -38,7 +38,6 @@ public class JS013Test {
                 .setInputBuTongGuo07("不通过，原因不明")
                 .setInputBuTongGuo08("");
 
-        System.out.println(JSON.toJSONString(newJson));
-        Assertions.assertTrue(docServiceJS013.fill(newJson));
+        System.out.println(docServiceJS013.fill(newJson));
     }
 }

@@ -1,14 +1,11 @@
 package com.njustc.onlinebiz.test.service.review;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.test.review.ReviewStage;
-import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
+import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 import com.njustc.onlinebiz.test.dao.review.ReportReviewDAO;
 import com.njustc.onlinebiz.test.exception.review.ReviewDAOFailureException;
-import com.njustc.onlinebiz.test.exception.review.ReviewInvalidStageException;
 import com.njustc.onlinebiz.test.exception.review.ReviewNotFoundException;
 import com.njustc.onlinebiz.test.exception.review.ReviewPermissionDeniedException;
-import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -38,7 +35,6 @@ public class MongoReportReviewService implements ReportReviewService {
         //创建一份空的检查表
         ReportReview reportReview = new ReportReview();
         reportReview.setReportId(reportId);
-        reportReview.setStatus(new ReviewStatus(ReviewStage.NOT_COPY_SAVED, null));
         //获取检查表id
         String reportReviewId = reportReviewDAO.insertReportReview(reportReview).getId();
         //TODO: 是否要将检查表id注册到测试报告中
@@ -62,15 +58,6 @@ public class MongoReportReviewService implements ReportReviewService {
         ReportReview origin = reportReviewDAO.findReportReviewById(reportReviewId);
         if (!origin.getId().equals(reportReview.getId())) {
             throw new ReviewPermissionDeniedException("测试报告检查表ID不一致");
-        }
-        ReviewStage curStage = origin.getStatus().getStage();
-        // 检查测试报告检查表的阶段，如果已上传附件则不能更改
-        if (curStage == ReviewStage.NOT_COPY_SAVED) {
-            if (!hasAuthorityToUpdateOrDelete(reportReview, userId, userRole)) {
-                throw new ReviewPermissionDeniedException("无权修改此测试报告检查表");
-            }
-        } else {
-            throw new ReviewInvalidStageException("此阶段不能修改测试报告检查表");
         }
         // 更新测试报告检查表
         reportReviewDAO.updateReportReview(reportReviewId, reportReview);
@@ -98,20 +85,11 @@ public class MongoReportReviewService implements ReportReviewService {
         if (!reportReviewDAO.updateScannedCopyPath(reportReviewId, path)) {
             throw new ReviewDAOFailureException("保存扫描文件路径失败");
         }
-        // 更新检查表阶段
-        if (!reportReviewDAO.updateStatus(reportReviewId, new ReviewStatus(ReviewStage.COPY_SAVED, null))) {
-            throw new ReviewDAOFailureException("更新检查表状态失败");
-        }
     }
 
     @Override
     public Resource getScannedCopy(String reportReviewId, Long userId, Role userRole) throws IOException {
         ReportReview reportReview = findReportReview(reportReviewId, userId, userRole);
-        ReviewStage curStage = reportReview.getStatus().getStage();
-        // 检查阶段
-        if (curStage != ReviewStage.COPY_SAVED) {
-            throw new ReviewInvalidStageException("检查表扫描件尚未上传");
-        }
         // 检查权限
         if (!hasAuthorityToUploadOrDownload(reportReview, userId, userRole)) {
             throw new ReviewPermissionDeniedException("无权下载扫描件");

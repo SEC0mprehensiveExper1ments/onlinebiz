@@ -2,8 +2,6 @@ package com.njustc.onlinebiz.test.service.review;
 
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.review.EntrustTestReview;
-import com.njustc.onlinebiz.common.model.test.review.ReviewStage;
-import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
 import com.njustc.onlinebiz.test.dao.review.EntrustTestReviewDAO;
 import com.njustc.onlinebiz.test.exception.review.ReviewNotFoundException;
 import com.njustc.onlinebiz.test.exception.review.ReviewPermissionDeniedException;
@@ -32,7 +30,6 @@ public class MongoEntrustTestReviewService implements EntrustTestReviewService {
         // 创建一份空的工作检查表
         EntrustTestReview entrustTestReview = new EntrustTestReview();
         entrustTestReview.setProjectId(projectId);
-        entrustTestReview.setStatus(new ReviewStatus(ReviewStage.COPY_SAVED, null));
         String entrustTestReviewId = entrustTestReviewDAO.insertEntrustTestReview(entrustTestReview).getId();
         return entrustTestReviewId;
     }

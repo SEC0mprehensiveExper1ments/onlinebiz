@@ -3,7 +3,6 @@ package com.njustc.onlinebiz.test.dao.review;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.njustc.onlinebiz.common.model.test.review.ReportReview;
-import com.njustc.onlinebiz.common.model.test.review.ReviewStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -42,12 +41,6 @@ public class MongoReportReviewDAO implements ReportReviewDAO {
     @Override
     public Boolean updateScannedCopyPath(String reportReviewId, String path) {
         Update update = new Update().set("scannedCopyPath", path);
-        return updateFirstWithId(reportReviewId, update);
-    }
-
-    @Override
-    public Boolean updateStatus(String reportReviewId, ReviewStatus status) {
-        Update update = new Update().set("status", status);
         return updateFirstWithId(reportReviewId, update);
     }
 

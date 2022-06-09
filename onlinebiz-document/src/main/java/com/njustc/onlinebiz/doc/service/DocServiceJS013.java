@@ -4,26 +4,75 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
+import com.njustc.onlinebiz.doc.dao.OSSProvider;
+import com.njustc.onlinebiz.doc.exception.DownloadDAOFailureException;
+import com.njustc.onlinebiz.doc.exception.DownloadNotFoundException;
+import com.njustc.onlinebiz.doc.exception.DownloadPermissionDeniedException;
 import com.njustc.onlinebiz.doc.model.JS013;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Objects;
 
 @Service
 public class DocServiceJS013 {
 
+    private static final String TEST_SERVICE = "http://onlinebiz-test";
+    private final RestTemplate restTemplate;
+    private final OSSProvider ossProvider;
+    private String schemeReviewId;
+
+    public DocServiceJS013(RestTemplate restTemplate, OSSProvider ossProvider) {
+        this.restTemplate = restTemplate;
+        this.ossProvider = ossProvider;
+    }
+
+    /**
+     * 通过 schemeReviewId 向test服务获取对象，以供后续生成文档并下载
+     * @param schemeReviewId 待下载的方案评审表 id
+     * @param userId 操作的用户 id
+     * @param userRole 操作的用户角色
+     * @return 若成功从test服务中获得对象，则返回；否则，返回异常信息
+     * */
+    public SchemeReview getSchemeReview(String schemeReviewId, Long userId, Role userRole) {
+        // 调用test服务的getSchemeReview接口
+        String params = "?userId=" + userId + "&userRole=" + userRole;
+        String url = TEST_SERVICE + "/api/review/scheme/" + schemeReviewId;
+        ResponseEntity<SchemeReview> responseEntity = restTemplate.getForEntity(url + params, SchemeReview.class);
+        // 检查方案评审表 id 及权限有效性
+        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+            throw new DownloadPermissionDeniedException("无权下载该文件");
+        }
+        else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+            throw new DownloadNotFoundException("未找到该测试方案评审表ID");
+        }
+        else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
+            throw new DownloadDAOFailureException("其他问题");
+        }
+        SchemeReview schemeReview = responseEntity.getBody();
+        this.schemeReviewId = schemeReviewId;
+
+        return schemeReview;
+    }
+
+    /**
+     * 以下是文档生成部分
+     * */
     private static final float marginLeft;
     private static final float marginRight;
     private static final float marginTop;
     private static final float marginBottom;
-    private static final int maxWidth = 430;      // 最大宽度
 
     @Value("${document-dir}")
     private String DOCUMENT_DIR;
@@ -38,12 +87,14 @@ public class DocServiceJS013 {
 
     private static JS013 JS013Json;
 
+
+
     /**
      * 填充JS013文档
      * */
-    public boolean fill(JS013 newJson) {
+    public String fill(JS013 newJson) {
         JS013Json = newJson;
-        String pdfPath = DOCUMENT_DIR + "JS013_out.pdf";
+        String pdfPath = DOCUMENT_DIR + "JS013_" + schemeReviewId + ".pdf";
         try {
             // 1.新建document对象
             Document document = new Document(PageSize.A4);// 建立一个Document对象
@@ -77,9 +128,40 @@ public class DocServiceJS013 {
             document.close();
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return "unable to generate a pdf";
         }
-        return true;
+        // 上传pdf
+        try {
+            if(ossProvider.upload(
+                    "doc", "JS013_" + schemeReviewId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+                deleteOutFile(pdfPath);
+                return "https://oss.syh1en.asia/doc/JS013_" + schemeReviewId + ".pdf";
+            } else {
+                deleteOutFile(pdfPath);
+                return "upload failed";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            deleteOutFile(pdfPath);
+            return "minio error";
+        }
+    }
+
+    /**
+     * 删除中间的out文件
+     * */
+    private void deleteOutFile(String pdfPath) {
+        System.out.println(pdfPath);
+        try {
+            File file = new File(pdfPath);
+            if (file.delete()) {
+                System.out.println(file.getName() + " is deleted!");
+            } else {
+                System.out.println("Delete" + file.getName() + "is failed.");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static BaseFont bfSimSun;

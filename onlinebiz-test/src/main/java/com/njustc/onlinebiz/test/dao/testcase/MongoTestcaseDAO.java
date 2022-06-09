@@ -3,7 +3,6 @@ package com.njustc.onlinebiz.test.dao.testcase;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.njustc.onlinebiz.common.model.test.testcase.Testcase;
-import com.njustc.onlinebiz.common.model.test.testcase.TestcaseStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -36,12 +35,6 @@ public class MongoTestcaseDAO implements TestcaseDAO {
     @Override
     public boolean updateContent(String testcaseListId, List<Testcase.TestcaseList> content) {
         Update update = new Update().set("testcases", content);
-        return updateFirstWithId(testcaseListId, update);
-    }
-
-    @Override
-    public boolean updateStatus(String testcaseListId, TestcaseStatus status) {
-        Update update = new Update().set("status", status);
         return updateFirstWithId(testcaseListId, update);
     }
 

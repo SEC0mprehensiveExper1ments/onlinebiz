@@ -2,24 +2,13 @@ package com.njustc.onlinebiz.test.service.testissue;
 
 import org.junit.jupiter.api.Test;
 import com.njustc.onlinebiz.common.model.EntrustDto;
-import com.njustc.onlinebiz.common.model.test.project.ProjectBaseInfo;
 import com.njustc.onlinebiz.test.dao.testissue.TestIssueDAO;
 import com.njustc.onlinebiz.test.service.project.ProjectService;
-import org.junit.jupiter.api.Test;
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.test.exception.testissue.TestIssueDAOFailureException;
-import com.njustc.onlinebiz.test.exception.testissue.TestIssueNotFoundException;
 import com.njustc.onlinebiz.test.exception.testissue.TestIssuePermissionDeniedException;
 import com.njustc.onlinebiz.common.model.test.testissue.TestIssueList;
-import com.njustc.onlinebiz.common.model.test.testissue.TestIssueStatus;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class MongoTestIssueServiceTest {
 

@@ -53,12 +53,12 @@ public class DocServiceJS005 {
         String params = "?userId=" + userId + "&userRole=" + userRole;
         String url = CONTRACT_SERVICE + "/api/contract/" + contracId;
         ResponseEntity<Contract> responseEntity = restTemplate.getForEntity(url + params, Contract.class);
-        // 检查委托 id 及权限的有效性
+        // 检查合同 id 及权限的有效性
         if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
             throw new DownloadPermissionDeniedException("无权下载该文件");
         }
         else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
-            throw new DownloadNotFoundException("未找到该委托ID");
+            throw new DownloadNotFoundException("未找到该合同ID");
         }
         else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
             throw new DownloadDAOFailureException("其他问题");

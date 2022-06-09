@@ -24,9 +24,6 @@ public class TestRecordList {
     //所有软件测试记录
     private List<TestRecord> testRecords;
 
-    //软件测试记录表状态
-    private TestRecordStatus status;
-
     //一条软件测试记录
     @Data
     @NoArgsConstructor

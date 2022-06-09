@@ -20,7 +20,4 @@ public interface SchemeService {
     // 根据测试方案ID删除测试方案
     void removeScheme(String schemeId, Long userId, Role userRole);
 
-    void denyContent(String schemeId, String message, Long userId, Role userRole);
-
-    void approveContent(String schemeId, Long userId, Role userRole);
 }

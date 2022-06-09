@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.doc.model;
 
+import com.njustc.onlinebiz.common.model.entrust.Entrust;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -87,4 +88,7 @@ public class JS014 {
     private String inputPingShenShuoMing0262 = "";
     private String inputPingShenShuoMing0263 = "";
 
+    public JS014(Entrust entrust){
+        // TODO: 格式转换
+    }
 }

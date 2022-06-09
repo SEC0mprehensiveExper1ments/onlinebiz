@@ -4,7 +4,6 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.njustc.onlinebiz.common.model.test.scheme.Scheme;
 import com.njustc.onlinebiz.common.model.test.scheme.SchemeContent;
-import com.njustc.onlinebiz.common.model.test.scheme.SchemeStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -35,12 +34,6 @@ public class MongoSchemeDAO implements SchemeDAO {
     @Override
     public boolean updateContent(String schemeId, SchemeContent content) {
         Update update = new Update().set("content", content);
-        return updateFirstWithId(schemeId, update);
-    }
-
-    @Override
-    public boolean updateStatus(String schemeId, SchemeStatus status) {
-        Update update = new Update().set("status", status);
         return updateFirstWithId(schemeId, update);
     }
 

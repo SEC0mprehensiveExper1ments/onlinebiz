@@ -1,6 +1,7 @@
 package com.njustc.onlinebiz.doc.model;
 
 
+import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,4 +28,8 @@ public class JS010 {
     private String inputJianChaJieGuo0112 = "";
     private String inputJianChaJieGuo0113 = "";
     private String inputJianChaJieGuo012 = "";
+
+    public JS010(ReportReview reportReview) {
+        // TODO: 格式转换
+    }
 }

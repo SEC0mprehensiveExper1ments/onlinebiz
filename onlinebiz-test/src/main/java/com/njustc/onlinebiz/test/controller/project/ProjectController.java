@@ -38,7 +38,7 @@ public class ProjectController {
             @RequestParam("page") Integer page,
             @RequestParam("pageSize") Integer pageSize
     ) {
-        return projectService.findProjectBaseInfos(page, pageSize, userId, userRole);
+        return projectService.findProjectOutlines(page, pageSize, userId, userRole);
     }
 
     // 获取项目的完整信息
@@ -62,17 +62,8 @@ public class ProjectController {
         projectService.updateQa(projectId, qaId, userId, userRole);
     }
 
-    // 将项目状态更新为已归档
-    @PostMapping("/test/{projectId}/finish")
-    public void fileProject(
-            @PathVariable("projectId") String projectId,
-            @RequestParam("userId") Long userId,
-            @RequestParam("userRole") Role userRole
-    ) {
-        projectService.fileProject(projectId, userId, userRole);
-    }
 
-    // 更新项目状态 (一般情况不需要)
+    // 更新项目状态，后端会检查状态更新的合法性
     @PostMapping("/test/{projectId}/status")
     public void updateStatus(
             @PathVariable("projectId") String projectId,

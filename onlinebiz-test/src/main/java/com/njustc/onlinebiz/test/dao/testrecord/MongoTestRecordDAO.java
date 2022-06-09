@@ -3,7 +3,6 @@ package com.njustc.onlinebiz.test.dao.testrecord;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
-import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -39,11 +38,6 @@ public class MongoTestRecordDAO implements TestRecordDAO {
         return updateFirstWithId(testRecordListId, update);
     }
 
-    @Override
-    public boolean updateStatus(String testRecordListId, TestRecordStatus status) {
-        Update update = new Update().set("status", status);
-        return updateFirstWithId(testRecordListId, update);
-    }
 
     @Override
     public boolean deleteTestRecordList(String testRecordListId) {

@@ -1,13 +1,14 @@
 package com.njustc.onlinebiz.test.service.testrecord;
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
+import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
+import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.testrecord.TestRecordDAO;
 import com.njustc.onlinebiz.test.exception.testrecord.TestRecordDAOFailureException;
+import com.njustc.onlinebiz.test.exception.testrecord.TestRecordInvalidStageException;
 import com.njustc.onlinebiz.test.exception.testrecord.TestRecordNotFoundException;
 import com.njustc.onlinebiz.test.exception.testrecord.TestRecordPermissionDeniedException;
-import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
-import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordStatus;
-import com.njustc.onlinebiz.test.service.project.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +18,11 @@ import java.util.List;
 @Service
 public class MongoTestRecordService implements TestRecordService {
     private final TestRecordDAO testRecordDAO;
-    private final ProjectService projectService;
+    private final ProjectDAO projectDAO;
 
-    public MongoTestRecordService(ProjectService projectService, TestRecordDAO testRecordDAO) {
-        this.projectService = projectService;
+    public MongoTestRecordService(TestRecordDAO testRecordDAO, ProjectDAO projectDAO) {
         this.testRecordDAO = testRecordDAO;
+        this.projectDAO = projectDAO;
     }
 
     @Override
@@ -33,7 +34,6 @@ public class MongoTestRecordService implements TestRecordService {
         testRecordList.setProjectId(projectId);
         testRecordList.setEntrustId(entrustId);
         testRecordList.setTestRecords(testRecords);
-        testRecordList.setStatus(new TestRecordStatus(true, "需修改"));
         return testRecordDAO.insertTestRecordList(testRecordList).getId();
     }
 
@@ -46,6 +46,13 @@ public class MongoTestRecordService implements TestRecordService {
         if (!hasAuthorityToCheck(userId, userRole, testRecordList)) {
             throw new TestRecordPermissionDeniedException("无权查看该测试记录表");
         }
+
+        ProjectStage projectStage = projectDAO.findProjectById(testRecordList.getProjectId()).getStatus().getStage();
+        if (projectStage == ProjectStage.WAIT_FOR_QA || projectStage == ProjectStage.SCHEME_UNFILLED ||
+                projectStage == ProjectStage.SCHEME_AUDITING || projectStage == ProjectStage.SCHEME_AUDITING_DENIED) {
+            throw new TestRecordInvalidStageException("此阶段不可查看测试记录表");
+        }
+
         return testRecordList;
     }
 
@@ -58,7 +65,14 @@ public class MongoTestRecordService implements TestRecordService {
         if (!hasAuthorityToFill(userId, userRole, testRecordList)) {
             throw new TestRecordPermissionDeniedException("无权查看该测试记录表");
         }
-        if (!testRecordDAO.updateContent(testRecordListId, testRecords) || !testRecordDAO.updateStatus(testRecordListId, new TestRecordStatus(true, null))) {
+
+        ProjectStage projectStage = projectDAO.findProjectById(testRecordList.getProjectId()).getStatus().getStage();
+        if (!(projectStage == ProjectStage.SCHEME_REVIEW_UPLOADED || projectStage == ProjectStage.REPORT_QA_DENIED ||
+                projectStage == ProjectStage.REPORT_CUSTOMER_REJECT || projectStage == ProjectStage.QA_ALL_REJECTED)) {
+            throw new TestRecordInvalidStageException("此阶段不可修改测试记录表");
+        }
+
+        if (!testRecordDAO.updateContent(testRecordListId, testRecords)) {
             throw new TestRecordDAOFailureException("更新测试记录表失败");
         }
     }
@@ -88,8 +102,8 @@ public class MongoTestRecordService implements TestRecordService {
         } else if (userRole == Role.QA_SUPERVISOR || userRole == Role.TESTING_SUPERVISOR) {
             return true;
         }
-        Long testerId = projectService.getProjectBaseInfo(testRecordList.getProjectId()).getTesterId();
-        Long qaId = projectService.getProjectBaseInfo(testRecordList.getProjectId()).getQaId();
+        Long testerId = projectDAO.findProjectById(testRecordList.getProjectId()).getProjectBaseInfo().getTesterId();
+        Long qaId = projectDAO.findProjectById(testRecordList.getProjectId()).getProjectBaseInfo().getQaId();
         if (userRole == Role.TESTER && userId.equals(testerId)) return true;
         if (userRole == Role.QA && userId.equals(qaId)) return true;
         return false;
@@ -104,7 +118,7 @@ public class MongoTestRecordService implements TestRecordService {
         } else if (userRole == Role.TESTING_SUPERVISOR) {
             return true;
         }
-        Long testerId = projectService.getProjectBaseInfo(testRecordList.getProjectId()).getTesterId();
+        Long testerId = projectDAO.findProjectById(testRecordList.getProjectId()).getProjectBaseInfo().getTesterId();
         if (userRole == Role.TESTER && userId.equals(testerId)) return true;
         return false;
     }

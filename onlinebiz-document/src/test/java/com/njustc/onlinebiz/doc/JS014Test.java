@@ -93,8 +93,7 @@ public class JS014Test {
                 .setInputPingShenShuoMing0262("")
                 .setInputPingShenShuoMing0263("");
 
-        System.out.println(JSON.toJSONString(newJson));
-        Assertions.assertTrue(docServiceJS014.fill(newJson));
+        System.out.println(docServiceJS014.fill(newJson));
 
     }
 }

@@ -1,5 +1,9 @@
 package com.njustc.onlinebiz.test.controller.report;
 
+import com.njustc.onlinebiz.test.exception.report.ReportDAOFailureException;
+import com.njustc.onlinebiz.test.exception.report.ReportInvalidStageException;
+import com.njustc.onlinebiz.test.exception.report.ReportNotFoundException;
+import com.njustc.onlinebiz.test.exception.report.ReportPermissionDeniedException;
 import com.njustc.onlinebiz.test.exception.review.ReviewDAOFailureException;
 import com.njustc.onlinebiz.test.exception.review.ReviewInvalidStageException;
 import com.njustc.onlinebiz.test.exception.review.ReviewNotFoundException;
@@ -18,7 +22,7 @@ import java.io.IOException;
 public class ReportControllerAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(ReviewNotFoundException.class)
+    @ExceptionHandler(ReportNotFoundException.class)
     public String handleNotFoundException(ReviewNotFoundException e) {
         log.warn("Not Found Exception: " + e.getMessage());
         return e.getMessage();
@@ -26,7 +30,7 @@ public class ReportControllerAdvice {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(ReviewPermissionDeniedException.class)
+    @ExceptionHandler(ReportPermissionDeniedException.class)
     public String handlePermissionDeniedException(ReviewPermissionDeniedException e) {
         log.warn("Permission Denied: " + e.getMessage());
         return e.getMessage();
@@ -34,7 +38,7 @@ public class ReportControllerAdvice {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ReviewInvalidStageException.class)
+    @ExceptionHandler(ReportInvalidStageException.class)
     public String handleInvalidStageException(ReviewInvalidStageException e) {
         log.warn("Invalid Stage Detected: " + e.getMessage());
         return e.getMessage();
@@ -42,14 +46,14 @@ public class ReportControllerAdvice {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(ReviewDAOFailureException.class)
+    @ExceptionHandler(ReportDAOFailureException.class)
     public String handleDAOFailureException(ReviewDAOFailureException e) {
         log.warn("DAO Failure Detected: " + e.getMessage());
         return e.getMessage();
     }
 
     @ResponseBody
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(IOException.class)
     public String handleIOException(IOException e) {
         log.warn("IO Exception: " + e.getMessage());

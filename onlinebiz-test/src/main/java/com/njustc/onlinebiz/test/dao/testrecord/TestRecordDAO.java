@@ -1,7 +1,6 @@
 package com.njustc.onlinebiz.test.dao.testrecord;
 
 import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
-import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordStatus;
 
 import java.util.List;
 
@@ -11,8 +10,6 @@ public interface TestRecordDAO {
     TestRecordList findTestRecordListById(String testRecordListId);
 
     boolean updateContent(String testRecordListId, List<TestRecordList.TestRecord> content);
-
-    boolean updateStatus(String testRecordListId, TestRecordStatus status);
 
     boolean deleteTestRecordList(String testRecordListId);
 }

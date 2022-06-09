@@ -24,9 +24,6 @@ public class TestIssueList {
     //所有软件测试问题
     private List<TestIssue> testIssues;
 
-    //软件测试问题清单状态
-    private TestIssueStatus status;
-
     //一条软件测试问题
     @Data
     @NoArgsConstructor

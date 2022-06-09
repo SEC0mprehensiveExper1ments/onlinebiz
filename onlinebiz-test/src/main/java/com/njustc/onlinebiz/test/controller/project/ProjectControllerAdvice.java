@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @Slf4j
 /**如果全部异常处理返回json，
  * 那么可以使用 @RestControllerAdvice 代替 @ControllerAdvice ，
@@ -48,6 +50,14 @@ public class ProjectControllerAdvice {
     @ExceptionHandler(ProjectInvalidArgumentException.class)
     public String handleInvalidArgumentException(ProjectInvalidArgumentException e) {
         log.warn("Invalid Argument encountered: " + e.getMessage());
+        return e.getMessage();
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(IOException.class)
+    public String handleIOException(IOException e) {
+        log.warn("IO Exception: " + e.getMessage());
         return e.getMessage();
     }
 }

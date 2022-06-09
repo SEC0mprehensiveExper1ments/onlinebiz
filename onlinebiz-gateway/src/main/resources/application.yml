@@ -69,6 +69,18 @@ spring:
           filters:
             - AddIdentity
 
+        - id: contract-test
+          uri: lb://onlinebiz-test
+          predicates:
+            - name: Path
+              args:
+                patterns:
+                  - /api/test/**
+                  - /api/review/**
+          filters:
+            - AddIdentity
+
+
 eureka:
   instance:
     instance-id: gateway8080
