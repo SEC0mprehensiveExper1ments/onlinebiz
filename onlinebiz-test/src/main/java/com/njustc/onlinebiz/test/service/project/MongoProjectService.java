@@ -248,7 +248,7 @@ public class MongoProjectService implements ProjectService {
 
         switch (project.getStatus().getStage()) {
             case WAIT_FOR_QA:               // 等待分配质量人员（所有表不能改）, next: SCHEME_UNFILLED
-                if (nextStatus.getStage() != ProjectStage.SCHEME_UNFILLED) {
+                if (nextStatus.getStage() != ProjectStage.SCHEME_UNFILLED || project.getProjectBaseInfo().getQaId() == null) {
                     throw new ProjectInvalidStageException("更新的下一个状态不合法");
                 }
                 break;
