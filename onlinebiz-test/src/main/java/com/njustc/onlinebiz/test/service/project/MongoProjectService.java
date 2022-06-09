@@ -244,7 +244,8 @@ public class MongoProjectService implements ProjectService {
 
     @Override
     public void updateStatus(String projectId, ProjectStatus nextStatus, Long userId, Role userRole) {
-        Project project = findProject(projectId, userId, userRole);
+        Project project = projectDAO.findProjectById(projectId);
+        // TODO: 检查用户权限
 
         switch (project.getStatus().getStage()) {
             case WAIT_FOR_QA:               // 等待分配质量人员（所有表不能改）, next: SCHEME_UNFILLED
