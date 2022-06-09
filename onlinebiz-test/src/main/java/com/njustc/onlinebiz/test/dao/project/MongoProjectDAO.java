@@ -135,7 +135,7 @@ public class MongoProjectDAO implements ProjectDAO {
 
     // 根据测试项目ID更新测试项目，由传入的 Update 对象设置要更新的部分
     private Boolean updateFirstWithId(String projectId, Update update) {
-        Query query = new Query().addCriteria(Criteria.where("_id").is(new ObjectId()));
+        Query query = new Query().addCriteria(Criteria.where("_id").is(new ObjectId(projectId)));
         UpdateResult result = mongoTemplate.updateFirst(query, update, COLLECTION_NAME);
         return result.wasAcknowledged() && result.getMatchedCount() == 1;
     }
