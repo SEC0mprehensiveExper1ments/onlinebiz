@@ -2,11 +2,15 @@ package com.njustc.onlinebiz.test.service.scheme;
 
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.project.Project;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
 import com.njustc.onlinebiz.common.model.test.scheme.Scheme;
 import com.njustc.onlinebiz.common.model.test.scheme.SchemeContent;
+import com.njustc.onlinebiz.test.dao.project.MongoProjectDAO;
+import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.scheme.SchemeDAO;
 import com.njustc.onlinebiz.test.exception.project.ProjectNotFoundException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemeDAOFailureException;
+import com.njustc.onlinebiz.test.exception.scheme.SchemeInvalidStageException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemeNotFoundException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemePermissionDeniedException;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +21,12 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class MongoSchemeService implements SchemeService {
 
-    private static final String PROJECT_SERVICE_URL = "http://onlinebiz-project";
-    private final RestTemplate restTemplate;
     private final SchemeDAO schemeDAO;
+    private final ProjectDAO projectDAO;
 
-    public MongoSchemeService(RestTemplate restTemplate, SchemeDAO schemeDAO) {
-        this.restTemplate = restTemplate;
+    public MongoSchemeService(SchemeDAO schemeDAO, ProjectDAO projectDAO) {
         this.schemeDAO = schemeDAO;
+        this.projectDAO = projectDAO;
     }
 
     @Override
@@ -35,6 +38,12 @@ public class MongoSchemeService implements SchemeService {
         if (!hasAuthorityToFill(userId, userRole, scheme)) {
             throw new SchemePermissionDeniedException("无权修改该测试方案");
         }
+
+        ProjectStage projectStage = projectDAO.findProjectById(scheme.getProjectId()).getStatus().getStage();
+        if (projectStage != ProjectStage.SCHEME_UNFILLED && projectStage != ProjectStage.SCHEME_AUDITING_DENIED &&
+            projectStage != ProjectStage.QA_ALL_REJECTED)
+            throw new SchemeInvalidStageException("此阶段无法修改测试方案");
+
         if (!schemeDAO.updateContent(schemeId, content)) {
             throw new SchemeDAOFailureException("更新测试方案失败");
         }
@@ -72,6 +81,10 @@ public class MongoSchemeService implements SchemeService {
         if (!hasAuthorityToCheck(userId, userRole, scheme)) {
             throw new SchemePermissionDeniedException("无权查看该测试方案");
         }
+
+        ProjectStage projectStage = projectDAO.findProjectById(scheme.getProjectId()).getStatus().getStage();
+        if (projectStage == ProjectStage.WAIT_FOR_QA || projectStage == ProjectStage.SCHEME_UNFILLED)
+            throw new SchemeInvalidStageException("此阶段无法查看测试方案");
         return scheme;
     }
 
@@ -81,19 +94,20 @@ public class MongoSchemeService implements SchemeService {
     }
 
     private boolean hasAuthorityToCheck(Long userId, Role userRole, Scheme scheme) {
-        String projectId = scheme.getProjectId();
-        Project project = restTemplate.getForObject(PROJECT_SERVICE_URL + "/api/project/{projectId}", Project.class, projectId);
+        Project project = projectDAO.findProjectById(scheme.getProjectId());
         if (project == null) {
             throw new ProjectNotFoundException("该项目不存在");
         }
         Long testerId = project.getProjectBaseInfo().getTesterId();
+        Long qaId =project.getProjectBaseInfo().getQaId();
             /*根据调研情况，分配的测试部人员、测试部主管、所有质量部人员、质量部主管均有权限查阅*/
-        return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId)) || userRole == Role.TESTING_SUPERVISOR || userRole == Role.QA || userRole == Role.QA_SUPERVISOR;
+        return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId))
+                || userRole == Role.TESTING_SUPERVISOR || (userRole == Role.QA && userId.equals(qaId))
+                || userRole == Role.QA_SUPERVISOR;
     }
 
     private boolean hasAuthorityToFill(Long userId, Role userRole, Scheme scheme) {
-        String projectId = scheme.getProjectId();
-        Project project = restTemplate.getForObject(PROJECT_SERVICE_URL + "/api/project/{projectId}", Project.class, projectId);
+        Project project = projectDAO.findProjectById(scheme.getProjectId());
         if (project == null) {
             throw new ProjectNotFoundException("该项目不存在");
         }
