@@ -1,15 +1,17 @@
 package com.njustc.onlinebiz.test.service.review;
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
 import com.njustc.onlinebiz.common.model.test.review.ReportReview;
+import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.review.ReportReviewDAO;
 import com.njustc.onlinebiz.test.exception.review.ReviewDAOFailureException;
+import com.njustc.onlinebiz.test.exception.review.ReviewInvalidStageException;
 import com.njustc.onlinebiz.test.exception.review.ReviewNotFoundException;
 import com.njustc.onlinebiz.test.exception.review.ReviewPermissionDeniedException;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -20,26 +22,23 @@ import java.io.IOException;
 public class MongoReportReviewService implements ReportReviewService {
     private static final String SCANNED_COPY_DIR = "~/review/";
     private final ReportReviewDAO reportReviewDAO;
-    private final RestTemplate restTemplate;
+    private final ProjectDAO projectDAO;
 
-    public MongoReportReviewService(ReportReviewDAO reportReviewDAO, RestTemplate restTemplate) {
+    public MongoReportReviewService(ReportReviewDAO reportReviewDAO, ProjectDAO projectDAO) {
         this.reportReviewDAO = reportReviewDAO;
-        this.restTemplate = restTemplate;
+        this.projectDAO = projectDAO;
     }
 
     @Override
-    public String createReportReview(String reportId, Long userId, Role userRole) {
+    public String createReportReview(String projectId, Long userId, Role userRole) {
         if (userRole != Role.ADMIN && userRole != Role.MARKETER && userRole != Role.MARKETING_SUPERVISOR) {
             throw new ReviewPermissionDeniedException("只有负责测试项目的市场部人员或主管可以创建测试报告评审表");
         }
         //创建一份空的检查表
         ReportReview reportReview = new ReportReview();
-        reportReview.setReportId(reportId);
+        reportReview.setProjectId(projectId);
         //获取检查表id
-        String reportReviewId = reportReviewDAO.insertReportReview(reportReview).getId();
-        //TODO: 是否要将检查表id注册到测试报告中
-
-        return reportReviewId;
+        return reportReviewDAO.insertReportReview(reportReview).getId();
     }
 
     @Override
@@ -50,6 +49,15 @@ public class MongoReportReviewService implements ReportReviewService {
         } else if (!hasAuthorityToCheck(reportReview, userId, userRole)) {
             throw new ReviewPermissionDeniedException("您没有权限查看该测试报告检查表");
         }
+
+        ProjectStage projectStage = projectDAO.findProjectById(reportReview.getProjectId()).getStatus().getStage();
+        if (projectStage != ProjectStage.REPORT_AUDITING && projectStage != ProjectStage.REPORT_QA_DENIED
+                && projectStage != ProjectStage.REPORT_QA_PASSED && projectStage != ProjectStage.REPORT_WAIT_CUSTOMER
+                && projectStage != ProjectStage.REPORT_CUSTOMER_CONFIRM && projectStage != ProjectStage.REPORT_CUSTOMER_REJECT
+                && projectStage != ProjectStage.QA_ALL_REJECTED && projectStage != ProjectStage.QA_ALL_PASSED) {
+            throw new ReviewInvalidStageException("无权在此阶段查看测试报告检查表");
+        }
+
         return reportReview;
     }
 
@@ -59,6 +67,15 @@ public class MongoReportReviewService implements ReportReviewService {
         if (!origin.getId().equals(reportReview.getId())) {
             throw new ReviewPermissionDeniedException("测试报告检查表ID不一致");
         }
+        if (!hasAuthorityToUpdateOrDelete(reportReview, userId, userRole)) {
+            throw new ReviewPermissionDeniedException("无权修改此测试报告检查表");
+        }
+
+        ProjectStage projectStage = projectDAO.findProjectById(origin.getProjectId()).getStatus().getStage();
+        if(projectStage != ProjectStage.REPORT_AUDITING){
+            throw new ReviewInvalidStageException("此阶段不能修改测试报告检查表");
+        }
+
         // 更新测试报告检查表
         reportReviewDAO.updateReportReview(reportReviewId, reportReview);
     }
@@ -99,13 +116,13 @@ public class MongoReportReviewService implements ReportReviewService {
     }
 
     @Override
-    public void removeReportReview(String reportReviewId, Long userId, Role userRole) throws IOException {
+    public void removeReportReview(String reportReviewId, Long userId, Role userRole) {
         ReportReview reportReview = findReportReview(reportReviewId, userId, userRole);
         if (!hasAuthorityToUpdateOrDelete(reportReview, userId, userRole)) {
-            throw new ReviewPermissionDeniedException("无权删除此测试检查报告");
+            throw new ReviewPermissionDeniedException("无权删除此测试报告检查表");
         }
         if (!reportReviewDAO.deleteReportAuditById(reportReview.getId())) {
-            throw new ReviewDAOFailureException("删除合同失败");
+            throw new ReviewDAOFailureException("删除测试报告检查表失败");
         }
     }
 
@@ -117,9 +134,12 @@ public class MongoReportReviewService implements ReportReviewService {
         } else if (userRole == Role.MARKETING_SUPERVISOR || userRole == Role.QA_SUPERVISOR) {
             return true;
         }
-        // TODO: 项目的测试相关人员及质量相关人员可以查看
-
-        return false;
+        // 质量部相关人员均可查看
+        else if (userId.equals(projectDAO.findProjectById(reportReview.getProjectId()).getProjectBaseInfo().getQaId())) {
+            return true;
+        }
+        // 测试部相关人员均可查看
+        else return userId.equals(projectDAO.findProjectById(reportReview.getProjectId()).getProjectBaseInfo().getTesterId());
     }
 
     private Boolean hasAuthorityToUpdateOrDelete(ReportReview reportReview, Long userId, Role userRole) {
@@ -130,8 +150,12 @@ public class MongoReportReviewService implements ReportReviewService {
         } else if (userRole == Role.MARKETING_SUPERVISOR || userRole == Role.QA_SUPERVISOR) {
             return true;
         }
-        // TODO: 项目的质量相关人员可以删改
-        return false;
+        // 质量部相关人员均可删改
+        else if (userId.equals(projectDAO.findProjectById(reportReview.getProjectId()).getProjectBaseInfo().getQaId())) {
+            return true;
+        }
+        // 测试部相关人员均可删改
+        else return userId.equals(projectDAO.findProjectById(reportReview.getProjectId()).getProjectBaseInfo().getTesterId());
     }
 
     private Boolean hasAuthorityToUploadOrDownload(ReportReview reportReview, Long userId, Role userRole) {
@@ -142,7 +166,7 @@ public class MongoReportReviewService implements ReportReviewService {
         } else if (userRole == Role.MARKETING_SUPERVISOR || userRole == Role.QA_SUPERVISOR) {
             return true;
         }
-        // TODO: 项目的质量相关人员也可以上传下载
-        return false;
+        // 项目的质量相关人员也可以上传下载
+        else return userId.equals(projectDAO.findProjectById(reportReview.getProjectId()).getProjectBaseInfo().getQaId());
     }
 }

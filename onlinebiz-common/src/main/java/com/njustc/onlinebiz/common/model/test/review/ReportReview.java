@@ -17,8 +17,8 @@ public class ReportReview {
     /** 一般不更新的部分 **/
     // 方案评审表 id，由 MongoDB 自动生成
     private String id;
-    // 此测试报告对应的报告 id
-    private String reportId;
+    // 此测试报告对应的测试项目编号 id
+    private String projectId;
     // 评审表扫描件的文件路径
     private String scannedCopyPath;
     /** 每次会经常更新的部分 **/
