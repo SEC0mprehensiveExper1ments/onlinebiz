@@ -281,11 +281,15 @@ public class MongoProjectService implements ProjectService {
                     throw new ProjectInvalidStageException("更新的下一个状态不合法");
                 }
                 break;
-            case REPORT_QA_PASSED:          // 测试报告经质量部审核通过，待上传测试报告检查表并签发测试报告, next: REPORT_WAIT_CUSTOMER
-                if (nextStatus.getStage() != ProjectStage.REPORT_WAIT_CUSTOMER) {
+            case REPORT_QA_PASSED:          // 测试报告经质量部审核通过，待上传测试报告检查表, next: REPORT_WAIT_SENT_TO_CUSTOMER
+                if (nextStatus.getStage() != ProjectStage.REPORT_WAIT_SENT_TO_CUSTOMER) {
                     throw new ProjectInvalidStageException("更新的下一个状态不合法");
                 }
                 break;
+            case REPORT_WAIT_SENT_TO_CUSTOMER: // 测试报告检查表已上传，待市场部点击向用户签发报告, next: REPORT_WAIT_CUSTOMER
+                if (nextStatus.getStage() != ProjectStage.REPORT_WAIT_CUSTOMER) {
+                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
+                }
             case REPORT_WAIT_CUSTOMER:      // 测试报告已签发，待客户接受, next: REPORT_CUSTOMER_CONFIRM 或 REPORT_CUSTOMER_REJECT
                 if (nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_CONFIRM && nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_REJECT) {
                     throw new ProjectInvalidStageException("更新的下一个状态不合法");

@@ -52,7 +52,7 @@ public class MongoReportReviewService implements ReportReviewService {
 
         ProjectStage projectStage = projectDAO.findProjectById(reportReview.getProjectId()).getStatus().getStage();
         if (projectStage != ProjectStage.REPORT_AUDITING && projectStage != ProjectStage.REPORT_QA_DENIED
-                && projectStage != ProjectStage.REPORT_QA_PASSED && projectStage != ProjectStage.REPORT_WAIT_CUSTOMER
+                && projectStage != ProjectStage.REPORT_QA_PASSED && projectStage != ProjectStage.REPORT_WAIT_SENT_TO_CUSTOMER && projectStage != ProjectStage.REPORT_WAIT_CUSTOMER
                 && projectStage != ProjectStage.REPORT_CUSTOMER_CONFIRM && projectStage != ProjectStage.REPORT_CUSTOMER_REJECT
                 && projectStage != ProjectStage.QA_ALL_REJECTED && projectStage != ProjectStage.QA_ALL_PASSED) {
             throw new ReviewInvalidStageException("无权在此阶段查看测试报告检查表");

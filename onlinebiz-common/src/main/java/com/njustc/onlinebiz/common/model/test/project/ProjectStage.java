@@ -28,9 +28,12 @@ public enum ProjectStage {
   // 11三个电子表格、测试报告、测试报告检查表）（下一个：REPORT_AUDITING,，测试报告提交时触发）
   REPORT_QA_DENIED,
 
-  // 测试报告经质量部审核通过，待上传测试报告检查表并签发测试报告（无可填，可看：测试方案、测试方案评审表、8 9
-  // 11三个电子表格、测试报告、测试报告检查表）（下一个：REPORT_WAIT_CUSTOMER,）
+  // 测试报告经质量部审核通过，待上传测试报告检查表（无可填，可看：测试方案、测试方案评审表、8 9
+  // 11三个电子表格、测试报告、测试报告检查表）（下一个：REPORT_WAIT_SENT_TO_CUSTOMER,）
   REPORT_QA_PASSED,
+
+  // 测试报告检查表已上传，待市场部点击向用户签发报告（无可填，可看：都行）（下一个：REPORT_WAIT_CUSTOMER,）
+  REPORT_WAIT_SENT_TO_CUSTOMER,
 
   // 测试报告已签发，待客户接受（无可填，客户只看测试报告，工作人员填了的都能看）（下一个：REPORT_CUSTOMER_CONFIRM,或REPORT_CUSTOMER_REJECT,）
   REPORT_WAIT_CUSTOMER,
