@@ -23,7 +23,7 @@ public class DefaultContractService implements ContractService {
 
     private static final String ENTRUST_SERVICE = "http://onlinebiz-entrust";
 
-    private static final String SCANNED_COPY_DIR = "~/contract/";
+    private static final String SCANNED_COPY_DIR = "/root/contract/";
 
     private final ContractDAO contractDAO;
 

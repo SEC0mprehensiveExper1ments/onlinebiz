@@ -20,7 +20,7 @@ import java.io.IOException;
 
 @Service
 public class MongoReportReviewService implements ReportReviewService {
-    private static final String SCANNED_COPY_DIR = "~/test/review/";
+    private static final String SCANNED_COPY_DIR = "/root/test/review/";
     private final ReportReviewDAO reportReviewDAO;
     private final ProjectDAO projectDAO;
 

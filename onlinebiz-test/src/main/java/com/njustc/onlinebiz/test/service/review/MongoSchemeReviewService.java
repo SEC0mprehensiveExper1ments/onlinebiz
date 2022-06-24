@@ -22,7 +22,7 @@ import java.io.IOException;
 @Service
 public class MongoSchemeReviewService implements SchemeReviewService {
 
-    private static final String SCANNED_COPY_DIR = "~/test/review/";
+    private static final String SCANNED_COPY_DIR = "/root/test/review/";
     private final SchemeReviewDAO schemeReviewDAO;
     private final ProjectDAO projectDAO;
     public MongoSchemeReviewService(SchemeReviewDAO schemeReviewDAO, ProjectDAO projectDAO) {
