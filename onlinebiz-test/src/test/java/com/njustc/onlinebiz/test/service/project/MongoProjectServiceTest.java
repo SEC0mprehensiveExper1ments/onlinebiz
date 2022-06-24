@@ -17,6 +17,7 @@ import com.njustc.onlinebiz.test.service.testissue.TestIssueService;
 import com.njustc.onlinebiz.test.service.testrecord.TestRecordService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ class MongoProjectServiceTest {
   private final TestcaseService testcaseService = mock(TestcaseService.class);
   private final TestRecordService testRecordService = mock(TestRecordService.class);
   private final ReportService reportService = mock(ReportService.class);
+  private final RestTemplate restTemplate = mock(RestTemplate.class);
   private final EntrustTestReviewService entrustTestReviewService =
       mock(EntrustTestReviewService.class);
   private final ReportReviewService reportReviewService = mock(ReportReviewService.class);
@@ -46,7 +48,7 @@ class MongoProjectServiceTest {
           reportService,
           entrustTestReviewService,
           reportReviewService,
-          testIssueService);
+          testIssueService, restTemplate);
 
   @Test
   void findProjectByCustomer() {
