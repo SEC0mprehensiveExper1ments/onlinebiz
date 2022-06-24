@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -16,7 +17,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class JS006 {
     private String inputBanBenHao = "";
-    private List<Modification> wenDangXiuGaiJiLu;
+    private List<Modification> wenDangXiuGaiJiLu = new ArrayList<>();
     private String inputBiaoShi = "";
     private String inputXiTongGaiShu = "";
     private String inputWenDangGaiShu = "";
@@ -31,10 +32,10 @@ public class JS006 {
     private String inputYiBanCeShiTiaoJian = "";
     private String inputJiHuaZhiXingDeCeShi = "";
     private String inputCeShiYongLi = "";
-    private Schedule zhiDingJiHua;
-    private Schedule sheJiCeShi;
-    private Schedule zhiXingCeShi;
-    private Schedule pingGuCeShi;
+    private Schedule zhiDingJiHua = new Schedule();
+    private Schedule sheJiCeShi = new Schedule();
+    private Schedule zhiXingCeShi = new Schedule();
+    private Schedule pingGuCeShi = new Schedule();
     private String inputXuQiuKeZhuiZongXing = "";
 
     public JS006(Scheme scheme) {

@@ -6,11 +6,13 @@ import com.njustc.onlinebiz.doc.model.JS006;
 import com.njustc.onlinebiz.doc.service.DocServiceJS006;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@SpringBootTest
 public class JS006Test {
 
     @Autowired

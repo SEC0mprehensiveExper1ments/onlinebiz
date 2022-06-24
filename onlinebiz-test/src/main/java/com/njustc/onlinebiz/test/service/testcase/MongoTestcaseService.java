@@ -33,7 +33,8 @@ public class MongoTestcaseService implements TestcaseService {
         testcase.setProjectId(projectId);
         testcase.setEntrustId(entrustId);
         testcase.setTestcases(testcases);
-        return testcaseDAO.insertTestcaseList(testcase).getId();
+        String testcaseId = testcaseDAO.insertTestcaseList(testcase).getId();
+        return testcaseId;
     }
 
     @Override
