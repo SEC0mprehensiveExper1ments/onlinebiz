@@ -20,7 +20,7 @@ import java.io.IOException;
 
 @Service
 public class MongoReportReviewService implements ReportReviewService {
-    private static final String SCANNED_COPY_DIR = "~/review/";
+    private static final String SCANNED_COPY_DIR = "~/test/review/";
     private final ReportReviewDAO reportReviewDAO;
     private final ProjectDAO projectDAO;
 
@@ -96,7 +96,7 @@ public class MongoReportReviewService implements ReportReviewService {
             throw new ReviewPermissionDeniedException("扫描文件名不能为空");
         }
         String suffix = originalFilename.substring(originalFilename.lastIndexOf('.'));
-        String path = SCANNED_COPY_DIR + reportReviewId + "." + suffix;
+        String path = SCANNED_COPY_DIR + reportReviewId + suffix;
         scannedCopy.transferTo(new File(path));
         // 将路径保存到合同对象中
         if (!reportReviewDAO.updateScannedCopyPath(reportReviewId, path)) {

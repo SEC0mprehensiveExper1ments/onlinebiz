@@ -18,6 +18,7 @@ public class ProjectControllerAdvice {
     @ExceptionHandler(ProjectPermissionDeniedException.class)
     public String handlePermissionDeniedException(ProjectPermissionDeniedException e) {
         log.warn("Permission Denied Exception: " + e.getMessage());
+        e.printStackTrace();
         return e.getMessage();
     }
 
@@ -26,6 +27,7 @@ public class ProjectControllerAdvice {
     @ExceptionHandler(ProjectDAOFailureException.class)
     public String handleDAOFailureException(ProjectDAOFailureException e) {
         log.error("DAO Failure Detected: " + e.getMessage());
+        e.printStackTrace();
         return e.getMessage();
     }
 
@@ -34,6 +36,7 @@ public class ProjectControllerAdvice {
     @ExceptionHandler(ProjectInvalidStageException.class)
     public String handleInvalidStageException(ProjectInvalidStageException e) {
         log.warn("Invalid Stage Detected: " + e.getMessage());
+        e.printStackTrace();
         return e.getMessage();
     }
 
@@ -42,6 +45,7 @@ public class ProjectControllerAdvice {
     @ExceptionHandler(ProjectNotFoundException.class)
     public String handleNotFoundException(ProjectNotFoundException e) {
         log.warn("Project Not Found: " + e.getMessage());
+        e.printStackTrace();
         return e.getMessage();
     }
 
@@ -50,6 +54,7 @@ public class ProjectControllerAdvice {
     @ExceptionHandler(ProjectInvalidArgumentException.class)
     public String handleInvalidArgumentException(ProjectInvalidArgumentException e) {
         log.warn("Invalid Argument encountered: " + e.getMessage());
+        e.printStackTrace();
         return e.getMessage();
     }
 
@@ -58,6 +63,7 @@ public class ProjectControllerAdvice {
     @ExceptionHandler(IOException.class)
     public String handleIOException(IOException e) {
         log.warn("IO Exception: " + e.getMessage());
+        e.printStackTrace();
         return e.getMessage();
     }
 }

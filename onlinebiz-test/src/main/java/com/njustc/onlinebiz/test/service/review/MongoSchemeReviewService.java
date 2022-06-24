@@ -22,7 +22,7 @@ import java.io.IOException;
 @Service
 public class MongoSchemeReviewService implements SchemeReviewService {
 
-    private static final String SCANNED_COPY_DIR = "~/review/";
+    private static final String SCANNED_COPY_DIR = "~/test/review/";
     private final SchemeReviewDAO schemeReviewDAO;
     private final ProjectDAO projectDAO;
     public MongoSchemeReviewService(SchemeReviewDAO schemeReviewDAO, ProjectDAO projectDAO) {
@@ -35,8 +35,6 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         // 创建一份空的检查表
         SchemeReview schemeReview = new SchemeReview();
         schemeReview.setProjectId(projectId);
-//        schemeReview.setQaId(qaId);
-//        schemeReview.setTesterId(testerId);
         // 获取检查表ID
         return schemeReviewDAO.insertSchemeReview(schemeReview).getId();
     }
@@ -111,7 +109,6 @@ public class MongoSchemeReviewService implements SchemeReviewService {
 
     @Override
     public void saveScannedCopy(String schemeReviewId, MultipartFile scannedCopy, Long userId, Role userRole) throws IOException {
-        // TODO: 修改文件路径bug，参考
         if (scannedCopy.isEmpty()) {
             throw new ReviewPermissionDeniedException("不能上传空的测试方案检查表的扫描件");
         }
@@ -131,7 +128,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
             throw new ReviewPermissionDeniedException("扫描文件名不能为空");
         }
         String suffix = originalFilename.substring(originalFilename.lastIndexOf('.'));
-        String path = SCANNED_COPY_DIR + schemeReviewId + "." + suffix;
+        String path = SCANNED_COPY_DIR + schemeReviewId + suffix;
         scannedCopy.transferTo(new File(path));
         // 将路径保存到合同对象中
         if (!schemeReviewDAO.updateScannedCopyPath(schemeReviewId, path)) {
