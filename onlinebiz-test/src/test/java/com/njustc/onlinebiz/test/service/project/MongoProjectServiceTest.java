@@ -1,166 +1,242 @@
 package com.njustc.onlinebiz.test.service.project;
 
-import com.njustc.onlinebiz.common.model.EntrustDto;
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.test.project.ProjectBaseInfo;
-import com.njustc.onlinebiz.test.exception.project.ProjectDAOFailureException;
+import com.njustc.onlinebiz.common.model.test.project.*;
+import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
+import com.njustc.onlinebiz.test.exception.project.ProjectInvalidArgumentException;
+import com.njustc.onlinebiz.test.exception.project.ProjectInvalidStageException;
 import com.njustc.onlinebiz.test.exception.project.ProjectNotFoundException;
 import com.njustc.onlinebiz.test.exception.project.ProjectPermissionDeniedException;
-import com.njustc.onlinebiz.common.model.test.project.Project;
+import com.njustc.onlinebiz.test.service.report.ReportService;
+import com.njustc.onlinebiz.test.service.review.EntrustTestReviewService;
+import com.njustc.onlinebiz.test.service.review.ReportReviewService;
+import com.njustc.onlinebiz.test.service.review.SchemeReviewService;
+import com.njustc.onlinebiz.test.service.scheme.SchemeService;
+import com.njustc.onlinebiz.test.service.testcase.TestcaseService;
+import com.njustc.onlinebiz.test.service.testissue.TestIssueService;
+import com.njustc.onlinebiz.test.service.testrecord.TestRecordService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 class MongoProjectServiceTest {
+  private final ProjectDAO projectDAO = mock(ProjectDAO.class);
+  private final SchemeService schemeService = mock(SchemeService.class);
+  private final SchemeReviewService schemeReviewService = mock(SchemeReviewService.class);
+  private final TestcaseService testcaseService = mock(TestcaseService.class);
+  private final TestRecordService testRecordService = mock(TestRecordService.class);
+  private final ReportService reportService = mock(ReportService.class);
+  private final EntrustTestReviewService entrustTestReviewService =
+      mock(EntrustTestReviewService.class);
+  private final ReportReviewService reportReviewService = mock(ReportReviewService.class);
+  private final TestIssueService testIssueService = mock(TestIssueService.class);
+  private final MongoProjectService mongoProjectService =
+      new MongoProjectService(
+          projectDAO,
+          schemeService,
+          schemeReviewService,
+          testcaseService,
+          testRecordService,
+          reportService,
+          entrustTestReviewService,
+          reportReviewService,
+          testIssueService);
 
-    @Autowired
-    private ProjectService projectService;
-    private static final String ENTRUST_SERVICE_URL = "http://onlinebiz-entrust";
-    private RestTemplate restTemplate;
-    private static String projectId1 = null;
-    private static String projectId2 = null;
-    private static String projectId3 = null;
+  @Test
+  void findProjectByCustomer() {
+    Assertions.assertThrows(
+        ProjectPermissionDeniedException.class,
+        () -> mongoProjectService.findProject("projectId", 0L, Role.CUSTOMER));
+  }
 
-    @Test
-    void createTestProject() {
+  @Test
+  void findProjectWaitForQA() {
+    Project project = new Project();
+    project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    Assertions.assertThrows(
+        ProjectInvalidStageException.class,
+        () -> mongoProjectService.findProject("projectId", 0L, Role.QA));
+  }
 
-        //由客户（非合法人员）创建项目
-        try {
-            projectService.createTestProject(11111L, Role.CUSTOMER, "E001");
-        } catch (Exception e) {
-            assert (e.getClass().equals(ProjectPermissionDeniedException.class));
-            System.out.println("Customer try to create a project and cause a mistake.");
-        }
-        //由质量部员工（非合法人员）创建项目
-        try {
-            projectService.createTestProject(3001L, Role.QA, "E001");
-        } catch (Exception e) {
-            assert (e.getClass().equals(ProjectPermissionDeniedException.class));
-            System.out.println("QA try to create a project and cause a mistake.");
-        }
-        //由质量部主管（非合法人员）创建项目
-        try {
-            projectService.createTestProject(3000L, Role.QA_SUPERVISOR, "E001");
-        } catch (Exception e) {
-            assert (e.getClass().equals(ProjectPermissionDeniedException.class));
-            System.out.println("QA supervisor try to create a project and cause a mistake.");
-        }
-        //由测试部员工（非合法人员）创建项目
-        try {
-            projectService.createTestProject(2001L, Role.TESTER, "E001");
-        } catch (Exception e) {
-            assert (e.getClass().equals(ProjectPermissionDeniedException.class));
-            System.out.println("Tester try to create a project and cause a mistake.");
-        }
-        //由测试部主管（非合法人员）创建项目
-        try {
-            projectService.createTestProject(2000L, Role.TESTING_SUPERVISOR, "E001");
-        } catch (Exception e) {
-            assert (e.getClass().equals(ProjectPermissionDeniedException.class));
-            System.out.println("Testing supervisor try to create a project and cause a mistake.");
-        }
+  @Test
+  void findProjectDaoNull() {
+    when(projectDAO.findProjectById(any())).thenReturn(null);
+    Assertions.assertThrows(
+        ProjectNotFoundException.class,
+        () -> mongoProjectService.findProject("projectId", 0L, Role.QA));
+  }
 
-        //由指定的市场部员工/市场部主管（合法人员）创建项目
-        String url1 = ENTRUST_SERVICE_URL + "/api/entrust/" + "E001" + "/get_dto";
-        ResponseEntity<EntrustDto> responseEntity1 = restTemplate.getForEntity(url1, EntrustDto.class);
-        EntrustDto entrustDto1 = responseEntity1.getBody();
-        if (entrustDto1 == null) {
-            throw new ProjectDAOFailureException("entrustDto为空");
-        }
-        projectId1 = projectService.createTestProject(entrustDto1.getMarketerId(), Role.MARKETER, "E001");
-        String url2 = ENTRUST_SERVICE_URL + "/api/entrust/" + "E002" + "/get_dto";
-        ResponseEntity<EntrustDto> responseEntity2 = restTemplate.getForEntity(url2, EntrustDto.class);
-        EntrustDto entrustDto2 = responseEntity2.getBody();
-        if (entrustDto2 == null) {
-            throw new ProjectDAOFailureException("entrustDto为空");
-        }
-        projectId2 = projectService.createTestProject(entrustDto2.getMarketerId(), Role.MARKETER, "E002");
-        projectId3 = projectService.createTestProject(2000L, Role.MARKETING_SUPERVISOR, "E003");
+  @Test
+  void findProjectSuccess() {
+    Project project = new Project();
+    project.setStatus(new ProjectStatus(ProjectStage.SCHEME_UNFILLED, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    Assertions.assertDoesNotThrow(
+        () -> {
+          mongoProjectService.findProject("projectId", 0L, Role.QA);
+        });
+  }
 
-        //由非该委托被指派的市场部员工（非合法人员）创建项目
-        Long marketerId = entrustDto1.getMarketerId();
-        if(marketerId.equals(1666L)) {
-            marketerId = 1665L;
-        }
-        else {
-            marketerId = 1666L;
-        }
-        try {
-            projectService.createTestProject(marketerId, Role.MARKETER, "E001");
-        } catch (Exception e) {
-            assert (e.getClass().equals(ProjectPermissionDeniedException.class));
-            System.out.println("Another marketer try to create a project and cause a mistake.");
-        }
-    }
+  @Test
+  void findProjectOutlinesInvalidPage() {
+    Assertions.assertThrows(
+        ProjectInvalidArgumentException.class,
+        () -> mongoProjectService.findProjectOutlines(0, 1, 0L, Role.QA));
+    Assertions.assertThrows(
+        ProjectInvalidArgumentException.class,
+        () -> mongoProjectService.findProjectOutlines(-1, 1, 0L, Role.QA));
+  }
 
-    @Test
-    void findProject() {
-        Project project;
-        //由客户（非合法人员）查看项目
-        try {
-            project = projectService.findProject(projectId1, 11111L, Role.CUSTOMER);
-        } catch (Exception e) {
-            assert (e.getClass().equals(ProjectPermissionDeniedException.class));
-            System.out.println("Customer try to find a project and cause a mistake.");
-        }
+  @Test
+  void findProjectOutlinesInvalidPageSize() {
+    Assertions.assertThrows(
+        ProjectInvalidArgumentException.class,
+        () -> mongoProjectService.findProjectOutlines(1, 0, 0L, Role.QA));
+    Assertions.assertThrows(
+        ProjectInvalidArgumentException.class,
+        () -> mongoProjectService.findProjectOutlines(1, -1, 0L, Role.QA));
+  }
 
-        //由质量部员工（合法人员）查看项目
-        project = projectService.findProject(projectId1, 3001L, Role.QA);
-        ProjectBaseInfo pbaseinfo1 = projectService.getProjectBaseInfo(projectId1);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(pbaseinfo1.getMarketerId()));
-        ProjectBaseInfo pbaseinfo2 = projectService.getProjectBaseInfo(projectId2);
-        project = projectService.findProject(projectId2, 3001L, Role.QA);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(pbaseinfo2.getMarketerId()));
-        project = projectService.findProject(projectId3, 3001L, Role.QA);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(2000L));
-        //由质量部主管（合法人员）查看项目
-        project = projectService.findProject(projectId1, 3000L, Role.QA_SUPERVISOR);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(pbaseinfo1.getMarketerId()));
-        project = projectService.findProject(projectId2, 3000L, Role.QA_SUPERVISOR);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(pbaseinfo2.getMarketerId()));
-        project = projectService.findProject(projectId3, 3000L, Role.QA_SUPERVISOR);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(2000L));
-        //由市场部员工（合法人员）查看项目
-        project = projectService.findProject(projectId1, 1001L, Role.MARKETER);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(pbaseinfo1.getMarketerId()));
-        project = projectService.findProject(projectId2, 1001L, Role.MARKETER);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(pbaseinfo2.getMarketerId()));
-        project = projectService.findProject(projectId3, 1001L, Role.MARKETER);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(2000L));
-        //由市场部主管（合法人员）查看项目
-        project = projectService.findProject(projectId1, 1000L, Role.MARKETING_SUPERVISOR);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(pbaseinfo1.getMarketerId()));
-        project = projectService.findProject(projectId2, 1000L, Role.MARKETING_SUPERVISOR);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(pbaseinfo2.getMarketerId()));
-        project = projectService.findProject(projectId3, 1000L, Role.MARKETING_SUPERVISOR);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(2000L));
-        //由测试部员工（合法人员）查看项目
-        project = projectService.findProject(projectId1, 2001L, Role.TESTER);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(pbaseinfo1.getMarketerId()));
-        project = projectService.findProject(projectId2, 2001L, Role.TESTER);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(pbaseinfo2.getMarketerId()));
-        project = projectService.findProject(projectId3, 2001L, Role.TESTER);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(2000L));
-        //由测试部主管（合法人员）查看项目
-        project = projectService.findProject(projectId1, 2000L, Role.TESTING_SUPERVISOR);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(pbaseinfo1.getMarketerId()));
-        project = projectService.findProject(projectId2, 2000L, Role.TESTING_SUPERVISOR);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(pbaseinfo2.getMarketerId()));
-        project = projectService.findProject(projectId3, 2000L, Role.TESTING_SUPERVISOR);
-        assert (project.getProjectBaseInfo().getMarketerId().equals(2000L));
+  @Test
+  void findProjectOutlinesSupervisor() {
+    when(projectDAO.countAll()).thenReturn(1L);
+    List<ProjectOutline> projectOutlines = new ArrayList<>();
+    when(projectDAO.findAllProjects(any(), any())).thenReturn(projectOutlines);
+    Assertions.assertDoesNotThrow(
+        () -> {
+          mongoProjectService.findProjectOutlines(1, 1, 0L, Role.ADMIN);
+        });
+  }
 
-        //查看一个不存在的项目id
-        try {
-            project = projectService.findProject("projectId4", 3001L, Role.QA);
-        } catch (Exception e) {
-            assert (e.getClass().equals(ProjectNotFoundException.class));
-            System.out.println("Try to find a project non-existent and cause a mistake.");
-        }
-    }
+  @Test
+  void findProjectOutlinesMarketer() {
+    when(projectDAO.countByMarketerId(any())).thenReturn(1L);
+    List<ProjectOutline> projectOutlines = new ArrayList<>();
+    when(projectDAO.findAllProjects(any(), any())).thenReturn(projectOutlines);
+    Assertions.assertDoesNotThrow(
+        () -> {
+          mongoProjectService.findProjectOutlines(1, 1, 0L, Role.MARKETER);
+        });
+  }
+
+  @Test
+  void findProjectOutlinesTester() {
+    when(projectDAO.countByTesterId(any())).thenReturn(1L);
+    List<ProjectOutline> projectOutlines = new ArrayList<>();
+    when(projectDAO.findAllProjects(any(), any())).thenReturn(projectOutlines);
+    Assertions.assertDoesNotThrow(
+        () -> {
+          mongoProjectService.findProjectOutlines(1, 1, 0L, Role.TESTER);
+        });
+  }
+
+  @Test
+  void findProjectOutlinesQA() {
+    when(projectDAO.countByQaId(any())).thenReturn(1L);
+    List<ProjectOutline> projectOutlines = new ArrayList<>();
+    when(projectDAO.findAllProjects(any(), any())).thenReturn(projectOutlines);
+    Assertions.assertDoesNotThrow(
+        () -> {
+          mongoProjectService.findProjectOutlines(1, 1, 0L, Role.QA);
+        });
+  }
+
+  @Test
+  void findProjectOutlinesCustomer() {
+    Assertions.assertThrows(
+        ProjectPermissionDeniedException.class,
+        () -> mongoProjectService.findProjectOutlines(1, 1, 0L, Role.CUSTOMER));
+  }
+
+  @Test
+  void updateQaInvalidStage() {
+    Project project = new Project();
+    project.setStatus(new ProjectStatus(ProjectStage.SCHEME_UNFILLED, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    Assertions.assertThrows(
+        ProjectInvalidStageException.class,
+        () -> mongoProjectService.updateQa("projectId", 0L, 0L, Role.QA));
+  }
+
+  @Test
+  void updateQaBySuccess() {
+    Project project = new Project();
+    project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, ""));
+    project.setProjectBaseInfo(new ProjectBaseInfo());
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    when(projectDAO.updateQaId(any(), any())).thenReturn(true);
+    when(projectDAO.updateFormIds(any(), any())).thenReturn(true);
+    Assertions.assertDoesNotThrow(
+        () -> mongoProjectService.updateQa("projectId", 0L, 0L, Role.QA_SUPERVISOR));
+  }
+
+  @Test
+  void updateQaWithoutPermission() {
+    Project project = new Project();
+    project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, ""));
+    project.setProjectBaseInfo(new ProjectBaseInfo());
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    Assertions.assertThrows(
+        ProjectPermissionDeniedException.class,
+        () -> mongoProjectService.updateQa("projectId", 0L, 0L, Role.CUSTOMER));
+    Assertions.assertThrows(
+        ProjectPermissionDeniedException.class,
+        () -> mongoProjectService.updateQa("projectId", 0L, 0L, Role.TESTING_SUPERVISOR));
+  }
+
+  @Test
+  void removeProjectWithoutPermission() {
+    Assertions.assertThrows(
+        ProjectPermissionDeniedException.class,
+        () -> mongoProjectService.removeProject("projectId", 0L, Role.CUSTOMER));
+    Assertions.assertThrows(
+        ProjectPermissionDeniedException.class,
+        () -> mongoProjectService.removeProject("projectId", 0L, Role.TESTING_SUPERVISOR));
+  }
+
+  @Test
+  void updateStatus() {}
+
+  @Test
+  void getProjectFormIdsDaoNull() {
+    when(projectDAO.findProjectById(any())).thenReturn(null);
+    Assertions.assertThrows(
+        ProjectNotFoundException.class, () -> mongoProjectService.getProjectFormIds("projectId"));
+  }
+
+  @Test
+  void getProjectFormIds() {
+    Project project = new Project();
+    project.setProjectFormIds(new ProjectFormIds());
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    Assertions.assertDoesNotThrow(
+        () -> {
+          mongoProjectService.getProjectFormIds("projectId");
+        });
+  }
+
+  @Test
+  void getProjectBaseInfo() {
+    Project project = new Project();
+    project.setProjectBaseInfo(new ProjectBaseInfo());
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    Assertions.assertDoesNotThrow(
+        () -> {
+          mongoProjectService.getProjectBaseInfo("projectId");
+        });
+  }
+
+  @Test
+  void getProjectBaseInfoNull() {
+    when(projectDAO.findProjectById(any())).thenReturn(null);
+    Assertions.assertThrows(
+        ProjectNotFoundException.class, () -> mongoProjectService.getProjectBaseInfo("projectId"));
+  }
 }
