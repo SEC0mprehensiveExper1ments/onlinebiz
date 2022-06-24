@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.test.service.project;
 
+import com.njustc.onlinebiz.common.model.EntrustDto;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.project.*;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
@@ -48,7 +49,23 @@ class MongoProjectServiceTest {
           reportService,
           entrustTestReviewService,
           reportReviewService,
-          testIssueService, restTemplate);
+          testIssueService,
+          restTemplate);
+
+  @Test
+  void createTestProjectByMarketer() {
+    EntrustDto entrustDto = new EntrustDto();
+    entrustDto.setMarketerId(2L);
+    Project project = new Project();
+    project.setId("projectId");
+
+    when(restTemplate.getForObject(any(String.class), any(Class.class))).thenReturn(entrustDto);
+    when(projectDAO.insertProject(any())).thenReturn(project);
+    when(restTemplate.postForEntity(any(), any(), any())).thenReturn(null);
+
+    Assertions.assertEquals(
+        "projectId", mongoProjectService.createTestProject(2L, Role.MARKETER, "entrustId"));
+  }
 
   @Test
   void findProjectByCustomer() {
