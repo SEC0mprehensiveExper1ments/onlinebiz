@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.test.service.project;
 
+import com.njustc.onlinebiz.common.model.EntrustDto;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.project.*;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
@@ -17,6 +18,7 @@ import com.njustc.onlinebiz.test.service.testissue.TestIssueService;
 import com.njustc.onlinebiz.test.service.testrecord.TestRecordService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,7 @@ class MongoProjectServiceTest {
   private final TestcaseService testcaseService = mock(TestcaseService.class);
   private final TestRecordService testRecordService = mock(TestRecordService.class);
   private final ReportService reportService = mock(ReportService.class);
+  private final RestTemplate restTemplate = mock(RestTemplate.class);
   private final EntrustTestReviewService entrustTestReviewService =
       mock(EntrustTestReviewService.class);
   private final ReportReviewService reportReviewService = mock(ReportReviewService.class);
@@ -46,7 +49,23 @@ class MongoProjectServiceTest {
           reportService,
           entrustTestReviewService,
           reportReviewService,
-          testIssueService);
+          testIssueService,
+          restTemplate);
+
+  @Test
+  void createTestProjectByMarketer() {
+    EntrustDto entrustDto = new EntrustDto();
+    entrustDto.setMarketerId(2L);
+    Project project = new Project();
+    project.setId("projectId");
+
+    when(restTemplate.getForObject(any(String.class), any(Class.class))).thenReturn(entrustDto);
+    when(projectDAO.insertProject(any())).thenReturn(project);
+    when(restTemplate.postForEntity(any(), any(), any())).thenReturn(null);
+
+    Assertions.assertEquals(
+        "projectId", mongoProjectService.createTestProject(2L, Role.MARKETER, "entrustId"));
+  }
 
   @Test
   void findProjectByCustomer() {
