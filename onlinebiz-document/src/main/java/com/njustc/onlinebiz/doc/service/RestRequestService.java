@@ -7,6 +7,7 @@ import com.njustc.onlinebiz.common.model.entrust.Entrust;
 import com.njustc.onlinebiz.common.model.test.review.EntrustTestReview;
 import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
+import com.njustc.onlinebiz.common.model.test.scheme.Scheme;
 import com.njustc.onlinebiz.common.model.test.testcase.Testcase;
 import com.njustc.onlinebiz.common.model.test.testissue.TestIssueList;
 import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
@@ -82,6 +83,22 @@ public class RestRequestService {
         Contract contract = responseEntity.getBody();
 
         return contract;
+    }
+
+    public Scheme getScheme(String schemeId, Long userId, Role userRole) {
+        String params = "?userId=" + userId + "&userRole=" + userRole;
+        String url = TEST_SERVICE + "/api/test/scheme/" + schemeId;
+        ResponseEntity<Scheme> responseEntity = restTemplate.getForEntity(url + params, Scheme.class);
+        // 检查测试方案 id 及权限有效性
+        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+            throw new DownloadPermissionDeniedException("无权下载该文件");
+        } else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+            throw new DownloadNotFoundException("未找到该测试方案ID");
+        } else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
+            throw new DownloadDAOFailureException("其他问题");
+        }
+        Scheme scheme = responseEntity.getBody();
+        return scheme;
     }
 
     /**

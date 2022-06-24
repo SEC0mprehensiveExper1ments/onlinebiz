@@ -127,9 +127,9 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    Scheme scheme = docServiceJS006.getScheme(schemeId, userId, userRole);
+    Scheme scheme = restRequestService.getScheme(schemeId, userId, userRole);
     JS006 newJson = new JS006(scheme);
-    return docServiceJS006.fill(newJson);
+    return docServiceJS006.fill(schemeId, newJson);
   }
 
   // JS008 文档下载接口

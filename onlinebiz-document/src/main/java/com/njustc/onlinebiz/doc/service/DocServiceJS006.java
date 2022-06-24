@@ -27,31 +27,10 @@ import java.nio.file.Path;
 
 @Service
 public class DocServiceJS006 {
-    private static final String TEST_SERVICE = "http://onlinebiz-test";
-    private final RestTemplate restTemplate;
     private final OSSProvider ossProvider;
-    private String schemeId;
 
-    public DocServiceJS006(RestTemplate restTemplate, OSSProvider ossProvider) {
-        this.restTemplate = restTemplate;
+    public DocServiceJS006(OSSProvider ossProvider) {
         this.ossProvider = ossProvider;
-    }
-
-    public Scheme getScheme(String schemeId, Long userId, Role userRole) {
-        String params = "?userId=" + userId + "&userRole=" + userRole;
-        String url = TEST_SERVICE + "/api/test/scheme/" + schemeId;
-        ResponseEntity<Scheme> responseEntity = restTemplate.getForEntity(url + params, Scheme.class);
-        // 检查测试方案 id 及权限有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
-            throw new DownloadPermissionDeniedException("无权下载该文件");
-        } else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
-            throw new DownloadNotFoundException("未找到该测试方案ID");
-        } else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
-            throw new DownloadDAOFailureException("其他问题");
-        }
-        Scheme scheme = responseEntity.getBody();
-        this.schemeId = schemeId;
-        return scheme;
     }
 
     private static final float marginLeft;
@@ -73,7 +52,7 @@ public class DocServiceJS006 {
 
     private JS006 JS006Json;
 
-    public String fill(JS006 newJson) {
+    public String fill(String schemeId, JS006 newJson) {
         JS006Json = newJson;
         String pdfPath = DOCUMENT_DIR + "JS006_" + schemeId + ".pdf";
         try {
@@ -85,7 +64,7 @@ public class DocServiceJS006 {
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
             // 2.5 添加页眉/页脚
             String header = "NST－04－JS006－2011";
-            String[] footer = new String[]{"第 ", " 页，共 ", " 页", "计算机软件新技术国家重点实验室（南京大学）"};
+            String[] footer = new String[]{"第 ", " 页，共 ", " 页"};
             int headerToPage = 100;
             int footerFromPage = 1;
             boolean isHaderLine = true;
