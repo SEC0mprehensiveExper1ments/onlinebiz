@@ -69,7 +69,7 @@ spring:
           filters:
             - AddIdentity
 
-        - id: contract-test
+        - id: test-service
           uri: lb://onlinebiz-test
           predicates:
             - name: Path

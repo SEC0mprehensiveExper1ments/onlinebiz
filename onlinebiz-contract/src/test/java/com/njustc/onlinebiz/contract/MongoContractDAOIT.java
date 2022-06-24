@@ -18,7 +18,7 @@ import java.util.Date;
 @Import(MongoContractDAO.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DataMongoTest(excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class)
-public class MongoContractDAOIT {
+public class   MongoContractDAOIT {
 
     @Autowired
     private ContractDAO contractDAO;

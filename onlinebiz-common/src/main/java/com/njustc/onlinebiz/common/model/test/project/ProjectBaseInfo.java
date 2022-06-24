@@ -20,11 +20,11 @@ public class ProjectBaseInfo {
     private Long testerId;
     // 质量部指定员工 id
     private Long qaId;
+    //委托对应的客户id
+    private Long customerId;
+
     // 软件名称
     private String softwareName;
-
-    //委托对应的客户id
-    private long customerId;
     // 项目编号（手填）
     private String serialNumber;
 

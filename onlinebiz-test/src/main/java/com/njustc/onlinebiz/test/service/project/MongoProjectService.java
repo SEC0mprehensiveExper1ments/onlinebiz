@@ -245,7 +245,14 @@ public class MongoProjectService implements ProjectService {
     @Override
     public void updateStatus(String projectId, ProjectStatus nextStatus, Long userId, Role userRole) {
         Project project = projectDAO.findProjectById(projectId);
-        // TODO: 检查用户权限
+        // 检查用户权限
+        if (userRole != Role.ADMIN && userRole != Role.TESTING_SUPERVISOR && userRole != Role.QA_SUPERVISOR
+            && !userId.equals(project.getProjectBaseInfo().getCustomerId())     // 项目有关的用户
+            && !userId.equals(project.getProjectBaseInfo().getTesterId())       // 项目有关的测试部人员
+            && !userId.equals(project.getProjectBaseInfo().getQaId()))          // 项目有关的质量部人员
+        {
+            throw new ProjectPermissionDeniedException("无权更新项目状态");
+        }
 
         switch (project.getStatus().getStage()) {
             case WAIT_FOR_QA:               // 等待分配质量人员（所有表不能改）, next: SCHEME_UNFILLED

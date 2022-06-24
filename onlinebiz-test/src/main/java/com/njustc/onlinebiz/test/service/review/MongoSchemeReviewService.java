@@ -111,6 +111,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
 
     @Override
     public void saveScannedCopy(String schemeReviewId, MultipartFile scannedCopy, Long userId, Role userRole) throws IOException {
+        // TODO: 修改文件路径bug，参考
         if (scannedCopy.isEmpty()) {
             throw new ReviewPermissionDeniedException("不能上传空的测试方案检查表的扫描件");
         }
