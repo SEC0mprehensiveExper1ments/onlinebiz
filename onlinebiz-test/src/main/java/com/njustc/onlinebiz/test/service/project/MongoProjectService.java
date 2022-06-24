@@ -1,5 +1,6 @@
 package com.njustc.onlinebiz.test.service.project;
 
+import com.google.gson.Gson;
 import com.njustc.onlinebiz.common.model.EntrustDto;
 import com.njustc.onlinebiz.common.model.PageResult;
 import com.njustc.onlinebiz.common.model.Role;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.ResponseBody;
 import okhttp3.internal.Util;
 import org.springframework.stereotype.Service;
 
@@ -41,13 +43,12 @@ public class MongoProjectService implements ProjectService {
     private final EntrustTestReviewService entrustTestReviewService;
     private final ReportReviewService reportReviewService;
     private final TestIssueService testIssueService;
-    private final EntrustDtoGetter entrustDtoGetter;
 
     public MongoProjectService(ProjectDAO projectDAO,
                                SchemeService schemeService,
                                SchemeReviewService schemeReviewService,
                                TestcaseService testcaseService,
-                               TestRecordService testRecordService, ReportService reportService, EntrustTestReviewService entrustTestReviewService, ReportReviewService reportReviewService, TestIssueService testIssueService, EntrustDtoGetter entrustDtoGetter) {
+                               TestRecordService testRecordService, ReportService reportService, EntrustTestReviewService entrustTestReviewService, ReportReviewService reportReviewService, TestIssueService testIssueService) {
         this.projectDAO = projectDAO;
         this.schemeService = schemeService;
         this.schemeReviewService = schemeReviewService;
@@ -57,7 +58,6 @@ public class MongoProjectService implements ProjectService {
         this.entrustTestReviewService = entrustTestReviewService;
         this.reportReviewService = reportReviewService;
         this.testIssueService = testIssueService;
-        this.entrustDtoGetter = entrustDtoGetter;
     }
 
     @Override
@@ -68,7 +68,15 @@ public class MongoProjectService implements ProjectService {
         }
         EntrustDto entrustDto = null;
         try {
-            entrustDto = entrustDtoGetter.getEntrustDto(entrustId);
+            CookieManager cookieManager = new CookieManager();
+            cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+            OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(new JavaNetCookieJar(cookieManager)).build();
+            Request login = new Request.Builder().url("http://124.222.168.27:8080/api/login/?userName=BackEndAdm1n&userPassword=123456Adm1n").post(Util.EMPTY_REQUEST).build();
+            Request request = new Request.Builder().url("http://124.222.168.27:8080/api/entrust/" + entrustId + "/get_dto").build();
+            okHttpClient.newCall(login).execute();
+            ResponseBody responseBody = okHttpClient.newCall(request).execute().body();
+            Gson gson = new Gson();
+            entrustDto = gson.fromJson(responseBody.string(), EntrustDto.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
