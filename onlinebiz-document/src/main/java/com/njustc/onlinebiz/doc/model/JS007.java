@@ -7,7 +7,6 @@ import lombok.experimental.Accessors;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Accessors(chain = true)
 public class JS007 {
     /* 子项先从左往右，从上至下，递增 */

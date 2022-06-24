@@ -123,7 +123,7 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    Testcase testcase = restRequestService.getTestcase(testcaseId, userId, userRole);
+    Testcase testcase = restRequestService.getTestcaseById(testcaseId, userId, userRole);
     return docServiceJS008.fill(testcaseId, new JS008(testcase));
   }
 
@@ -134,7 +134,7 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    TestRecordList testRecordList = restRequestService.getTestRecordList(testRecordId, userId, userRole);
+    TestRecordList testRecordList = restRequestService.getTestRecordListById(testRecordId, userId, userRole);
     return docServiceJS009.fill(testRecordId, new JS009(testRecordList));
   }
 
@@ -145,7 +145,7 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    ReportReview reportReview = restRequestService.getReportReview(reportReviewId, userId, userRole);
+    ReportReview reportReview = restRequestService.getReportReviewById(reportReviewId, userId, userRole);
     return docServiceJS010.fill(reportReviewId, new JS010(reportReview));
   }
 
@@ -156,7 +156,7 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    TestIssueList testIssueList = restRequestService.getTestIssueList(testIssueId, userId, userRole);
+    TestIssueList testIssueList = restRequestService.getTestIssueListById(testIssueId, userId, userRole);
     return docServiceJS011.fill(testIssueId, new JS011(testIssueList));
   }
 
@@ -167,7 +167,7 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    EntrustTestReview entrustTestReview = restRequestService.getEntrustTestReview(entrustTestReviewId, userId, userRole);
+    EntrustTestReview entrustTestReview = restRequestService.getEntrustTestReviewById(entrustTestReviewId, userId, userRole);
     return docServiceJS012.fill(entrustTestReviewId, new JS012(entrustTestReview));
   }
 
@@ -178,7 +178,7 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    SchemeReview schemeReview = restRequestService.getSchemeReview(schemeReviewId, userId, userRole);
+    SchemeReview schemeReview = restRequestService.getSchemeReviewById(schemeReviewId, userId, userRole);
     return docServiceJS013.fill(schemeReviewId, new JS013(schemeReview));
   }
 

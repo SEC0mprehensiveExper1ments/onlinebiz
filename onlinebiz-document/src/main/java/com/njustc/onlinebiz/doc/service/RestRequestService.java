@@ -43,7 +43,7 @@ public class RestRequestService {
         String url = ENTRUST_SERVICE + "/api/entrust/" + entrustId;
         ResponseEntity<Entrust> responseEntity = restTemplate.getForEntity(url + params, Entrust.class);
         // 检查委托 id 及权限的有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN || responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST) {
             throw new DownloadPermissionDeniedException("无权下载该文件");
         }
         else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
@@ -70,7 +70,7 @@ public class RestRequestService {
         String url = CONTRACT_SERVICE + "/api/contract/" + contracId;
         ResponseEntity<Contract> responseEntity = restTemplate.getForEntity(url + params, Contract.class);
         // 检查委托 id 及权限的有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN || responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST) {
             throw new DownloadPermissionDeniedException("无权下载该文件");
         }
         else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
@@ -91,13 +91,13 @@ public class RestRequestService {
      * @param userRole 操作的用户角色
      * @return 若成功从test服务中获得对象，则返回；否则，返回异常信息
      * */
-    public Testcase getTestcase(String testcaseId, Long userId, Role userRole) {
+    public Testcase getTestcaseById(String testcaseId, Long userId, Role userRole) {
         // 调用test服务的getTestCase接口
         String params = "?userId=" + userId + "&userRole=" + userRole;
         String url = TEST_SERVICE + "/api/test/testcase/" + testcaseId;
         ResponseEntity<Testcase> responseEntity = restTemplate.getForEntity(url + params, Testcase.class);
         // 检查测试用例表 id 及权限有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN || responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST) {
             throw new DownloadPermissionDeniedException("无权下载该文件");
         }
         else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
@@ -118,13 +118,13 @@ public class RestRequestService {
      * @param userRole 操作的用户角色
      * @return 若成功从test服务中获得对象，则返回；否则，返回异常信息
      * */
-    public TestRecordList getTestRecordList(String testRecordId, Long userId, Role userRole) {
+    public TestRecordList getTestRecordListById(String testRecordId, Long userId, Role userRole) {
         // 调用test服务的getTestRecord接口
         String params = "?userId=" + userId + "&userRole=" + userRole;
         String url = TEST_SERVICE + "/api/test/testRecord/" + testRecordId;
         ResponseEntity<TestRecordList> responseEntity = restTemplate.getForEntity(url + params, TestRecordList.class);
         // 检查测试记录表 id 及权限有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN || responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST) {
             throw new DownloadPermissionDeniedException("无权下载该文件");
         }
         else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
@@ -145,13 +145,13 @@ public class RestRequestService {
      * @param userRole 操作的用户角色
      * @return 若成功从test服务中获得对象，则返回；否则，返回异常信息
      * */
-    public TestIssueList getTestIssueList(String testIssueId, Long userId, Role userRole) {
+    public TestIssueList getTestIssueListById(String testIssueId, Long userId, Role userRole) {
         // 调用test服务的getTestIssue接口
         String params = "?userId" + userId + "&userRole=" + userRole;
         String url = TEST_SERVICE + "/api/test/testIssue/" + testIssueId;
         ResponseEntity<TestIssueList> responseEntity = restTemplate.getForEntity(url + params, TestIssueList.class);
         // 检查测试问题表 id 及权限有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN || responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST) {
             throw new DownloadPermissionDeniedException("无权下载该文件");
         }
         else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
@@ -172,13 +172,13 @@ public class RestRequestService {
      * @param userRole 操作的用户角色
      * @return 若成功从test服务中获得对象，则返回；否则，返回异常信息
      * */
-    public EntrustTestReview getEntrustTestReview(String entrustTestReviewId, Long userId, Role userRole) {
+    public EntrustTestReview getEntrustTestReviewById(String entrustTestReviewId, Long userId, Role userRole) {
         // 调用test服务的getEntrustReview接口
         String params = "?userId" + userId + "&userRole=" + userRole;
         String url = TEST_SERVICE + "/api/review/entrustTest" + entrustTestReviewId;
         ResponseEntity<EntrustTestReview> responseEntity = restTemplate.getForEntity(url + params, EntrustTestReview.class);
         // 检查测试工作检查表 id 及权限有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN || responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST) {
             throw new DownloadPermissionDeniedException("无权下载该文件");
         }
         else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
@@ -199,13 +199,13 @@ public class RestRequestService {
      * @param userRole 操作的用户角色
      * @return 若成功从test服务中获得对象，则返回；否则，返回异常信息
      * */
-    public SchemeReview getSchemeReview(String schemeReviewId, Long userId, Role userRole) {
+    public SchemeReview getSchemeReviewById(String schemeReviewId, Long userId, Role userRole) {
         // 调用test服务的getSchemeReview接口
         String params = "?userId=" + userId + "&userRole=" + userRole;
         String url = TEST_SERVICE + "/api/review/scheme/" + schemeReviewId;
         ResponseEntity<SchemeReview> responseEntity = restTemplate.getForEntity(url + params, SchemeReview.class);
         // 检查方案评审表 id 及权限有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN || responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST) {
             throw new DownloadPermissionDeniedException("无权下载该文件");
         }
         else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
@@ -226,13 +226,13 @@ public class RestRequestService {
      * @param userRole 操作的用户角色
      * @return 若成功从test服务中获得对象，则返回；否则，返回异常信息
      * */
-    public ReportReview getReportReview(String reportReviewId, Long userId, Role userRole) {
+    public ReportReview getReportReviewById(String reportReviewId, Long userId, Role userRole) {
         // 调用test服务的getSchemeReview接口
         String params = "?userId=" + userId + "&userRole=" + userRole;
         String url = TEST_SERVICE + "/api/review/report/" + reportReviewId;
         ResponseEntity<ReportReview> responseEntity = restTemplate.getForEntity(url + params, ReportReview.class);
         // 检查测试报告检查表 id 及权限有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN || responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST) {
             throw new DownloadPermissionDeniedException("无权下载该文件");
         }
         else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
