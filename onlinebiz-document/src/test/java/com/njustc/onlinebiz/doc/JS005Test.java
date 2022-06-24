@@ -21,6 +21,6 @@ public class JS005Test {
                 .setInputWeiTuoXiangMu("江苏省在线某表格管理软件平台");
 
         System.out.println(JSON.toJSONString(newJson));
-        System.out.println(docServiceJS005.fill(newJson));
+        System.out.println(docServiceJS005.fill("1111", newJson));
     }
 }

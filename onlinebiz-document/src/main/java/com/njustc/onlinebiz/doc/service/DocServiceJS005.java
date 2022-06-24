@@ -4,20 +4,12 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.contract.Contract;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
-import com.njustc.onlinebiz.doc.exception.DownloadDAOFailureException;
-import com.njustc.onlinebiz.doc.exception.DownloadNotFoundException;
-import com.njustc.onlinebiz.doc.exception.DownloadPermissionDeniedException;
 import com.njustc.onlinebiz.doc.model.JS005;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,43 +19,11 @@ import java.nio.file.Path;
 @Service
 public class DocServiceJS005 {
 
-    private static final String CONTRACT_SERVICE = "http://onlinebiz-contract";
-    private final RestTemplate restTemplate;
     private final OSSProvider ossProvider;
-    private String contracId;
 
 
-    public DocServiceJS005(RestTemplate restTemplate, OSSProvider ossProvider) {
-        this.restTemplate = restTemplate;
+    public DocServiceJS005(OSSProvider ossProvider) {
         this.ossProvider = ossProvider;
-    }
-
-    /**
-     * 通过 contracId 向contract服务获取对象，以供后续生成文档并下载
-     * @param contracId 待下载的合同 id
-     * @param userId 操作的用户 id
-     * @param userRole 操作的用户角色
-     * @return 若成功从contract服务中获得对象，则返回；否则，返回异常信息
-     * */
-    public Contract getContractById(String contracId, Long userId, Role userRole) {
-        // 调用contract服务的getContract的接口
-        String params = "?userId=" + userId + "&userRole=" + userRole;
-        String url = CONTRACT_SERVICE + "/api/contract/" + contracId;
-        ResponseEntity<Contract> responseEntity = restTemplate.getForEntity(url + params, Contract.class);
-        // 检查合同 id 及权限的有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
-            throw new DownloadPermissionDeniedException("无权下载该文件");
-        }
-        else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
-            throw new DownloadNotFoundException("未找到该合同ID");
-        }
-        else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
-            throw new DownloadDAOFailureException("其他问题");
-        }
-        Contract contract = responseEntity.getBody();
-        this.contracId = contracId;
-
-        return contract;
     }
 
     /**
@@ -90,9 +50,9 @@ public class DocServiceJS005 {
     /**
      * 填充JS005文档
      * */
-    public String fill(JS005 newJson) {
+    public String fill(String contractId, JS005 newJson) {
         JS005Json = newJson;
-        String pdfPath = DOCUMENT_DIR + "JS005_" + contracId +  "out.pdf";
+        String pdfPath = DOCUMENT_DIR + "JS005_" + contractId +  "out.pdf";
         try {
             // 1.新建document对象
             Document document = new Document(PageSize.A4);// 建立一个Document对象
@@ -126,9 +86,9 @@ public class DocServiceJS005 {
         // 上传pdf
         try {
             if(ossProvider.upload(
-                    "doc", "JS005_" + contracId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+                    "doc", "JS005_" + contractId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
                 deleteOutFile(pdfPath);
-                return "https://oss.syh1en.asia/doc/JS005_" + contracId + ".pdf";
+                return "https://oss.syh1en.asia/doc/JS005_" + contractId + ".pdf";
             } else {
                 deleteOutFile(pdfPath);
                 return "upload failed";
@@ -156,7 +116,6 @@ public class DocServiceJS005 {
         }
     }
 
-    private BaseFont bfSimSun;
     private Font titlefont;
     private Font textfont;
 
@@ -166,7 +125,7 @@ public class DocServiceJS005 {
     public void generatePageOne(Document document) throws Exception {
         // 加载字体
         try {
-            bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            BaseFont bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont = new Font(bfSimSun, 15.5f, Font.BOLD);
             textfont = new Font(bfSimSun, 12f, Font.NORMAL);
         } catch (Exception e) {

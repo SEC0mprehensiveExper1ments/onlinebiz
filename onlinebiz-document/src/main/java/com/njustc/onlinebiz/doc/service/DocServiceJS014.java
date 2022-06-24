@@ -4,20 +4,12 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.entrust.Entrust;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
-import com.njustc.onlinebiz.doc.exception.DownloadDAOFailureException;
-import com.njustc.onlinebiz.doc.exception.DownloadNotFoundException;
-import com.njustc.onlinebiz.doc.exception.DownloadPermissionDeniedException;
 import com.njustc.onlinebiz.doc.model.JS014;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,42 +20,10 @@ import java.util.Arrays;
 @Service
 public class DocServiceJS014 {
 
-    private static final String ENTRUST_SERVICE = "http://onlinebiz-entrust";
-    private final RestTemplate restTemplate;
     private final OSSProvider ossProvider;
-    private String entrustId;
 
-    public DocServiceJS014(RestTemplate restTemplate, OSSProvider ossProvider) {
-        this.restTemplate = restTemplate;
+    public DocServiceJS014(OSSProvider ossProvider) {
         this.ossProvider = ossProvider;
-    }
-
-    /**
-     * 通过 entrustId 向test服务获取对象，以供后续生成文档并下载
-     * @param entrustId 待下载的软件文档评审表所在委托表的 id
-     * @param userId 操作的用户 id
-     * @param userRole 操作的用户角色
-     * @return 若成功从test服务中获得对象，则返回；否则，返回异常信息
-     * */
-    public Entrust getEntrust(String entrustId, Long userId, Role userRole) {
-        // 调用entrust服务的getEntrust的接口
-        String params = "?userId=" + userId + "&userRole=" + userRole;
-        String url = ENTRUST_SERVICE + "/api/entrust/" + entrustId;
-        ResponseEntity<Entrust> responseEntity = restTemplate.getForEntity(url + params, Entrust.class);
-        // 检查委托 id 及权限的有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
-            throw new DownloadPermissionDeniedException("无权下载该文件");
-        }
-        else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
-            throw new DownloadNotFoundException("未找到该委托ID");
-        }
-        else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
-            throw new DownloadDAOFailureException("其他问题");
-        }
-        Entrust entrust = responseEntity.getBody();
-        this.entrustId = entrustId;
-
-        return entrust;
     }
 
     /**
@@ -92,7 +52,7 @@ public class DocServiceJS014 {
     /**
      * 填充JS014文档
      * */
-    public String fill(JS014 newJson) {
+    public String fill(String entrustId, JS014 newJson) {
         JS014Json = newJson;
         String pdfPath = DOCUMENT_DIR + "JS014_" + entrustId + ".pdf";
         try {
@@ -164,8 +124,6 @@ public class DocServiceJS014 {
         }
     }
 
-    // 定义全局的字体静态变量
-    private static BaseFont bfSimSun;
     private static Font titlefont;
     private static Font titlefont2;
     private static Font textfont;
@@ -176,14 +134,14 @@ public class DocServiceJS014 {
     public void generatePageOne(Document document) throws Exception {
         // 加载字体
         try {
-            bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            // 定义全局的字体静态变量
+            BaseFont bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont = new Font(bfSimSun, 17f, Font.NORMAL);
             titlefont2 = new Font(bfSimSun, 12f, Font.NORMAL);
             textfont = new Font(bfSimSun, 10.5f, Font.NORMAL);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         // 标题
         Paragraph title = new Paragraph("软件文档评审表", titlefont);

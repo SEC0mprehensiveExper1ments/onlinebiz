@@ -53,6 +53,6 @@ public class JS003Test {
                 .setInputBanBenHao("2012-xxx")
                 .setInputRuanJianGongNengXiangMu(inputRuanJianGongNengXiangMu);
 
-        System.out.println(docServiceJS003.fill(newJson));
+        System.out.println(docServiceJS003.fill("1111", newJson));
     }
 }

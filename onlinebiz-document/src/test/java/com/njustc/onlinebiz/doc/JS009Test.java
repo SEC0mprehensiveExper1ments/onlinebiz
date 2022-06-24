@@ -26,6 +26,6 @@ public class JS009Test {
         testRecords.add(new TestRecord("你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1"));
         testRecords.add(new TestRecord("你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1"));
         JS009 newJson = new JS009().setTestRecords(testRecords);
-        System.out.println(docServiceJS009.fill(newJson));
+        System.out.println(docServiceJS009.fill("1111", newJson));
     }
 }

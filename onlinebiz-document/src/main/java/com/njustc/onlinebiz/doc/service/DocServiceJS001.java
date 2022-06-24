@@ -43,8 +43,6 @@ public class DocServiceJS001 {
     private Font titlefont2;
     private Font keyfont;
     private Font textfont;
-    private BaseFont bfChinese;
-//    private BaseFont bfHeiTi;
 
 
     /**
@@ -121,9 +119,7 @@ public class DocServiceJS001 {
     public void generatePageOne(Document document) throws Exception {
         // 加载字体
         try {
-            bfChinese = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-//            bfHeiTi = BaseFont.createFont(DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-//            titlefont1 = new Font(bfHeiTi, 29, Font.BOLD);
+            BaseFont bfChinese = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont2 = new Font(bfChinese, 21, Font.NORMAL);
             keyfont = new Font(bfChinese, 12.5f, Font.BOLD);
             textfont = new Font(bfChinese, 12f, Font.NORMAL);

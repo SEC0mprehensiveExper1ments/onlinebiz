@@ -32,6 +32,6 @@ public class JS010Test {
                 .setInputJianChaJieGuo0113("不合格")
                 .setInputJianChaJieGuo012("不合格");
 
-        System.out.println(docServiceJS010.fill(newJson));
+        System.out.println(docServiceJS010.fill("1111", newJson));
     }
 }

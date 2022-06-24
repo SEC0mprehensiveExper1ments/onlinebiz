@@ -4,20 +4,12 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
-import com.njustc.onlinebiz.doc.exception.DownloadDAOFailureException;
-import com.njustc.onlinebiz.doc.exception.DownloadNotFoundException;
-import com.njustc.onlinebiz.doc.exception.DownloadPermissionDeniedException;
 import com.njustc.onlinebiz.doc.model.JS013;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,42 +20,10 @@ import java.util.Arrays;
 @Service
 public class DocServiceJS013 {
 
-    private static final String TEST_SERVICE = "http://onlinebiz-test";
-    private final RestTemplate restTemplate;
     private final OSSProvider ossProvider;
-    private String schemeReviewId;
 
-    public DocServiceJS013(RestTemplate restTemplate, OSSProvider ossProvider) {
-        this.restTemplate = restTemplate;
+    public DocServiceJS013(OSSProvider ossProvider) {
         this.ossProvider = ossProvider;
-    }
-
-    /**
-     * 通过 schemeReviewId 向test服务获取对象，以供后续生成文档并下载
-     * @param schemeReviewId 待下载的方案评审表 id
-     * @param userId 操作的用户 id
-     * @param userRole 操作的用户角色
-     * @return 若成功从test服务中获得对象，则返回；否则，返回异常信息
-     * */
-    public SchemeReview getSchemeReview(String schemeReviewId, Long userId, Role userRole) {
-        // 调用test服务的getSchemeReview接口
-        String params = "?userId=" + userId + "&userRole=" + userRole;
-        String url = TEST_SERVICE + "/api/review/scheme/" + schemeReviewId;
-        ResponseEntity<SchemeReview> responseEntity = restTemplate.getForEntity(url + params, SchemeReview.class);
-        // 检查方案评审表 id 及权限有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
-            throw new DownloadPermissionDeniedException("无权下载该文件");
-        }
-        else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
-            throw new DownloadNotFoundException("未找到该测试方案评审表ID");
-        }
-        else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
-            throw new DownloadDAOFailureException("其他问题");
-        }
-        SchemeReview schemeReview = responseEntity.getBody();
-        this.schemeReviewId = schemeReviewId;
-
-        return schemeReview;
     }
 
     /**
@@ -89,7 +49,7 @@ public class DocServiceJS013 {
     /**
      * 填充JS013文档
      * */
-    public String fill(JS013 newJson) {
+    public String fill(String schemeReviewId, JS013 newJson) {
         JS013Json = newJson;
         String pdfPath = DOCUMENT_DIR + "JS013_" + schemeReviewId + ".pdf";
         try {
@@ -161,7 +121,6 @@ public class DocServiceJS013 {
         }
     }
 
-    private static BaseFont bfSimSun;
     private static Font titlefont;
     private static Font keyfont;
     private static Font textfont;
@@ -173,7 +132,7 @@ public class DocServiceJS013 {
         // 加载字体
         try {
             // 不同字体（这里定义为同一种字体：包含不同字号、不同style）
-            bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            BaseFont bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont = new Font(bfSimSun, 17f, Font.BOLD);
             keyfont = new Font(bfSimSun, 10.5f, Font.BOLD);
             textfont = new Font(bfSimSun, 10.5f, Font.NORMAL);

@@ -1,16 +1,27 @@
 package com.njustc.onlinebiz.doc;
 
+import com.njustc.onlinebiz.common.model.entrust.Entrust;
+import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.model.JS002;
 import com.njustc.onlinebiz.doc.service.DocServiceJS002;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.client.RestTemplate;
 
+import static org.mockito.Mockito.*;
 @SpringBootTest
 public class JS002Test {
 
-    @Autowired
-    DocServiceJS002 docServiceJS002;
+    private final OSSProvider ossProvider = mock(OSSProvider.class);
+    private final RestTemplate restTemplate = mock(RestTemplate.class);
+    DocServiceJS002 docServiceJS002 = new DocServiceJS002(ossProvider);
+//    @Autowired
+//    DocServiceJS002 docServiceJS002;
+
+
 
     @Test
     void testFillJS002Success() {
@@ -149,6 +160,7 @@ public class JS002Test {
                 .setInputCeShiXiangMuBianHao("")
                 .setInputBeiZhu("");
 
-        System.out.println(docServiceJS002.fill(newJson));
+        ReflectionTestUtils.setField(docServiceJS002, "DOCUMENT_DIR", "/");
+        System.out.println(docServiceJS002.fill("111", newJson));
     }
 }

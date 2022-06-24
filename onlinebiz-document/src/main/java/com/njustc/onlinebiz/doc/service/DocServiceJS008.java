@@ -5,21 +5,13 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.test.testcase.Testcase;
 import com.njustc.onlinebiz.common.model.test.testcase.Testcase.TestcaseList;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
-import com.njustc.onlinebiz.doc.exception.DownloadDAOFailureException;
-import com.njustc.onlinebiz.doc.exception.DownloadNotFoundException;
-import com.njustc.onlinebiz.doc.exception.DownloadPermissionDeniedException;
 import com.njustc.onlinebiz.doc.model.JS008;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,42 +23,10 @@ import java.util.List;
 @Service
 public class DocServiceJS008 {
 
-    private static final String TEST_SERVICE = "http://onlinebiz-test";
-    private final RestTemplate restTemplate;
     private final OSSProvider ossProvider;
-    private String testcaseId;
 
-    public DocServiceJS008(RestTemplate restTemplate, OSSProvider ossProvider) {
-        this.restTemplate = restTemplate;
+    public DocServiceJS008(OSSProvider ossProvider) {
         this.ossProvider = ossProvider;
-    }
-
-    /**
-     * 通过 testcaseId 向test服务获取对象，以供后续生成文档并下载
-     * @param testcaseId 待下载的测试用例表 id
-     * @param userId 操作的用户 id
-     * @param userRole 操作的用户角色
-     * @return 若成功从test服务中获得对象，则返回；否则，返回异常信息
-     * */
-    public Testcase getReportReview(String testcaseId, Long userId, Role userRole) {
-        // 调用test服务的getTestCase接口
-        String params = "?userId=" + userId + "&userRole=" + userRole;
-        String url = TEST_SERVICE + "/api/test/testcase/" + testcaseId;
-        ResponseEntity<Testcase> responseEntity = restTemplate.getForEntity(url + params, Testcase.class);
-        // 检查测试用例表 id 及权限有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
-            throw new DownloadPermissionDeniedException("无权下载该文件");
-        }
-        else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
-            throw new DownloadNotFoundException("未找到该测试用例表ID");
-        }
-        else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
-            throw new DownloadDAOFailureException("其他问题");
-        }
-        Testcase testcase = responseEntity.getBody();
-        this.testcaseId = testcaseId;
-
-        return testcase;
     }
 
     /**
@@ -83,7 +43,6 @@ public class DocServiceJS008 {
     private static Font titlefont1;
     private static Font titlefont2;
     private static Font textfont;
-    private static BaseFont bfChinese;
 
     static {
         // absolutePath = Objects.requireNonNull(Objects.requireNonNull(ClassUtils.getDefaultClassLoader()).getResource("font")).getPath().substring(1) + "/../";
@@ -99,7 +58,7 @@ public class DocServiceJS008 {
     private static JS008 JS008Json;
 
     /** 填充JS008文档 */
-    public String fill(JS008 newJson) {
+    public String fill(String testcaseId, JS008 newJson) {
         JS008Json = newJson;
         String pdfPath = DOCUMENT_DIR + "JS008_" + testcaseId + ".pdf";
         try {
@@ -170,12 +129,7 @@ public class DocServiceJS008 {
     public void generatePageOne(Document document) throws Exception {
         // 加载字体
         try {
-            bfChinese =
-                    BaseFont.createFont(
-                            DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-//            bfHeiTi =
-//                    BaseFont.createFont(
-//                            DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            BaseFont bfChinese = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont1 = new Font(bfChinese, 20, Font.NORMAL);
             titlefont2 = new Font(bfChinese, 12, Font.BOLD);
             // keyfont = new Font(bfChinese, 12.5f, Font.BOLD);
@@ -199,8 +153,6 @@ public class DocServiceJS008 {
         // 行列每个基础单元格为 5mm x 5mm
         PdfPTable table = ItextUtils.createTable(widths, tableWidth);
 
-        // float[] paddings = new float[]{6f, 6f, 5f, 5f};
-        // float[] paddings2 = new float[]{12.5f, 12.5f, 5f, 5f};
         float[] paddings3 = new float[]{4f, 4f, 3f, 3f};        // 上下左右的间距
         float borderWidth = 0.3f;
 

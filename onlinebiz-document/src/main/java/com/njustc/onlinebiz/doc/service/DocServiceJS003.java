@@ -4,20 +4,12 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.doc.exception.DownloadDAOFailureException;
-import com.njustc.onlinebiz.doc.exception.DownloadNotFoundException;
-import com.njustc.onlinebiz.doc.exception.DownloadPermissionDeniedException;
 import com.njustc.onlinebiz.doc.model.JS003.JS003;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
-import com.njustc.onlinebiz.common.model.entrust.Entrust;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,43 +20,10 @@ import java.util.Arrays;
 @Service
 public class DocServiceJS003 {
 
-  private static final String ENTRUST_SERVICE = "http://onlinebiz-entrust";
-  private final RestTemplate restTemplate;
   private final OSSProvider ossProvider;
 
-  private String entrustId;
-
-  public DocServiceJS003(RestTemplate restTemplate, OSSProvider ossProvider) {
-    this.restTemplate = restTemplate;
+  public DocServiceJS003(OSSProvider ossProvider) {
     this.ossProvider = ossProvider;
-  }
-
-  /**
-   * 通过 entrustId 向entrust服务获取对象，以供后续生成文档并下载
-   * @param entrustId 待下载的委托 id
-   * @param userId 操作的用户 id
-   * @param userRole 操作的用户角色
-   * @return 若成功从entrust服务中获得对象，则返回；否则，返回异常信息
-   * */
-  public Entrust getEntrustById(String entrustId, Long userId, Role userRole) {
-    // 调用entrust服务的getEntrust的接口
-    String params = "?userId=" + userId + "&userRole=" + userRole;
-    String url = ENTRUST_SERVICE + "/api/entrust/" + entrustId;
-    ResponseEntity<Entrust> responseEntity = restTemplate.getForEntity(url + params, Entrust.class);
-    // 检查委托 id 及权限的有效性
-    if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
-      throw new DownloadPermissionDeniedException("无权下载该文件");
-    }
-    else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
-      throw new DownloadNotFoundException("未找到该委托ID");
-    }
-    else if (responseEntity.getStatusCode() != HttpStatus.ACCEPTED && responseEntity.getStatusCode() != HttpStatus.OK) {
-      throw new DownloadDAOFailureException("其他问题");
-    }
-    Entrust entrust = responseEntity.getBody();
-    this.entrustId = entrustId;
-
-    return entrust;
   }
 
 
@@ -94,7 +53,7 @@ public class DocServiceJS003 {
    * @param newJson JS003对象
    * @return 成功返回OSS链接，失败返回原因
    * */
-  public String fill(JS003 newJson) {
+  public String fill(String entrustId, JS003 newJson) {
     JS003Json = newJson;
     String pdfPath = DOCUMENT_DIR + "JS003_" + entrustId + ".pdf";
     try {
@@ -165,19 +124,12 @@ public class DocServiceJS003 {
   private Font titlefont3;
   private Font keyfont;
   private Font textfont;
-  private BaseFont bfChinese;
-//  private BaseFont bfHeiTi;
 
 
   public void generatePageOne(Document document) throws Exception {
     // 加载字体
     try {
-      bfChinese =
-              BaseFont.createFont(
-                      DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-//      bfHeiTi =
-//              BaseFont.createFont(
-//                      DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+      BaseFont bfChinese = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
       titlefont1 = new Font(bfChinese, 16, Font.BOLD);
       titlefont2 = new Font(bfChinese, 13f, Font.BOLD);
       titlefont3 = new Font(bfChinese, 13.5f, Font.NORMAL);
@@ -231,8 +183,8 @@ public class DocServiceJS003 {
     text.add(
             new Phrase(
                     "   1.软件功能说明按树型结构方式描述。软件功能项目栏中应列出软件产品的所\n" +
-                             "     有功能（包括各级子功能）。具体可见样例。\n" +
-                             "   2.功能说明栏目应填写功能项目概述等信息。\n",
+                            "     有功能（包括各级子功能）。具体可见样例。\n" +
+                            "   2.功能说明栏目应填写功能项目概述等信息。\n",
                     textfont));
     text.setSpacingAfter(0f); // 设置段落下空白
 

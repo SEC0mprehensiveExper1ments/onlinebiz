@@ -29,6 +29,6 @@ public class JS008Test {
         testcases.add(new TestcaseList("你好8", "你好", "你好p", "你好", "你好", "你好", "你好"));
 
         JS008 newJson = new JS008().setTestcases(testcases);
-        System.out.println(docServiceJS008.fill(newJson));
+        System.out.println(docServiceJS008.fill("1111", newJson));
     }
 }

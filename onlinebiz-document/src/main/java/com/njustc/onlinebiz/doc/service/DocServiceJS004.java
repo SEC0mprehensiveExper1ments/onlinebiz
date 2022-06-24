@@ -4,20 +4,12 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.contract.Contract;
-import com.njustc.onlinebiz.doc.exception.DownloadDAOFailureException;
-import com.njustc.onlinebiz.doc.exception.DownloadNotFoundException;
-import com.njustc.onlinebiz.doc.exception.DownloadPermissionDeniedException;
 import com.njustc.onlinebiz.doc.model.JS004;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,45 +19,11 @@ import java.util.Arrays;
 
 @Service
 public class DocServiceJS004 {
-
-  private static final String CONTRACT_SERVICE = "http://onlinebiz-contract";
-  private final RestTemplate restTemplate;
   private final OSSProvider ossProvider;
-  private String contracId;
 
-  public DocServiceJS004(RestTemplate restTemplate, OSSProvider ossProvider) {
-    this.restTemplate = restTemplate;
+  public DocServiceJS004(OSSProvider ossProvider) {
     this.ossProvider = ossProvider;
   }
-
-  /**
-   * 通过 contracId 向contract服务获取对象，以供后续生成文档并下载
-   * @param contracId 待下载的合同 id
-   * @param userId 操作的用户 id
-   * @param userRole 操作的用户角色
-   * @return 若成功从contract服务中获得对象，则返回；否则，返回异常信息
-   * */
-  public Contract getContractById(String contracId, Long userId, Role userRole) {
-    // 调用contract服务的getContract的接口
-    String params = "?userId=" + userId + "&userRole=" + userRole;
-    String url = CONTRACT_SERVICE + "/api/contract/" + contracId;
-    ResponseEntity<Contract> responseEntity = restTemplate.getForEntity(url + params, Contract.class);
-    // 检查委托 id 及权限的有效性
-    if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
-      throw new DownloadPermissionDeniedException("无权下载该文件");
-    }
-    else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
-      throw new DownloadNotFoundException("未找到该委托ID");
-    }
-    else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
-      throw new DownloadDAOFailureException("其他问题");
-    }
-    Contract contract = responseEntity.getBody();
-    this.contracId = contracId;
-
-    return contract;
-  }
-
 
   /**
    * 以下是文档生成部分
@@ -83,7 +41,6 @@ public class DocServiceJS004 {
   private static Font titlefont2;
   private static Font keyfont;
   private static Font textfont;
-  private static BaseFont bfChinese;
   private static BaseFont bfHeiTi;
 
   static {
@@ -97,9 +54,9 @@ public class DocServiceJS004 {
 
 
   /** 填充JS004文档 */
-  public String fill(JS004 newJson) {
+  public String fill(String contractId, JS004 newJson) {
     JS004Json = newJson;
-    String pdfPath = DOCUMENT_DIR + "JS004_" + contracId + ".pdf";
+    String pdfPath = DOCUMENT_DIR + "JS004_" + contractId + ".pdf";
     try {
       // 1.新建document对象
       Document document = new Document(PageSize.A4); // 建立一个Document对象
@@ -154,9 +111,9 @@ public class DocServiceJS004 {
     // 上传pdf
     try {
       if (ossProvider.upload(
-              "doc", "JS004_" + contracId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+              "doc", "JS004_" + contractId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
         deleteOutFile(pdfPath);
-        return "https://oss.syh1en.asia/doc/JS004_" + contracId + ".pdf";
+        return "https://oss.syh1en.asia/doc/JS004_" + contractId + ".pdf";
       } else {
         deleteOutFile(pdfPath);
         return "upload failed";
@@ -190,9 +147,8 @@ public class DocServiceJS004 {
   public void generatePageOne(Document document) throws Exception {
     // 加载字体
     try{
-      bfChinese =
-              BaseFont.createFont(
-                      DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+      BaseFont bfChinese = BaseFont.createFont(
+              DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
       bfHeiTi =
               BaseFont.createFont(
                       DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);

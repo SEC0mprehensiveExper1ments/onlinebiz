@@ -4,20 +4,12 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.test.review.EntrustTestReview;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
-import com.njustc.onlinebiz.doc.exception.DownloadDAOFailureException;
-import com.njustc.onlinebiz.doc.exception.DownloadNotFoundException;
-import com.njustc.onlinebiz.doc.exception.DownloadPermissionDeniedException;
 import com.njustc.onlinebiz.doc.model.JS012;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,42 +20,10 @@ import java.util.Arrays;
 @Service
 public class DocServiceJS012 {
 
-    private static final String TEST_SERVICE = "http://onlinebiz-test";
-    private final RestTemplate restTemplate;
     private final OSSProvider ossProvider;
-    private String entrustTestReviewId;
 
-    public DocServiceJS012(RestTemplate restTemplate, OSSProvider ossProvider) {
-        this.restTemplate = restTemplate;
+    public DocServiceJS012(OSSProvider ossProvider) {
         this.ossProvider = ossProvider;
-    }
-
-    /**
-     * 通过 entrustTestReviewId 向test服务获取对象，以供后续生成文档并下载
-     * @param entrustTestReviewId 待下载的工作检查表 id
-     * @param userId 操作的用户 id
-     * @param userRole 操作的用户角色
-     * @return 若成功从test服务中获得对象，则返回；否则，返回异常信息
-     * */
-    public EntrustTestReview getEntrustTestReview(String entrustTestReviewId, Long userId, Role userRole) {
-        // 调用test服务的getEntrustReview接口
-        String params = "?userId" + userId + "&userRole=" + userRole;
-        String url = TEST_SERVICE + "/api/review/entrustTest" + entrustTestReviewId;
-        ResponseEntity<EntrustTestReview> responseEntity = restTemplate.getForEntity(url + params, EntrustTestReview.class);
-        // 检查测试工作检查表 id 及权限有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
-            throw new DownloadPermissionDeniedException("无权下载该文件");
-        }
-        else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
-            throw new DownloadNotFoundException("未找到该工作检查表ID");
-        }
-        else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
-            throw new DownloadDAOFailureException("其他问题");
-        }
-        EntrustTestReview entrustTestReview = responseEntity.getBody();
-        this.entrustTestReviewId = entrustTestReviewId;
-
-        return entrustTestReview;
     }
 
     /**
@@ -93,7 +53,7 @@ public class DocServiceJS012 {
     /**
      * 填充JS012文档
      * */
-    public String fill(JS012 newJson) {
+    public String fill(String entrustTestReviewId, JS012 newJson) {
         JS012Json = newJson;
         String pdfPath = DOCUMENT_DIR + "JS012_" + entrustTestReviewId + ".pdf";
         try {
@@ -165,8 +125,6 @@ public class DocServiceJS012 {
         }
     }
 
-    // 定义全局的字体静态变量
-    private static BaseFont bfSimSun;
     private static Font titlefont;
     private static Font titlefont2;
     private static Font textfont;
@@ -177,7 +135,8 @@ public class DocServiceJS012 {
     public void generatePageOne(Document document) throws Exception {
         // 加载字体
         try {
-            bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            // 定义全局的字体静态变量
+            BaseFont bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont = new Font(bfSimSun, 17f, Font.BOLD);
             titlefont2 = new Font(bfSimSun, 12f, Font.NORMAL);
             textfont = new Font(bfSimSun, 10.5f, Font.NORMAL);
@@ -188,10 +147,6 @@ public class DocServiceJS012 {
         // 标题
         Paragraph title = new Paragraph("软件项目委托测试工作检查表", titlefont);
         title.setAlignment(1); //设置文字居中 0靠左   1，居中     2，靠右
-//        paragraph.setIndentationLeft(12); //设置左缩进
-//        paragraph.setIndentationRight(12); //设置右缩进
-//        paragraph.setFirstLineIndent(24); //设置首行缩进
-//        paragraph.setLeading(0f); //行间距
         title.setSpacingBefore(-25f); //设置段落上空白
         title.setSpacingAfter(1f); //设置段落下空白
 

@@ -4,20 +4,12 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
-import com.njustc.onlinebiz.doc.exception.DownloadDAOFailureException;
-import com.njustc.onlinebiz.doc.exception.DownloadNotFoundException;
-import com.njustc.onlinebiz.doc.exception.DownloadPermissionDeniedException;
 import com.njustc.onlinebiz.doc.model.JS010;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,44 +19,10 @@ import java.util.Arrays;
 
 @Service
 public class DocServiceJS010 {
-    private static final String TEST_SERVICE = "http://onlinebiz-test";
-    private final RestTemplate restTemplate;
     private final OSSProvider ossProvider;
 
-    private String reportReviewId;
-
-    public DocServiceJS010(RestTemplate restTemplate, OSSProvider ossProvider) {
-        this.restTemplate = restTemplate;
+    public DocServiceJS010(OSSProvider ossProvider) {
         this.ossProvider = ossProvider;
-    }
-
-    /**
-     * 通过 reportReviewId 向test服务获取对象，以供后续生成文档并下载
-     * @param reportReviewId 待下载的测试报告检查表 id
-     * @param userId 操作的用户 id
-     * @param userRole 操作的用户角色
-     * @return 若成功从test服务中获得对象，则返回；否则，返回异常信息
-     * */
-    public ReportReview getReportReview(String reportReviewId, Long userId, Role userRole) {
-        // 调用test服务的getReportReview接口
-        String params = "?userId=" + userId + "&userRole=" + userRole;
-        String url = TEST_SERVICE + "/api/review/report/" + reportReviewId;
-        ResponseEntity<ReportReview> responseEntity = restTemplate.getForEntity(url + params, ReportReview.class);
-        // 检查检查表 id 及权限有效性
-        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
-            throw new DownloadPermissionDeniedException("无权下载该文件");
-        }
-        else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
-            throw new DownloadNotFoundException("未找到该检查表ID");
-        }
-        else if (responseEntity.getStatusCode() != HttpStatus.OK &&
-                responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
-            throw new DownloadDAOFailureException("其他问题");
-        }
-        ReportReview reportReview = responseEntity.getBody();
-        this.reportReviewId = reportReviewId;
-
-        return reportReview;
     }
 
     /**
@@ -92,7 +50,7 @@ public class DocServiceJS010 {
     /**
      * 填充JS010文档
      * */
-    public String fill(JS010 newJson) {
+    public String fill(String reportReviewId, JS010 newJson) {
         JS010Json = newJson;
         String pdfPath = DOCUMENT_DIR + "JS010_" + reportReviewId + ".pdf";
         try {
@@ -164,7 +122,6 @@ public class DocServiceJS010 {
         }
     }
 
-    private static BaseFont bfSimSun;
     private static Font titlefont1;
     private static Font titlefont2;
     private static Font keyfont;
@@ -176,7 +133,7 @@ public class DocServiceJS010 {
     public void generatePageOne(Document document) throws Exception {
         // 加载字体
         try {
-            bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            BaseFont bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont1 = new Font(bfSimSun, 22f, Font.BOLD);
             titlefont2 = new Font(bfSimSun, 14f, Font.BOLD);
             keyfont = new Font(bfSimSun, 12f, Font.BOLD);

@@ -30,6 +30,6 @@ public class JS011Test {
         testIssues.add(new TestIssue("你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1"));
 
         JS011 newJson = new JS011().setTestIssues(testIssues);
-        System.out.println(docServiceJS011.fill(newJson));
+        System.out.println(docServiceJS011.fill("1111", newJson));
     }
 }

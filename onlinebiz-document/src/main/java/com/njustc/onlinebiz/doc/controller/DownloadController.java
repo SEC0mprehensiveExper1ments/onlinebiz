@@ -36,6 +36,7 @@ public class DownloadController {
   private final DocServiceJS012 docServiceJS012;
   private final DocServiceJS013 docServiceJS013;
   private final DocServiceJS014 docServiceJS014;
+  private final RestRequestService restRequestService;
 
   public DownloadController(DocServiceJS001 docServiceJS001,
                             DocServiceJS002 docServiceJS002,
@@ -48,7 +49,8 @@ public class DownloadController {
                             DocServiceJS011 docServiceJS011,
                             DocServiceJS012 docServiceJS012,
                             DocServiceJS013 docServiceJS013,
-                            DocServiceJS014 docServiceJS014) {
+                            DocServiceJS014 docServiceJS014,
+                            RestRequestService restRequestService) {
     this.docServiceJS001 = docServiceJS001;
     this.docServiceJS002 = docServiceJS002;
     this.docServiceJS003 = docServiceJS003;
@@ -61,6 +63,7 @@ public class DownloadController {
     this.docServiceJS012 = docServiceJS012;
     this.docServiceJS013 = docServiceJS013;
     this.docServiceJS014 = docServiceJS014;
+    this.restRequestService = restRequestService;
   }
 
   // JS001 文档下载接口
@@ -76,9 +79,8 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    Entrust entrust = docServiceJS002.getEntrustById(entrustId, userId, userRole);
-    JS002 newJson = new JS002(entrust);
-    return docServiceJS002.fill(newJson);
+    Entrust entrust = restRequestService.getEntrustById(entrustId, userId, userRole);
+    return docServiceJS002.fill(entrustId, new JS002(entrust));
   }
 
   // JS003 文档下载接口
@@ -88,10 +90,8 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ){
-    Entrust entrust = docServiceJS003.getEntrustById(entrustId, userId, userRole);
-    JS003 newJson = new JS003(entrust);
-
-    return docServiceJS003.fill(newJson);
+    Entrust entrust = restRequestService.getEntrustById(entrustId, userId, userRole);
+    return docServiceJS003.fill(entrustId, new JS003(entrust));
   }
 
   // JS004 文档下载接口
@@ -101,9 +101,8 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    Contract contract = docServiceJS004.getContractById(contractId, userId, userRole);
-    JS004 newJson = new JS004(contract);
-    return docServiceJS004.fill(newJson);
+    Contract contract = restRequestService.getContractById(contractId, userId, userRole);
+    return docServiceJS004.fill(contractId, new JS004(contract));
   }
 
   // JS005 文档下载接口
@@ -113,9 +112,8 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    Contract contract = docServiceJS005.getContractById(contractId, userId, userRole);
-    JS005 newJson = new JS005(contract);
-    return docServiceJS005.fill(newJson);
+    Contract contract = restRequestService.getContractById(contractId, userId, userRole);
+    return docServiceJS005.fill(contractId, new JS005(contract));
   }
 
   // JS008 文档下载接口
@@ -125,9 +123,8 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    Testcase testcase = docServiceJS008.getReportReview(testcaseId, userId, userRole);
-    JS008 newJson = new JS008(testcase);
-    return docServiceJS008.fill(newJson);
+    Testcase testcase = restRequestService.getTestcase(testcaseId, userId, userRole);
+    return docServiceJS008.fill(testcaseId, new JS008(testcase));
   }
 
   // JS009 文档下载接口
@@ -137,9 +134,8 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    TestRecordList testRecordList = docServiceJS009.getTestRecordList(testRecordId, userId, userRole);
-    JS009 newJson = new JS009(testRecordList);
-    return docServiceJS009.fill(newJson);
+    TestRecordList testRecordList = restRequestService.getTestRecordList(testRecordId, userId, userRole);
+    return docServiceJS009.fill(testRecordId, new JS009(testRecordList));
   }
 
   // JS010 文档下载接口
@@ -149,9 +145,8 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    ReportReview reportReview = docServiceJS010.getReportReview(reportReviewId, userId, userRole);
-    JS010 newJson = new JS010(reportReview);
-    return docServiceJS010.fill(newJson);
+    ReportReview reportReview = restRequestService.getReportReview(reportReviewId, userId, userRole);
+    return docServiceJS010.fill(reportReviewId, new JS010(reportReview));
   }
 
   // JS011 文档下载接口
@@ -161,9 +156,8 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    TestIssueList testIssueList = docServiceJS011.getTestIssueList(testIssueId, userId, userRole);
-    JS011 newJson = new JS011(testIssueList);
-    return docServiceJS011.fill(newJson);
+    TestIssueList testIssueList = restRequestService.getTestIssueList(testIssueId, userId, userRole);
+    return docServiceJS011.fill(testIssueId, new JS011(testIssueList));
   }
 
   // JS012 文档下载接口
@@ -173,9 +167,8 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    EntrustTestReview entrustTestReview = docServiceJS012.getEntrustTestReview(entrustTestReviewId, userId, userRole);
-    JS012 newJson = new JS012(entrustTestReview);
-    return docServiceJS012.fill(newJson);
+    EntrustTestReview entrustTestReview = restRequestService.getEntrustTestReview(entrustTestReviewId, userId, userRole);
+    return docServiceJS012.fill(entrustTestReviewId, new JS012(entrustTestReview));
   }
 
   // JS013 文档下载接口
@@ -185,9 +178,8 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    SchemeReview schemeReview = docServiceJS013.getSchemeReview(schemeReviewId, userId, userRole);
-    JS013 newJson = new JS013(schemeReview);
-    return docServiceJS013.fill(newJson);
+    SchemeReview schemeReview = restRequestService.getSchemeReview(schemeReviewId, userId, userRole);
+    return docServiceJS013.fill(schemeReviewId, new JS013(schemeReview));
   }
 
   // JS014 文档下载接口
@@ -197,53 +189,8 @@ public class DownloadController {
           @RequestParam("userId") Long userId,
           @RequestParam("userRole") Role userRole
   ) {
-    Entrust entrust = docServiceJS014.getEntrust(entrustId, userId, userRole);
-    JS014 newJson = new JS014(entrust);
-    return docServiceJS014.fill(newJson);
-  }
-
-
-
-  // 下面接口未测试用，非生产接口
-  @GetMapping("/doc/JS009")
-  public String downloadJS009(
-  ) {
-    List<TestRecordList.TestRecord> testRecords = new ArrayList<>();
-    testRecords.add(new TestRecordList.TestRecord("你好", "你好1", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testRecords.add(new TestRecordList.TestRecord("你好", "你好2", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testRecords.add(new TestRecordList.TestRecord("你好", "你好3", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testRecords.add(new TestRecordList.TestRecord("你好", "你好4", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testRecords.add(new TestRecordList.TestRecord("你好", "你好5", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testRecords.add(new TestRecordList.TestRecord("你好", "你好6", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testRecords.add(new TestRecordList.TestRecord("你好", "你好7", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testRecords.add(new TestRecordList.TestRecord("你好", "你好8", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testRecords.add(new TestRecordList.TestRecord("你好", "你好9", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testRecords.add(new TestRecordList.TestRecord("你好", "你好0", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testRecords.add(new TestRecordList.TestRecord("你好", "你好11", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testRecords.add(new TestRecordList.TestRecord("你好", "你好12", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-
-    JS009 newJson = new JS009().setTestRecords(testRecords);
-    String result = docServiceJS009.fill(newJson);
-    System.out.println(result);
-    return result;
-  }
-
-  @GetMapping("/doc/JS011")
-  public String downloadJS011(
-  ) {
-    List<TestIssueList.TestIssue> testIssueList = new ArrayList<>();
-    testIssueList.add(new TestIssueList.TestIssue("你好1", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testIssueList.add(new TestIssueList.TestIssue("你好2", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testIssueList.add(new TestIssueList.TestIssue("你好3", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testIssueList.add(new TestIssueList.TestIssue("你好4", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testIssueList.add(new TestIssueList.TestIssue("你好5", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testIssueList.add(new TestIssueList.TestIssue("你好6", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testIssueList.add(new TestIssueList.TestIssue("你好7", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    testIssueList.add(new TestIssueList.TestIssue("你好8", "你好", "你好", "你好", "你好", "你好", "你好", "你好", "你好"));
-    JS011 newJson = new JS011().setTestIssues(testIssueList);
-    String result = docServiceJS011.fill(newJson);
-    System.out.println(result);
-    return result;
+    Entrust entrust = restRequestService.getEntrustById(entrustId, userId, userRole);
+    return docServiceJS014.fill(entrustId, new JS014(entrust));
   }
 
 

@@ -56,7 +56,7 @@ public class JS012Test {
 
 
 
-        System.out.println(docServiceJS012.fill(newJson));
+        System.out.println(docServiceJS012.fill("1111", newJson));
     }
 
 }

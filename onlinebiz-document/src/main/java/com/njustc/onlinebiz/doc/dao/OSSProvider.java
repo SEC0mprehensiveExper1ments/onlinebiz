@@ -40,7 +40,6 @@ public class OSSProvider {
       }
       // 产生输入流
       InputStream inputStream = new ByteArrayInputStream(data);
-
       // 上传文件
       minioClient.putObject(PutObjectArgs.builder().bucket(bucketName).object(objectName).stream(inputStream, data.length, -1).contentType(contentType).build());
       return true;
