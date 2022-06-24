@@ -1,6 +1,5 @@
 package com.njustc.onlinebiz.doc;
 
-import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
 import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList.TestRecord;
 import com.njustc.onlinebiz.doc.model.JS009;
 import com.njustc.onlinebiz.doc.service.DocServiceJS009;
@@ -20,7 +19,12 @@ public class JS009Test {
     @Test
     void testFillJS009Success() {
         List<TestRecord> testRecords = new ArrayList<>();
-
+        testRecords.add(new TestRecord("你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1"));
+        testRecords.add(new TestRecord("你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1"));
+        testRecords.add(new TestRecord("你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1"));
+        testRecords.add(new TestRecord("你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1"));
+        testRecords.add(new TestRecord("你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1"));
+        testRecords.add(new TestRecord("你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1", "你好1"));
         JS009 newJson = new JS009().setTestRecords(testRecords);
         System.out.println(docServiceJS009.fill(newJson));
     }

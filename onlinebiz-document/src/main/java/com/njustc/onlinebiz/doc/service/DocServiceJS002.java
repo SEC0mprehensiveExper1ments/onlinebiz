@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
@@ -112,13 +111,13 @@ public class DocServiceJS002 {
             String[] footer = new String[]{"南京大学计算机软件新技术国家重点实验室       密级范围：内部                   第", "页 共", "页"};
             int headerToPage = 100;
             int footerFromPage = 1;
-            boolean isHaderLine = true;
+            boolean isHeaderLine = true;
             boolean isFooterLine = true;
             float[] headerLoc = new float[]{document.right() - 5, document.top() + 15};
             float[] footerLoc = new float[]{document.left(), document.bottom() - 20};
             float headLineOff = -5f;
             float footLineOff = 12f;
-            writer.setPageEvent(new HeaderFooter(header, footer, headerToPage, footerFromPage, isHaderLine, isFooterLine,
+            writer.setPageEvent(new HeaderFooter(header, footer, headerToPage, footerFromPage, isHeaderLine, isFooterLine,
                     headerLoc, footerLoc, headLineOff, footLineOff));
             // 3.打开文档
             document.open();
@@ -232,7 +231,6 @@ public class DocServiceJS002 {
         float[] paddings3 = new float[]{3.5f, 4.5f, 5.5f, 5.5f};
         float borderWidth = 0.5f;
         float fixedLeading = 14f;
-        String tmp;
         PdfPCell cell;
         Phrase phrase;
 

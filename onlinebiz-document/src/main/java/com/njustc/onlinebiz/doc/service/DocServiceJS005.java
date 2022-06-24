@@ -1,6 +1,5 @@
 package com.njustc.onlinebiz.doc.service;
 
-
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -18,14 +17,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 
 @Service
 public class DocServiceJS005 {
@@ -69,7 +66,6 @@ public class DocServiceJS005 {
         return contract;
     }
 
-
     /**
      * 以下是文档生成部分
      * */
@@ -91,9 +87,6 @@ public class DocServiceJS005 {
     }
 
     private static JS005 JS005Json;
-
-
-
     /**
      * 填充JS005文档
      * */
@@ -162,7 +155,6 @@ public class DocServiceJS005 {
             e.printStackTrace();
         }
     }
-
 
     private BaseFont bfSimSun;
     private Font titlefont;

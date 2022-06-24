@@ -6,18 +6,14 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 
 
 @Service
@@ -44,12 +40,11 @@ public class DocServiceJS001 {
     @Value("${document-dir}")
     private String DOCUMENT_DIR;
 
-    private Font titlefont1;
     private Font titlefont2;
     private Font keyfont;
     private Font textfont;
     private BaseFont bfChinese;
-    private BaseFont bfHeiTi;
+//    private BaseFont bfHeiTi;
 
 
     /**
@@ -72,13 +67,13 @@ public class DocServiceJS001 {
             String[] footer = new String[] {"第 ", " 页 共 ", " 页"};
             int headerToPage = 100;
             int footerFromPage = 1;
-            boolean isHaderLine = true;
+            boolean isHeaderLine = true;
             boolean isFooterLine = false;
             float[] headerLoc = new float[]{document.right() - 5, document.top() + 15};
             float[] footerLoc = new float[] {(document.left() + document.right()) / 2.0f - 35, document.bottom() - 20};
             float headLineOff = -5f;
             float footLineOff = 12f;
-            writer.setPageEvent(new HeaderFooter(header, footer, headerToPage, footerFromPage, isHaderLine, isFooterLine,
+            writer.setPageEvent(new HeaderFooter(header, footer, headerToPage, footerFromPage, isHeaderLine, isFooterLine,
                     headerLoc, footerLoc, headLineOff, footLineOff));
             // 3.打开文档
             document.open();
@@ -127,8 +122,8 @@ public class DocServiceJS001 {
         // 加载字体
         try {
             bfChinese = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            bfHeiTi = BaseFont.createFont(DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            titlefont1 = new Font(bfHeiTi, 29, Font.BOLD);
+//            bfHeiTi = BaseFont.createFont(DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+//            titlefont1 = new Font(bfHeiTi, 29, Font.BOLD);
             titlefont2 = new Font(bfChinese, 21, Font.NORMAL);
             keyfont = new Font(bfChinese, 12.5f, Font.BOLD);
             textfont = new Font(bfChinese, 12f, Font.NORMAL);

@@ -1,6 +1,5 @@
 package com.njustc.onlinebiz.doc;
 
-import com.njustc.onlinebiz.common.model.test.testcase.Testcase;
 import com.njustc.onlinebiz.common.model.test.testcase.Testcase.TestcaseList;
 import com.njustc.onlinebiz.doc.model.JS008;
 import com.njustc.onlinebiz.doc.service.DocServiceJS008;

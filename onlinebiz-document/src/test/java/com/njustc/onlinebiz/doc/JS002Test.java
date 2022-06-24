@@ -2,7 +2,6 @@ package com.njustc.onlinebiz.doc;
 
 import com.njustc.onlinebiz.doc.model.JS002;
 import com.njustc.onlinebiz.doc.service.DocServiceJS002;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
@@ -25,7 +24,6 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Objects;
 
 @Service
 public class DocServiceJS004 {
@@ -155,8 +153,7 @@ public class DocServiceJS004 {
     }
     // 上传pdf
     try {
-      OSSProvider documentOSSProvider = new OSSProvider();
-      if (documentOSSProvider.upload(
+      if (ossProvider.upload(
               "doc", "JS004_" + contracId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
         deleteOutFile(pdfPath);
         return "https://oss.syh1en.asia/doc/JS004_" + contracId + ".pdf";

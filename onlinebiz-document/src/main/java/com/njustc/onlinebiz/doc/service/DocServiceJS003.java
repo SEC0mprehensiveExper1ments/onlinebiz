@@ -24,7 +24,6 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Objects;
 
 @Service
 public class DocServiceJS003 {
@@ -167,7 +166,7 @@ public class DocServiceJS003 {
   private Font keyfont;
   private Font textfont;
   private BaseFont bfChinese;
-  private BaseFont bfHeiTi;
+//  private BaseFont bfHeiTi;
 
 
   public void generatePageOne(Document document) throws Exception {
@@ -176,9 +175,9 @@ public class DocServiceJS003 {
       bfChinese =
               BaseFont.createFont(
                       DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-      bfHeiTi =
-              BaseFont.createFont(
-                      DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+//      bfHeiTi =
+//              BaseFont.createFont(
+//                      DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
       titlefont1 = new Font(bfChinese, 16, Font.BOLD);
       titlefont2 = new Font(bfChinese, 13f, Font.BOLD);
       titlefont3 = new Font(bfChinese, 13.5f, Font.NORMAL);
@@ -202,8 +201,8 @@ public class DocServiceJS003 {
     // 行列每个基础单元格为 5mm x 5mm
     PdfPTable table = ItextUtils.createTable(widths, tableWidth);
 
-    float[] paddings = new float[]{6f, 6f, 5f, 5f};
-    float[] paddings2 = new float[]{12.5f, 12.5f, 5f, 5f};
+//    float[] paddings = new float[]{6f, 6f, 5f, 5f};
+//    float[] paddings2 = new float[]{12.5f, 12.5f, 5f, 5f};
     float[] paddings3 = new float[]{8.5f, 8.5f, 5f, 5f};        // 上下左右的间距
     float borderWidth = 0.3f;
 

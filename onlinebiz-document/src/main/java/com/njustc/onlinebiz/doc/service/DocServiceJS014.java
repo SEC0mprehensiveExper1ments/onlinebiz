@@ -75,7 +75,7 @@ public class DocServiceJS014 {
     private static final float marginBottom;
 
 
-    @Value("$document-dir")
+    @Value("${document-dir}")
     private String DOCUMENT_DIR;
 
     static {

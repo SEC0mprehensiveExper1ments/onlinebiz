@@ -30,7 +30,6 @@ import java.util.List;
 
 @Service
 public class DocServiceJS009 {
-
     private static final String TEST_SERVICE = "http://onlinebiz-test";
     private final RestTemplate restTemplate;
     private final OSSProvider ossProvider;
@@ -68,7 +67,6 @@ public class DocServiceJS009 {
 
         return testRecordList;
     }
-
 
     /**
      * 以下是文档生成部分
@@ -138,7 +136,7 @@ public class DocServiceJS009 {
         try {
             if(ossProvider.upload(
                     "doc", "JS009_" + testRecordId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
-                // deleteOutFile(pdfPath);
+                deleteOutFile(pdfPath);
                 return "https://oss.syh1en.asia/doc/JS009_" + testRecordId + ".pdf";
             } else {
                 deleteOutFile(pdfPath);
@@ -166,7 +164,6 @@ public class DocServiceJS009 {
             e.printStackTrace();
         }
     }
-
 
     public void generatePageOne(Document document) throws Exception {
         // 加载字体
