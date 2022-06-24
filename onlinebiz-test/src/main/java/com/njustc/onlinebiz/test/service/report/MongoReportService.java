@@ -33,7 +33,8 @@ public class MongoReportService implements ReportService {
         report.setProjectId(projectId);
         report.setContent(content);
         report.setEntrustId(entrustId);
-        return reportDAO.insertReport(report).getId();
+        String reportId = reportDAO.insertReport(report).getId();
+        return reportId;
     }
 
     @Override

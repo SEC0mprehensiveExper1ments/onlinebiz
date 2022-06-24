@@ -34,7 +34,8 @@ public class MongoTestIssueService implements TestIssueService {
         testIssueList.setProjectId(projectId);
         testIssueList.setEntrustId(entrustId);
         testIssueList.setTestIssues(testIssues);
-        return testIssueDAO.insertTestIssueList(testIssueList).getId();
+        String testIssueListId = testIssueDAO.insertTestIssueList(testIssueList).getId();
+        return testIssueListId;
     }
 
     @Override
