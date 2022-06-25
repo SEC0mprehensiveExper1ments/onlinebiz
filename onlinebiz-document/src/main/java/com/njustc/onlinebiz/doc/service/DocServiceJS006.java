@@ -438,9 +438,9 @@ public class DocServiceJS006 {
         CeShiJinDuBiao.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
         document.add(CeShiJinDuBiao);
 
-        Paragraph CeShiJinDuBiaoContent = new Paragraph("    " + "此项目主要分为：业务测试和文档审查两部分的工作。两部分的工作可以并行完成。测试方为完成本方案所述的测试所需时间大约为XX个工作日，如测试需求产生变更会导致测试时间的变化。\n"+"    "+"下表大致估计了本次测试各个阶段所需工作量及起止时间。下表大致估计了本次测试各个阶段所需工作量及起止时间。", normal5song);
+        Paragraph CeShiJinDuBiaoContent = new Paragraph("    " + "此项目主要分为：业务测试和文档审查两部分的工作。两部分的工作可以并行完成。测试方为完成本方案所述的测试所需时间大约为"+JS006Json.getInputYuJiGongZuoRi()+"个工作日，如测试需求产生变更会导致测试时间的变化。\n"+"    "+"下表大致估计了本次测试各个阶段所需工作量及起止时间。下表大致估计了本次测试各个阶段所需工作量及起止时间。", normal5song);
         CeShiJinDuBiaoContent.setSpacingBefore(20f); // 设置段落上空白
-        CeShiJinDuBiaoContent.setSpacingAfter(40f); // 设置段落下空白
+        CeShiJinDuBiaoContent.setSpacingAfter(20f); // 设置段落下空白
         CeShiJinDuBiaoContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
         document.add(CeShiJinDuBiaoContent);
 

@@ -170,7 +170,7 @@ public class ItextUtils {
 
     public static PdfPCell createGreyCell(String value, Font font, int align, int colspan, int rowspan, float[] paddings, float borderWidth) {
         PdfPCell cell = new PdfPCell();
-        cell.setBackgroundColor(new BaseColor(128, 128, 128));
+        cell.setBackgroundColor(new BaseColor(220, 220, 220));
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         cell.setHorizontalAlignment(align);
         cell.setColspan(colspan);

@@ -32,6 +32,7 @@ public class JS006 {
     private String inputYiBanCeShiTiaoJian = "";
     private String inputJiHuaZhiXingDeCeShi = "";
     private String inputCeShiYongLi = "";
+    private String inputYuJiGongZuoRi = "";
     private Schedule zhiDingJiHua = new Schedule();
     private Schedule sheJiCeShi = new Schedule();
     private Schedule zhiXingCeShi = new Schedule();
@@ -55,6 +56,7 @@ public class JS006 {
         this.inputYiBanCeShiTiaoJian = scheme.getContent().getTestCondition();
         this.inputJiHuaZhiXingDeCeShi = scheme.getContent().getTestToBeExecuted();
         this.inputCeShiYongLi = scheme.getContent().getTestSample();
+        this.inputYuJiGongZuoRi = scheme.getContent().getExpectedTime();
         this.inputXuQiuKeZhuiZongXing = scheme.getContent().getTraceability();
         this.zhiDingJiHua = scheme.getContent().getPlanSchedule();
         this.sheJiCeShi = scheme.getContent().getDesignSchedule();
