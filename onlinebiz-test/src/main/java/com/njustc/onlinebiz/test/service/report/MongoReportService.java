@@ -9,7 +9,6 @@ import com.njustc.onlinebiz.test.exception.report.ReportDAOFailureException;
 import com.njustc.onlinebiz.test.exception.report.ReportInvalidStageException;
 import com.njustc.onlinebiz.test.exception.report.ReportNotFoundException;
 import com.njustc.onlinebiz.test.exception.report.ReportPermissionDeniedException;
-import com.njustc.onlinebiz.test.exception.scheme.SchemeDAOFailureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -86,7 +85,7 @@ public class MongoReportService implements ReportService {
             throw new ReportNotFoundException("该测试报告不存在");
         }
         if (!reportDAO.deleteReport(report.getId())) {
-            throw new SchemeDAOFailureException("删除测试报告失败");
+            throw new ReportDAOFailureException("删除测试报告失败");
         }
     }
 
