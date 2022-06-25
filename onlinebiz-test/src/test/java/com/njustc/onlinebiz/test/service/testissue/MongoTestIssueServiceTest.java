@@ -69,6 +69,7 @@ class MongoTestIssueServiceTest {
 
     @Test
     void findTestIssueList() {
+
         TestIssueList TestissueList = new TestIssueList();
         Project project = new Project();
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
@@ -126,6 +127,7 @@ class MongoTestIssueServiceTest {
 
     @Test
     void updateTestIssueList() {
+
         TestIssueList TestissueList = new TestIssueList();
         Project project = new Project();
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
@@ -181,6 +183,7 @@ class MongoTestIssueServiceTest {
 
     @Test
     void removeTestIssueList() {
+
         TestIssueList TestissueList = new TestIssueList();
         Project project = new Project();
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
