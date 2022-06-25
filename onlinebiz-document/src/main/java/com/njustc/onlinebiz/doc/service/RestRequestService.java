@@ -4,6 +4,7 @@ package com.njustc.onlinebiz.doc.service;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.contract.Contract;
 import com.njustc.onlinebiz.common.model.entrust.Entrust;
+import com.njustc.onlinebiz.common.model.test.report.Report;
 import com.njustc.onlinebiz.common.model.test.review.EntrustTestReview;
 import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
@@ -99,6 +100,22 @@ public class RestRequestService {
         }
         Scheme scheme = responseEntity.getBody();
         return scheme;
+    }
+
+    public Report getReport(String reportId, Long userId, Role userRole) {
+        String params = "?userId=" + userId + "&userRole=" + userRole;
+        String url = TEST_SERVICE + "/api/test/report/" + reportId;
+        ResponseEntity<Report> responseEntity = restTemplate.getForEntity(url + params, Report.class);
+        // 检查测试方案 id 及权限有效性
+        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
+            throw new DownloadPermissionDeniedException("无权下载该文件");
+        } else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+            throw new DownloadNotFoundException("未找到该测试方案ID");
+        } else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
+            throw new DownloadDAOFailureException("其他问题");
+        }
+        Report report = responseEntity.getBody();
+        return report;
     }
 
     /**

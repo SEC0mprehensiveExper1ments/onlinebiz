@@ -2,6 +2,7 @@ package com.njustc.onlinebiz.doc.controller;
 
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.contract.Contract;
+import com.njustc.onlinebiz.common.model.test.report.Report;
 import com.njustc.onlinebiz.common.model.test.review.EntrustTestReview;
 import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
@@ -31,6 +32,7 @@ public class DownloadController {
   private final DocServiceJS004 docServiceJS004;
   private final DocServiceJS005 docServiceJS005;
   private final DocServiceJS006 docServiceJS006;
+  private final DocServiceJS007 docServiceJS007;
   private final DocServiceJS008 docServiceJS008;
   private final DocServiceJS009 docServiceJS009;
   private final DocServiceJS010 docServiceJS010;
@@ -46,6 +48,7 @@ public class DownloadController {
                             DocServiceJS004 docServiceJS004,
                             DocServiceJS005 docServiceJS005,
                             DocServiceJS006 docServiceJS006,
+                            DocServiceJS007 docServiceJS007,
                             DocServiceJS008 docServiceJS008,
                             DocServiceJS009 docServiceJS009,
                             DocServiceJS010 docServiceJS010,
@@ -60,6 +63,7 @@ public class DownloadController {
     this.docServiceJS004 = docServiceJS004;
     this.docServiceJS005 = docServiceJS005;
     this.docServiceJS006 = docServiceJS006;
+    this.docServiceJS007 = docServiceJS007;
     this.docServiceJS008 = docServiceJS008;
     this.docServiceJS009 = docServiceJS009;
     this.docServiceJS010 = docServiceJS010;
@@ -130,6 +134,18 @@ public class DownloadController {
     Scheme scheme = restRequestService.getScheme(schemeId, userId, userRole);
     JS006 newJson = new JS006(scheme);
     return docServiceJS006.fill(schemeId, newJson);
+  }
+
+  // JS007 文档下载接口
+  @GetMapping("/doc/JS007/{reportId}")
+  public String downloadJS007(
+          @PathVariable("reportId") String reportId,
+          @RequestParam("userId") Long userId,
+          @RequestParam("userRole") Role userRole
+  ) {
+    Report report = restRequestService.getReport(reportId, userId, userRole);
+    JS007 newJson = new JS007(report);
+    return docServiceJS007.fill(reportId, newJson);
   }
 
   // JS008 文档下载接口
