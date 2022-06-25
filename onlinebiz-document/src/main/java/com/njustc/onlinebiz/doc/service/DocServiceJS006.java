@@ -132,7 +132,9 @@ public class DocServiceJS006 {
     private static Font titlefont2;
     private static Font normal5song;
     private static Font bold5song;
-    private static Font bold4song;
+    private static Font bold4songblue;
+    private static Font bold2song;
+    private static Font bold3song;
 
     public void generatePage(Document document) throws Exception {
         try {
@@ -146,7 +148,10 @@ public class DocServiceJS006 {
             titlefont2 = new Font(bfHeiTi, 22, Font.NORMAL);
             normal5song = new Font(bfChinese, 10.5f, Font.NORMAL);
             bold5song = new Font(bfChinese, 10.5f, Font.BOLD);
-            bold4song = new Font(bfChinese, 14f, Font.BOLD);
+            bold4songblue = new Font(bfChinese, 14f, Font.BOLD);
+            bold4songblue.setColor(new BaseColor(61, 89, 171));
+            bold2song = new Font(bfChinese, 22f, Font.BOLD);
+            bold3song = new Font(bfChinese, 16f, Font.BOLD);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -160,7 +165,7 @@ public class DocServiceJS006 {
         PdfPCell cell = table.getDefaultCell();
         cell.setBorderWidth(1.0f);
         cell.setBorder(Rectangle.BOTTOM);
-        cell.setBorderColor(BaseColor.BLUE);
+        cell.setBorderColor(new BaseColor(61, 89, 171));
         table.addCell(cell);
 
         Paragraph version = new Paragraph(JS006Json.getInputBanBenHao(), titlefont2);
@@ -190,16 +195,16 @@ public class DocServiceJS006 {
 
         // 第一行
         modificationTable.addCell(ItextUtils.createGreyCell("版本", normal5song, Element.ALIGN_LEFT, 4, 2, paddings3, borderWidth));
-        modificationTable.addCell(ItextUtils.createGreyCell("日期", normal5song, Element.ALIGN_LEFT, 15, 2, paddings3, borderWidth));
-        modificationTable.addCell(ItextUtils.createGreyCell("AMD", normal5song, Element.ALIGN_LEFT, 6, 2, paddings3, borderWidth));
+        modificationTable.addCell(ItextUtils.createGreyCell("日期", normal5song, Element.ALIGN_LEFT, 17, 2, paddings3, borderWidth));
+        modificationTable.addCell(ItextUtils.createGreyCell("AMD", normal5song, Element.ALIGN_LEFT, 4, 2, paddings3, borderWidth));
         modificationTable.addCell(ItextUtils.createGreyCell("修订者", normal5song, Element.ALIGN_LEFT, 8, 2, paddings3, borderWidth));
         modificationTable.addCell(ItextUtils.createGreyCell("说明", normal5song, Element.ALIGN_LEFT, 10, 2, paddings3, borderWidth));
 
         List<Modification> modifications = JS006Json.getWenDangXiuGaiJiLu();
         for (Modification modification : modifications) {
             modificationTable.addCell(ItextUtils.createCell(modification.getVersion(), normal5song, Element.ALIGN_LEFT, 4, 2, paddings3, borderWidth));
-            modificationTable.addCell(ItextUtils.createCell(modification.getDate().toString(), normal5song, Element.ALIGN_LEFT, 15, 2, paddings3, borderWidth));
-            modificationTable.addCell(ItextUtils.createCell(modification.getMethod().toString(), normal5song, Element.ALIGN_LEFT, 6, 2, paddings3, borderWidth));
+            modificationTable.addCell(ItextUtils.createCell(modification.getDate().toString(), normal5song, Element.ALIGN_LEFT, 17, 2, paddings3, borderWidth));
+            modificationTable.addCell(ItextUtils.createCell(modification.getMethod().toString(), normal5song, Element.ALIGN_LEFT, 4, 2, paddings3, borderWidth));
             modificationTable.addCell(ItextUtils.createCell(modification.getModifier(), normal5song, Element.ALIGN_LEFT, 8, 2, paddings3, borderWidth));
             modificationTable.addCell(ItextUtils.createCell(modification.getIllustration(), normal5song, Element.ALIGN_LEFT, 10, 2, paddings3, borderWidth));
         }
@@ -212,9 +217,271 @@ public class DocServiceJS006 {
         document.newPage();
         //document.add(new Paragraph("\n"));
 
-        Paragraph directory = new Paragraph("目录", bold4song);
-        directory.setSpacingBefore(60f); // 设置段落上空白
-        directory.setSpacingAfter(10f); // 设置段落下空白
+        Paragraph directoryTitle = new Paragraph("目录", bold4songblue);
+        directoryTitle.setSpacingBefore(60f); // 设置段落上空白
+        directoryTitle.setSpacingAfter(10f); // 设置段落下空白
+        directoryTitle.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        Paragraph directory = new Paragraph();
+        directory.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        directory.add(
+                new Phrase(
+                        ""
+                                + "1 引言………………………………………………………………………………………………1\n"
+                                + "     1.1标识………………………………………………………………………………………1\n"
+                                + "     1.2系统概述…………………………………………………………………………………1\n"
+                                + "     1.3文档概述…………………………………………………………………………………1\n"
+                                + "     1.4基线………………………………………………………………………………………1\n"
+                                + "2 引用文件…………………………………………………………………………………………1\n"
+                                + "3 软件测试环境……………………………………………………………………………………1\n"
+                                + "     3.1硬件………………………………………………………………………………………1\n"
+                                + "     3.2软件………………………………………………………………………………………1\n"
+                                + "     3.3其他………………………………………………………………………………………1\n"
+                                + "     3.4参与组织…………………………………………………………………………………1\n"
+                                + "     3.5人员………………………………………………………………………………………2\n"
+                                + "4 计划………………………………………………………………………………………………2\n"
+                                + "     4.1总体设计…………………………………………………………………………………2\n"
+                                + "           4.1.1测试级别………………………………………………………………………2\n"
+                                + "           4.1.2测试类别………………………………………………………………………2\n"
+                                + "           4.1.3一般测试条件…………………………………………………………………2\n"
+                                + "     4.2计划执行的测试…………………………………………………………………………2\n"
+                                + "     4.3测试用例…………………………………………………………………………………2\n"
+                                + "5 测试进度表………………………………………………………………………………………2\n"
+                                + "6 需求的可追踪性…………………………………………………………………………………3\n"
+                        , normal5song));
+        document.add(directoryTitle);
+        document.add(directory);
 
+        document.newPage();
+
+        Paragraph YinYan = new Paragraph("1 引言", bold2song);
+        YinYan.setSpacingBefore(80f); // 设置段落上空白
+        //YinYan.setSpacingAfter(30f); // 设置段落下空白
+        YinYan.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(YinYan);
+
+        Paragraph BiaoShi = new Paragraph("1.1 标识", bold3song);
+        BiaoShi.setSpacingBefore(20f); // 设置段落上空白
+        //BiaoShi.setSpacingAfter(30f); // 设置段落下空白
+        BiaoShi.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(BiaoShi);
+
+        Paragraph BiaoShiContent = new Paragraph("    " + JS006Json.getInputBiaoShi(), normal5song);
+        BiaoShiContent.setSpacingBefore(20f); // 设置段落上空白
+        BiaoShiContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(BiaoShiContent);
+
+        Paragraph XiTongGaiShu = new Paragraph("1.2 系统概述", bold3song);
+        XiTongGaiShu.setSpacingBefore(20f); // 设置段落上空白
+        //BiaoShi.setSpacingAfter(30f); // 设置段落下空白
+        XiTongGaiShu.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(XiTongGaiShu);
+
+        Paragraph XiTongGaiShuContent = new Paragraph("    " + JS006Json.getInputXiTongGaiShu(), normal5song);
+        XiTongGaiShuContent.setSpacingBefore(20f); // 设置段落上空白
+        XiTongGaiShuContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(XiTongGaiShuContent);
+
+        Paragraph WenDangGaiShu = new Paragraph("1.3 文档概述", bold3song);
+        WenDangGaiShu.setSpacingBefore(20f); // 设置段落上空白
+        //BiaoShi.setSpacingAfter(30f); // 设置段落下空白
+        WenDangGaiShu.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(WenDangGaiShu);
+
+        Paragraph WenDangGaiShuContent = new Paragraph("    " + JS006Json.getInputWenDangGaiShu(), normal5song);
+        WenDangGaiShuContent.setSpacingBefore(20f); // 设置段落上空白
+        WenDangGaiShuContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(WenDangGaiShuContent);
+
+        Paragraph JiXian = new Paragraph("1.4 基线", bold3song);
+        JiXian.setSpacingBefore(20f); // 设置段落上空白
+        //BiaoShi.setSpacingAfter(30f); // 设置段落下空白
+        JiXian.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(JiXian);
+
+        Paragraph JiXianContent = new Paragraph("    " + JS006Json.getInputJiXian(), normal5song);
+        JiXianContent.setSpacingBefore(20f); // 设置段落上空白
+        JiXianContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(JiXianContent);
+
+        Paragraph YinYongWenJian = new Paragraph("2 引用文件", bold2song);
+        YinYongWenJian.setSpacingBefore(20f); // 设置段落上空白
+        YinYongWenJian.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(YinYongWenJian);
+
+        Paragraph YinYongWenJianContent = new Paragraph("    " + "《计算机软件文档编制规范》GB/T 8567－2006。", normal5song);
+        YinYongWenJianContent.setSpacingBefore(20f); // 设置段落上空白
+        YinYongWenJianContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(YinYongWenJianContent);
+
+        Paragraph HuanJing = new Paragraph("3 软件测试环境", bold2song);
+        HuanJing.setSpacingBefore(20f); // 设置段落上空白
+        HuanJing.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(HuanJing);
+
+        Paragraph YingJian = new Paragraph("3.1 硬件", bold3song);
+        YingJian.setSpacingBefore(20f); // 设置段落上空白
+        YingJian.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(YingJian);
+
+        Paragraph YingJianContent = new Paragraph("    " + JS006Json.getInputYingJian(), normal5song);
+        YingJianContent.setSpacingBefore(20f); // 设置段落上空白
+        YingJianContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(YingJianContent);
+
+        Paragraph RuanJian = new Paragraph("3.2 软件", bold3song);
+        RuanJian.setSpacingBefore(20f); // 设置段落上空白
+        RuanJian.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(RuanJian);
+
+        Paragraph RuanJianContent = new Paragraph("    " + JS006Json.getInputRuanJian(), normal5song);
+        RuanJianContent.setSpacingBefore(20f); // 设置段落上空白
+        RuanJianContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(RuanJianContent);
+
+        Paragraph QiTa = new Paragraph("3.3 其他", bold3song);
+        QiTa.setSpacingBefore(20f); // 设置段落上空白
+        QiTa.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(QiTa);
+
+        Paragraph QiTaContent = new Paragraph("    " + JS006Json.getInputQiTa(), normal5song);
+        QiTaContent.setSpacingBefore(20f); // 设置段落上空白
+        QiTaContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(QiTaContent);
+
+        Paragraph CanYuZuZhi = new Paragraph("3.4 参与组织", bold3song);
+        CanYuZuZhi.setSpacingBefore(20f); // 设置段落上空白
+        CanYuZuZhi.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CanYuZuZhi);
+
+        Paragraph CanYuZuZhiContent = new Paragraph("    " + JS006Json.getInputCanYuZuZhi(), normal5song);
+        CanYuZuZhiContent.setSpacingBefore(20f); // 设置段落上空白
+        CanYuZuZhiContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CanYuZuZhiContent);
+
+        Paragraph RenYuan = new Paragraph("3.5 人员", bold3song);
+        RenYuan.setSpacingBefore(20f); // 设置段落上空白
+        RenYuan.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(RenYuan);
+
+        Paragraph RenYuanContent = new Paragraph("    " + JS006Json.getInputRenYuan(), normal5song);
+        RenYuanContent.setSpacingBefore(20f); // 设置段落上空白
+        RenYuanContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(RenYuanContent);
+
+        Paragraph JiHua = new Paragraph("4 计划", bold2song);
+        JiHua.setSpacingBefore(20f); // 设置段落上空白
+        JiHua.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(JiHua);
+
+        Paragraph JiHuaContent = new Paragraph("    " + "本章描述了计划测试的总范围并且描述了本测试计划适用的每个测试，包括对相关文档的审查。", normal5song);
+        JiHuaContent.setSpacingBefore(20f); // 设置段落上空白
+        JiHuaContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(JiHuaContent);
+
+        Paragraph ZongTiSheJi = new Paragraph("4.1 总体设计", bold3song);
+        ZongTiSheJi.setSpacingBefore(20f); // 设置段落上空白
+        ZongTiSheJi.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(ZongTiSheJi);
+
+        Paragraph CeShiJiBie = new Paragraph("4.1.1 测试级别", bold3song);
+        CeShiJiBie.setSpacingBefore(20f); // 设置段落上空白
+        CeShiJiBie.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CeShiJiBie);
+
+        Paragraph CeShiJiBieContent = new Paragraph("    " + JS006Json.getInputCeShiJiBie(), normal5song);
+        CeShiJiBieContent.setSpacingBefore(20f); // 设置段落上空白
+        CeShiJiBieContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CeShiJiBieContent);
+
+        Paragraph CeShiLeiBie = new Paragraph("4.1.2 测试类别", bold3song);
+        CeShiLeiBie.setSpacingBefore(20f); // 设置段落上空白
+        CeShiLeiBie.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CeShiLeiBie);
+
+        Paragraph CeShiLeiBieContent = new Paragraph("    " + JS006Json.getInputCeShiLeiBie(), normal5song);
+        CeShiLeiBieContent.setSpacingBefore(20f); // 设置段落上空白
+        CeShiLeiBieContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CeShiLeiBieContent);
+
+        Paragraph YiBanCeShiTiaoJian = new Paragraph("4.1.3 一般测试条件", bold3song);
+        YiBanCeShiTiaoJian.setSpacingBefore(20f); // 设置段落上空白
+        YiBanCeShiTiaoJian.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(YiBanCeShiTiaoJian);
+
+        Paragraph YiBanCeShiTiaoJianContent = new Paragraph("    " + JS006Json.getInputYiBanCeShiTiaoJian(), normal5song);
+        YiBanCeShiTiaoJianContent.setSpacingBefore(20f); // 设置段落上空白
+        YiBanCeShiTiaoJianContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(YiBanCeShiTiaoJianContent);
+
+        Paragraph JiHuaZhiXingDeCeShi = new Paragraph("4.2 计划执行的测试", bold3song);
+        JiHuaZhiXingDeCeShi.setSpacingBefore(20f); // 设置段落上空白
+        JiHuaZhiXingDeCeShi.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(JiHuaZhiXingDeCeShi);
+
+        Paragraph JiHuaZhiXingDeCeShiContent = new Paragraph("    " + JS006Json.getInputJiHuaZhiXingDeCeShi(), normal5song);
+        JiHuaZhiXingDeCeShiContent.setSpacingBefore(20f); // 设置段落上空白
+        JiHuaZhiXingDeCeShiContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(JiHuaZhiXingDeCeShiContent);
+
+        Paragraph CeShiYongLi = new Paragraph("4.3 测试用例", bold3song);
+        CeShiYongLi.setSpacingBefore(20f); // 设置段落上空白
+        CeShiYongLi.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CeShiYongLi);
+
+        Paragraph CeShiYongLiContent = new Paragraph("    " + JS006Json.getInputCeShiYongLi(), normal5song);
+        CeShiYongLiContent.setSpacingBefore(20f); // 设置段落上空白
+        CeShiYongLiContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CeShiYongLiContent);
+
+        Paragraph CeShiJinDuBiao = new Paragraph("5 测试进度表", bold2song);
+        CeShiJinDuBiao.setSpacingBefore(20f); // 设置段落上空白
+        CeShiJinDuBiao.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CeShiJinDuBiao);
+
+        Paragraph CeShiJinDuBiaoContent = new Paragraph("    " + "此项目主要分为：业务测试和文档审查两部分的工作。两部分的工作可以并行完成。测试方为完成本方案所述的测试所需时间大约为XX个工作日，如测试需求产生变更会导致测试时间的变化。\n"+"    "+"下表大致估计了本次测试各个阶段所需工作量及起止时间。下表大致估计了本次测试各个阶段所需工作量及起止时间。", normal5song);
+        CeShiJinDuBiaoContent.setSpacingBefore(20f); // 设置段落上空白
+        CeShiJinDuBiaoContent.setSpacingAfter(40f); // 设置段落下空白
+        CeShiJinDuBiaoContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CeShiJinDuBiaoContent);
+
+        PdfPTable CeShiJinDuTable = new PdfPTable(4);
+        CeShiJinDuTable.setWidthPercentage(100);
+
+        // 第一行
+        CeShiJinDuTable.addCell(ItextUtils.createCell("里程碑任务", normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell("工作量", normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell("开始时间", normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell("结束时间", normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        // 第二行
+        CeShiJinDuTable.addCell(ItextUtils.createCell("制定测试计划", normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiDingJiHua().getWorkload(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiDingJiHua().getStartDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiDingJiHua().getEndDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        // 第三行
+        CeShiJinDuTable.addCell(ItextUtils.createCell("设计测试", normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getSheJiCeShi().getWorkload(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getSheJiCeShi().getStartDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getSheJiCeShi().getEndDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        // 第四行
+        CeShiJinDuTable.addCell(ItextUtils.createCell("执行测试", normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiXingCeShi().getWorkload(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiXingCeShi().getStartDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiXingCeShi().getEndDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        // 第五行
+        CeShiJinDuTable.addCell(ItextUtils.createCell("评估测试", normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getPingGuCeShi().getWorkload(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getPingGuCeShi().getStartDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getPingGuCeShi().getEndDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        document.add(CeShiJinDuTable);
+
+        Paragraph XuQiuKeZhuiZongXing = new Paragraph("6 需求的可追踪性", bold2song);
+        XuQiuKeZhuiZongXing.setSpacingBefore(20f); // 设置段落上空白
+        XuQiuKeZhuiZongXing.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(XuQiuKeZhuiZongXing);
+
+        Paragraph XuQiuKeZhuiZongXingContent = new Paragraph("    " + JS006Json.getInputXuQiuKeZhuiZongXing(), normal5song);
+        XuQiuKeZhuiZongXingContent.setSpacingBefore(20f); // 设置段落上空白
+        XuQiuKeZhuiZongXingContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(XuQiuKeZhuiZongXingContent);
     }
 }
