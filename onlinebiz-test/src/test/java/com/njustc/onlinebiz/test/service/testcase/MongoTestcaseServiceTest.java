@@ -76,10 +76,11 @@ class MongoTestcaseServiceTest {
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
         when(projectDAO.findProjectById(any())).thenReturn(project);
         when(testcaseDAO.findTestcaseListById(any())).thenReturn(testcase);
-        project.setProjectBaseInfo(new ProjectBaseInfo());
+        ProjectBaseInfo baseinfo = new ProjectBaseInfo();
+        baseinfo.setTesterId(2001L);
+        baseinfo.setQaId(3001L);
+        project.setProjectBaseInfo(baseinfo);
         when(projectService.getProjectBaseInfo(any())).thenReturn(project.getProjectBaseInfo());
-        when(projectbaseinfo.getTesterId()).thenReturn(2001L);
-        when(projectbaseinfo.getQaId()).thenReturn(3001L);
         //由客户（非合法人员）查找测试用例表
         Assertions.assertThrows(
                 TestcasePermissionDeniedException.class,
@@ -105,18 +106,15 @@ class MongoTestcaseServiceTest {
 
         //由指派的测试部员工/测试部主管（合法人员）查找测试用例表
         when(testcaseDAO.findTestcaseListById(any())).thenReturn(testcase);
-        when(projectbaseinfo.getTesterId()).thenReturn(2001L);
-//        Assertions.assertDoesNotThrow(() ->
-//                mongotestcaseservice.findTestcaseList("TestcaseListId", 2001L, Role.TESTER));
-/*TODO*/
+        Assertions.assertDoesNotThrow(() ->
+                mongotestcaseservice.findTestcaseList("TestcaseListId", 2001L, Role.TESTER));
         Assertions.assertDoesNotThrow(() ->
                 mongotestcaseservice.findTestcaseList("TestcaseListId", 2000L, Role.TESTING_SUPERVISOR));
         //由指派的质量部员工/质量部主管（合法人员）查找测试用例表
         when(testcaseDAO.findTestcaseListById(any())).thenReturn(testcase);
         when(projectbaseinfo.getQaId()).thenReturn(3001L);
-//        Assertions.assertDoesNotThrow(() ->
-//                mongotestcaseservice.findTestcaseList("TestcaseListId", 3001L, Role.QA));
-/*TODO*/
+        Assertions.assertDoesNotThrow(() ->
+                mongotestcaseservice.findTestcaseList("TestcaseListId", 3001L, Role.QA));
         Assertions.assertDoesNotThrow(() ->
                 mongotestcaseservice.findTestcaseList("TestcaseListId", 3000L, Role.QA_SUPERVISOR));
 
@@ -141,10 +139,11 @@ class MongoTestcaseServiceTest {
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
         when(projectDAO.findProjectById(any())).thenReturn(project);
         when(testcaseDAO.findTestcaseListById(any())).thenReturn(testcase);
-        project.setProjectBaseInfo(new ProjectBaseInfo());
-        when(projectService.getProjectBaseInfo(any())).thenReturn(project.getProjectBaseInfo());
-        when(projectbaseinfo.getTesterId()).thenReturn(2001L);
-        when(projectbaseinfo.getQaId()).thenReturn(3001L);
+        ProjectBaseInfo baseinfo = new ProjectBaseInfo();
+        baseinfo.setTesterId(2001L);
+        baseinfo.setQaId(3001L);
+        project.setProjectBaseInfo(baseinfo);
+        when(projectService.getProjectBaseInfo(any())).thenReturn(baseinfo);
 
         //由客户（非合法人员）修改测试用例表
         Assertions.assertThrows(
@@ -174,10 +173,10 @@ class MongoTestcaseServiceTest {
 
         //由指派的测试部人员/测试部主管（合法人员）修改测试用例
         when(testcaseDAO.findTestcaseListById(any())).thenReturn(testcase);
-        when(projectbaseinfo.getTesterId()).thenReturn(2001L);
-//        Assertions.assertDoesNotThrow(() ->
-//                mongotestcaseservice.updateTestcaseList("TestcaseListId", null, 2001L, Role.TESTER));
-/*TODO*/
+        when(projectService.getProjectBaseInfo(any())).thenReturn(baseinfo);
+        when(testcaseDAO.updateContent(any(), any())).thenReturn(true);
+        Assertions.assertDoesNotThrow(() ->
+                mongotestcaseservice.updateTestcaseList("TestcaseListId", null, 2001L, Role.TESTER));
         when(testcaseDAO.updateContent(any(), any())).thenReturn(true);
         Assertions.assertDoesNotThrow(() ->
                 mongotestcaseservice.updateTestcaseList("TestcaseListId", null, 2000L, Role.TESTING_SUPERVISOR));
