@@ -18,7 +18,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class JS007 {
     private String inputBaoGaoBianHao="";
-    private String inputRuanjianMingCheng="";
+    private String inputRuanJianMingCheng="";
     private String inputBanBenHao="";
     private String inputWeiTuoDanWei="";
     private String inputCeShiLeiBie="";
@@ -83,7 +83,7 @@ public class JS007 {
 
     public JS007(Report report){
         this.inputBaoGaoBianHao=report.getContent().getId();
-        this.inputRuanjianMingCheng=report.getContent().getSoftwareName();
+        this.inputRuanJianMingCheng=report.getContent().getSoftwareName();
         this.inputBanBenHao=report.getContent().getVersion();
         this.inputWeiTuoDanWei=report.getContent().getClientContact().getCompanyCH();
         this.inputCeShiLeiBie=report.getContent().getTestType();
