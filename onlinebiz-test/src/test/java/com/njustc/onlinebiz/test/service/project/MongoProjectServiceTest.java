@@ -4,10 +4,7 @@ import com.njustc.onlinebiz.common.model.EntrustDto;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.project.*;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
-import com.njustc.onlinebiz.test.exception.project.ProjectInvalidArgumentException;
-import com.njustc.onlinebiz.test.exception.project.ProjectInvalidStageException;
-import com.njustc.onlinebiz.test.exception.project.ProjectNotFoundException;
-import com.njustc.onlinebiz.test.exception.project.ProjectPermissionDeniedException;
+import com.njustc.onlinebiz.test.exception.project.*;
 import com.njustc.onlinebiz.test.service.report.ReportService;
 import com.njustc.onlinebiz.test.service.review.EntrustTestReviewService;
 import com.njustc.onlinebiz.test.service.review.ReportReviewService;
@@ -65,6 +62,52 @@ class MongoProjectServiceTest {
 
     Assertions.assertEquals(
         "projectId", mongoProjectService.createTestProject(2L, Role.MARKETER, "entrustId"));
+  }
+
+  @Test
+  void createTestProjectByCustomer() {
+    EntrustDto entrustDto = new EntrustDto();
+    entrustDto.setMarketerId(2L);
+    Project project = new Project();
+    project.setId("projectId");
+
+    when(restTemplate.getForObject(any(String.class), any(Class.class))).thenReturn(entrustDto);
+    when(projectDAO.insertProject(any())).thenReturn(project);
+    when(restTemplate.postForEntity(any(), any(), any())).thenReturn(null);
+
+    Assertions.assertThrows(
+        ProjectPermissionDeniedException.class,
+        () -> mongoProjectService.createTestProject(2L, Role.CUSTOMER, "entrustId"));
+  }
+
+  @Test
+  void createTestProjectByInvalidMarketer() {
+    EntrustDto entrustDto = new EntrustDto();
+    entrustDto.setMarketerId(2L);
+    Project project = new Project();
+    project.setId("projectId");
+
+    when(restTemplate.getForObject(any(String.class), any(Class.class))).thenReturn(entrustDto);
+    when(projectDAO.insertProject(any())).thenReturn(project);
+    when(restTemplate.postForEntity(any(), any(), any())).thenReturn(null);
+
+    Assertions.assertThrows(
+        ProjectPermissionDeniedException.class,
+        () -> mongoProjectService.createTestProject(1L, Role.MARKETER, "entrustId"));
+  }
+
+  @Test
+  void createProjectDtoNull() {
+    Project project = new Project();
+    project.setId("projectId");
+
+    when(restTemplate.getForObject(any(String.class), any(Class.class))).thenReturn(null);
+    when(projectDAO.insertProject(any())).thenReturn(project);
+    when(restTemplate.postForEntity(any(), any(), any())).thenReturn(null);
+
+    Assertions.assertThrows(
+        ProjectDAOFailureException.class,
+        () -> mongoProjectService.createTestProject(2L, Role.MARKETER, "entrustId"));
   }
 
   @Test
