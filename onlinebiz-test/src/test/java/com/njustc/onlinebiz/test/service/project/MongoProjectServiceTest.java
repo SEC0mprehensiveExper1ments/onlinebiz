@@ -264,6 +264,29 @@ class MongoProjectServiceTest {
   }
 
   @Test
+  void removeProjectSuccess() {
+    Project project = new Project();
+    project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
+    project.setProjectFormIds(new ProjectFormIds());
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    when(projectDAO.deleteProject(any())).thenReturn(true);
+    Assertions.assertDoesNotThrow(
+        () -> mongoProjectService.removeProject("projectId", 0L, Role.ADMIN));
+  }
+
+  @Test
+  void removeProjectDaoFailure() {
+    Project project = new Project();
+    project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
+    project.setProjectFormIds(new ProjectFormIds());
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    when(projectDAO.deleteProject(any())).thenReturn(false);
+    Assertions.assertThrows(
+        ProjectDAOFailureException.class,
+        () -> mongoProjectService.removeProject("projectId", 0L, Role.ADMIN));
+  }
+
+  @Test
   void updateStatus() {}
 
   @Test
