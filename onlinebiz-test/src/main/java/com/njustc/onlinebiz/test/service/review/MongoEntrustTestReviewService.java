@@ -3,6 +3,7 @@ package com.njustc.onlinebiz.test.service.review;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.review.EntrustTestReview;
 import com.njustc.onlinebiz.test.dao.review.EntrustTestReviewDAO;
+import com.njustc.onlinebiz.test.exception.review.ReviewDAOFailureException;
 import com.njustc.onlinebiz.test.exception.review.ReviewNotFoundException;
 import com.njustc.onlinebiz.test.exception.review.ReviewPermissionDeniedException;
 import org.springframework.stereotype.Service;
@@ -43,13 +44,18 @@ public class MongoEntrustTestReviewService implements EntrustTestReviewService {
     @Override
     public void updateEntrustTestReview(String entrustTestReviewId, EntrustTestReview entrustTestReview, Long userId, Role userRole) {
         EntrustTestReview origin = entrustTestReviewDAO.findEntrustTestReviewById(entrustTestReviewId);
+        if (origin == null) {
+            throw new ReviewNotFoundException("工作评审表不存在");
+        }
         if (!origin.getProjectId().equals(entrustTestReview.getProjectId())) {
             throw new ReviewPermissionDeniedException("工作评审表不属于当前项目");
         }
         if (userRole == Role.CUSTOMER) {
             throw new ReviewPermissionDeniedException("只有测试中心人员可以修改工作评审表");
         }
-        entrustTestReviewDAO.updateEntrustTestReview(entrustTestReviewId, entrustTestReview);
+        if (!entrustTestReviewDAO.updateEntrustTestReview(entrustTestReviewId, entrustTestReview)) {
+            throw new ReviewDAOFailureException("更新工作评审表失败");
+        }
     }
 
     @Override
@@ -61,6 +67,8 @@ public class MongoEntrustTestReviewService implements EntrustTestReviewService {
         if (userRole != Role.ADMIN) {
             throw new ReviewPermissionDeniedException("只有管理员可以删除工作评审表");
         }
-        entrustTestReviewDAO.deleteEntrustTestReviewById(entrustTestReviewId);
+        if (!entrustTestReviewDAO.deleteEntrustTestReviewById(entrustTestReviewId)) {
+            throw new ReviewDAOFailureException("删除工作评审表失败");
+        }
     }
 }
