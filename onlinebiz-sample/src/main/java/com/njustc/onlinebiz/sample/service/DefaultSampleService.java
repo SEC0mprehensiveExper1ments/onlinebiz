@@ -43,10 +43,10 @@ public class DefaultSampleService implements SampleService {
     }
     // 判空
     if (entrust == null) {
-      throw new SamplePermissionDeniedException("找不到对应委托申请");
+      throw new SampleDAOFailureException("找不到对应委托申请");
     }
     if (!userId.equals(entrust.getMarketerId())) {
-      throw new SampleDAOFailureException("委托还未分配市场部人员");
+      throw new SampleDAOFailureException("委托还未分配市场部人员或操作人员ID与委托对应人员ID不匹配");
     }
     SampleCollection sampleCollection = new SampleCollection();
     sampleCollection.setEntrustId(entrustId);

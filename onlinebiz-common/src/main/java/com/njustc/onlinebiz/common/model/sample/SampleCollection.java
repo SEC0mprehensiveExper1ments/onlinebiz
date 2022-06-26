@@ -3,12 +3,14 @@ package com.njustc.onlinebiz.common.model.sample;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 public class SampleCollection {
   // 样品集Id
   private String id;
