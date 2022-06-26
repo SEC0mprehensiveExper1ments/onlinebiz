@@ -2,10 +2,12 @@ package com.njustc.onlinebiz.doc.service;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.model.JS007;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
+import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +35,8 @@ public class DocServiceJS007 {
     static {
         // 在 iText 中每一个单位大小默认近似于点（pt）
         // 1mm = 72 ÷ 25.4 ≈ 2.834645...（pt）
-        marginLeft = 80f;
-        marginRight = 80f;
+        marginLeft = 60f;
+        marginRight = 60f;
         marginTop = 72f;
         marginBottom = 72f;
     }
@@ -161,11 +163,11 @@ public class DocServiceJS007 {
         document.add(new Paragraph("\n\n\n"));
 
         Paragraph firstPageContent = new Paragraph(
-                "    软件名称： "+JS007Json.getInputRuanJianMingCheng()+"\n\n" +
-                "    版 本 号： "+JS007Json.getInputBanBenHao()+"\n\n" +
-                "    委托单位： "+JS007Json.getInputWeiTuoDanWei()+"\n\n" +
-                "    测试类别： "+JS007Json.getInputCeShiLeiBie()+"\n\n" +
-                "    报告日期： "+JS007Json.getInputBaoGaoRiQiNian()+" 年 "+JS007Json.getInputBaoGaoRiQiYue()+" 月 "+JS007Json.getInputBaoGaoRiQiRi()+" 日 \n\n"
+                "     软件名称： "+JS007Json.getInputRuanJianMingCheng()+"\n\n" +
+                "     版 本 号： "+JS007Json.getInputBanBenHao()+"\n\n" +
+                "     委托单位： "+JS007Json.getInputWeiTuoDanWei()+"\n\n" +
+                "     测试类别： "+JS007Json.getInputCeShiLeiBie()+"\n\n" +
+                "     报告日期： "+JS007Json.getInputBaoGaoRiQiNian()+" 年 "+JS007Json.getInputBaoGaoRiQiYue()+" 月 "+JS007Json.getInputBaoGaoRiQiRi()+" 日 \n\n"
                 , bold3song);
         firstPageContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
         document.add(firstPageContent);
@@ -194,6 +196,7 @@ public class DocServiceJS007 {
                         "    8、本报告无本实验室章、涂改均无效。"
                 ,normalxiao4song);
         secondPageContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        secondPageContent.setLeading(25f);
         document.add(secondPageContent);
 
         document.newPage();
@@ -207,7 +210,46 @@ public class DocServiceJS007 {
         //表格
         float[] paddings3 = new float[]{4f, 4f, 3f, 3f};        // 上下左右的间距
         float borderWidth = 0.3f;
+        //float fixedLeading = 14f;
+        PdfPTable reportTable=new PdfPTable(48);
+        reportTable.setWidthPercentage(100); // 宽度100%居中
 
+        reportTable.addCell(ItextUtils.createCell_Height("委托单位", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputWeiTuoDanWei(), normalxiao4song, Element.ALIGN_CENTER, 22, 2, 25f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height("项目编号", normalxiao4song, Element.ALIGN_CENTER, 7, 2, 25f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputXiangMuBianHao(), normalxiao4song, Element.ALIGN_CENTER, 11, 2, 25f, paddings3, borderWidth));
+
+        reportTable.addCell(ItextUtils.createCell_Height("样品名称", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputYangPinMingCheng(), normalxiao4song, Element.ALIGN_CENTER, 22, 2, 25f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height("版本/型号", normalxiao4song, Element.ALIGN_CENTER, 7, 2, 25f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputBanBenXingHao(), normalxiao4song, Element.ALIGN_CENTER, 11, 2, 25f, paddings3, borderWidth));
+
+        reportTable.addCell(ItextUtils.createCell_Height("来样日期", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(
+                JS007Json.getInputLaiYangRiQiNian()+" 年 "+JS007Json.getInputLaiYangRiQiYue()+" 月 "+JS007Json.getInputLaiYangRiQiRi()+" 日"
+                , normalxiao4song, Element.ALIGN_CENTER, 22, 2, 25f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height("测试类型", normalxiao4song, Element.ALIGN_CENTER, 7, 2, 25f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputCeShiLeiBie(), normalxiao4song, Element.ALIGN_CENTER, 11, 2, 25f, paddings3, borderWidth));
+
+        reportTable.addCell(ItextUtils.createCell_Height("测试时间", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(
+                JS007Json.getInputCeShiKaiShiRiQiNian()+" 年 "+JS007Json.getInputCeShiKaiShiRiQiYue()+" 月 "+JS007Json.getInputCeShiKaiShiRiQiRi()+" 日"
+                +" 至 "+JS007Json.getInputCeShiJieShuRiQiNian()+" 年 "+JS007Json.getInputCeShiJieShuRiQiYue()+" 月 "+JS007Json.getInputCeShiJieShuRiQiRi()+" 日"
+                , normalxiao4song, Element.ALIGN_CENTER, 40, 2, 25f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height("样品状态", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputYangPinZhuangTai(), normalxiao4song, Element.ALIGN_CENTER, 40, 2, 25f, paddings3, borderWidth));
+
+        reportTable.addCell(ItextUtils.createCell_Height("测试依据", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 45f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputCeShiYiJu(), normalxiao4song, Element.ALIGN_CENTER, 40, 2, 40f, paddings3, borderWidth));
+
+        reportTable.addCell(ItextUtils.createCell_Height("样品清单", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 100f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputYangPinQingDan(), normalxiao4song, Element.ALIGN_CENTER, 40, 2, 100f, paddings3, borderWidth));
+
+        reportTable.addCell(ItextUtils.createCell_Height("测试结论", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 60f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputCeShiJieLun(), normalxiao4song, Element.ALIGN_CENTER, 40, 2, 60f, paddings3, borderWidth));
+
+        document.add(reportTable);
+        document.newPage();
     }
 
 }
