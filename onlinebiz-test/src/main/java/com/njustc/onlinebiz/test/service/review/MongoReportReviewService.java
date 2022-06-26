@@ -85,7 +85,7 @@ public class MongoReportReviewService implements ReportReviewService {
     @Override
     public void saveScannedCopy(String reportReviewId, MultipartFile scannedCopy, Long userId, Role userRole) throws IOException {
         if (scannedCopy.isEmpty()) {
-            throw new ReviewPermissionDeniedException("不能上传测试报告检查表的扫描件");
+            throw new ReviewNotFoundException("测试报告检查表的扫描件为空");
         }
         ReportReview reportReview = findReportReview(reportReviewId, userId, userRole);
         // 检查权限
