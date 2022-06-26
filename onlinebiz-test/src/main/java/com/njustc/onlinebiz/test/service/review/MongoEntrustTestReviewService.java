@@ -3,6 +3,7 @@ package com.njustc.onlinebiz.test.service.review;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.review.EntrustTestReview;
 import com.njustc.onlinebiz.test.dao.review.EntrustTestReviewDAO;
+import com.njustc.onlinebiz.test.exception.review.ReviewDAOFailureException;
 import com.njustc.onlinebiz.test.exception.review.ReviewNotFoundException;
 import com.njustc.onlinebiz.test.exception.review.ReviewPermissionDeniedException;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,9 @@ public class MongoEntrustTestReviewService implements EntrustTestReviewService {
         if (userRole == Role.CUSTOMER) {
             throw new ReviewPermissionDeniedException("只有测试中心人员可以修改工作评审表");
         }
-        entrustTestReviewDAO.updateEntrustTestReview(entrustTestReviewId, entrustTestReview);
+        if (!entrustTestReviewDAO.updateEntrustTestReview(entrustTestReviewId, entrustTestReview)) {
+            throw new ReviewDAOFailureException("更新工作评审表失败");
+        }
     }
 
     @Override
