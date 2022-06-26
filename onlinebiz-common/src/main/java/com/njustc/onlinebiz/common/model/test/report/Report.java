@@ -33,7 +33,7 @@ public class Report {
   public static class ReportContent {
     // 委托单位联系方式
     PartyDetail clientContact;
-    // 报告 id, 由 MongoDB 自动生成
+    // 测试报告编号，由工作人员自行指定
     private String id;
     // 软件名称
     private String softwareName;

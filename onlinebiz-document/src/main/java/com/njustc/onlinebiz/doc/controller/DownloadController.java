@@ -5,6 +5,7 @@ import com.njustc.onlinebiz.common.model.contract.Contract;
 import com.njustc.onlinebiz.common.model.test.review.EntrustTestReview;
 import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
+import com.njustc.onlinebiz.common.model.test.scheme.Scheme;
 import com.njustc.onlinebiz.common.model.test.testcase.Testcase;
 import com.njustc.onlinebiz.common.model.test.testissue.TestIssueList;
 import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
@@ -29,6 +30,7 @@ public class DownloadController {
   private final DocServiceJS003 docServiceJS003;
   private final DocServiceJS004 docServiceJS004;
   private final DocServiceJS005 docServiceJS005;
+  private final DocServiceJS006 docServiceJS006;
   private final DocServiceJS008 docServiceJS008;
   private final DocServiceJS009 docServiceJS009;
   private final DocServiceJS010 docServiceJS010;
@@ -43,6 +45,7 @@ public class DownloadController {
                             DocServiceJS003 docServiceJS003,
                             DocServiceJS004 docServiceJS004,
                             DocServiceJS005 docServiceJS005,
+                            DocServiceJS006 docServiceJS006,
                             DocServiceJS008 docServiceJS008,
                             DocServiceJS009 docServiceJS009,
                             DocServiceJS010 docServiceJS010,
@@ -56,6 +59,7 @@ public class DownloadController {
     this.docServiceJS003 = docServiceJS003;
     this.docServiceJS004 = docServiceJS004;
     this.docServiceJS005 = docServiceJS005;
+    this.docServiceJS006 = docServiceJS006;
     this.docServiceJS008 = docServiceJS008;
     this.docServiceJS009 = docServiceJS009;
     this.docServiceJS010 = docServiceJS010;
@@ -114,6 +118,18 @@ public class DownloadController {
   ) {
     Contract contract = restRequestService.getContractById(contractId, userId, userRole);
     return docServiceJS005.fill(contractId, new JS005(contract));
+  }
+
+  // JS006 文档下载接口
+  @GetMapping("/doc/JS006/{schemeId}")
+  public String downloadJS006(
+          @PathVariable("schemeId") String schemeId,
+          @RequestParam("userId") Long userId,
+          @RequestParam("userRole") Role userRole
+  ) {
+    Scheme scheme = restRequestService.getScheme(schemeId, userId, userRole);
+    JS006 newJson = new JS006(scheme);
+    return docServiceJS006.fill(schemeId, newJson);
   }
 
   // JS008 文档下载接口

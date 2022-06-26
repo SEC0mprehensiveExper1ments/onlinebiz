@@ -34,7 +34,8 @@ public class MongoTestRecordService implements TestRecordService {
         testRecordList.setProjectId(projectId);
         testRecordList.setEntrustId(entrustId);
         testRecordList.setTestRecords(testRecords);
-        return testRecordDAO.insertTestRecordList(testRecordList).getId();
+        String testRecordListId = testRecordDAO.insertTestRecordList(testRecordList).getId();
+        return testRecordListId;
     }
 
     @Override

@@ -42,6 +42,8 @@ public class SchemeContent {
     private String testToBeExecuted;
     //    测试用例
     private String testSample;
+    //    预计工作日
+    private String expectedTime;
     //    制定测试计划
     private Schedule planSchedule;
     //    设计测试计划

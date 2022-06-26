@@ -33,7 +33,8 @@ public class MongoTestcaseService implements TestcaseService {
         testcase.setProjectId(projectId);
         testcase.setEntrustId(entrustId);
         testcase.setTestcases(testcases);
-        return testcaseDAO.insertTestcaseList(testcase).getId();
+        String testcaseId = testcaseDAO.insertTestcaseList(testcase).getId();
+        return testcaseId;
     }
 
     @Override
@@ -96,7 +97,8 @@ public class MongoTestcaseService implements TestcaseService {
         /*根据调研情况，分配的测试部人员、测试部主管、分配的质量部人员、质量部主管均有权限查阅*/
         if (userId == null || userRole == null) {
             return false;
-        } else if (userRole == Role.ADMIN) {
+        }
+        else if (userRole == Role.ADMIN) {
             return true;
         } else if (userRole == Role.QA_SUPERVISOR || userRole == Role.TESTING_SUPERVISOR) {
             return true;

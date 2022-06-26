@@ -1,5 +1,12 @@
 package com.njustc.onlinebiz.test.service.testissue;
 
+import com.njustc.onlinebiz.common.model.test.project.Project;
+import com.njustc.onlinebiz.common.model.test.project.ProjectBaseInfo;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStatus;
+import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
+import com.njustc.onlinebiz.test.exception.testissue.TestIssueNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import com.njustc.onlinebiz.common.model.EntrustDto;
 import com.njustc.onlinebiz.test.dao.testissue.TestIssueDAO;
@@ -9,82 +16,218 @@ import com.njustc.onlinebiz.test.exception.testissue.TestIssuePermissionDeniedEx
 import com.njustc.onlinebiz.common.model.test.testissue.TestIssueList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import static org.mockito.Mockito.mock;
 
 class MongoTestIssueServiceTest {
 
-    private TestIssueService testissueservice;
-    private ProjectService projectService;
-    private TestIssueDAO testissueDAO;
+    private final ProjectDAO projectDAO = mock(ProjectDAO.class);
+    private final TestIssueDAO testissueDAO = mock(TestIssueDAO.class);
+    private final MongoTestIssueService testissueservice = new MongoTestIssueService(testissueDAO, projectDAO);
+    private final ProjectBaseInfo projectbaseinfo = mock(ProjectBaseInfo.class);
+    private final ProjectService projectService = mock(ProjectService.class);
     private static final String ENTRUST_SERVICE_URL = "http://onlinebiz-entrust";
-    private RestTemplate restTemplate;
-    private static String TestIssueListId1 = null;
-    private static String TestIssueListId2 = null;
-    private static String TestIssueListId3 = null;
-    private static TestIssueList TestIssueList1 = null;
-    private static TestIssueList TestIssueList2 = null;
-    private static TestIssueList TestIssueList3 = null;
 
     @Test
     void createTestIssueList() {
 
+        TestIssueList TestissueList = new TestIssueList();
+        when(testissueDAO.insertTestIssueList(any())).thenReturn(TestissueList);
         //由客户（非合法人员）创建测试问题清单
-        try {
-            testissueservice.createTestIssueList("P001", "E001", null, 11111L, Role.CUSTOMER);
-        } catch (Exception e) {
-            assert (e.getClass().equals(TestIssuePermissionDeniedException.class));
-            System.out.println("Customer try to create a test-issue list and cause a mistake.");
-        }
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.createTestIssueList("P001", "E001", null, 11111L, Role.CUSTOMER));
         //由测试部员工（非合法人员）创建测试问题清单
-        try {
-            testissueservice.createTestIssueList("P001", "E001", null, 2001L, Role.TESTER);
-        } catch (Exception e) {
-            assert (e.getClass().equals(TestIssuePermissionDeniedException.class));
-            System.out.println("Tester try to create a test-issue list and cause a mistake.");
-        }
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.createTestIssueList("P001", "E001", null, 2001L, Role.TESTER));
         //由测试部主管（非合法人员）创建测试问题清单
-        try {
-            testissueservice.createTestIssueList("P001", "E001", null, 2000L, Role.TESTING_SUPERVISOR);
-        } catch (Exception e) {
-            assert (e.getClass().equals(TestIssuePermissionDeniedException.class));
-            System.out.println("Testing supervisor try to create a test-issue list and cause a mistake.");
-        }
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.createTestIssueList("P001", "E001", null, 2000L, Role.TESTING_SUPERVISOR));
         //由质量部员工（非合法人员）创建测试问题清单
-        try {
-            testissueservice.createTestIssueList("P001", "E001", null, 3001L, Role.QA);
-        } catch (Exception e) {
-            assert (e.getClass().equals(TestIssuePermissionDeniedException.class));
-            System.out.println("QA try to create a test-issue list and cause a mistake.");
-        }
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.createTestIssueList("P001", "E001", null, 3001L, Role.QA));
         //由质量部主管（非合法人员）创建测试问题清单
-        try {
-            testissueservice.createTestIssueList("P001", "E001", null, 3000L, Role.QA_SUPERVISOR);
-        } catch (Exception e) {
-            assert (e.getClass().equals(TestIssuePermissionDeniedException.class));
-            System.out.println("QA supervisor try to create a test-issue list and cause a mistake.");
-        }
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.createTestIssueList("P001", "E001", null, 3000L, Role.QA_SUPERVISOR));
         //由指派的市场部员工/市场部主管（合法人员）创建测试用例表
-        String url1 = ENTRUST_SERVICE_URL + "/api/entrust/" + "E001" + "/get_dto";
-        ResponseEntity<EntrustDto> responseEntity1 = restTemplate.getForEntity(url1, EntrustDto.class);
-        EntrustDto entrustDto1 = responseEntity1.getBody();
-        TestIssueListId1 = testissueservice.createTestIssueList("P001", "E001", null, entrustDto1.getMarketerId(), Role.MARKETER);
-        String url2 = ENTRUST_SERVICE_URL + "/api/entrust/" + "E002" + "/get_dto";
-        ResponseEntity<EntrustDto> responseEntity2 = restTemplate.getForEntity(url2, EntrustDto.class);
-        EntrustDto entrustDto2 = responseEntity2.getBody();
-        TestIssueListId2 = testissueservice.createTestIssueList("P002", "E002", null, entrustDto2.getMarketerId(), Role.MARKETER);
-        TestIssueListId3 = testissueservice.createTestIssueList("P003", "E003", null, 1000L, Role.MARKETING_SUPERVISOR);
+        Assertions.assertDoesNotThrow(() ->
+                testissueservice.createTestIssueList("P001", "E001", null, 1001L, Role.MARKETER));
+        Assertions.assertDoesNotThrow(() ->
+                testissueservice.createTestIssueList("P002", "E002", null, 1002L, Role.MARKETER));
+        Assertions.assertDoesNotThrow(() ->
+                testissueservice.createTestIssueList("P001", "E001", null, 1000L, Role.MARKETING_SUPERVISOR));
 
         /*若非被指派的市场部员工想创建，则会在创建项目时识别出并报错，此处无需再进行检测和处理*/
     }
 
     @Test
     void findTestIssueList() {
+
+        TestIssueList TestissueList = new TestIssueList();
+        Project project = new Project();
+        project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
+        when(projectDAO.findProjectById(any())).thenReturn(project);
+        when(testissueDAO.findTestIssueListById(any())).thenReturn(TestissueList);
+        ProjectBaseInfo baseinfo = new ProjectBaseInfo();
+        baseinfo.setTesterId(2001L);
+        baseinfo.setQaId(3001L);
+        project.setProjectBaseInfo(baseinfo);
+        when(projectService.getProjectBaseInfo(any())).thenReturn(project.getProjectBaseInfo());
+
+        //由客户（非合法人员）查找测试问题清单
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.findTestIssueList("TestIssueListId", 11111L, Role.CUSTOMER));
+        //由市场部员工（非合法人员）查找测试问题清单
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.findTestIssueList("TestIssueListId", 1001L, Role.MARKETER));
+        //由市场部主管（非合法人员）查找测试问题清单
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.findTestIssueList("TestIssueListId", 1000L, Role.MARKETING_SUPERVISOR));
+        //由非指定的测试部员工（非合法人员）查找测试问题清单
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.findTestIssueList("TestIssueListId", 2066L, Role.TESTER));
+        //由非指定的质量部员工（非合法人员）查找测试问题清单
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.findTestIssueList("TestIssueListId", 3066L, Role.QA));
+        //由指派的测试部员工/测试部主管（合法人员）查找测试问题清单
+        Assertions.assertDoesNotThrow(() ->
+                testissueservice.findTestIssueList("TestIssueListId", 2001L, Role.TESTER));
+        Assertions.assertDoesNotThrow(() ->
+                testissueservice.findTestIssueList("TestIssueListId", 2000L, Role.TESTING_SUPERVISOR));
+        //由指派的质量部员工（合法人员）查找测试问题清单
+        Assertions.assertDoesNotThrow(() ->
+                testissueservice.findTestIssueList("TestIssueListId", 3001L, Role.QA));
+        Assertions.assertDoesNotThrow(() ->
+                testissueservice.findTestIssueList("TestIssueListId", 3000L, Role.QA_SUPERVISOR));
+
+        //尝试寻找不存在的测试问题清单
+        when(testissueDAO.findTestIssueListById(any())).thenReturn(null);
+        Assertions.assertThrows(
+                TestIssueNotFoundException.class,
+                () -> testissueservice.findTestIssueList("TestIssueListId", 2000L, Role.TESTING_SUPERVISOR));
+        Assertions.assertThrows(
+                TestIssueNotFoundException.class,
+                () -> testissueservice.findTestIssueList("TestIssueListId", 2001L, Role.TESTER));
+        Assertions.assertThrows(
+                TestIssueNotFoundException.class,
+                () -> testissueservice.findTestIssueList("TestIssueListId", 3000L, Role.QA_SUPERVISOR));
     }
 
     @Test
     void updateTestIssueList() {
+
+        TestIssueList TestissueList = new TestIssueList();
+        Project project = new Project();
+        project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
+        when(projectDAO.findProjectById(any())).thenReturn(project);
+        when(testissueDAO.findTestIssueListById(any())).thenReturn(TestissueList);
+        ProjectBaseInfo baseinfo = new ProjectBaseInfo();
+        baseinfo.setTesterId(2001L);
+        baseinfo.setQaId(3001L);
+        project.setProjectBaseInfo(baseinfo);
+        when(projectService.getProjectBaseInfo(any())).thenReturn(project.getProjectBaseInfo());
+
+        //由客户（非合法人员）修改测试问题清单
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.updateTestIssueList("TestIssueListId", null, 11111L, Role.CUSTOMER));
+        //由市场部员工（非合法人员）修改测试问题清单
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.updateTestIssueList("TestIssueListId", null, 1001L, Role.MARKETER));
+        //由市场部主管（非合法人员）修改测试问题清单
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.updateTestIssueList("TestIssueListId", null, 1000L, Role.MARKETING_SUPERVISOR));
+        //由非指派的测试部员工（非合法人员）修改测试问题清单
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.updateTestIssueList("TestIssueListId", null, 2066L, Role.TESTER));
+        //由质量部员工（非合法人员）修改测试问题清单
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.updateTestIssueList("TestIssueListId", null, 3001L, Role.QA));
+        //由质量部主管（非合法人员）修改测试问题清单
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.updateTestIssueList("TestIssueListId", null, 3000L, Role.QA_SUPERVISOR));
+
+        //由指派的测试部员工/测试部主管（非合法人员）修改测试问题清单
+        when(testissueDAO.updateContent(any(), any())).thenReturn(true);
+        Assertions.assertDoesNotThrow(() ->
+                testissueservice.updateTestIssueList("TestIssueListId", null, 2001L, Role.TESTER));
+        Assertions.assertDoesNotThrow(() ->
+                testissueservice.updateTestIssueList("TestIssueListId", null, 2000L, Role.TESTING_SUPERVISOR));
+
+        //尝试修改不存在的测试问题清单
+        when(testissueDAO.findTestIssueListById(any())).thenReturn(null);
+        Assertions.assertThrows(
+                TestIssueNotFoundException.class,
+                () -> testissueservice.updateTestIssueList("TestIssueListId", null, 2001L, Role.TESTER));
+        Assertions.assertThrows(
+                TestIssueNotFoundException.class,
+                () -> testissueservice.updateTestIssueList("TestIssueListId", null, 2000L, Role.TESTING_SUPERVISOR));
     }
 
     @Test
     void removeTestIssueList() {
+
+        TestIssueList TestissueList = new TestIssueList();
+        Project project = new Project();
+        project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
+        when(projectDAO.findProjectById(any())).thenReturn(project);
+        when(testissueDAO.findTestIssueListById(any())).thenReturn(TestissueList);
+
+        //由客户（非合法人员）删除测试用例表
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.removeTestIssueList("TestIssueListId", 11111L, Role.CUSTOMER));
+        //由市场部员工（非合法人员）删除测试用例表
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.removeTestIssueList("TestIssueListId", 1001L, Role.MARKETER));
+        //由市场部主管（非合法人员）删除测试用例表
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.removeTestIssueList("TestIssueListId", 1000L, Role.MARKETING_SUPERVISOR));
+        //由测试部员工（非合法人员）删除测试用例表
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.removeTestIssueList("TestIssueListId", 2001L, Role.TESTER));
+        //由测试部主管（非合法人员）删除测试用例表
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.removeTestIssueList("TestIssueListId", 2000L, Role.TESTING_SUPERVISOR));
+        //由质量部员工（非合法人员）删除测试用例表
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.removeTestIssueList("TestIssueListId", 3001L, Role.QA));
+        //由质量部主管（非合法人员）删除测试用例表
+        Assertions.assertThrows(
+                TestIssuePermissionDeniedException.class,
+                () -> testissueservice.removeTestIssueList("TestIssueListId", 3000L, Role.QA_SUPERVISOR));
+
+        //由超级管理员ADMIN（合法人员）删除测试用例表
+        when(testissueDAO.deleteTestIssueList(any())).thenReturn(true);
+        Assertions.assertDoesNotThrow(() ->
+                testissueservice.removeTestIssueList("TestIssueListId", 0L, Role.ADMIN));
+
+        //尝试删除不存在的测试用例表
+        when(testissueDAO.findTestIssueListById(any())).thenReturn(null);
+        Assertions.assertThrows(
+                TestIssueNotFoundException.class,
+                () -> testissueservice.removeTestIssueList("TestIssueListId", 0L, Role.ADMIN));
     }
 }
