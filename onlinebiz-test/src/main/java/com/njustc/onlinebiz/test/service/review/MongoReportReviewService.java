@@ -77,7 +77,9 @@ public class MongoReportReviewService implements ReportReviewService {
         }
 
         // 更新测试报告检查表
-        reportReviewDAO.updateReportReview(reportReviewId, reportReview);
+        if (!reportReviewDAO.updateReportReview(reportReviewId, reportReview)) {
+            throw new ReviewDAOFailureException("更新测试报告检查表失败");
+        }
     }
 
     @Override
