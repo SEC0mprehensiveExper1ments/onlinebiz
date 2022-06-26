@@ -67,6 +67,8 @@ public class MongoEntrustTestReviewService implements EntrustTestReviewService {
         if (userRole != Role.ADMIN) {
             throw new ReviewPermissionDeniedException("只有管理员可以删除工作评审表");
         }
-        entrustTestReviewDAO.deleteEntrustTestReviewById(entrustTestReviewId);
+        if (!entrustTestReviewDAO.deleteEntrustTestReviewById(entrustTestReviewId)) {
+            throw new ReviewDAOFailureException("删除工作评审表失败");
+        }
     }
 }
