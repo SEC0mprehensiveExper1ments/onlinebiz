@@ -43,6 +43,9 @@ public class MongoEntrustTestReviewService implements EntrustTestReviewService {
     @Override
     public void updateEntrustTestReview(String entrustTestReviewId, EntrustTestReview entrustTestReview, Long userId, Role userRole) {
         EntrustTestReview origin = entrustTestReviewDAO.findEntrustTestReviewById(entrustTestReviewId);
+        if (origin == null) {
+            throw new ReviewNotFoundException("工作评审表不存在");
+        }
         if (!origin.getProjectId().equals(entrustTestReview.getProjectId())) {
             throw new ReviewPermissionDeniedException("工作评审表不属于当前项目");
         }
