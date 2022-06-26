@@ -55,6 +55,7 @@ public class JS004Test {
         System.out.println(JSON.toJSONString(newJson));
         String JS004URL = docServiceJS004.fill("1111", newJson);
         System.out.println(JS004URL);
+        System.err.println(JS004URL);
         Assertions.assertTrue(JS004URL.startsWith("https://"));
     }
 }
