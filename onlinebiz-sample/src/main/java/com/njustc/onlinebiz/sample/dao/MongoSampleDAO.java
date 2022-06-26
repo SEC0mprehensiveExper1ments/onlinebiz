@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class MongoSampleDAO implements SampleDAO {
 
@@ -25,18 +27,30 @@ public class MongoSampleDAO implements SampleDAO {
   }
 
   @Override
-  public SampleCollection findSampleCollectionById(String id) {
-    return mongoTemplate.findById(id, SampleCollection.class, COLLECTION_NAME);
+  public long countAll() {
+    return mongoTemplate.count(new Query(), COLLECTION_NAME);
   }
 
   @Override
-  public Boolean updateSampleCollection(String id, SampleCollection sampleCollection) {
+  public List<SampleCollection> findAllCollections(Integer page, Integer pageSize) {
+    Query query = new Query();
+    return findWithProjection(query, page, pageSize);
+  }
+
+
+  @Override
+  public SampleCollection findSampleCollectionById(String sampleCollectionId) {
+    return mongoTemplate.findById(sampleCollectionId, SampleCollection.class, COLLECTION_NAME);
+  }
+
+  @Override
+  public Boolean updateSampleCollection(String sampleCollectionId, SampleCollection sampleCollection) {
     Update update =
         new Update()
             .set("name", sampleCollection.getName())
             .set("samples", sampleCollection.getSamples())
             .set("stage", sampleCollection.getStage());
-    return updateSampleCollectionById(id, update);
+    return updateSampleCollectionById(sampleCollectionId, update);
   }
 
   @Override
@@ -44,6 +58,25 @@ public class MongoSampleDAO implements SampleDAO {
     Query query = new Query().addCriteria(Criteria.where("_id").is(id));
     DeleteResult result = mongoTemplate.remove(query, COLLECTION_NAME);
     return result.wasAcknowledged() && result.getDeletedCount() == 1;
+  }
+
+  private List<SampleCollection> findWithProjection(Query query, Integer page, Integer pageSize) {
+    // 设置要取回的字段
+    query.fields().include("_id");
+    query.fields().include("entrustId");
+    query.fields().include("marketerId");
+    query.fields().include("name");
+    query.fields().include("samples");
+    query.fields().include("stage");
+    return findWithPagination(query, page, pageSize);
+  }
+
+  private List<SampleCollection> findWithPagination(Query query, Integer page, Integer pageSize) {
+    // 计算起始位置，页码从1开始
+    int offset = (page - 1) * pageSize;
+    // 先不优化分页查询
+    query.skip(offset).limit(pageSize);
+    return mongoTemplate.find(query, SampleCollection.class, COLLECTION_NAME);
   }
 
   private Boolean updateSampleCollectionById(String id, Update update) {

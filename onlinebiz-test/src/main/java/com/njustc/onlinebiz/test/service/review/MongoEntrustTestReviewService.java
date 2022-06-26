@@ -6,19 +6,14 @@ import com.njustc.onlinebiz.test.dao.review.EntrustTestReviewDAO;
 import com.njustc.onlinebiz.test.exception.review.ReviewNotFoundException;
 import com.njustc.onlinebiz.test.exception.review.ReviewPermissionDeniedException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.io.IOException;
 
 @Service
 public class MongoEntrustTestReviewService implements EntrustTestReviewService {
 
     private final EntrustTestReviewDAO entrustTestReviewDAO;
-    private final RestTemplate restTemplate;
 
-    public MongoEntrustTestReviewService(EntrustTestReviewDAO entrustTestReviewDAO, RestTemplate restTemplate) {
+    public MongoEntrustTestReviewService(EntrustTestReviewDAO entrustTestReviewDAO) {
         this.entrustTestReviewDAO = entrustTestReviewDAO;
-        this.restTemplate = restTemplate;
     }
 
 
@@ -30,8 +25,7 @@ public class MongoEntrustTestReviewService implements EntrustTestReviewService {
         // 创建一份空的工作检查表
         EntrustTestReview entrustTestReview = new EntrustTestReview();
         entrustTestReview.setProjectId(projectId);
-        String entrustTestReviewId = entrustTestReviewDAO.insertEntrustTestReview(entrustTestReview).getId();
-        return entrustTestReviewId;
+        return entrustTestReviewDAO.insertEntrustTestReview(entrustTestReview).getId();
     }
 
     @Override
@@ -59,7 +53,7 @@ public class MongoEntrustTestReviewService implements EntrustTestReviewService {
     }
 
     @Override
-    public void removeEntrustTestReview(String entrustTestReviewId, Long userId, Role userRole) throws IOException {
+    public void removeEntrustTestReview(String entrustTestReviewId, Long userId, Role userRole) {
         EntrustTestReview entrustTestReview = entrustTestReviewDAO.findEntrustTestReviewById(entrustTestReviewId);
         if (entrustTestReview == null) {
             throw new ReviewNotFoundException("工作评审表不存在");

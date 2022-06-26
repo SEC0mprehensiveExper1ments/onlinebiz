@@ -14,10 +14,12 @@ public class SampleCollection {
   private String id;
   // 委托Id
   private String entrustId;
+  // 市场部人员ID
+  private Long marketerId;
   // 集合的名称
   private String name;
   // 集合内的样品
   private List<Sample> samples;
   // 集合的状态
-  private SampleStage stage;
+  private SampleCollectionStage stage;
 }
