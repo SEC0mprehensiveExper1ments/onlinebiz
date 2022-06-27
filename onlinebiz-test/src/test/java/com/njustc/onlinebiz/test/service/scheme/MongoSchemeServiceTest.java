@@ -44,6 +44,7 @@ class MongoSchemeServiceTest {
         when(schemeDAO.findSchemeById(any())).thenReturn(scheme);
         Project project = new Project();
         ProjectBaseInfo baseinfo = new ProjectBaseInfo();
+        baseinfo.setMarketerId(1001L);
         baseinfo.setTesterId(2001L);
         baseinfo.setQaId(3001L);
         project.setProjectBaseInfo(baseinfo);
@@ -173,11 +174,52 @@ class MongoSchemeServiceTest {
     }
 
     @Test
-    void denyContent() {
-    }
+    void createScheme() {
+        String SchemeId = new String();
+        Scheme scheme = new Scheme();
+        scheme.setId(SchemeId);
+        when(schemeDAO.findSchemeById(any())).thenReturn(scheme);
+        when(schemeDAO.insertScheme(any())).thenReturn(scheme);
+        Project project = new Project();
+        ProjectBaseInfo baseinfo = new ProjectBaseInfo();
+        baseinfo.setMarketerId(1001L);
+        baseinfo.setTesterId(2001L);
+        baseinfo.setQaId(3001L);
+        project.setProjectBaseInfo(baseinfo);
+        when(projectService.getProjectBaseInfo(any())).thenReturn(project.getProjectBaseInfo());
+        SchemeContent schemecontent = new SchemeContent();
 
-    @Test
-    void approveContent() {
+        //开始测试
+        //由客户（非合法人员）创建测试方案
+        Assertions.assertThrows(
+                SchemePermissionDeniedException.class,
+                () -> schemeservice.createScheme("entrustId", schemecontent, 11111L, Role.CUSTOMER, "ProjectId"));
+        //由测试部员工（非合法人员）创建测试方案
+        Assertions.assertThrows(
+                SchemePermissionDeniedException.class,
+                () -> schemeservice.createScheme("entrustId", schemecontent, 2001L, Role.TESTER, "ProjectId"));
+        //由测试部主管（非合法人员）创建测试方案
+        Assertions.assertThrows(
+                SchemePermissionDeniedException.class,
+                () -> schemeservice.createScheme("entrustId", schemecontent, 2000L, Role.TESTING_SUPERVISOR, "ProjectId"));
+        //由质量部员工（非合法人员）创建测试方案
+        Assertions.assertThrows(
+                SchemePermissionDeniedException.class,
+                () -> schemeservice.createScheme("entrustId", schemecontent, 3001L, Role.QA, "ProjectId"));
+        //由质量部主管（非合法人员）创建测试方案
+        Assertions.assertThrows(
+                SchemePermissionDeniedException.class,
+                () -> schemeservice.createScheme("entrustId", schemecontent, 3000L, Role.QA_SUPERVISOR, "ProjectId"));
+        //由非指派的测试部员工（非合法人员）创建测试方案
+        Assertions.assertThrows(
+                SchemePermissionDeniedException.class,
+                () -> schemeservice.createScheme("entrustId", schemecontent, 2066L, Role.TESTER, "ProjectId"));
+
+        //由指派的市场部员工/市场部主管（合法人员）创建测试方案
+        Assertions.assertDoesNotThrow(
+                () -> schemeservice.createScheme("entrustId", schemecontent, 1001L, Role.MARKETER, "ProjectId"));
+        Assertions.assertDoesNotThrow(
+                () -> schemeservice.createScheme("entrustId", schemecontent, 1000L, Role.MARKETING_SUPERVISOR, "ProjectId"));
     }
 
     @Test
@@ -186,6 +228,7 @@ class MongoSchemeServiceTest {
         when(schemeDAO.findSchemeById(any())).thenReturn(scheme);
         Project project = new Project();
         ProjectBaseInfo baseinfo = new ProjectBaseInfo();
+        baseinfo.setMarketerId(1001L);
         baseinfo.setTesterId(2001L);
         baseinfo.setQaId(3001L);
         project.setProjectBaseInfo(baseinfo);
@@ -200,6 +243,7 @@ class MongoSchemeServiceTest {
         when(schemeDAO.findSchemeById(any())).thenReturn(scheme);
         Project project = new Project();
         ProjectBaseInfo baseinfo = new ProjectBaseInfo();
+        baseinfo.setMarketerId(1001L);
         baseinfo.setTesterId(2001L);
         baseinfo.setQaId(3001L);
         project.setProjectBaseInfo(baseinfo);
