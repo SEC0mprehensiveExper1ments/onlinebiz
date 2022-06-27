@@ -4,6 +4,8 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.njustc.onlinebiz.common.model.test.report.SoftwareEnvironment;
+import com.njustc.onlinebiz.common.model.test.report.TestContent;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.model.JS007;
 import com.njustc.onlinebiz.doc.util.HeaderFooter;
@@ -11,6 +13,7 @@ import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
@@ -56,14 +59,14 @@ public class DocServiceJS007 {
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
 //            System.out.println("Success");
             // 2.5 添加页眉/页脚
-            String header = "报告编号："+JS007Json.getInputBaoGaoBianHao();
-            String[] footer = new String[]{"南京大学计算机软件新技术国家重点实验室      "+header+"         第 ", " 页，共 ", " 页"};
+            String header = "报告编号：" + JS007Json.getInputBaoGaoBianHao();
+            String[] footer = new String[]{"南京大学计算机软件新技术国家重点实验室      " + header + "         第 ", " 页，共 ", " 页"};
             int headerToPage = 0;
             int footerFromPage = 1;
             boolean isHaderLine = false;
             boolean isFooterLine = false;
             float[] headerLoc = new float[]{document.right() - 5, document.top() + 15};
-            float[] footerLoc = new float[]{document.left(), document.bottom() - 20};
+            float[] footerLoc = new float[]{document.left() + 15, document.bottom() - 20};
             float headLineOff = -5f;
             float footLineOff = 12f;
             writer.setPageEvent(new HeaderFooter(header, footer, headerToPage, footerFromPage, isHaderLine, isFooterLine,
@@ -120,10 +123,11 @@ public class DocServiceJS007 {
     private static Font boldxiao1song;
     private static Font normalxiao4song;
     private static Font boldxiao4song;
+    private static Font normal4song;
 
     private static Font normal5song;
     private static Font bold5song;
-    private static Font bold4songblue;
+    private static Font bold4song;
     private static Font bold2song;
 
     public void generatePage(Document document) throws Exception {
@@ -140,11 +144,11 @@ public class DocServiceJS007 {
             boldxiao1song = new Font(bfChinese, 24f, Font.BOLD);
             normalxiao4song = new Font(bfChinese, 12f, Font.NORMAL);
             boldxiao4song = new Font(bfChinese, 12f, Font.BOLD);
+            normal4song = new Font(bfChinese, 14f, Font.NORMAL);
 
             normal5song = new Font(bfChinese, 10.5f, Font.NORMAL);
             bold5song = new Font(bfChinese, 10.5f, Font.BOLD);
-            bold4songblue = new Font(bfChinese, 14f, Font.BOLD);
-            bold4songblue.setColor(new BaseColor(61, 89, 171));
+            bold4song = new Font(bfChinese, 14f, Font.BOLD);
             bold2song = new Font(bfChinese, 22f, Font.BOLD);
         } catch (Exception e) {
             e.printStackTrace();
@@ -165,29 +169,29 @@ public class DocServiceJS007 {
         document.add(new Paragraph("\n\n\n"));
 
         Paragraph firstPageContent = new Paragraph(
-                "     软件名称： "+JS007Json.getInputRuanJianMingCheng()+"\n\n" +
-                "     版 本 号： "+JS007Json.getInputBanBenHao()+"\n\n" +
-                "     委托单位： "+JS007Json.getInputWeiTuoDanWei()+"\n\n" +
-                "     测试类别： "+JS007Json.getInputCeShiLeiBie()+"\n\n" +
-                "     报告日期： "+JS007Json.getInputBaoGaoRiQiNian()+" 年 "+JS007Json.getInputBaoGaoRiQiYue()+" 月 "+JS007Json.getInputBaoGaoRiQiRi()+" 日 \n\n"
+                "     软件名称： " + JS007Json.getInputRuanJianMingCheng() + "\n\n" +
+                        "     版 本 号： " + JS007Json.getInputBanBenHao() + "\n\n" +
+                        "     委托单位： " + JS007Json.getInputWeiTuoDanWei() + "\n\n" +
+                        "     测试类别： " + JS007Json.getInputCeShiLeiBie() + "\n\n" +
+                        "     报告日期： " + JS007Json.getInputBaoGaoRiQiNian() + " 年 " + JS007Json.getInputBaoGaoRiQiYue() + " 月 " + JS007Json.getInputBaoGaoRiQiRi() + " 日 \n\n"
                 , bold3song);
         firstPageContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
         document.add(firstPageContent);
         document.add(new Paragraph("\n\n\n\n\n"));
 
-        Paragraph DanWei=new Paragraph(
-                "南京大学计算机软件新技术\n"+
-                "国家重点实验室"
-                ,boldxiao1song);
+        Paragraph DanWei = new Paragraph(
+                "南京大学计算机软件新技术\n" +
+                        "国家重点实验室"
+                , boldxiao1song);
         DanWei.setAlignment(1); // 设置文字居中 0靠左   1，居中     2，靠右
         document.add(DanWei);
         document.newPage();
 
-        Paragraph ShengMing=new Paragraph("声  明\n\n",bold3song);
+        Paragraph ShengMing = new Paragraph("声  明\n\n", bold3song);
         ShengMing.setAlignment(1); // 设置文字居中 0靠左   1，居中     2，靠右
         document.add(ShengMing);
 
-        Paragraph secondPageContent=new Paragraph(
+        Paragraph secondPageContent = new Paragraph(
                 "    1、本测试报告仅适用于本报告明确指出的委托单位的被测样品及版本。\n" +
                         "    2、本测试报告是本实验室对所测样品进行科学、客观测试的结果，为被测样品提供第三方独立、客观、公正的重要判定依据，也为最终用户选择产品提供参考和帮助。\n" +
                         "    3、未经本实验室书面批准，不得复制本报告中的内容（全文复制除外），以免误导他人（尤其是用户）对被测样品做出不准确的评价。\n" +
@@ -196,14 +200,14 @@ public class DocServiceJS007 {
                         "    6、当被测样品出现版本更新或其它任何改变时，本测试结果不再适用，涉及到的任何技术、模块（或子系统）甚至整个软件都必须按要求进行必要的备案或重新测试，更不能出现将本测试结果应用于低于被测样品版本的情况。\n" +
                         "    7、本报告无主测人员、审核人员、批准人员（授权签字人）签字无效。\n" +
                         "    8、本报告无本实验室章、涂改均无效。"
-                ,normalxiao4song);
+                , normalxiao4song);
         secondPageContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
         secondPageContent.setLeading(25f);
         document.add(secondPageContent);
 
         document.newPage();
 
-        Paragraph CeShiBaoGaoTitle=new Paragraph("测 试 报 告",bold2song);
+        Paragraph CeShiBaoGaoTitle = new Paragraph("测 试 报 告", bold2song);
         CeShiBaoGaoTitle.setAlignment(1); // 设置文字居中 0靠左   1，居中     2，靠右
         CeShiBaoGaoTitle.setSpacingBefore(20f); // 设置段前间距
         CeShiBaoGaoTitle.setSpacingAfter(20f); // 设置段后间距
@@ -213,7 +217,7 @@ public class DocServiceJS007 {
         float[] paddings3 = new float[]{4f, 4f, 3f, 3f};        // 上下左右的间距
         float borderWidth = 0.3f;
         //float fixedLeading = 14f;
-        PdfPTable reportTable=new PdfPTable(48);
+        PdfPTable reportTable = new PdfPTable(48);
         reportTable.setWidthPercentage(100); // 宽度100%居中
 
         reportTable.addCell(ItextUtils.createCell_Height("委托单位", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
@@ -228,15 +232,15 @@ public class DocServiceJS007 {
 
         reportTable.addCell(ItextUtils.createCell_Height("来样日期", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height(
-                JS007Json.getInputLaiYangRiQiNian()+" 年 "+JS007Json.getInputLaiYangRiQiYue()+" 月 "+JS007Json.getInputLaiYangRiQiRi()+" 日"
+                JS007Json.getInputLaiYangRiQiNian() + " 年 " + JS007Json.getInputLaiYangRiQiYue() + " 月 " + JS007Json.getInputLaiYangRiQiRi() + " 日"
                 , normalxiao4song, Element.ALIGN_CENTER, 22, 2, 25f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height("测试类型", normalxiao4song, Element.ALIGN_CENTER, 7, 2, 25f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputCeShiLeiBie(), normalxiao4song, Element.ALIGN_CENTER, 11, 2, 25f, paddings3, borderWidth));
 
         reportTable.addCell(ItextUtils.createCell_Height("测试时间", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height(
-                JS007Json.getInputCeShiKaiShiRiQiNian()+" 年 "+JS007Json.getInputCeShiKaiShiRiQiYue()+" 月 "+JS007Json.getInputCeShiKaiShiRiQiRi()+" 日"
-                +" 至 "+JS007Json.getInputCeShiJieShuRiQiNian()+" 年 "+JS007Json.getInputCeShiJieShuRiQiYue()+" 月 "+JS007Json.getInputCeShiJieShuRiQiRi()+" 日"
+                JS007Json.getInputCeShiKaiShiRiQiNian() + " 年 " + JS007Json.getInputCeShiKaiShiRiQiYue() + " 月 " + JS007Json.getInputCeShiKaiShiRiQiRi() + " 日"
+                        + " 至 " + JS007Json.getInputCeShiJieShuRiQiNian() + " 年 " + JS007Json.getInputCeShiJieShuRiQiYue() + " 月 " + JS007Json.getInputCeShiJieShuRiQiRi() + " 日"
                 , normalxiao4song, Element.ALIGN_CENTER, 40, 2, 25f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height("样品状态", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputYangPinZhuangTai(), normalxiao4song, Element.ALIGN_CENTER, 40, 2, 25f, paddings3, borderWidth));
@@ -254,33 +258,33 @@ public class DocServiceJS007 {
         reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputZhuCeRen(), normalxiao4song, Element.ALIGN_LEFT, 16, 2, 30f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height("日期", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 30f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height(
-                JS007Json.getInputZhuCeRiQiNian()+" 年 "+JS007Json.getInputZhuCeRiQiYue()+" 月 "+JS007Json.getInputZhuCeRiQiRi()+" 日"
+                JS007Json.getInputZhuCeRiQiNian() + " 年 " + JS007Json.getInputZhuCeRiQiYue() + " 月 " + JS007Json.getInputZhuCeRiQiRi() + " 日"
                 , normalxiao4song, Element.ALIGN_CENTER, 16, 2, 30f, paddings3, borderWidth));
 
         reportTable.addCell(ItextUtils.createCell_Height("审核人", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 30f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputZhuCeRen(), normalxiao4song, Element.ALIGN_LEFT, 16, 2, 30f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height("日期", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 30f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height(
-                JS007Json.getInputShenHeRiQiNian()+" 年 "+JS007Json.getInputShenHeRiQiYue()+" 月 "+JS007Json.getInputShenHeRiQiRi()+" 日"
+                JS007Json.getInputShenHeRiQiNian() + " 年 " + JS007Json.getInputShenHeRiQiYue() + " 月 " + JS007Json.getInputShenHeRiQiRi() + " 日"
                 , normalxiao4song, Element.ALIGN_CENTER, 16, 2, 30f, paddings3, borderWidth));
 
         reportTable.addCell(ItextUtils.createCell_Height("批准人", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 30f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputPiZhunRen(), normalxiao4song, Element.ALIGN_LEFT, 16, 2, 30f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height("日期", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 30f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height(
-                JS007Json.getInputPiZhunRiQiNian()+" 年 "+JS007Json.getInputPiZhunRiQiYue()+" 月 "+JS007Json.getInputPiZhunRiQiRi()+" 日"
+                JS007Json.getInputPiZhunRiQiNian() + " 年 " + JS007Json.getInputPiZhunRiQiYue() + " 月 " + JS007Json.getInputPiZhunRiQiRi() + " 日"
                 , normalxiao4song, Element.ALIGN_CENTER, 16, 2, 30f, paddings3, borderWidth));
 
         reportTable.addCell(ItextUtils.createCell_Height("委托单位联系方式", boldxiao4song, Element.ALIGN_LEFT, 24, 2, 25f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Height("测试单位联系方式", boldxiao4song, Element.ALIGN_LEFT, 24, 2, 25f, paddings3, borderWidth));
 
         reportTable.addCell(ItextUtils.createCell_Leading(
-                "电话："+JS007Json.getInputDianHua()+ "\n" +
-                        "传真："+ JS007Json.getInputChuanZhen()+ "\n" +
-                        "地址： "+ JS007Json.getInputDiZhi()+ "\n" +
-                        "邮编： " + JS007Json.getInputYouBian()+ "\n" +
-                        "联系人： " + JS007Json.getInputLianXiRen()+ "\n" +
-                        "E-mail: "+ JS007Json.getInputEmail()+ "\n"
+                "电话：" + JS007Json.getInputDianHua() + "\n" +
+                        "传真：" + JS007Json.getInputChuanZhen() + "\n" +
+                        "地址： " + JS007Json.getInputDiZhi() + "\n" +
+                        "邮编： " + JS007Json.getInputYouBian() + "\n" +
+                        "联系人： " + JS007Json.getInputLianXiRen() + "\n" +
+                        "E-mail: " + JS007Json.getInputEmail() + "\n"
                 , normalxiao4song, Element.ALIGN_LEFT, 24, 2, 20f, paddings3, borderWidth));
         reportTable.addCell(ItextUtils.createCell_Leading(
                 "单位地址：南京市栖霞区仙林大道163号\n" +
@@ -290,12 +294,252 @@ public class DocServiceJS007 {
                         "网址： http://keysoftlab.nju.edu.cn \n" +
                         "E-mail: keysoftlab@nju.edu.cn\n"
                 , normalxiao4song, Element.ALIGN_LEFT, 24, 2, 20f, paddings3, borderWidth));
-
-
         document.add(reportTable);
         document.newPage();
 
+        Paragraph CeShiHuanJing = new Paragraph("一、测试环境", bold4song);
+        CeShiHuanJing.setSpacingBefore(40f); // 设置段落上空白
+        CeShiHuanJing.setSpacingAfter(20f); // 设置段落下空白
+        CeShiHuanJing.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CeShiHuanJing);
 
+        Paragraph YingJianHuanJing = new Paragraph("硬件环境", boldxiao4song);
+        YingJianHuanJing.setSpacingAfter(20f); // 设置段落下空白
+        YingJianHuanJing.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(YingJianHuanJing);
+
+        Paragraph YingJianHuanJingContent = new Paragraph("    本次测试中使用到的硬件环境如下：", normalxiao4song);
+        YingJianHuanJingContent.setSpacingAfter(10f); // 设置段落下空白
+        YingJianHuanJingContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(YingJianHuanJingContent);
+
+        PdfPTable YingJianTable = new PdfPTable(48);
+        YingJianTable.setWidthPercentage(100);
+
+        // 第一行
+        YingJianTable.addCell(ItextUtils.createGreyCell_Height("硬件类别", bold5song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
+        YingJianTable.addCell(ItextUtils.createGreyCell_Height("硬件名称", bold5song, Element.ALIGN_CENTER, 10, 2, 25f, paddings3, borderWidth));
+        YingJianTable.addCell(ItextUtils.createGreyCell_Height("配置", bold5song, Element.ALIGN_CENTER, 23, 2, 25f, paddings3, borderWidth));
+        YingJianTable.addCell(ItextUtils.createGreyCell_Height("数量", bold5song, Element.ALIGN_CENTER, 7, 2, 25f, paddings3, borderWidth));
+
+        YingJianTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputYingJianLeiBie(), normal5song, Element.ALIGN_CENTER, 8, 2, 60f, paddings3, borderWidth));
+        YingJianTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputYingJianMingCheng(), normal5song, Element.ALIGN_CENTER, 10, 2, 60f, paddings3, borderWidth));
+        YingJianTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputYingJianPeiZhi(), normal5song, Element.ALIGN_CENTER, 23, 2, 60f, paddings3, borderWidth));
+        YingJianTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputYingJianShuLiang(), normal5song, Element.ALIGN_CENTER, 7, 2, 60f, paddings3, borderWidth));
+
+        document.add(YingJianTable);
+
+        Paragraph RuanJianHuanJing = new Paragraph("软件环境", boldxiao4song);
+        RuanJianHuanJing.setSpacingBefore(10f); // 设置段落上空白
+        RuanJianHuanJing.setSpacingAfter(20f); // 设置段落下空白
+        RuanJianHuanJing.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(RuanJianHuanJing);
+
+        Paragraph RuanJianHuanJingContent = new Paragraph("    本次测试中使用到的软件环境如下：", normalxiao4song);
+        RuanJianHuanJingContent.setSpacingAfter(10f); // 设置段落下空白
+        RuanJianHuanJingContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(RuanJianHuanJingContent);
+
+        PdfPTable RuanJianTable = new PdfPTable(48);
+        RuanJianTable.setWidthPercentage(100);
+
+        // 第一行
+        RuanJianTable.addCell(ItextUtils.createGreyCell_Height("软件类别", bold5song, Element.ALIGN_CENTER, 10, 2, 25f, paddings3, borderWidth));
+        RuanJianTable.addCell(ItextUtils.createGreyCell_Height("软件名称", bold5song, Element.ALIGN_CENTER, 26, 2, 25f, paddings3, borderWidth));
+        RuanJianTable.addCell(ItextUtils.createGreyCell_Height("版本", bold5song, Element.ALIGN_CENTER, 12, 2, 25f, paddings3, borderWidth));
+
+        RuanJianTable.addCell(ItextUtils.createCell_Height("操作系统", normal5song, Element.ALIGN_CENTER, 10, 2, 26f, paddings3, borderWidth));
+        RuanJianTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputCaoZuoXiTongMingCheng(), normal5song, Element.ALIGN_CENTER, 26, 2, 26f, paddings3, borderWidth));
+        RuanJianTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputCaoZuoXiTongBanBen(), normal5song, Element.ALIGN_CENTER, 12, 2, 26f, paddings3, borderWidth));
+
+        List<SoftwareEnvironment> RuanJianHuanJingList = JS007Json.getInputRuanJianHuanJing();
+        for (SoftwareEnvironment softwareEnvironment : RuanJianHuanJingList) {
+            RuanJianTable.addCell(ItextUtils.createCell_Height(softwareEnvironment.getSoftwareType(), normal5song, Element.ALIGN_CENTER, 10, 2, 26f, paddings3, borderWidth));
+            RuanJianTable.addCell(ItextUtils.createCell_Height(softwareEnvironment.getSoftwareName(), normal5song, Element.ALIGN_CENTER, 26, 2, 26f, paddings3, borderWidth));
+            RuanJianTable.addCell(ItextUtils.createCell_Height(softwareEnvironment.getSoftwareVersion(), normal5song, Element.ALIGN_CENTER, 12, 2, 26f, paddings3, borderWidth));
+        }
+        document.add(RuanJianTable);
+
+        Paragraph WangLuoHuanJing = new Paragraph("网络环境", boldxiao4song);
+        WangLuoHuanJing.setSpacingBefore(10f); // 设置段落上空白
+        WangLuoHuanJing.setSpacingAfter(20f); // 设置段落下空白
+        WangLuoHuanJing.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(WangLuoHuanJing);
+
+        Paragraph WangLuoHuanJingContent = new Paragraph("    " + JS007Json.getInputWangLuoHuanJing(), normalxiao4song);
+        WangLuoHuanJingContent.setSpacingAfter(10f); // 设置段落下空白
+        WangLuoHuanJingContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(WangLuoHuanJingContent);
+
+        Paragraph CeShiYiJuCanKaoZiLiao = new Paragraph("二、测试依据和参考资料", bold4song);
+        CeShiYiJuCanKaoZiLiao.setSpacingBefore(10f); // 设置段落上空白
+        CeShiYiJuCanKaoZiLiao.setSpacingAfter(20f); // 设置段落下空白
+        CeShiYiJuCanKaoZiLiao.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CeShiYiJuCanKaoZiLiao);
+
+        Paragraph CeShiYiJu = new Paragraph("测试依据", boldxiao4song);
+        CeShiYiJu.setSpacingAfter(20f); // 设置段落下空白
+        CeShiYiJu.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CeShiYiJu);
+
+        List<String> CeShiYiJuList = JS007Json.getInputTestBases();
+        for (String testBase : CeShiYiJuList) {
+            Paragraph testBaseContent = new Paragraph("■ " + testBase, normalxiao4song);
+            testBaseContent.setSpacingAfter(10f); // 设置段落下空白
+            testBaseContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+            document.add(testBaseContent);
+        }
+
+        Paragraph CanKaoZiLiao = new Paragraph("参考资料", boldxiao4song);
+        CanKaoZiLiao.setSpacingAfter(20f); // 设置段落下空白
+        CanKaoZiLiao.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CanKaoZiLiao);
+
+        List<String> CanKaoZiLiaoList = JS007Json.getInputCanKaoZiLiao();
+        for (String canKaoZiLiao : CanKaoZiLiaoList) {
+            Paragraph canKaoZiLiaoContent = new Paragraph("■ " + canKaoZiLiao, normalxiao4song);
+            canKaoZiLiaoContent.setSpacingAfter(10f); // 设置段落下空白
+            canKaoZiLiaoContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+            document.add(canKaoZiLiaoContent);
+        }
+
+        Paragraph CeShiNeiRong = new Paragraph("三、测试内容", bold4song);
+        CeShiNeiRong.setSpacingBefore(10f); // 设置段落上空白
+        CeShiNeiRong.setSpacingAfter(20f); // 设置段落下空白
+        CeShiNeiRong.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CeShiNeiRong);
+
+        Paragraph GongNengXingCeShi = new Paragraph("功能性测试", boldxiao4song);
+        GongNengXingCeShi.setSpacingAfter(10f); // 设置段落下空白
+        GongNengXingCeShi.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(GongNengXingCeShi);
+
+        PdfPTable GongNengXingCeShiTable = new PdfPTable(48);
+        GongNengXingCeShiTable.setWidthPercentage(100);
+        // 第一行
+        GongNengXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("功能模块", bold5song, Element.ALIGN_CENTER, 12, 2, 25f, paddings3, borderWidth));
+        GongNengXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("功能要求", bold5song, Element.ALIGN_CENTER, 28, 2, 25f, paddings3, borderWidth));
+        GongNengXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试结果", bold5song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
+
+        List<TestContent> GongNengXingCeShiList = JS007Json.getInputGongNengXingCeShi();
+        for (TestContent testContent : GongNengXingCeShiList) {
+            GongNengXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getContent(), normal5song, Element.ALIGN_LEFT, 12, 2, 25f, paddings3, borderWidth));
+            GongNengXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getDescription(), normal5song, Element.ALIGN_LEFT, 28, 2, 25f, paddings3, borderWidth));
+            GongNengXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getResult(), normal5song, Element.ALIGN_LEFT, 8, 2, 25f, paddings3, borderWidth));
+        }
+        document.add(GongNengXingCeShiTable);
+
+        Paragraph XiaoLvCeShi = new Paragraph("效率测试", boldxiao4song);
+        XiaoLvCeShi.setSpacingAfter(10f); // 设置段落下空白
+        XiaoLvCeShi.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(XiaoLvCeShi);
+
+        PdfPTable XiaoLvCeShiTable = new PdfPTable(48);
+        XiaoLvCeShiTable.setWidthPercentage(100);
+        // 第一行
+        XiaoLvCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试特性", bold5song, Element.ALIGN_CENTER, 12, 2, 25f, paddings3, borderWidth));
+        XiaoLvCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试说明", bold5song, Element.ALIGN_CENTER, 28, 2, 25f, paddings3, borderWidth));
+        XiaoLvCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试结果", bold5song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
+
+        List<TestContent> XiaoLvCeShiList = JS007Json.getInputXiaoLvCeShi();
+        for (TestContent testContent : XiaoLvCeShiList) {
+            XiaoLvCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getContent(), normal5song, Element.ALIGN_LEFT, 12, 2, 25f, paddings3, borderWidth));
+            XiaoLvCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getDescription(), normal5song, Element.ALIGN_LEFT, 28, 2, 25f, paddings3, borderWidth));
+            XiaoLvCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getResult(), normal5song, Element.ALIGN_LEFT, 8, 2, 25f, paddings3, borderWidth));
+        }
+        document.add(XiaoLvCeShiTable);
+
+        Paragraph KeYiZhiXingCeShi = new Paragraph("可移植性测试", boldxiao4song);
+        KeYiZhiXingCeShi.setSpacingAfter(10f); // 设置段落下空白
+        KeYiZhiXingCeShi.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(KeYiZhiXingCeShi);
+
+        PdfPTable KeYiZhiXingCeShiTable = new PdfPTable(48);
+        KeYiZhiXingCeShiTable.setWidthPercentage(100);
+        // 第一行
+        KeYiZhiXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试特性", bold5song, Element.ALIGN_CENTER, 12, 2, 25f, paddings3, borderWidth));
+        KeYiZhiXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试说明", bold5song, Element.ALIGN_CENTER, 28, 2, 25f, paddings3, borderWidth));
+        KeYiZhiXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试结果", bold5song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
+
+        List<TestContent> KeYiZhiXingCeShiList = JS007Json.getInputKeYiZhiXingCeShi();
+        for (TestContent testContent : KeYiZhiXingCeShiList) {
+            KeYiZhiXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getContent(), normal5song, Element.ALIGN_LEFT, 12, 2, 25f, paddings3, borderWidth));
+            KeYiZhiXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getDescription(), normal5song, Element.ALIGN_LEFT, 28, 2, 25f, paddings3, borderWidth));
+            KeYiZhiXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getResult(), normal5song, Element.ALIGN_LEFT, 8, 2, 25f, paddings3, borderWidth));
+        }
+        document.add(KeYiZhiXingCeShiTable);
+
+        Paragraph YiYongXingCeShi = new Paragraph("易用性测试", boldxiao4song);
+        YiYongXingCeShi.setSpacingAfter(10f); // 设置段落下空白
+        YiYongXingCeShi.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(YiYongXingCeShi);
+
+        PdfPTable YiYongXingCeShiTable = new PdfPTable(48);
+        YiYongXingCeShiTable.setWidthPercentage(100);
+        // 第一行
+        YiYongXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试特性", bold5song, Element.ALIGN_CENTER, 12, 2, 25f, paddings3, borderWidth));
+        YiYongXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试说明", bold5song, Element.ALIGN_CENTER, 28, 2, 25f, paddings3, borderWidth));
+        YiYongXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试结果", bold5song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
+
+        List<TestContent> YiYongXingCeShiList = JS007Json.getInputYiYongXingCeShi();
+        for (TestContent testContent : YiYongXingCeShiList) {
+            YiYongXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getContent(), normal5song, Element.ALIGN_LEFT, 12, 2, 25f, paddings3, borderWidth));
+            YiYongXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getDescription(), normal5song, Element.ALIGN_LEFT, 28, 2, 25f, paddings3, borderWidth));
+            YiYongXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getResult(), normal5song, Element.ALIGN_LEFT, 8, 2, 25f, paddings3, borderWidth));
+        }
+        document.add(YiYongXingCeShiTable);
+
+        Paragraph KeKaoXingCeShi = new Paragraph("可靠性测试", boldxiao4song);
+        KeKaoXingCeShi.setSpacingAfter(10f); // 设置段落下空白
+        KeKaoXingCeShi.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(KeKaoXingCeShi);
+
+        PdfPTable KeKaoXingCeShiTable = new PdfPTable(48);
+        KeKaoXingCeShiTable.setWidthPercentage(100);
+        // 第一行
+        KeKaoXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试特性", bold5song, Element.ALIGN_CENTER, 12, 2, 25f, paddings3, borderWidth));
+        KeKaoXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试说明", bold5song, Element.ALIGN_CENTER, 28, 2, 25f, paddings3, borderWidth));
+        KeKaoXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试结果", bold5song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
+
+        List<TestContent> KeKaoXingCeShiList = JS007Json.getInputKeKaoXingCeShi();
+        for (TestContent testContent : KeKaoXingCeShiList) {
+            KeKaoXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getContent(), normal5song, Element.ALIGN_LEFT, 12, 2, 25f, paddings3, borderWidth));
+            KeKaoXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getDescription(), normal5song, Element.ALIGN_LEFT, 28, 2, 25f, paddings3, borderWidth));
+            KeKaoXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getResult(), normal5song, Element.ALIGN_LEFT, 8, 2, 25f, paddings3, borderWidth));
+        }
+        document.add(KeKaoXingCeShiTable);
+
+        Paragraph KeWeiHuXingCeShi = new Paragraph("可维护性测试", boldxiao4song);
+        KeWeiHuXingCeShi.setSpacingAfter(10f); // 设置段落下空白
+        KeWeiHuXingCeShi.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(KeWeiHuXingCeShi);
+
+        PdfPTable KeWeiHuXingCeShiTable = new PdfPTable(48);
+        KeWeiHuXingCeShiTable.setWidthPercentage(100);
+        // 第一行
+        KeWeiHuXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试特性", bold5song, Element.ALIGN_CENTER, 12, 2, 25f, paddings3, borderWidth));
+        KeWeiHuXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试说明", bold5song, Element.ALIGN_CENTER, 28, 2, 25f, paddings3, borderWidth));
+        KeWeiHuXingCeShiTable.addCell(ItextUtils.createGreyCell_Height("测试结果", bold5song, Element.ALIGN_CENTER, 8, 2, 25f, paddings3, borderWidth));
+
+        List<TestContent> KeWeiHuXingCeShiList = JS007Json.getInputKeWeiHuXingCeShi();
+        for (TestContent testContent : KeWeiHuXingCeShiList) {
+            KeWeiHuXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getContent(), normal5song, Element.ALIGN_LEFT, 12, 2, 25f, paddings3, borderWidth));
+            KeWeiHuXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getDescription(), normal5song, Element.ALIGN_LEFT, 28, 2, 25f, paddings3, borderWidth));
+            KeWeiHuXingCeShiTable.addCell(ItextUtils.createCell_Height(testContent.getResult(), normal5song, Element.ALIGN_LEFT, 8, 2, 25f, paddings3, borderWidth));
+        }
+        document.add(KeWeiHuXingCeShiTable);
+
+        Paragraph CeShiZhiXingJiLu = new Paragraph("四、测试执行记录", bold4song);
+        CeShiZhiXingJiLu.setSpacingBefore(10f); // 设置段落上空白
+        CeShiZhiXingJiLu.setSpacingAfter(20f); // 设置段落下空白
+        CeShiZhiXingJiLu.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(CeShiZhiXingJiLu);
+
+        Paragraph KongBai = new Paragraph("以 下 空 白", normal4song);
+        KongBai.setSpacingBefore(10f); // 设置段落上空白
+        KongBai.setSpacingAfter(20f); // 设置段落下空白
+        KongBai.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
+        document.add(KongBai);
     }
 
 }
