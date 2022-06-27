@@ -80,6 +80,16 @@ spring:
           filters:
             - AddIdentity
 
+        - id: sample-service
+          uri: lb://onlinebiz-sample
+          predicates:
+            - name: Path
+              args:
+                patterns:
+                  - /api/sample/**
+          filters:
+            - AddIdentity
+
 
 eureka:
   instance:

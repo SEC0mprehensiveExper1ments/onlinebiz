@@ -79,10 +79,7 @@ public class DocServiceJS005 {
             generatePageOne(document);
             // 5.关闭文档
             document.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "unable to generate a pdf";
-        }
+        } catch (Exception e) { e.printStackTrace(); return "unable to generate a pdf"; }
         // 上传pdf
         try {
             if(ossProvider.upload(
@@ -90,15 +87,8 @@ public class DocServiceJS005 {
                 System.out.println(pdfPath);
                 deleteOutFile(pdfPath);
                 return "https://oss.syh1en.asia/doc/JS005_" + contractId + ".pdf";
-            } else {
-                deleteOutFile(pdfPath);
-                return "upload failed";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            deleteOutFile(pdfPath);
-            return "minio error";
-        }
+            } else { deleteOutFile(pdfPath); return "upload failed"; }
+        } catch (Exception e) { e.printStackTrace(); deleteOutFile(pdfPath); return "minio error"; }
     }
 
     /**
@@ -109,12 +99,8 @@ public class DocServiceJS005 {
             File file = new File(pdfPath);
             if (file.delete()) {
                 System.out.println(file.getName() + " is deleted!");
-            } else {
-                System.out.println("Delete" + file.getName() + "is failed.");
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+            } else { System.out.println("Delete" + file.getName() + "is failed."); }
+        } catch(Exception e) { e.printStackTrace(); }
     }
 
     private Font titlefont;
@@ -129,9 +115,7 @@ public class DocServiceJS005 {
             BaseFont bfSimSun = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont = new Font(bfSimSun, 15.5f, Font.BOLD);
             textfont = new Font(bfSimSun, 12f, Font.NORMAL);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
 
 
         // 标题

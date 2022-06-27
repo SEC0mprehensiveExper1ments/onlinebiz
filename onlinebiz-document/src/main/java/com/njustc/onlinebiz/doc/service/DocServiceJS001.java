@@ -79,41 +79,25 @@ public class DocServiceJS001 {
             generatePageOne(document);
             // 5.关闭文档
             document.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "unable to generate a pdf";
-        }
+        } catch (Exception e) { e.printStackTrace(); return "unable to generate a pdf"; }
         // 上传pdf
         try {
             if(ossProvider.upload(
                     "doc", "JS001_out.pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
                 deleteOutFile(pdfPath);
                 return "https://oss.syh1en.asia/doc/JS001_out.pdf";
-            } else {
-                deleteOutFile(pdfPath);
-                return "upload failed";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            deleteOutFile(pdfPath);
-            return "minio error";
-        }
+            } else { deleteOutFile(pdfPath); return "upload failed"; }
+        } catch (Exception e) { e.printStackTrace(); deleteOutFile(pdfPath); return "minio error"; }
     }
 
-    /**
-     * 删除中间的out文件
-     * */
+    // 删除中间的out文件
     private void deleteOutFile(String pdfPath) {
         try {
             File file = new File(pdfPath);
             if (file.delete()) {
                 System.out.println(file.getName() + " is deleted!");
-            } else {
-                System.out.println("Delete" + file.getName() + "is failed.");
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+            } else { System.out.println("Delete" + file.getName() + "is failed."); }
+        } catch(Exception e) { e.printStackTrace(); }
     }
 
     public void generatePageOne(Document document) throws Exception {
@@ -123,10 +107,7 @@ public class DocServiceJS001 {
             titlefont2 = new Font(bfChinese, 21, Font.NORMAL);
             keyfont = new Font(bfChinese, 12.5f, Font.BOLD);
             textfont = new Font(bfChinese, 12f, Font.NORMAL);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        } catch (Exception e) { e.printStackTrace(); }
         // 标题
         Paragraph title = new Paragraph("软件项目委托测试提交材料", titlefont2);
         title.setAlignment(1); // 设置文字居中 0靠左   1，居中     2，靠右

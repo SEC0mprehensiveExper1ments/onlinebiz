@@ -14,6 +14,6 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Build with Maven
-        run: mvn package
+        run: sudo mvn package
       - name: Run tests
-        run: mvn test
+        run: sudo mvn test

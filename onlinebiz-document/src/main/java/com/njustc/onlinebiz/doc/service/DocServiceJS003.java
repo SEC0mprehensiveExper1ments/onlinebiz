@@ -82,25 +82,15 @@ public class DocServiceJS003 {
       generatePageOne(document);
       // 5.关闭文档
       document.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-      return "unable to generate a pdf";
-    }
+    } catch (Exception e) { e.printStackTrace(); return "unable to generate a pdf"; }
     // 上传pdf
     try {
       if(ossProvider.upload(
               "doc", "JS003_" + entrustId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
         deleteOutFile(pdfPath);
         return "https://oss.syh1en.asia/doc/JS003_" + entrustId + ".pdf";
-      } else {
-        deleteOutFile(pdfPath);
-        return "upload failed";
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-      deleteOutFile(pdfPath);
-      return "minio error";
-    }
+      } else { deleteOutFile(pdfPath); return "upload failed"; }
+    } catch (Exception e) { e.printStackTrace(); deleteOutFile(pdfPath); return "minio error"; }
   }
 
   /**
@@ -111,12 +101,8 @@ public class DocServiceJS003 {
       File file = new File(pdfPath);
       if (file.delete()) {
         System.out.println(file.getName() + " is deleted!");
-      } else {
-        System.out.println("Delete" + file.getName() + "is failed.");
-      }
-    } catch(Exception e) {
-      e.printStackTrace();
-    }
+      } else { System.out.println("Delete" + file.getName() + "is failed."); }
+    } catch(Exception e) { e.printStackTrace(); }
   }
 
   private Font titlefont1;
@@ -135,9 +121,7 @@ public class DocServiceJS003 {
       titlefont3 = new Font(bfChinese, 13.5f, Font.NORMAL);
       keyfont = new Font(bfChinese, 11.5f, Font.BOLD);
       textfont = new Font(bfChinese, 11.5f, Font.NORMAL);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    } catch (Exception e) { e.printStackTrace(); }
 
     // 标题
     Paragraph title = new Paragraph("委托测试软件功能列表", titlefont1);

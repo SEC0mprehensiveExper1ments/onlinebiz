@@ -43,10 +43,7 @@ public class OSSProvider {
       // 上传文件
       minioClient.putObject(PutObjectArgs.builder().bucket(bucketName).object(objectName).stream(inputStream, data.length, -1).contentType(contentType).build());
       return true;
-    } catch (Exception e) {
-        e.printStackTrace();
-        return false;
-    }
+    } catch (Exception e) { e.printStackTrace(); return false; }
   }
 
 }

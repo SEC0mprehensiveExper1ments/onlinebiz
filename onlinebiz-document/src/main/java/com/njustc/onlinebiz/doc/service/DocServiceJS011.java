@@ -86,25 +86,15 @@ public class DocServiceJS011 {
             generatePageOne(document);
             // 5.关闭文档
             document.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "unable to generate a pdf";
-        }
+        } catch (Exception e) { e.printStackTrace(); return "unable to generate a pdf"; }
         // 上传pdf
         try {
             if(ossProvider.upload(
                     "doc", "JS011_" + testIssueId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
                 deleteOutFile(pdfPath);
                 return "https://oss.syh1en.asia/doc/JS011_" + testIssueId + ".pdf";
-            } else {
-                deleteOutFile(pdfPath);
-                return "upload failed";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            deleteOutFile(pdfPath);
-            return "minio error";
-        }
+            } else { deleteOutFile(pdfPath); return "upload failed"; }
+        } catch (Exception e) { e.printStackTrace(); deleteOutFile(pdfPath); return "minio error"; }
     }
 
     /**
@@ -115,12 +105,8 @@ public class DocServiceJS011 {
             File file = new File(pdfPath);
             if (file.delete()) {
                 System.out.println(file.getName() + " is deleted!");
-            } else {
-                System.out.println("Delete" + file.getName() + "is failed.");
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+            } else { System.out.println("Delete" + file.getName() + "is failed."); }
+        } catch(Exception e) { e.printStackTrace(); }
     }
 
 
@@ -130,9 +116,7 @@ public class DocServiceJS011 {
             BaseFont bfChinese = BaseFont.createFont(DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             titlefont1 = new Font(bfChinese, 20, Font.NORMAL);
             titlefont2 = new Font(bfChinese, 11f, Font.BOLD);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
 
         // 标题
         Paragraph title = new Paragraph("软件测试问题清单(项目编号)", titlefont1);
