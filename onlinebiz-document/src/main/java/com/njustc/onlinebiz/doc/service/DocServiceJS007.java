@@ -59,7 +59,7 @@ public class DocServiceJS007 {
             String header = "报告编号："+JS007Json.getInputBaoGaoBianHao();
             String[] footer = new String[]{"南京大学计算机软件新技术国家重点实验室      "+header+"         第 ", " 页，共 ", " 页"};
             int headerToPage = 0;
-            int footerFromPage = 3;
+            int footerFromPage = 1;
             boolean isHaderLine = false;
             boolean isFooterLine = false;
             float[] headerLoc = new float[]{document.right() - 5, document.top() + 15};
@@ -119,6 +119,7 @@ public class DocServiceJS007 {
     private static Font bold3song;
     private static Font boldxiao1song;
     private static Font normalxiao4song;
+    private static Font boldxiao4song;
 
     private static Font normal5song;
     private static Font bold5song;
@@ -138,6 +139,7 @@ public class DocServiceJS007 {
             bold3song = new Font(bfChinese, 16f, Font.BOLD);
             boldxiao1song = new Font(bfChinese, 24f, Font.BOLD);
             normalxiao4song = new Font(bfChinese, 12f, Font.NORMAL);
+            boldxiao4song = new Font(bfChinese, 12f, Font.BOLD);
 
             normal5song = new Font(bfChinese, 10.5f, Font.NORMAL);
             bold5song = new Font(bfChinese, 10.5f, Font.BOLD);
@@ -240,16 +242,60 @@ public class DocServiceJS007 {
         reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputYangPinZhuangTai(), normalxiao4song, Element.ALIGN_CENTER, 40, 2, 25f, paddings3, borderWidth));
 
         reportTable.addCell(ItextUtils.createCell_Height("测试依据", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 45f, paddings3, borderWidth));
-        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputCeShiYiJu(), normalxiao4song, Element.ALIGN_CENTER, 40, 2, 40f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputCeShiYiJu(), normalxiao4song, Element.ALIGN_LEFT, 40, 2, 40f, paddings3, borderWidth));
 
-        reportTable.addCell(ItextUtils.createCell_Height("样品清单", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 100f, paddings3, borderWidth));
-        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputYangPinQingDan(), normalxiao4song, Element.ALIGN_CENTER, 40, 2, 100f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height("样品清单", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 120f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputYangPinQingDan(), normalxiao4song, Element.ALIGN_LEFT, 40, 2, 100f, paddings3, borderWidth));
 
         reportTable.addCell(ItextUtils.createCell_Height("测试结论", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 60f, paddings3, borderWidth));
-        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputCeShiJieLun(), normalxiao4song, Element.ALIGN_CENTER, 40, 2, 60f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputCeShiJieLun(), normalxiao4song, Element.ALIGN_LEFT, 40, 2, 60f, paddings3, borderWidth));
+
+        reportTable.addCell(ItextUtils.createCell_Height("主测人", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 30f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputZhuCeRen(), normalxiao4song, Element.ALIGN_LEFT, 16, 2, 30f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height("日期", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 30f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(
+                JS007Json.getInputZhuCeRiQiNian()+" 年 "+JS007Json.getInputZhuCeRiQiYue()+" 月 "+JS007Json.getInputZhuCeRiQiRi()+" 日"
+                , normalxiao4song, Element.ALIGN_CENTER, 16, 2, 30f, paddings3, borderWidth));
+
+        reportTable.addCell(ItextUtils.createCell_Height("审核人", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 30f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputZhuCeRen(), normalxiao4song, Element.ALIGN_LEFT, 16, 2, 30f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height("日期", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 30f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(
+                JS007Json.getInputShenHeRiQiNian()+" 年 "+JS007Json.getInputShenHeRiQiYue()+" 月 "+JS007Json.getInputShenHeRiQiRi()+" 日"
+                , normalxiao4song, Element.ALIGN_CENTER, 16, 2, 30f, paddings3, borderWidth));
+
+        reportTable.addCell(ItextUtils.createCell_Height("批准人", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 30f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(JS007Json.getInputPiZhunRen(), normalxiao4song, Element.ALIGN_LEFT, 16, 2, 30f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height("日期", normalxiao4song, Element.ALIGN_CENTER, 8, 2, 30f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height(
+                JS007Json.getInputPiZhunRiQiNian()+" 年 "+JS007Json.getInputPiZhunRiQiYue()+" 月 "+JS007Json.getInputPiZhunRiQiRi()+" 日"
+                , normalxiao4song, Element.ALIGN_CENTER, 16, 2, 30f, paddings3, borderWidth));
+
+        reportTable.addCell(ItextUtils.createCell_Height("委托单位联系方式", boldxiao4song, Element.ALIGN_LEFT, 24, 2, 25f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Height("测试单位联系方式", boldxiao4song, Element.ALIGN_LEFT, 24, 2, 25f, paddings3, borderWidth));
+
+        reportTable.addCell(ItextUtils.createCell_Leading(
+                "电话："+JS007Json.getInputDianHua()+ "\n" +
+                        "传真："+ JS007Json.getInputChuanZhen()+ "\n" +
+                        "地址： "+ JS007Json.getInputDiZhi()+ "\n" +
+                        "邮编： " + JS007Json.getInputYouBian()+ "\n" +
+                        "联系人： " + JS007Json.getInputLianXiRen()+ "\n" +
+                        "E-mail: "+ JS007Json.getInputEmail()+ "\n"
+                , normalxiao4song, Element.ALIGN_LEFT, 24, 2, 20f, paddings3, borderWidth));
+        reportTable.addCell(ItextUtils.createCell_Leading(
+                "单位地址：南京市栖霞区仙林大道163号\n" +
+                        "邮政编码：210023\n" +
+                        "电话： 86-25-89683467\n" +
+                        "传真： 86-25-89686596\n" +
+                        "网址： http://keysoftlab.nju.edu.cn \n" +
+                        "E-mail: keysoftlab@nju.edu.cn\n"
+                , normalxiao4song, Element.ALIGN_LEFT, 24, 2, 20f, paddings3, borderWidth));
+
 
         document.add(reportTable);
         document.newPage();
+
+
     }
 
 }
