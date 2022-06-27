@@ -19,5 +19,5 @@ jobs:
         run: sudo mvn test
       - uses: actions/upload-artifact@v3
         with:
-          name: Report coverage of onlinebiz-test
-          path: /**/site/
+          name: onlinebiz-test
+          path: ./**/site/
