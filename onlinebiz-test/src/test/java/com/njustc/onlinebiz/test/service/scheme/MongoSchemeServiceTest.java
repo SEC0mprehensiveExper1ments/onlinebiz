@@ -57,7 +57,7 @@ class MongoSchemeServiceTest {
         when(schemeDAO.updateContent(any(), any())).thenReturn(false);
 
         //开始测试
-        //在SCHEME_UNFILLED阶段（合法阶段）
+        //在SCHEME_UNFILLED阶段尝试修改测试方案（合法阶段）
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_UNFILLED, ""));
         when(projectDAO.findProjectById(any())).thenReturn((project));
         //由客户（非法人员）更新测试方案
@@ -111,7 +111,7 @@ class MongoSchemeServiceTest {
                 SchemeNotFoundException.class,
                 () -> schemeservice.updateScheme("schemeId", schemecontent, 2000L, Role.TESTING_SUPERVISOR));
 
-        //在SCHEME_AUDITING_DENIED阶段（合法阶段）
+        //在SCHEME_AUDITING_DENIED阶段尝试修改测试方案（合法阶段）
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_AUDITING_DENIED, ""));
         when(projectDAO.findProjectById(any())).thenReturn((project));
         when(schemeDAO.findSchemeById(any())).thenReturn(scheme);
