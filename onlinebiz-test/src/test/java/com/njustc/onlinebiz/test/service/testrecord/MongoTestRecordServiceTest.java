@@ -1,6 +1,8 @@
 package com.njustc.onlinebiz.test.service.testrecord;
 
 import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
+import com.njustc.onlinebiz.test.exception.testrecord.TestRecordDAOFailureException;
+import com.njustc.onlinebiz.test.exception.testrecord.TestRecordDAOFailureException;
 import com.njustc.onlinebiz.test.exception.testrecord.TestRecordInvalidStageException;
 import com.njustc.onlinebiz.test.exception.testrecord.TestRecordNotFoundException;
 import com.njustc.onlinebiz.test.exception.testrecord.TestRecordPermissionDeniedException;
@@ -239,6 +241,15 @@ class MongoTestRecordServiceTest {
                 testrecordservice.updateTestRecordList("TestRecordListId", null, 2001L, Role.TESTER));
         Assertions.assertDoesNotThrow(() ->
                 testrecordservice.updateTestRecordList("TestRecordListId", null, 2000L, Role.TESTING_SUPERVISOR));
+        when(testrecordDAO.updateContent(any(), any())).thenReturn(false);
+        Assertions.assertThrows(
+                TestRecordDAOFailureException.class,
+                () -> testrecordservice.updateTestRecordList("TestIssueListId", null, 2001L, Role.TESTER));
+        when(testrecordDAO.updateContent(any(), any())).thenReturn(false);
+        Assertions.assertThrows(
+                TestRecordDAOFailureException.class,
+                () -> testrecordservice.updateTestRecordList("TestIssueListId", null, 2000L, Role.TESTING_SUPERVISOR));
+        when(testrecordDAO.updateContent(any(), any())).thenReturn(true);
 
         //尝试修改不存在的测试记录表
         when(testrecordDAO.findTestRecordListById(any())).thenReturn(null);
@@ -284,6 +295,15 @@ class MongoTestRecordServiceTest {
                 testrecordservice.updateTestRecordList("TestRecordListId", null, 2001L, Role.TESTER));
         Assertions.assertDoesNotThrow(() ->
                 testrecordservice.updateTestRecordList("TestRecordListId", null, 2000L, Role.TESTING_SUPERVISOR));
+        when(testrecordDAO.updateContent(any(), any())).thenReturn(false);
+        Assertions.assertThrows(
+                TestRecordDAOFailureException.class,
+                () -> testrecordservice.updateTestRecordList("TestIssueListId", null, 2001L, Role.TESTER));
+        when(testrecordDAO.updateContent(any(), any())).thenReturn(false);
+        Assertions.assertThrows(
+                TestRecordDAOFailureException.class,
+                () -> testrecordservice.updateTestRecordList("TestIssueListId", null, 2000L, Role.TESTING_SUPERVISOR));
+        when(testrecordDAO.updateContent(any(), any())).thenReturn(true);
 
         //尝试修改不存在的测试记录表
         when(testrecordDAO.findTestRecordListById(any())).thenReturn(null);
@@ -346,10 +366,15 @@ class MongoTestRecordServiceTest {
                 TestRecordPermissionDeniedException.class,
                 () -> testrecordservice.removeTestRecordList("TestRecordListId", 3000L, Role.QA_SUPERVISOR));
 
-        //由超级管理员ADMIN（合法人员）删除测试记录表
+        //由超级管理员admin（合法人员）删除测试用表
         when(testrecordDAO.deleteTestRecordList(any())).thenReturn(true);
         Assertions.assertDoesNotThrow(() ->
                 testrecordservice.removeTestRecordList("TestRecordListId", 0L, Role.ADMIN));
+        when(testrecordDAO.deleteTestRecordList(any())).thenReturn(false);
+        Assertions.assertThrows(
+                TestRecordDAOFailureException.class,
+                () -> testrecordservice.removeTestRecordList("TestRecordListId", 0L, Role.ADMIN));
+        when(testrecordDAO.deleteTestRecordList(any())).thenReturn(true);
 
         //尝试删除不存在的测试记录表
         when(testrecordDAO.findTestRecordListById(any())).thenReturn(null);

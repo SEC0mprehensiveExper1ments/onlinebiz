@@ -6,6 +6,7 @@ import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
 import com.njustc.onlinebiz.common.model.test.project.ProjectStatus;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.testcase.TestcaseDAO;
+import com.njustc.onlinebiz.test.exception.testcase.TestcaseDAOFailureException;
 import com.njustc.onlinebiz.test.exception.testcase.TestcaseInvalidStageException;
 import com.njustc.onlinebiz.test.service.project.ProjectService;
 import org.junit.jupiter.api.Assertions;
@@ -251,7 +252,7 @@ class MongoTestcaseServiceTest {
         when(projectbaseinfo.getTesterId()).thenReturn(2001L);
         Assertions.assertThrows(
                 TestcasePermissionDeniedException.class,
-                () -> mongotestcaseservice.findTestcaseList("TestcaseListId", 2066L, Role.TESTER));
+                () -> mongotestcaseservice.updateTestcaseList("TestcaseListId", null, 2066L, Role.TESTER));
 
         //由指派的测试部人员/测试部主管（合法人员）修改测试用例
         when(testcaseDAO.findTestcaseListById(any())).thenReturn(testcase);
@@ -262,6 +263,15 @@ class MongoTestcaseServiceTest {
         when(testcaseDAO.updateContent(any(), any())).thenReturn(true);
         Assertions.assertDoesNotThrow(() ->
                 mongotestcaseservice.updateTestcaseList("TestcaseListId", null, 2000L, Role.TESTING_SUPERVISOR));
+        when(testcaseDAO.updateContent(any(), any())).thenReturn(false);
+        Assertions.assertThrows(
+                TestcaseDAOFailureException.class,
+                () -> mongotestcaseservice.updateTestcaseList("TestcaseListId", null, 2001L, Role.TESTER));
+        when(testcaseDAO.updateContent(any(), any())).thenReturn(false);
+        Assertions.assertThrows(
+                TestcaseDAOFailureException.class,
+                () -> mongotestcaseservice.updateTestcaseList("TestcaseListId", null, 2000L, Role.TESTING_SUPERVISOR));
+        when(testcaseDAO.updateContent(any(), any())).thenReturn(true);
 
         //尝试修改不存在的测试用例表
         when(testcaseDAO.findTestcaseListById(any())).thenReturn(null);
@@ -311,6 +321,15 @@ class MongoTestcaseServiceTest {
         when(testcaseDAO.updateContent(any(), any())).thenReturn(true);
         Assertions.assertDoesNotThrow(() ->
                 mongotestcaseservice.updateTestcaseList("TestcaseListId", null, 2000L, Role.TESTING_SUPERVISOR));
+        when(testcaseDAO.updateContent(any(), any())).thenReturn(false);
+        Assertions.assertThrows(
+                TestcaseDAOFailureException.class,
+                () -> mongotestcaseservice.updateTestcaseList("TestcaseListId", null, 2001L, Role.TESTER));
+        when(testcaseDAO.updateContent(any(), any())).thenReturn(false);
+        Assertions.assertThrows(
+                TestcaseDAOFailureException.class,
+                () -> mongotestcaseservice.updateTestcaseList("TestcaseListId", null, 2000L, Role.TESTING_SUPERVISOR));
+        when(testcaseDAO.updateContent(any(), any())).thenReturn(true);
 
         //尝试修改不存在的测试用例表
         when(testcaseDAO.findTestcaseListById(any())).thenReturn(null);
@@ -378,6 +397,11 @@ class MongoTestcaseServiceTest {
         when(testcaseDAO.deleteTestcaseList(any())).thenReturn(true);
         Assertions.assertDoesNotThrow(() ->
                 mongotestcaseservice.removeTestcaseList("TestcaseListId", 0L, Role.ADMIN));
+        when(testcaseDAO.deleteTestcaseList(any())).thenReturn(false);
+        Assertions.assertThrows(
+                TestcaseDAOFailureException.class,
+                () -> mongotestcaseservice.removeTestcaseList("TestcaseListId", 0L, Role.ADMIN));
+        when(testcaseDAO.deleteTestcaseList(any())).thenReturn(true);
 
         //尝试删除不存在的测试用例表
         when(testcaseDAO.findTestcaseListById(any())).thenReturn(null);
