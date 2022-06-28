@@ -204,7 +204,7 @@ class MongoReportReviewServiceTest {
     ProjectBaseInfo baseInfo = new ProjectBaseInfo();
     baseInfo.setQaId(3L);
     project.setProjectBaseInfo(baseInfo);
-    project.setStatus(new ProjectStatus(ProjectStage.REPORT_AUDITING, ""));
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_QA_PASSED, ""));
     when(projectDAO.findProjectById(any())).thenReturn(project);
     ReportReview reportReview = new ReportReview();
     reportReview.setId("123");
@@ -223,7 +223,7 @@ class MongoReportReviewServiceTest {
     ProjectBaseInfo baseInfo = new ProjectBaseInfo();
     baseInfo.setQaId(3L);
     project.setProjectBaseInfo(baseInfo);
-    project.setStatus(new ProjectStatus(ProjectStage.REPORT_AUDITING, ""));
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_QA_PASSED, ""));
     when(projectDAO.findProjectById(any())).thenReturn(project);
     ReportReview reportReview = new ReportReview();
     reportReview.setId("123");
@@ -242,7 +242,7 @@ class MongoReportReviewServiceTest {
     ProjectBaseInfo baseInfo = new ProjectBaseInfo();
     baseInfo.setQaId(3L);
     project.setProjectBaseInfo(baseInfo);
-    project.setStatus(new ProjectStatus(ProjectStage.REPORT_AUDITING, ""));
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_QA_PASSED, ""));
     when(projectDAO.findProjectById(any())).thenReturn(project);
     ReportReview reportReview = new ReportReview();
     reportReview.setId("123");
