@@ -282,10 +282,10 @@ public class RestRequestService {
     }
 
     public EntrustQuote getEntrustQuoteById(String entrustId, Long userId, Role userRole) {
+        // 调用entrust服务的getEntrust的接口
         String params = "?userId=" + userId + "&userRole=" + userRole;
-        //TODO: 调用test服务的getEntrustQuote接口
-        String url = TEST_SERVICE + "/api/review/report/" + entrustId;
-        ResponseEntity<EntrustQuote> responseEntity = restTemplate.getForEntity(url + params, EntrustQuote.class);
+        String url = ENTRUST_SERVICE + "/api/entrust/" + entrustId;
+        ResponseEntity<Entrust> responseEntity = restTemplate.getForEntity(url + params, Entrust.class);
         if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN || responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST) {
             throw new DownloadPermissionDeniedException("无权下载该文件");
         }
@@ -295,7 +295,7 @@ public class RestRequestService {
         else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
             throw new DownloadDAOFailureException("其他问题");
         }
-        EntrustQuote entrustQuote = responseEntity.getBody();
+        EntrustQuote entrustQuote = responseEntity.getBody().getQuote();
 
         return entrustQuote;
     }
