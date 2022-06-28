@@ -94,7 +94,7 @@ public class DocServiceJS012 {
         // 上传pdf
         try {
             if(ossProvider.upload(
-                    "doc", "JS012_" + entrustTestReviewId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+                    "doc", "JS012_" + entrustTestReviewId + ".pdf", Files.readAllBytes(Path.of(pdfPath.replaceAll("\\\\", "/"))), "application/pdf")) {
                 deleteOutFile(pdfPath);
                 return "https://oss.syh1en.asia/doc/JS012_" + entrustTestReviewId + ".pdf";
             } else {
@@ -114,7 +114,7 @@ public class DocServiceJS012 {
     private void deleteOutFile(String pdfPath) {
         System.out.println(pdfPath);
         try {
-            File file = new File(pdfPath);
+            File file = new File(pdfPath.replaceAll("\\\\", "/"));
             if (file.delete()) {
                 System.out.println(file.getName() + " is deleted!");
             } else {
