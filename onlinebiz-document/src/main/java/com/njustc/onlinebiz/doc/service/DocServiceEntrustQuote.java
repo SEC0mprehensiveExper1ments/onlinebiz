@@ -39,16 +39,14 @@ public class DocServiceEntrustQuote {
         marginBottom = 72f;
     }
 
-    private static EntrustQuoteDoc EntrustQuoteJson;
     public String fill(String entrustId, EntrustQuoteDoc newJson) {
-        EntrustQuoteJson = newJson;
         String pdfPath = DOCUMENT_DIR + "EntrustQuote_" + entrustId + ".pdf";
         try {
             // 1.新建document对象
             Document document = new Document(PageSize.A4);// 建立一个Document对象
             document.setMargins(marginLeft, marginRight, marginTop, marginBottom);
             // 2.建立一个书写器(Writer)与document对象关联
-            File file = new File(pdfPath);
+            File file = new File(pdfPath.replaceAll("\\\\", "/"));
 //            System.out.println("file: " + file);
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
 //            System.out.println("Success");
@@ -65,7 +63,7 @@ public class DocServiceEntrustQuote {
         // 上传pdf
         try {
             if (ossProvider.upload(
-                    "doc", "EntrustQuote_" + entrustId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+                    "doc", "EntrustQuote_" + entrustId + ".pdf", Files.readAllBytes(Path.of(pdfPath.replaceAll("\\\\", "/"))), "application/pdf")) {
                 //System.out.println(pdfPath);
                 deleteOutFile(pdfPath);
                 return "https://oss.syh1en.asia/doc/EntrustQuote_" + entrustId + ".pdf";
@@ -85,7 +83,7 @@ public class DocServiceEntrustQuote {
      */
     private void deleteOutFile(String pdfPath) {
         try {
-            File file = new File(pdfPath);
+            File file = new File(pdfPath.replaceAll("\\\\", "/"));
             if (file.delete()) {
                 System.out.println(file.getName() + " is deleted!");
             } else {
