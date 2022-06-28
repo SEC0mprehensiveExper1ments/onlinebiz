@@ -40,7 +40,7 @@ public class ReportReviewController {
         reportReviewService.updateReportReview(reportReviewId, reportReview, userId, userRole);
     }
 
-    // 上传合同扫描件
+    // 上传测试报告检查表扫描件
     @PutMapping("/review/report/{reportReviewId}/upload")
     public void updateScannedCopy(
             @PathVariable("reportReviewId") String reportReviewId,
@@ -51,7 +51,7 @@ public class ReportReviewController {
         reportReviewService.saveScannedCopy(reportReviewId, scannedCopy, userId, userRole);
     }
 
-    // 下载合同扫描件
+    // 下载测试报告检查表扫描件
     @GetMapping("/review/report/{reportReviewId}/download")
     public ResponseEntity<Resource> downloadScannedCopy(
             @PathVariable("reportReviewId") String reportReviewId,

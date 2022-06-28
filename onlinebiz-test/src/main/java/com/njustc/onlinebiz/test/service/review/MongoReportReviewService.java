@@ -1,8 +1,6 @@
 package com.njustc.onlinebiz.test.service.review;
 
 import com.njustc.onlinebiz.common.model.Role;
-import com.njustc.onlinebiz.common.model.contract.ContractStage;
-import com.njustc.onlinebiz.common.model.contract.ContractStatus;
 import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
 import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
