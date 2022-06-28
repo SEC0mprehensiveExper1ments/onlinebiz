@@ -46,6 +46,11 @@ public class MongoSchemeReviewService implements SchemeReviewService {
             throw new ReviewNotFoundException("该测试方案检查表不存在: " + schemeReviewId);
         } else if (!hasFindAuthority(schemeReview, userId, userRole)) {
             throw new ReviewPermissionDeniedException("无权查看该测试方案检查表");
+        } else {
+            ProjectStage projectStage = projectDAO.findProjectById(schemeReview.getProjectId()).getStatus().getStage();
+            if(projectStage == ProjectStage.WAIT_FOR_QA || projectStage == ProjectStage.SCHEME_UNFILLED) {
+                throw new ReviewInvalidStageException("此阶段不能查看测试方案检查表");
+            }
         }
         return schemeReview;
     }
