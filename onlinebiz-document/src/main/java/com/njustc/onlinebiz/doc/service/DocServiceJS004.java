@@ -62,7 +62,7 @@ public class DocServiceJS004 {
       Document document = new Document(PageSize.A4); // 建立一个Document对象
       document.setMargins(marginLeft, marginRight, marginTop, marginBottom);
       // 2.建立一个书写器(Writer)与document对象关联
-      File file = new File(pdfPath);
+      File file = new File(pdfPath.replaceAll("\\\\", "/"));
       System.out.println(pdfPath);
       PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
       System.out.println(1);
@@ -111,16 +111,16 @@ public class DocServiceJS004 {
     // 上传pdf
     try {
       if (ossProvider.upload(
-              "doc", "JS004_" + contractId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
-        deleteOutFile(pdfPath);
+              "doc", "JS004_" + contractId + ".pdf", Files.readAllBytes(Path.of(pdfPath.replaceAll("\\\\", "/"))), "application/pdf")) {
+        deleteOutFile(pdfPath.replaceAll("\\\\", "/"));
         return "https://oss.syh1en.asia/doc/JS004_" + contractId + ".pdf";
       } else {
-        deleteOutFile(pdfPath);
+        deleteOutFile(pdfPath.replaceAll("\\\\", "/"));
         return "upload failed";
       }
     } catch (Exception e) {
       e.printStackTrace();
-      deleteOutFile(pdfPath);
+      deleteOutFile(pdfPath.replaceAll("\\\\", "/"));
       return "minio error";
     }
   }
@@ -130,7 +130,7 @@ public class DocServiceJS004 {
    * */
   private void deleteOutFile(String pdfPath) {
     try {
-      File file = new File(pdfPath);
+      File file = new File(pdfPath.replaceAll("\\\\", "/"));
       if (file.delete()) {
         System.out.println(file.getName() + " is deleted!");
       } else {

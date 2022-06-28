@@ -61,7 +61,7 @@ public class DocServiceJS002 {
             Document document = new Document(PageSize.A4);// 建立一个Document对象
             document.setMargins(marginLeft, marginRight, marginTop, marginBottom);
             // 2.建立一个书写器(Writer)与document对象关联
-            File file = new File(pdfPath);
+            File file = new File(pdfPath.replaceAll("\\\\", "/"));
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
             // 2.5 添加页眉/页脚
             String header = "NST－04－JS002－2011";
@@ -108,7 +108,7 @@ public class DocServiceJS002 {
      * */
     private void deleteOutFile(String pdfPath) {
         try {
-            File file = new File(pdfPath);
+            File file = new File(pdfPath.replaceAll("\\\\", "/"));
             if (file.delete()) {
                 System.out.println(file.getName() + " is deleted!");
             } else {
