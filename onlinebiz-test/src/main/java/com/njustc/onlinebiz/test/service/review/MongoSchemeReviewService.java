@@ -134,7 +134,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         }
         String suffix = originalFilename.substring(originalFilename.lastIndexOf('.'));
         String path = SCANNED_COPY_DIR + schemeReviewId + suffix;
-        scannedCopy.transferTo(new File(path));
+        scannedCopy.transferTo(new File(path.replaceAll("\\\\", "/")));
         // 将路径保存到合同对象中
         if (!schemeReviewDAO.updateScannedCopyPath(schemeReviewId, path)) {
             throw new ReviewDAOFailureException("保存扫描文件路径失败");

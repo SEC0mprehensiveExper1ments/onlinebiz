@@ -108,7 +108,7 @@ public class MongoReportReviewService implements ReportReviewService {
         }
         String suffix = originalFilename.substring(originalFilename.lastIndexOf('.'));
         String path = SCANNED_COPY_DIR + reportReviewId + suffix;
-        scannedCopy.transferTo(new File(path));
+        scannedCopy.transferTo(new File(path.replaceAll("\\\\", "/")));
         // 将路径保存到合同对象中
         if (!reportReviewDAO.updateScannedCopyPath(reportReviewId, path)) {
             throw new ReviewDAOFailureException("保存扫描文件路径失败");
