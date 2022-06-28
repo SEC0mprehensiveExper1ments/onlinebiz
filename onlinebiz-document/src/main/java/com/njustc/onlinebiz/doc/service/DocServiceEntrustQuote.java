@@ -63,7 +63,7 @@ public class DocServiceEntrustQuote {
         // 上传pdf
         try {
             if (ossProvider.upload(
-                    "doc", "EntrustQuote_" + entrustId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+                    "doc", "EntrustQuote_" + entrustId + ".pdf", Files.readAllBytes(Path.of(pdfPath.replaceAll("\\\\", "/"))), "application/pdf")) {
                 //System.out.println(pdfPath);
                 deleteOutFile(pdfPath);
                 return "https://oss.syh1en.asia/doc/EntrustQuote_" + entrustId + ".pdf";
@@ -83,7 +83,7 @@ public class DocServiceEntrustQuote {
      */
     private void deleteOutFile(String pdfPath) {
         try {
-            File file = new File(pdfPath);
+            File file = new File(pdfPath.replaceAll("\\\\", "/"));
             if (file.delete()) {
                 System.out.println(file.getName() + " is deleted!");
             } else {
