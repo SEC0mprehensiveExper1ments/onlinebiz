@@ -4,6 +4,7 @@ package com.njustc.onlinebiz.doc.service;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.contract.Contract;
 import com.njustc.onlinebiz.common.model.entrust.Entrust;
+import com.njustc.onlinebiz.common.model.entrust.EntrustQuote;
 import com.njustc.onlinebiz.common.model.test.report.Report;
 import com.njustc.onlinebiz.common.model.test.review.EntrustTestReview;
 import com.njustc.onlinebiz.common.model.test.review.ReportReview;
@@ -106,11 +107,11 @@ public class RestRequestService {
         String params = "?userId=" + userId + "&userRole=" + userRole;
         String url = TEST_SERVICE + "/api/test/report/" + reportId;
         ResponseEntity<Report> responseEntity = restTemplate.getForEntity(url + params, Report.class);
-        // 检查测试方案 id 及权限有效性
+        // 检查测试报告 id 及权限有效性
         if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN) {
             throw new DownloadPermissionDeniedException("无权下载该文件");
         } else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
-            throw new DownloadNotFoundException("未找到该测试方案ID");
+            throw new DownloadNotFoundException("未找到该测试报告ID");
         } else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
             throw new DownloadDAOFailureException("其他问题");
         }
@@ -278,5 +279,24 @@ public class RestRequestService {
         ReportReview reportReview = responseEntity.getBody();
 
         return reportReview;
+    }
+
+    public EntrustQuote getEntrustQuoteById(String entrustId, Long userId, Role userRole) {
+        String params = "?userId=" + userId + "&userRole=" + userRole;
+        //TODO: 调用test服务的getEntrustQuote接口
+        String url = TEST_SERVICE + "/api/review/report/" + entrustId;
+        ResponseEntity<EntrustQuote> responseEntity = restTemplate.getForEntity(url + params, EntrustQuote.class);
+        if (responseEntity.getStatusCode() == HttpStatus.FORBIDDEN || responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST) {
+            throw new DownloadPermissionDeniedException("无权下载该文件");
+        }
+        else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+            throw new DownloadNotFoundException("未找到该委托报价单ID");
+        }
+        else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
+            throw new DownloadDAOFailureException("其他问题");
+        }
+        EntrustQuote entrustQuote = responseEntity.getBody();
+
+        return entrustQuote;
     }
 }
