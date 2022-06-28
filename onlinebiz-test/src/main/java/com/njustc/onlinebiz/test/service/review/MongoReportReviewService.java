@@ -95,7 +95,7 @@ public class MongoReportReviewService implements ReportReviewService {
         // 保存测试报告检查表到磁盘
         String originalFilename = scannedCopy.getOriginalFilename();
         if (originalFilename == null) {
-            throw new ReviewPermissionDeniedException("扫描文件名不能为空");
+            throw new ReviewNotFoundException("扫描文件名不能为空");
         }
         String suffix = originalFilename.substring(originalFilename.lastIndexOf('.'));
         String path = SCANNED_COPY_DIR + reportReviewId + suffix;
