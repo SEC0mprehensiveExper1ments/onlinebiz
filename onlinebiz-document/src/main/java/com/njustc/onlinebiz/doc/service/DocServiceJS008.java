@@ -92,7 +92,7 @@ public class DocServiceJS008 {
         // 上传pdf
         try {
             if(ossProvider.upload(
-                    "doc", "JS008_" + testcaseId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+                    "doc", "JS008_" + testcaseId + ".pdf", Files.readAllBytes(Path.of(pdfPath.replaceAll("\\\\", "/"))), "application/pdf")) {
                 deleteOutFile(pdfPath);
                 return "https://oss.syh1en.asia/doc/JS008_" + testcaseId + ".pdf";
             } else { deleteOutFile(pdfPath); return "upload failed"; }

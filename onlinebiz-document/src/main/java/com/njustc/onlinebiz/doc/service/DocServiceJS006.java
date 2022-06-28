@@ -95,7 +95,7 @@ public class DocServiceJS006 {
         //System.out.println(pdfPath);
         try {
             if (ossProvider.upload(
-                    "doc", "JS006_" + schemeId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+                    "doc", "JS006_" + schemeId + ".pdf", Files.readAllBytes(Path.of(pdfPath.replaceAll("\\\\", "/"))), "application/pdf")) {
                 //System.out.println(pdfPath);
                 deleteOutFile(pdfPath);
                 return "https://oss.syh1en.asia/doc/JS006_" + schemeId + ".pdf";

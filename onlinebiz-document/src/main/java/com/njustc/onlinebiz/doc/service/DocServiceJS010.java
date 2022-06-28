@@ -91,7 +91,7 @@ public class DocServiceJS010 {
         // 上传pdf
         try {
             if (ossProvider.upload(
-                    "doc", "JS010_" + reportReviewId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
+                    "doc", "JS010_" + reportReviewId + ".pdf", Files.readAllBytes(Path.of(pdfPath.replaceAll("\\\\", "/"))), "application/pdf")) {
                 deleteOutFile(pdfPath);
                 return "https://oss.syh1en.asia/doc/JS010_" + reportReviewId + ".pdf";
             } else {
