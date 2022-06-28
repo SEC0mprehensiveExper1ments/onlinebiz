@@ -1,6 +1,8 @@
 package com.njustc.onlinebiz.test.service.review;
 
 import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.contract.ContractStage;
+import com.njustc.onlinebiz.common.model.contract.ContractStatus;
 import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
 import com.njustc.onlinebiz.common.model.test.review.ReportReview;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
@@ -84,18 +86,27 @@ public class MongoReportReviewService implements ReportReviewService {
 
     @Override
     public void saveScannedCopy(String reportReviewId, MultipartFile scannedCopy, Long userId, Role userRole) throws IOException {
+        ReportReview origin = reportReviewDAO.findReportReviewById(reportReviewId);
         if (scannedCopy.isEmpty()) {
             throw new ReviewNotFoundException("测试报告检查表的扫描件为空");
         }
         ReportReview reportReview = findReportReview(reportReviewId, userId, userRole);
+
         // 检查权限
         if (!hasAuthorityToUploadOrDownload(reportReview, userId, userRole)) {
             throw new ReviewPermissionDeniedException("无权上传测试报告检查表");
         }
+
+        //检查状态
+        ProjectStage projectStage = projectDAO.findProjectById(origin.getProjectId()).getStatus().getStage();
+        if(projectStage != ProjectStage.REPORT_QA_PASSED){
+            throw new ReviewInvalidStageException("此阶段不能上传测试报告检查表扫描件");
+        }
+
         // 保存测试报告检查表到磁盘
         String originalFilename = scannedCopy.getOriginalFilename();
         if (originalFilename == null) {
-            throw new ReviewPermissionDeniedException("扫描文件名不能为空");
+            throw new ReviewNotFoundException("扫描文件名不能为空");
         }
         String suffix = originalFilename.substring(originalFilename.lastIndexOf('.'));
         String path = SCANNED_COPY_DIR + reportReviewId + suffix;

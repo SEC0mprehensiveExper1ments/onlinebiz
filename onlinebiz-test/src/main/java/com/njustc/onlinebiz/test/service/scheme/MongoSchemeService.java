@@ -100,7 +100,7 @@ public class MongoSchemeService implements SchemeService {
         }
         Long testerId = project.getProjectBaseInfo().getTesterId();
         Long qaId =project.getProjectBaseInfo().getQaId();
-            /*根据调研情况，分配的测试部人员、测试部主管、所有质量部人员、质量部主管均有权限查阅*/
+            /*根据调研情况，分配的测试部人员、测试部主管、分配的质量部人员、质量部主管均有权限查阅*/
         return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId))
                 || userRole == Role.TESTING_SUPERVISOR || (userRole == Role.QA && userId.equals(qaId))
                 || userRole == Role.QA_SUPERVISOR;

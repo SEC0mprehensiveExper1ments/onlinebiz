@@ -41,7 +41,7 @@ public class ReportReviewController {
     }
 
     // 上传合同扫描件
-    @PostMapping("/review/report/{reportReviewId}/upload")
+    @PutMapping("/review/report/{reportReviewId}/upload")
     public void updateScannedCopy(
             @PathVariable("reportReviewId") String reportReviewId,
             @RequestParam("userId") Long userId,
