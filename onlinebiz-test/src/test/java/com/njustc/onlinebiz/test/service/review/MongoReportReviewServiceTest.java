@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -195,8 +197,183 @@ class MongoReportReviewServiceTest {
   }
 
   @Test
-  void getScannedCopy() {}
+  void saveScannedCopyInvalidQa() {
+    MultipartFile file = mock(MultipartFile.class);
+    when(file.isEmpty()).thenReturn(false);
+    Project project = new Project();
+    ProjectBaseInfo baseInfo = new ProjectBaseInfo();
+    baseInfo.setQaId(3L);
+    project.setProjectBaseInfo(baseInfo);
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_AUDITING, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    ReportReview reportReview = new ReportReview();
+    reportReview.setId("123");
+    when(reportReviewDAO.findReportReviewById(any())).thenReturn(reportReview);
+    Assertions.assertThrows(
+        ReviewPermissionDeniedException.class,
+        () -> reportReviewService.saveScannedCopy("123", file, 1L, Role.QA));
+  }
 
   @Test
-  void removeReportReview() {}
+  void saveScannedCopyEmptyFileName() {
+    MultipartFile file = mock(MultipartFile.class);
+    when(file.getOriginalFilename()).thenReturn(null);
+    when(file.isEmpty()).thenReturn(false);
+    Project project = new Project();
+    ProjectBaseInfo baseInfo = new ProjectBaseInfo();
+    baseInfo.setQaId(3L);
+    project.setProjectBaseInfo(baseInfo);
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_AUDITING, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    ReportReview reportReview = new ReportReview();
+    reportReview.setId("123");
+    when(reportReviewDAO.findReportReviewById(any())).thenReturn(reportReview);
+    Assertions.assertThrows(
+        ReviewNotFoundException.class,
+        () -> reportReviewService.saveScannedCopy("123", file, 3L, Role.QA));
+  }
+
+  @Test
+  void saveScannedCopyDaoFailure() {
+    MultipartFile file = mock(MultipartFile.class);
+    when(file.getOriginalFilename()).thenReturn("null.null");
+    when(file.isEmpty()).thenReturn(false);
+    Project project = new Project();
+    ProjectBaseInfo baseInfo = new ProjectBaseInfo();
+    baseInfo.setQaId(3L);
+    project.setProjectBaseInfo(baseInfo);
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_AUDITING, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    ReportReview reportReview = new ReportReview();
+    reportReview.setId("123");
+    when(reportReviewDAO.findReportReviewById(any())).thenReturn(reportReview);
+    when(reportReviewDAO.updateScannedCopyPath(any(), any())).thenReturn(false);
+    Assertions.assertThrows(
+        ReviewDAOFailureException.class,
+        () -> reportReviewService.saveScannedCopy("123", file, 3L, Role.QA));
+  }
+
+  @Test
+  void saveScannedCopySuccess() {
+    MultipartFile file = mock(MultipartFile.class);
+    when(file.getOriginalFilename()).thenReturn("null.null");
+    when(file.isEmpty()).thenReturn(false);
+    Project project = new Project();
+    ProjectBaseInfo baseInfo = new ProjectBaseInfo();
+    baseInfo.setQaId(3L);
+    project.setProjectBaseInfo(baseInfo);
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_AUDITING, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    ReportReview reportReview = new ReportReview();
+    reportReview.setId("123");
+    when(reportReviewDAO.findReportReviewById(any())).thenReturn(reportReview);
+    when(reportReviewDAO.updateScannedCopyPath(any(), any())).thenReturn(true);
+    Assertions.assertDoesNotThrow(
+        () -> reportReviewService.saveScannedCopy("123", file, 3L, Role.QA));
+  }
+
+  @Test
+  void saveScannedCopyWithoutPermission() {
+    MultipartFile file = mock(MultipartFile.class);
+    when(file.getOriginalFilename()).thenReturn("null.null");
+    when(file.isEmpty()).thenReturn(false);
+    Project project = new Project();
+    ProjectBaseInfo baseInfo = new ProjectBaseInfo();
+    baseInfo.setQaId(3L);
+    baseInfo.setTesterId(2L);
+    project.setProjectBaseInfo(baseInfo);
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_AUDITING, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    ReportReview reportReview = new ReportReview();
+    reportReview.setId("123");
+    when(reportReviewDAO.findReportReviewById(any())).thenReturn(reportReview);
+    when(reportReviewDAO.updateScannedCopyPath(any(), any())).thenReturn(true);
+    Assertions.assertThrows(
+        ReviewPermissionDeniedException.class,
+        () -> reportReviewService.saveScannedCopy("123", file, 1L, Role.TESTER));
+  }
+
+  @Test
+  void getScannedCopySuccess() {
+    Project project = new Project();
+    ProjectBaseInfo baseInfo = new ProjectBaseInfo();
+    baseInfo.setQaId(3L);
+    project.setProjectBaseInfo(baseInfo);
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_AUDITING, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    ReportReview reportReview = new ReportReview();
+    reportReview.setId("123");
+    reportReview.setScannedCopyPath("null.null");
+    when(reportReviewDAO.findReportReviewById(any())).thenReturn(reportReview);
+    Assertions.assertThrows(
+        FileNotFoundException.class, () -> reportReviewService.getScannedCopy("123", 3L, Role.QA));
+  }
+
+  @Test
+  void getScannedCopyWithoutPermission() {
+    Project project = new Project();
+    ProjectBaseInfo baseInfo = new ProjectBaseInfo();
+    baseInfo.setQaId(3L);
+    baseInfo.setTesterId(2L);
+    project.setProjectBaseInfo(baseInfo);
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_AUDITING, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    ReportReview reportReview = new ReportReview();
+    reportReview.setId("123");
+    reportReview.setScannedCopyPath("null.null");
+    when(reportReviewDAO.findReportReviewById(any())).thenReturn(reportReview);
+    Assertions.assertThrows(
+        ReviewPermissionDeniedException.class,
+        () -> reportReviewService.getScannedCopy("123", 1L, Role.TESTER));
+  }
+
+  @Test
+  void removeReportReviewSuccess() {
+    Project project = new Project();
+    ProjectBaseInfo baseInfo = new ProjectBaseInfo();
+    baseInfo.setQaId(3L);
+    project.setProjectBaseInfo(baseInfo);
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_AUDITING, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    ReportReview reportReview = new ReportReview();
+    reportReview.setId("123");
+    when(reportReviewDAO.findReportReviewById(any())).thenReturn(reportReview);
+    when(reportReviewDAO.deleteReportAuditById(any())).thenReturn(true);
+    Assertions.assertDoesNotThrow(() -> reportReviewService.removeReportReview("123", 3L, Role.QA));
+  }
+
+  @Test
+  void removeReportReviewDaoFailure() {
+    Project project = new Project();
+    ProjectBaseInfo baseInfo = new ProjectBaseInfo();
+    baseInfo.setQaId(3L);
+    project.setProjectBaseInfo(baseInfo);
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_AUDITING, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    ReportReview reportReview = new ReportReview();
+    reportReview.setId("123");
+    when(reportReviewDAO.findReportReviewById(any())).thenReturn(reportReview);
+    when(reportReviewDAO.deleteReportAuditById(any())).thenReturn(false);
+    Assertions.assertThrows(
+        ReviewDAOFailureException.class,
+        () -> reportReviewService.removeReportReview("123", 3L, Role.QA));
+  }
+
+  @Test
+  void removeReportReviewWithoutPermission() {
+    Project project = new Project();
+    ProjectBaseInfo baseInfo = new ProjectBaseInfo();
+    baseInfo.setQaId(3L);
+    baseInfo.setTesterId(2L);
+    project.setProjectBaseInfo(baseInfo);
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_AUDITING, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    ReportReview reportReview = new ReportReview();
+    reportReview.setId("123");
+    when(reportReviewDAO.findReportReviewById(any())).thenReturn(reportReview);
+    when(reportReviewDAO.deleteReportAuditById(any())).thenReturn(true);
+    Assertions.assertThrows(
+        ReviewPermissionDeniedException.class,
+        () -> reportReviewService.removeReportReview("123", 1L, Role.TESTER));
+  }
 }
