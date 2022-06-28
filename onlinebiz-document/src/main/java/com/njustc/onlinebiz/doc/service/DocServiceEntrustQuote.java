@@ -41,22 +41,12 @@ public class DocServiceEntrustQuote {
 
     public String fill(String entrustId, EntrustQuoteDoc newJson) {
         String pdfPath = DOCUMENT_DIR + "EntrustQuote_" + entrustId + ".pdf";
-        // 检查路径合法性，至多允许一个'.'
-        int dotCount = 0;
-        for (int i = 0; i < pdfPath.length(); i++) {
-            if (pdfPath.charAt(i) == '.') {
-                dotCount++;
-            }
-            if (dotCount > 1) {
-                return "";
-            }
-        }
         try {
             // 1.新建document对象
             Document document = new Document(PageSize.A4);// 建立一个Document对象
             document.setMargins(marginLeft, marginRight, marginTop, marginBottom);
             // 2.建立一个书写器(Writer)与document对象关联
-            File file = new File(pdfPath);
+            File file = new File(pdfPath.replaceAll("\\\\", "/"));
 //            System.out.println("file: " + file);
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
 //            System.out.println("Success");
