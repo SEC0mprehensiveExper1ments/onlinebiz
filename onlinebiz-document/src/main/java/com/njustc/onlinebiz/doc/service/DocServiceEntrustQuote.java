@@ -41,6 +41,16 @@ public class DocServiceEntrustQuote {
 
     public String fill(String entrustId, EntrustQuoteDoc newJson) {
         String pdfPath = DOCUMENT_DIR + "EntrustQuote_" + entrustId + ".pdf";
+        // 检查路径合法性，至多允许一个'.'
+        int dotCount = 0;
+        for (int i = 0; i < pdfPath.length(); i++) {
+            if (pdfPath.charAt(i) == '.') {
+                dotCount++;
+            }
+            if (dotCount > 1) {
+                return "";
+            }
+        }
         try {
             // 1.新建document对象
             Document document = new Document(PageSize.A4);// 建立一个Document对象
