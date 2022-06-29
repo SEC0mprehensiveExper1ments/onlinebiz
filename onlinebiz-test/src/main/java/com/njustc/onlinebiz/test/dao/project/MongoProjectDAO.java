@@ -40,6 +40,9 @@ public class MongoProjectDAO implements ProjectDAO {
     @Override
     public Boolean updateQaId(String projectId, Long qaId) {
         Project project = findProjectById(projectId);
+        if (project == null) {
+            return false;
+        }
         ProjectBaseInfo projectBaseInfo = project.getProjectBaseInfo();
         projectBaseInfo.setQaId(qaId);
         Update update = new Update().set("projectBaseInfo", projectBaseInfo);
