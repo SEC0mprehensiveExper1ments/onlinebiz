@@ -6,7 +6,6 @@ import com.njustc.onlinebiz.test.exception.review.ReviewDAOFailureException;
 import com.njustc.onlinebiz.test.exception.review.ReviewInvalidStageException;
 import com.njustc.onlinebiz.test.exception.review.ReviewNotFoundException;
 import com.njustc.onlinebiz.test.exception.review.ReviewPermissionDeniedException;
-import com.njustc.onlinebiz.test.exception.testrecord.TestRecordPermissionDeniedException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import com.njustc.onlinebiz.common.model.test.project.Project;
@@ -19,6 +18,7 @@ import com.njustc.onlinebiz.common.model.Role;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.font.MultipleMaster;
+import java.io.FileNotFoundException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -613,20 +613,27 @@ class MongoSchemeReviewServiceTest {
         //由非指派的质量部员工（非法人员）尝试下载测试方案评审表扫描件
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3001L, Role.QA));
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3066L, Role.QA));
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3099L, Role.QA));
 
         //由指派的质量部员工（合法人员）尝试下载测试方案评审表扫描件
-        Assertions.assertDoesNotThrow(() ->
-                schemereviewservice.getScannedCopy("SchemeReviewId", 3001L, Role.QA));
+        Assertions.assertThrows(
+                FileNotFoundException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3001L, Role.QA));
         //由测试部主管（合法人员）尝试下载测试方案评审表扫描件
-        Assertions.assertDoesNotThrow(() ->
-                schemereviewservice.getScannedCopy("SchemeReviewId", 2000L, Role.TESTING_SUPERVISOR));
+        Assertions.assertThrows(
+                FileNotFoundException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 2000L, Role.TESTING_SUPERVISOR));
         //由指派的质量部主管（合法人员）尝试下载测试方案评审表扫描件
-        Assertions.assertDoesNotThrow(() ->
-                schemereviewservice.getScannedCopy("SchemeReviewId", 3000L, Role.QA_SUPERVISOR));
+        Assertions.assertThrows(
+                FileNotFoundException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3000L, Role.QA_SUPERVISOR));
         //由ADMIN（合法人员）尝试下载测试方案评审表扫描件
-        Assertions.assertDoesNotThrow(() ->
-                schemereviewservice.getScannedCopy("SchemeReviewId", 0L, Role.ADMIN));
+        Assertions.assertThrows(
+                FileNotFoundException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 0L, Role.ADMIN));
     }
 
     @Test
