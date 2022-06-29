@@ -179,7 +179,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
 
     @Override
     public void removeSchemeReview(String schemeReviewId, Long userId, Role userRole) {
-        SchemeReview schemeReview = findSchemeReview(schemeReviewId, userId, userRole);
+        SchemeReview schemeReview = schemeReviewDAO.findSchemeReviewById(schemeReviewId);
         if (!hasUpdateOrDeleteAuthority(schemeReview, userId, userRole)) {
             throw new ReviewPermissionDeniedException("无权删除此测试方案评审表");
         }
