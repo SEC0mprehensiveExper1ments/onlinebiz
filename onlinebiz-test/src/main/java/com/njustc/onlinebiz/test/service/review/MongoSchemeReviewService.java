@@ -81,7 +81,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         SchemeReview origin = schemeReviewDAO.findSchemeReviewById(schemeReviewId);
         // 检查测试方案评审表是否存在
         if (origin == null) {
-            throw new ReviewDAOFailureException("该测试方案评审表不存在");
+            throw new ReviewNotFoundException("该测试方案评审表不存在");
         }
         if (!origin.getId().equals(schemeReview.getId())) {
             throw new ReviewPermissionDeniedException("测试方案检查表ID不一致");
@@ -97,7 +97,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         }
         // 更新测试方案检查表
         if (!schemeReviewDAO.updateSchemeReview(schemeReviewId, schemeReview)) {
-            throw new ReviewDAOFailureException("测试方案评审表更新失败");
+            throw new ReviewDAOFailureException("测试方案检查表更新失败");
         }
     }
 
@@ -184,11 +184,14 @@ public class MongoSchemeReviewService implements SchemeReviewService {
     @Override
     public void removeSchemeReview(String schemeReviewId, Long userId, Role userRole) {
         SchemeReview schemeReview = schemeReviewDAO.findSchemeReviewById(schemeReviewId);
+        if (schemeReview == null) {
+            throw new ReviewNotFoundException("尝试删除不存在的测试方案检查表");
+        }
         if (!hasUpdateOrDeleteAuthority(schemeReview, userId, userRole)) {
-            throw new ReviewPermissionDeniedException("无权删除此测试方案评审表");
+            throw new ReviewPermissionDeniedException("无权删除此测试方案检查表");
         }
         if (!schemeReviewDAO.deleteSchemeAuditById(schemeReview.getId())) {
-            throw new ReviewDAOFailureException("删除测试方案评审表失败");
+            throw new ReviewDAOFailureException("删除测试方案检查表失败");
         }
     }
 }

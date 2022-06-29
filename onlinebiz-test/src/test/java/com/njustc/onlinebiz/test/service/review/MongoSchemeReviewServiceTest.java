@@ -80,47 +80,47 @@ class MongoSchemeReviewServiceTest {
         when(projectService.getProjectBaseInfo(any())).thenReturn(project.getProjectBaseInfo());
 
         //开始测试
-        //在阶段SCHEME_AUDITING（合法阶段）尝试查找测试方案评审表
+        //在阶段SCHEME_AUDITING（合法阶段）尝试查找测试方案检查表
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_AUDITING, ""));
         when(projectDAO.findProjectById(any())).thenReturn(project);
-        //由客户（非法人员）查找测试方案评审表
+        //由客户（非法人员）查找测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.findSchemeReview("SchemeReviewId", 11111L, Role.CUSTOMER));
-        //由市场部员工（非法人员）查找测试方案评审表
+        //由市场部员工（非法人员）查找测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.findSchemeReview("SchemeReviewId", 1001L, Role.MARKETER));
-        //由市场部主管（非法人员）查找测试方案评审表
+        //由市场部主管（非法人员）查找测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.findSchemeReview("SchemeReviewId", 1000L, Role.MARKETING_SUPERVISOR));
-        //由非指派的测试部员工（非法人员）查找测试方案评审表
+        //由非指派的测试部员工（非法人员）查找测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.findSchemeReview("SchemeReviewId", 2066L, Role.TESTER));
-        //由非指派的质量部员工（非法人员）查找测试方案评审表
+        //由非指派的质量部员工（非法人员）查找测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.findSchemeReview("SchemeReviewId", 3066L, Role.QA));
 
-        //由指派的测试部员工（合法人员）查找测试方案评审表
+        //由指派的测试部员工（合法人员）查找测试方案检查表
         Assertions.assertDoesNotThrow(() ->
                 schemereviewservice.findSchemeReview("SchemeReviewId", 2001L, Role.TESTER));
-        //由测试部主管（合法人员）查找测试方案评审表
+        //由测试部主管（合法人员）查找测试方案检查表
         Assertions.assertDoesNotThrow(() ->
                 schemereviewservice.findSchemeReview("SchemeReviewId", 2000L, Role.TESTING_SUPERVISOR));
-        //由指派的质量部人员（合法人员）查找测试方案评审表
+        //由指派的质量部人员（合法人员）查找测试方案检查表
         Assertions.assertDoesNotThrow(() ->
                 schemereviewservice.findSchemeReview("SchemeReviewId", 3001L, Role.QA));
-        //由质量部主管（合法人员）查找测试方案评审表
+        //由质量部主管（合法人员）查找测试方案检查表
         Assertions.assertDoesNotThrow(() ->
                 schemereviewservice.findSchemeReview("SchemeReviewId", 3000L, Role.QA_SUPERVISOR));
-        //由ADMIN（合法人员）查找测试方案评审表
+        //由ADMIN（合法人员）查找测试方案检查表
         Assertions.assertDoesNotThrow(() ->
                 schemereviewservice.findSchemeReview("SchemeReviewId", 0L, Role.ADMIN));
 
-        //尝试查找不存在的测试方案评审表
+        //尝试查找不存在的测试方案检查表
         when(schemereviewDao.findSchemeReviewById(any())).thenReturn(null);
         Assertions.assertThrows(
                 ReviewNotFoundException.class,
@@ -139,48 +139,48 @@ class MongoSchemeReviewServiceTest {
                 () -> schemereviewservice.findSchemeReview("SchemeReviewId", 0L, Role.ADMIN));
         when(schemereviewDao.findSchemeReviewById(any())).thenReturn(schemereview);
 
-        //在阶段SCHEME_AUDITING_DENIED（合法阶段）尝试查找测试方案评审表
+        //在阶段SCHEME_AUDITING_DENIED（合法阶段）尝试查找测试方案检查表
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_AUDITING_DENIED, ""));
         when(projectDAO.findProjectById(any())).thenReturn(project);
         when(schemereviewDao.findSchemeReviewById(any())).thenReturn(schemereview);
-        //由客户（非法人员）查找测试方案评审表
+        //由客户（非法人员）查找测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.findSchemeReview("SchemeReviewId", 11111L, Role.CUSTOMER));
-        //由市场部员工（非法人员）查找测试方案评审表
+        //由市场部员工（非法人员）查找测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.findSchemeReview("SchemeReviewId", 1001L, Role.MARKETER));
-        //由市场部主管（非法人员）查找测试方案评审表
+        //由市场部主管（非法人员）查找测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.findSchemeReview("SchemeReviewId", 1000L, Role.MARKETING_SUPERVISOR));
-        //由非指派的测试部员工（非法人员）查找测试方案评审表
+        //由非指派的测试部员工（非法人员）查找测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.findSchemeReview("SchemeReviewId", 2066L, Role.TESTER));
-        //由非指派的质量部员工（非法人员）查找测试方案评审表
+        //由非指派的质量部员工（非法人员）查找测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.findSchemeReview("SchemeReviewId", 3066L, Role.QA));
 
-        //由指派的测试部员工（合法人员）查找测试方案评审表
+        //由指派的测试部员工（合法人员）查找测试方案检查表
         Assertions.assertDoesNotThrow(() ->
                 schemereviewservice.findSchemeReview("SchemeReviewId", 2001L, Role.TESTER));
-        //由测试部主管（合法人员）查找测试方案评审表
+        //由测试部主管（合法人员）查找测试方案检查表
         Assertions.assertDoesNotThrow(() ->
                 schemereviewservice.findSchemeReview("SchemeReviewId", 2000L, Role.TESTING_SUPERVISOR));
-        //由指派的质量部人员（合法人员）查找测试方案评审表
+        //由指派的质量部人员（合法人员）查找测试方案检查表
         Assertions.assertDoesNotThrow(() ->
                 schemereviewservice.findSchemeReview("SchemeReviewId", 3001L, Role.QA));
-        //由质量部主管（合法人员）查找测试方案评审表
+        //由质量部主管（合法人员）查找测试方案检查表
         Assertions.assertDoesNotThrow(() ->
                 schemereviewservice.findSchemeReview("SchemeReviewId", 3000L, Role.QA_SUPERVISOR));
-        //由ADMIN（合法人员）查找测试方案评审表
+        //由ADMIN（合法人员）查找测试方案检查表
         Assertions.assertDoesNotThrow(() ->
                 schemereviewservice.findSchemeReview("SchemeReviewId", 0L, Role.ADMIN));
 
-        //尝试查找不存在的测试方案评审表
+        //尝试查找不存在的测试方案检查表
         when(schemereviewDao.findSchemeReviewById(any())).thenReturn(null);
         Assertions.assertThrows(
                 ReviewNotFoundException.class,
@@ -199,7 +199,7 @@ class MongoSchemeReviewServiceTest {
                 () -> schemereviewservice.findSchemeReview("SchemeReviewId", 0L, Role.ADMIN));
         when(schemereviewDao.findSchemeReviewById(any())).thenReturn(schemereview);
 
-        //在阶段WAIT_FOR_QA（非法阶段）尝试查找测试方案评审表
+        //在阶段WAIT_FOR_QA（非法阶段）尝试查找测试方案检查表
         when(schemereviewDao.findSchemeReviewById(any())).thenReturn(schemereview);
         project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, ""));
         when(projectDAO.findProjectById(any())).thenReturn(project);
@@ -218,7 +218,7 @@ class MongoSchemeReviewServiceTest {
         Assertions.assertThrows(
                 ReviewInvalidStageException.class,
                 () -> schemereviewservice.findSchemeReview("SchemeReviewId", 0L, Role.ADMIN));
-        //在阶段SCHEME_UNFILLED（非法阶段）尝试查找测试方案评审表
+        //在阶段SCHEME_UNFILLED（非法阶段）尝试查找测试方案检查表
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_UNFILLED, ""));
         when(projectDAO.findProjectById(any())).thenReturn(project);
         Assertions.assertThrows(
@@ -257,30 +257,30 @@ class MongoSchemeReviewServiceTest {
         when(schemereviewDao.updateSchemeReview(any(), any())).thenReturn(true);
 
         //开始测试
-        //在阶段SCHEME_AUDITING（合法阶段）尝试修改测试方案评审表
+        //在阶段SCHEME_AUDITING（合法阶段）尝试修改测试方案检查表
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_AUDITING, ""));
         when(projectDAO.findProjectById(any())).thenReturn(project);
-        //由客户（非法人员）尝试修改测试方案评审表
+        //由客户（非法人员）尝试修改测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 11111L, Role.CUSTOMER));
-        //由市场部员工（非法人员）尝试修改测试方案评审表
+        //由市场部员工（非法人员）尝试修改测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 1001L, Role.MARKETER));
-        //由市场部主管（非法人员）尝试修改测试方案评审表
+        //由市场部主管（非法人员）尝试修改测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 1000L, Role.MARKETING_SUPERVISOR));
-        //由测试部员工（非法人员）尝试修改测试方案评审表
+        //由测试部员工（非法人员）尝试修改测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 2001L, Role.TESTER));
-        //由测试部主管（非法人员）尝试修改测试方案评审表
+        //由测试部主管（非法人员）尝试修改测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 2000L, Role.TESTING_SUPERVISOR));
-        //由非指派的质量部员工（非法人员）尝试修改测试方案评审表
+        //由非指派的质量部员工（非法人员）尝试修改测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3066L, Role.QA));
@@ -288,7 +288,7 @@ class MongoSchemeReviewServiceTest {
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3003L, Role.QA));
 
-        //由指派的质量部员工（合法人员）尝试修改测试方案评审表
+        //由指派的质量部员工（合法人员）尝试修改测试方案检查表
         Assertions.assertDoesNotThrow(() ->
                 schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3001L, Role.QA));
         when(schemereviewDao.updateSchemeReview(any(), any())).thenReturn(false);
@@ -296,7 +296,7 @@ class MongoSchemeReviewServiceTest {
                 ReviewDAOFailureException.class,
                 () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3001L, Role.QA));
         when(schemereviewDao.updateSchemeReview(any(), any())).thenReturn(true);
-        //由质量部主管（合法人员）尝试修改测试方案评审表
+        //由质量部主管（合法人员）尝试修改测试方案检查表
         Assertions.assertDoesNotThrow(() ->
                 schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3000L, Role.QA_SUPERVISOR));
         when(schemereviewDao.updateSchemeReview(any(), any())).thenReturn(false);
@@ -304,7 +304,7 @@ class MongoSchemeReviewServiceTest {
                 ReviewDAOFailureException.class,
                 () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3000L, Role.QA_SUPERVISOR));
         when(schemereviewDao.updateSchemeReview(any(), any())).thenReturn(true);
-        //由ADMIN（合法人员）尝试修改测试方案评审表
+        //由ADMIN（合法人员）尝试修改测试方案检查表
         Assertions.assertDoesNotThrow(() ->
                 schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 0L, Role.ADMIN));
         when(schemereviewDao.updateSchemeReview(any(), any())).thenReturn(false);
@@ -313,7 +313,7 @@ class MongoSchemeReviewServiceTest {
                 () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 0L, Role.ADMIN));
         when(schemereviewDao.updateSchemeReview(any(), any())).thenReturn(true);
 
-        //尝试修改不存在的测试方案评审表
+        //尝试修改不存在的测试方案检查表
         when(schemereviewDao.findSchemeReviewById(any())).thenReturn(null);
         Assertions.assertThrows(
                 ReviewNotFoundException.class,
@@ -326,7 +326,7 @@ class MongoSchemeReviewServiceTest {
                 () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 0L, Role.ADMIN));
         when(schemereviewDao.findSchemeReviewById(any())).thenReturn(schemereview);
 
-        //尝试在WAIT_FOR_QA（非法阶段）修改测试方案评审表
+        //尝试在WAIT_FOR_QA（非法阶段）修改测试方案检查表
         project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, ""));
         when(projectDAO.findProjectById(any())).thenReturn(project);
         when(schemereviewDao.findSchemeReviewById(any())).thenReturn(schemereview);
@@ -340,7 +340,7 @@ class MongoSchemeReviewServiceTest {
                 ReviewInvalidStageException.class,
                 () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 0L, Role.ADMIN));
 
-        //尝试在WAIT_FOR_QA（非法阶段）修改测试方案评审表
+        //尝试在WAIT_FOR_QA（非法阶段）修改测试方案检查表
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_AUDITING_PASSED, ""));
         when(projectDAO.findProjectById(any())).thenReturn(project);
         when(schemereviewDao.findSchemeReviewById(any())).thenReturn(schemereview);
@@ -380,36 +380,34 @@ class MongoSchemeReviewServiceTest {
         when(schemereviewDao.deleteSchemeAuditById(any())).thenReturn(true);
 
         //开始测试
-        //由客户（非法人员）尝试删除测试方案评审表
+        //由客户（非法人员）尝试删除测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.removeSchemeReview("SchemeReviewId", 11111L, Role.CUSTOMER));
-        //由市场部员工（非法人员）尝试删除测试方案评审表
+        //由市场部员工（非法人员）尝试删除测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.removeSchemeReview("SchemeReviewId", 1001L, Role.MARKETER));
-        //由市场部主管（非法人员）尝试删除测试方案评审表
+        //由市场部主管（非法人员）尝试删除测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.removeSchemeReview("SchemeReviewId", 1000L, Role.MARKETING_SUPERVISOR));
-        //由测试部员工（非法人员）尝试删除测试方案评审表
+        //由测试部员工（非法人员）尝试删除测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.removeSchemeReview("SchemeReviewId", 2001L, Role.TESTER));
-        //由测试部主管（非法人员）尝试删除测试方案评审表
+        //由测试部主管（非法人员）尝试删除测试方案检查表
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.removeSchemeReview("SchemeReviewId", 3000L, Role.TESTING_SUPERVISOR));
-        //由质量部员工（非法人员）尝试删除测试方案评审表
-        Assertions.assertThrows(
-                ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.removeSchemeReview("SchemeReviewId", 3001L, Role.QA));
-        //由质量部主管（非法人员）尝试删除测试方案评审表
-        Assertions.assertThrows(
-                ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.removeSchemeReview("SchemeReviewId", 2001L, Role.QA_SUPERVISOR));
 
-        //由ADMIN（合法人员）尝试删除测试方案评审表
+        //由质量部员工（合法人员）尝试删除测试方案检查表
+        Assertions.assertDoesNotThrow(() ->
+                schemereviewservice.removeSchemeReview("SchemeReviewId", 3001L, Role.QA));
+        //由质量部主管（合法人员）尝试删除测试方案检查表
+        Assertions.assertDoesNotThrow(() ->
+                schemereviewservice.removeSchemeReview("SchemeReviewId", 2001L, Role.QA_SUPERVISOR));
+        //由ADMIN（合法人员）尝试删除测试方案检查表
         Assertions.assertDoesNotThrow(() ->
                 schemereviewservice.removeSchemeReview("SchemeReviewId", 0L, Role.ADMIN));
         when(schemereviewDao.deleteSchemeAuditById(any())).thenReturn(false);
@@ -418,7 +416,7 @@ class MongoSchemeReviewServiceTest {
                 () -> schemereviewservice.removeSchemeReview("SchemeReviewId", 0L, Role.ADMIN));
         when(schemereviewDao.deleteSchemeAuditById(any())).thenReturn(false);
 
-        //尝试删除不存在的测试方案评审表
+        //尝试删除不存在的测试方案检查表
         when(schemereviewDao.findSchemeReviewById(any())).thenReturn(null);
         Assertions.assertThrows(
                 ReviewNotFoundException.class,
