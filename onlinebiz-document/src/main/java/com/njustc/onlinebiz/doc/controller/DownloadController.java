@@ -2,6 +2,7 @@ package com.njustc.onlinebiz.doc.controller;
 
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.contract.Contract;
+import com.njustc.onlinebiz.common.model.entrust.Entrust;
 import com.njustc.onlinebiz.common.model.entrust.EntrustQuote;
 import com.njustc.onlinebiz.common.model.test.report.Report;
 import com.njustc.onlinebiz.common.model.test.review.EntrustTestReview;
@@ -14,11 +15,7 @@ import com.njustc.onlinebiz.common.model.test.testrecord.TestRecordList;
 import com.njustc.onlinebiz.doc.model.*;
 import com.njustc.onlinebiz.doc.model.JS003.JS003;
 import com.njustc.onlinebiz.doc.service.*;
-import com.njustc.onlinebiz.common.model.entrust.Entrust;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -92,7 +89,7 @@ public class DownloadController {
             @RequestParam("userRole") Role userRole
     ) {
         Entrust entrust = restRequestService.getEntrustById(entrustId, userId, userRole);
-        return docServiceJS002.fill(entrustId, new JS002(entrust));
+        return docServiceJS002.fill(entrustId.replaceAll("////",""), new JS002(entrust));
     }
 
     // JS003 文档下载接口
@@ -103,7 +100,7 @@ public class DownloadController {
             @RequestParam("userRole") Role userRole
     ) {
         Entrust entrust = restRequestService.getEntrustById(entrustId, userId, userRole);
-        return docServiceJS003.fill(entrustId, new JS003(entrust));
+        return docServiceJS003.fill(entrustId.replaceAll("////",""), new JS003(entrust));
     }
 
     // JS004 文档下载接口
@@ -114,7 +111,7 @@ public class DownloadController {
             @RequestParam("userRole") Role userRole
     ) {
         Contract contract = restRequestService.getContractById(contractId, userId, userRole);
-        return docServiceJS004.fill(contractId, new JS004(contract));
+        return docServiceJS004.fill(contractId.replaceAll("////",""), new JS004(contract));
     }
 
     // JS005 文档下载接口
@@ -125,7 +122,7 @@ public class DownloadController {
             @RequestParam("userRole") Role userRole
     ) {
         Contract contract = restRequestService.getContractById(contractId, userId, userRole);
-        return docServiceJS005.fill(contractId, new JS005(contract));
+        return docServiceJS005.fill(contractId.replaceAll("////",""), new JS005(contract));
     }
 
     // JS006 文档下载接口
@@ -137,7 +134,7 @@ public class DownloadController {
     ) {
         Scheme scheme = restRequestService.getScheme(schemeId, userId, userRole);
         JS006 newJson = new JS006(scheme);
-        return docServiceJS006.fill(schemeId, newJson);
+        return docServiceJS006.fill(schemeId.replaceAll("////",""), newJson);
     }
 
     // JS007 文档下载接口
@@ -149,7 +146,7 @@ public class DownloadController {
     ) {
         Report report = restRequestService.getReport(reportId, userId, userRole);
         JS007 newJson = new JS007(report);
-        return docServiceJS007.fill(reportId, newJson);
+        return docServiceJS007.fill(reportId.replaceAll("////",""), newJson);
     }
 
     // JS008 文档下载接口
@@ -160,7 +157,7 @@ public class DownloadController {
             @RequestParam("userRole") Role userRole
     ) {
         Testcase testcase = restRequestService.getTestcaseById(testcaseId, userId, userRole);
-        return docServiceJS008.fill(testcaseId, new JS008(testcase));
+        return docServiceJS008.fill(testcaseId.replaceAll("////",""), new JS008(testcase));
     }
 
     // JS009 文档下载接口
@@ -171,7 +168,7 @@ public class DownloadController {
             @RequestParam("userRole") Role userRole
     ) {
         TestRecordList testRecordList = restRequestService.getTestRecordListById(testRecordId, userId, userRole);
-        return docServiceJS009.fill(testRecordId, new JS009(testRecordList));
+        return docServiceJS009.fill(testRecordId.replaceAll("////",""), new JS009(testRecordList));
     }
 
     // JS010 文档下载接口
@@ -182,7 +179,7 @@ public class DownloadController {
             @RequestParam("userRole") Role userRole
     ) {
         ReportReview reportReview = restRequestService.getReportReviewById(reportReviewId, userId, userRole);
-        return docServiceJS010.fill(reportReviewId, new JS010(reportReview));
+        return docServiceJS010.fill(reportReviewId.replaceAll("////",""), new JS010(reportReview));
     }
 
     // JS011 文档下载接口
@@ -193,7 +190,7 @@ public class DownloadController {
             @RequestParam("userRole") Role userRole
     ) {
         TestIssueList testIssueList = restRequestService.getTestIssueListById(testIssueId, userId, userRole);
-        return docServiceJS011.fill(testIssueId, new JS011(testIssueList));
+        return docServiceJS011.fill(testIssueId.replaceAll("////",""), new JS011(testIssueList));
     }
 
     // JS012 文档下载接口
@@ -204,7 +201,7 @@ public class DownloadController {
             @RequestParam("userRole") Role userRole
     ) {
         EntrustTestReview entrustTestReview = restRequestService.getEntrustTestReviewById(entrustTestReviewId, userId, userRole);
-        return docServiceJS012.fill(entrustTestReviewId, new JS012(entrustTestReview));
+        return docServiceJS012.fill(entrustTestReviewId.replaceAll("////",""), new JS012(entrustTestReview));
     }
 
     // JS013 文档下载接口
@@ -215,7 +212,7 @@ public class DownloadController {
             @RequestParam("userRole") Role userRole
     ) {
         SchemeReview schemeReview = restRequestService.getSchemeReviewById(schemeReviewId, userId, userRole);
-        return docServiceJS013.fill(schemeReviewId, new JS013(schemeReview));
+        return docServiceJS013.fill(schemeReviewId.replaceAll("////",""), new JS013(schemeReview));
     }
 
     // JS014 文档下载接口
@@ -226,7 +223,7 @@ public class DownloadController {
             @RequestParam("userRole") Role userRole
     ) {
         Entrust entrust = restRequestService.getEntrustById(entrustId, userId, userRole);
-        return docServiceJS014.fill(entrustId, new JS014(entrust));
+        return docServiceJS014.fill(entrustId.replaceAll("////",""), new JS014(entrust));
     }
 
     // 报价单 文档下载接口
@@ -237,7 +234,7 @@ public class DownloadController {
             @RequestParam("userRole") Role userRole
     ) {
         EntrustQuote entrustQuote = restRequestService.getEntrustQuoteById(entrustId, userId, userRole);
-        return docServiceEntrustQuote.fill(entrustId, new EntrustQuoteDoc(entrustQuote));
+        return docServiceEntrustQuote.fill(entrustId.replaceAll("////",""), new EntrustQuoteDoc(entrustQuote));
     }
 
 }
