@@ -361,5 +361,20 @@ class MongoSchemeReviewServiceTest {
 
         //开始测试
         //由客户（非法人员）尝试删除测试方案评审表
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.removeSchemeReview("SchemeReviewId", 11111L, Role.CUSTOMER));
+        //由市场部员工（非法人员）尝试删除测试方案评审表
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.removeSchemeReview("SchemeReviewId", 1001L, Role.MARKETER));
+        //由市场部主管（非法人员）尝试删除测试方案评审表
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.removeSchemeReview("SchemeReviewId", 1000L, Role.MARKETING_SUPERVISOR));
+        //由测试部员工（非法人员）尝试删除测试方案评审表
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.removeSchemeReview("SchemeReviewId", 2001L, Role.TESTER));
     }
 }

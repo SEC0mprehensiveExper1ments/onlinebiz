@@ -181,10 +181,10 @@ public class MongoSchemeReviewService implements SchemeReviewService {
     public void removeSchemeReview(String schemeReviewId, Long userId, Role userRole) {
         SchemeReview schemeReview = findSchemeReview(schemeReviewId, userId, userRole);
         if (!hasUpdateOrDeleteAuthority(schemeReview, userId, userRole)) {
-            throw new ReviewPermissionDeniedException("无权删除此测试检查方案");
+            throw new ReviewPermissionDeniedException("无权删除此测试方案评审表");
         }
         if (!schemeReviewDAO.deleteSchemeAuditById(schemeReview.getId())) {
-            throw new ReviewDAOFailureException("删除合同失败");
+            throw new ReviewDAOFailureException("删除测试方案评审表失败");
         }
     }
 }
