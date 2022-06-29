@@ -350,14 +350,14 @@ public class DocServiceJS004 {
     text1.setLeading(24f);
     Chunk chunk1 = new Chunk(JS004Json.getInputCeShiFeiYong(), textfont);
     chunk1.setUnderline(0.3f, -3f);
-    Chunk chunk2 = new Chunk(JS004Json.getInputCeShiFeiYong0Yuan(), textfont);
+    //Chunk chunk2 = new Chunk(JS004Json.getInputCeShiFeiYong0Yuan(), textfont);
     //        chunk2.setUnderline(0.3f, -3f);
 
     text1.add(new Chunk("四、合同价款\n", keyfont));
     text1.add(new Chunk("    本合同软件测试费用为人民币", textfont));
     text1.add(chunk1);
     text1.add(new Chunk("（¥ ", textfont));
-    text1.add(chunk2);
+    //text1.add(chunk2);
     text1.add(new Chunk(" 元）。", textfont));
     text1.setSpacingAfter(30f); // 设置段落下空白
 

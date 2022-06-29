@@ -48,22 +48,21 @@ public class JS004 {
 
   public JS004(Contract contract) {
     this.inputXiangMuMingChen = contract.getProjectName();
-    //
+
     PartyDetail jiaFang = contract.getPartyA();
     PartyDetail yiFang = contract.getPartyB();
     this.inputJiaFang = jiaFang.getCompanyCH();
     this.inputYiFang = yiFang.getCompanyCH();
     this.inputQianDingDiDian = contract.getSignedAt();
-    // TODO: 签订日期需要确定格式
-//    this.inputQianDingRiQi0Nian = ;
-//    this.inputQianDingRiQi0Yue = ;
-//    this.inputQianDingRiQi0Ri = ;
+
+    String signedDate = contract.getSignedDate();
+    this.inputQianDingRiQi0Nian = signedDate.substring(0, 4);
+    this.inputQianDingRiQi0Yue = signedDate.substring(5, 7);
+    this.inputQianDingRiQi0Ri = signedDate.substring(8, 10);
 
     this.inputShouCeRuanJian = contract.getTargetSoftware();
 
-
-    // TODO: 合同价款
-//    this.inputCeShiFeiYong = contract;
+    this.inputCeShiFeiYong = contract.getPrice().toString();
 //    this.inputCeShiFeiYong0Yuan = ;
 
     this.inputLvXingQiXian = Integer.toString(contract.getTotalWorkingDays());
