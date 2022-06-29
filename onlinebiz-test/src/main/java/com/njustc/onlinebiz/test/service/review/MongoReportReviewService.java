@@ -64,6 +64,9 @@ public class MongoReportReviewService implements ReportReviewService {
     @Override
     public void updateReportReview(String reportReviewId, ReportReview reportReview, Long userId, Role userRole) {
         ReportReview origin = reportReviewDAO.findReportReviewById(reportReviewId);
+        if (origin == null) {
+            throw new ReviewNotFoundException("该测试报告检查表不存在");
+        }
         if (!origin.getId().equals(reportReview.getId())) {
             throw new ReviewPermissionDeniedException("测试报告检查表ID不一致");
         }
