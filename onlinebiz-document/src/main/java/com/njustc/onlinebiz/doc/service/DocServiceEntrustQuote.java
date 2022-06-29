@@ -8,7 +8,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.njustc.onlinebiz.common.model.entrust.EntrustQuote;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
 import com.njustc.onlinebiz.doc.model.EntrustQuoteDoc;
-import com.njustc.onlinebiz.doc.util.HeaderFooter;
 import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -43,7 +42,7 @@ public class DocServiceEntrustQuote {
         marginLeft = 40f;
         marginRight = 40f;
         marginTop = 20f;
-        marginBottom = 72f;
+        marginBottom = 20f;
     }
 
     private static EntrustQuoteDoc EntrustQuoteJson;
@@ -60,8 +59,6 @@ public class DocServiceEntrustQuote {
 //            System.out.println("file: " + file);
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
 //            System.out.println("Success");
-            //TODO:添加页脚
-
             // 3.打开文档
             document.open();
             // 4.向文档中添加内容
@@ -107,8 +104,10 @@ public class DocServiceEntrustQuote {
     }
 
     private static BaseFont bfYaHei;
+    private static BaseFont bfChinese;
     private static Font normal5YaHei;
     private static Font normalxiao4YaHei;
+    private static Font normalxiao5song;
     private static Font bold5YaHei;
     private static Font Under5YaHei;
 
@@ -117,10 +116,14 @@ public class DocServiceEntrustQuote {
             bfYaHei =
                     BaseFont.createFont(
                             DOCUMENT_DIR + "font/msyh.ttc,0", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            bfChinese =
+                    BaseFont.createFont(
+                            DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             normal5YaHei = new Font(bfYaHei, 10.5f, Font.NORMAL);
             normalxiao4YaHei = new Font(bfYaHei, 14f, Font.NORMAL);
             bold5YaHei = new Font(bfYaHei, 10.5f, Font.BOLD);
             Under5YaHei = new Font(bfYaHei, 10.5f, Font.UNDERLINE);
+            normalxiao5song = new Font(bfChinese, 9f, Font.NORMAL);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -144,12 +147,17 @@ public class DocServiceEntrustQuote {
 
         Paragraph ZhangHu = new Paragraph("   户      名：  " + EntrustQuoteJson.getAccountName() + "\n" +
                 "   开户银行：  " + EntrustQuoteJson.getBankName() + "\n" +
-                "   账      号：  " + EntrustQuoteJson.getAccount() + "\n\n" +
-                "软件名称：  " + EntrustQuoteJson.getSoftwareName()
+                "   账      号：  " + EntrustQuoteJson.getAccount() + "\n"
                 , normal5YaHei);
         ZhangHu.setAlignment(0);
         ZhangHu.setSpacingAfter(20f);
+        ZhangHu.setLeading(25f);
         document.add(ZhangHu);
+
+        Paragraph RuanJianMingCheng=new Paragraph("软件名称：  " + EntrustQuoteJson.getSoftwareName(), normalxiao4YaHei);
+        RuanJianMingCheng.setAlignment(0);
+        RuanJianMingCheng.setSpacingAfter(20f);
+        document.add(RuanJianMingCheng);
 
         Paragraph DanWei = new Paragraph("单位：元", normal5YaHei);
         DanWei.setAlignment(2);
@@ -207,6 +215,13 @@ public class DocServiceEntrustQuote {
         JieYu.setAlignment(1);
         JieYu.setSpacingAfter(10f);
         document.add(JieYu);
+
+        Paragraph Info = new Paragraph("南京大学 计算机软件新技术国家重点实验室 软件测试中心\n" +
+                "江苏省 南京市 栖霞区 仙林大道163号  南京大学仙林校区计算机科学与技术楼\n" +
+                "电话025-89683467  传真025-89686596   Email: keysoftlab@nju.edu.cn\n", normalxiao5song);
+        Info.setAlignment(1);
+        Info.setSpacingBefore(120f);
+        document.add(Info);
 
     }
 }
