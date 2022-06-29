@@ -95,7 +95,9 @@ public class MongoSchemeReviewService implements SchemeReviewService {
             throw new ReviewInvalidStageException("此阶段不能修改测试方案检查表");
         }
         // 更新测试方案检查表
-        schemeReviewDAO.updateSchemeReview(schemeReviewId, schemeReview);
+        if(!schemeReviewDAO.updateSchemeReview(schemeReviewId, schemeReview)) {
+            throw new ReviewDAOFailureException("修改测试方案评审表失败");
+        }
     }
 
     private Boolean hasUpdateOrDeleteAuthority(SchemeReview schemeReview, Long userId, Role userRole) {
@@ -182,10 +184,10 @@ public class MongoSchemeReviewService implements SchemeReviewService {
     public void removeSchemeReview(String schemeReviewId, Long userId, Role userRole) {
         SchemeReview schemeReview = findSchemeReview(schemeReviewId, userId, userRole);
         if (!hasUpdateOrDeleteAuthority(schemeReview, userId, userRole)) {
-            throw new ReviewPermissionDeniedException("无权删除此测试检查方案");
+            throw new ReviewPermissionDeniedException("无权删除此测试方案评审表");
         }
         if (!schemeReviewDAO.deleteSchemeAuditById(schemeReview.getId())) {
-            throw new ReviewDAOFailureException("删除合同失败");
+            throw new ReviewDAOFailureException("删除测试方案评审表失败");
         }
     }
 }
