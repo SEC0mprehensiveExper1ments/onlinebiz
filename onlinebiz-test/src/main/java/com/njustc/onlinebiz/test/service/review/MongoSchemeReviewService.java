@@ -169,9 +169,9 @@ public class MongoSchemeReviewService implements SchemeReviewService {
     private Boolean hasUploadOrDownloadAuthority(SchemeReview schemeReview, Long userId, Role userRole){
         if (userId == null || userRole == null) {
             return false;
-        } else if (userRole == Role.ADMIN){
+        } else if (userRole == Role.ADMIN) {
             return true;
-        } else if (userRole == Role.MARKETING_SUPERVISOR || userRole == Role.QA_SUPERVISOR) {
+        } else if (userRole == Role.TESTING_SUPERVISOR || userRole == Role.QA_SUPERVISOR) {
             return true;
         }
         // 项目的质量相关人员也可以上传下载

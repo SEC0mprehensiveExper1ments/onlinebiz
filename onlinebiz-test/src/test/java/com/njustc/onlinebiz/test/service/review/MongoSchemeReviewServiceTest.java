@@ -375,13 +375,13 @@ class MongoSchemeReviewServiceTest {
         baseinfo.setQaId(3001L);
         project.setProjectBaseInfo(baseinfo);
         when(projectService.getProjectBaseInfo(any())).thenReturn(project.getProjectBaseInfo());
-        when(schemereviewDao.updateSchemeReview(any(), any())).thenReturn(true);
+        when(schemereviewDao.updateScannedCopyPath(any(), any())).thenReturn(true);
         when(multipartfile.isEmpty()).thenReturn(false);
 
         //开始测试
-        //尝试上传空的测试方案评审表
+        //尝试上传空的测试方案评审表扫描件
         when(multipartfile.isEmpty()).thenReturn(true);
-        when(multipartfile.getOriginalFilename()).thenReturn("OriginalFilename");
+        when(multipartfile.getOriginalFilename()).thenReturn("OriginalFilename.");
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
                 () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 0L, Role.ADMIN));
@@ -396,7 +396,7 @@ class MongoSchemeReviewServiceTest {
                 () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3001L, Role.QA));
         when(multipartfile.isEmpty()).thenReturn(false);
 
-        //在阶段WAIT_FOR_QA（非法阶段）下上传测试方案评审表
+        //在阶段WAIT_FOR_QA（非法阶段）下上传测试方案评审表扫描件
         project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, ""));
         when(multipartfile.isEmpty()).thenReturn(false);
         Assertions.assertThrows(
@@ -412,7 +412,7 @@ class MongoSchemeReviewServiceTest {
                 ReviewInvalidStageException.class,
                 () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3001L, Role.QA));
 
-        //在阶段SCHEME_REVIEW_UPLOADED（非法阶段）下上传测试方案评审表
+        //在阶段SCHEME_REVIEW_UPLOADED（非法阶段）下上传测试方案评审表扫描件
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
         when(multipartfile.isEmpty()).thenReturn(false);
         Assertions.assertThrows(
@@ -428,10 +428,77 @@ class MongoSchemeReviewServiceTest {
                 ReviewInvalidStageException.class,
                 () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3001L, Role.QA));
 
-        //在阶段SCHEME_AUDITING_PASSED（合法阶段）下上传测试方案评审表
+        //在阶段SCHEME_AUDITING_PASSED（合法阶段）下上传测试方案评审表扫描件
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_AUDITING_PASSED, ""));
         when(multipartfile.isEmpty()).thenReturn(false);
+        //由客户（非法人员）上传测试方案评审表扫描件
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 11111L, Role.CUSTOMER));
+        //由市场部员工（非法人员）上传测试方案评审表扫描件
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 1001L, Role.MARKETER));
+        //由市场部主管（非法人员）上传测试方案评审表扫描件
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 1000L, Role.MARKETING_SUPERVISOR));
+        //由测试部员工（非法人员）上传测试方案评审表扫描件
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 2001L, Role.TESTER));
+        //由非指派的质量部员工（非法人员）上传测试方案评审表扫描件
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3066L, Role.QA));
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3099L, Role.QA));
 
+        //由市场部主管（合法人员）上传测试方案评审表扫描件
+        Assertions.assertDoesNotThrow(() ->
+                schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 2000L, Role.TESTING_SUPERVISOR));
+        //由质量部主管（合法人员）上传测试方案评审表扫描件
+        Assertions.assertDoesNotThrow(() ->
+                schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3000L, Role.QA_SUPERVISOR));
+        //由指派的质量部员工（合法人员）上传测试方案评审表扫描件
+        Assertions.assertDoesNotThrow(() ->
+                schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3001L, Role.QA));
+        //由ADMIN（合法人员）上传测试方案评审表扫描件
+        Assertions.assertDoesNotThrow(() ->
+                schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 0L, Role.ADMIN));
+
+        //尝试上传扫描文件名为空的测试方案评审表
+        when(multipartfile.getOriginalFilename()).thenReturn(null);
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 2000L, Role.TESTING_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3000L, Role.QA_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3001L, Role.QA));
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 0L, Role.ADMIN));
+        when(multipartfile.getOriginalFilename()).thenReturn("OriginalFilename.");
+
+        //若保存扫描路径失败
+        when(schemereviewDao.updateScannedCopyPath(any(), any())).thenReturn(false);
+        Assertions.assertThrows(
+                ReviewDAOFailureException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 2000L, Role.TESTING_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewDAOFailureException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3000L, Role.QA_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewDAOFailureException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3001L, Role.QA));
+        Assertions.assertThrows(
+                ReviewDAOFailureException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 0L, Role.ADMIN));
+        when(schemereviewDao.updateSchemeReview(any(), any())).thenReturn(true);
     }
 
     @Test
