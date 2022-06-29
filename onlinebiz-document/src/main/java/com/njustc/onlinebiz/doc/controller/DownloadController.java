@@ -237,7 +237,7 @@ public class DownloadController {
             @RequestParam("userRole") Role userRole
     ) {
         EntrustQuote entrustQuote = restRequestService.getEntrustQuoteById(entrustId, userId, userRole);
-        return docServiceEntrustQuote.fill(entrustId, new EntrustQuoteDoc(entrustQuote));
+        return docServiceEntrustQuote.fill(entrustId.replaceAll("http",""), new EntrustQuoteDoc(entrustQuote));
     }
 
 }
