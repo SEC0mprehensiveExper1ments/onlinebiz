@@ -149,10 +149,11 @@ public class MongoSchemeReviewService implements SchemeReviewService {
 
     @Override
     public Resource getScannedCopy(String schemeReviewId, Long userId, Role userRole) throws IOException {
-        SchemeReview schemeReview = findSchemeReview(schemeReviewId, userId, userRole);
+        SchemeReview schemeReview = schemeReviewDAO.findSchemeReviewById(schemeReviewId);
         ProjectStage projectStage = projectDAO.findProjectById(schemeReview.getProjectId()).getStatus().getStage();
         // 检查阶段
-        if (projectStage == ProjectStage.SCHEME_UNFILLED ||
+        if (projectStage == ProjectStage.WAIT_FOR_QA ||
+            projectStage == ProjectStage.SCHEME_UNFILLED ||
             projectStage == ProjectStage.SCHEME_AUDITING ||
             projectStage == ProjectStage.SCHEME_AUDITING_DENIED ||
             projectStage == ProjectStage.SCHEME_AUDITING_PASSED) {

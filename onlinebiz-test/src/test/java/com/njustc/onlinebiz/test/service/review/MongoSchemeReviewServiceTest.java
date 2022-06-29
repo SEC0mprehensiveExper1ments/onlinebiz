@@ -506,6 +506,7 @@ class MongoSchemeReviewServiceTest {
 
         SchemeReview schemereview = new SchemeReview();
         schemereview.setId("SchemeReviewId");
+        schemereview.setScannedCopyPath("null.null");
         when(schemereviewDao.findSchemeReviewById(any())).thenReturn(schemereview);
         Project project = new Project();
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_AUDITING_PASSED, ""));
@@ -520,12 +521,112 @@ class MongoSchemeReviewServiceTest {
         when(schemereviewDao.updateSchemeReview(any(), any())).thenReturn(true);
 
         //开始测试
-        //在状态WAIT_FOR_QA（非法阶段）下下载测试方案评审表
+        //在状态WAIT_FOR_QA（非法阶段）下下载测试方案评审表扫描件
         project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, ""));
-        //在状态SCHEME_REVIEW_UPLOADED（非法状态）下下载测试方案评审表
-        project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
-        //在状态SCHEME_AUDITING_PASSED（合法阶段）下下载测试方案评审表
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 0L, Role.ADMIN));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 2000L, Role.TESTING_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3000L, Role.QA_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3001L, Role.QA));
+        //在状态SCHEME_UNFILLED（非法状态）下下载测试方案评审表扫描件
+        project.setStatus(new ProjectStatus(ProjectStage.SCHEME_UNFILLED, ""));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 0L, Role.ADMIN));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 2000L, Role.TESTING_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3000L, Role.QA_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3001L, Role.QA));
+        //在状态SCHEME_AUDITING（非法状态）下下载测试方案评审表扫描件
+        project.setStatus(new ProjectStatus(ProjectStage.SCHEME_AUDITING, ""));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 0L, Role.ADMIN));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 2000L, Role.TESTING_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3000L, Role.QA_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3001L, Role.QA));
+        //在状态SCHEME_AUDITING_DENIED（非法状态）下下载测试方案评审表扫描件
+        project.setStatus(new ProjectStatus(ProjectStage.SCHEME_AUDITING_DENIED, ""));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 0L, Role.ADMIN));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 2000L, Role.TESTING_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3000L, Role.QA_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3001L, Role.QA));
+        //在状态SCHEME_AUDITING_PASSED（非法状态）下下载测试方案评审表扫描件
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_AUDITING_PASSED, ""));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 0L, Role.ADMIN));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 2000L, Role.TESTING_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3000L, Role.QA_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3001L, Role.QA));
+
+        //在状态REPORT_AUDITING（合法阶段）下下载测试方案评审表扫描件
+        project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
+        //由客户（非法人员）尝试下载测试方案评审表扫描件
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 11111L, Role.CUSTOMER));
+        //由市场部员工（非法人员）尝试下载测试方案评审表扫描件
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 1001L, Role.MARKETER));
+        //由市场部员工（非法人员）尝试下载测试方案评审表扫描件
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 1000L, Role.MARKETING_SUPERVISOR));
+        //由测试部员工（非法人员）尝试下载测试方案评审表扫描件
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 2001L, Role.TESTER));
+        //由非指派的质量部员工（非法人员）尝试下载测试方案评审表扫描件
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.getScannedCopy("SchemeReviewId", 3001L, Role.QA));
+
+        //由指派的质量部员工（合法人员）尝试下载测试方案评审表扫描件
+        Assertions.assertDoesNotThrow(() ->
+                schemereviewservice.getScannedCopy("SchemeReviewId", 3001L, Role.QA));
+        //由测试部主管（合法人员）尝试下载测试方案评审表扫描件
+        Assertions.assertDoesNotThrow(() ->
+                schemereviewservice.getScannedCopy("SchemeReviewId", 2000L, Role.TESTING_SUPERVISOR));
+        //由指派的质量部主管（合法人员）尝试下载测试方案评审表扫描件
+        Assertions.assertDoesNotThrow(() ->
+                schemereviewservice.getScannedCopy("SchemeReviewId", 3000L, Role.QA_SUPERVISOR));
+        //由ADMIN（合法人员）尝试下载测试方案评审表扫描件
+        Assertions.assertDoesNotThrow(() ->
+                schemereviewservice.getScannedCopy("SchemeReviewId", 0L, Role.ADMIN));
     }
 
     @Test
