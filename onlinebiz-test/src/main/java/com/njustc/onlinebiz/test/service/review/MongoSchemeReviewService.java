@@ -78,7 +78,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
 
     @Override
     public void updateSchemeReview(String schemeReviewId, SchemeReview schemeReview, Long userId, Role userRole) {
-        SchemeReview origin = findSchemeReview(schemeReviewId, userId, userRole);
+        SchemeReview origin = schemeReviewDAO.findSchemeReviewById(schemeReviewId);
         if (!origin.getId().equals(schemeReview.getId())) {
             throw new ReviewPermissionDeniedException("测试方案检查表ID不一致");
         }
@@ -92,7 +92,9 @@ public class MongoSchemeReviewService implements SchemeReviewService {
             throw new ReviewInvalidStageException("此阶段不能修改测试方案检查表");
         }
         // 更新测试方案检查表
-        schemeReviewDAO.updateSchemeReview(schemeReviewId, schemeReview);
+        if (!schemeReviewDAO.updateSchemeReview(schemeReviewId, schemeReview)) {
+            throw new ReviewDAOFailureException("测试方案评审表更新失败");
+        }
     }
 
     private Boolean hasUpdateOrDeleteAuthority(SchemeReview schemeReview, Long userId, Role userRole) {
