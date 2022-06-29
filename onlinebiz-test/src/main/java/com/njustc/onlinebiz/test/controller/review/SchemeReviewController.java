@@ -11,6 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+/**
+ * 方案审查控制器
+ *
+ */
 @RestController
 @RequestMapping("/api")
 public class SchemeReviewController {
@@ -22,7 +26,14 @@ public class SchemeReviewController {
 
     // 创建接口为测试项目内部调用
 
-    // 获取检查表详情
+    /**
+     * 获取检查表详情
+     *
+     * @param schemeReviewId 方案审查id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link SchemeReview}
+     */
     @GetMapping("/review/scheme/{schemeReviewId}")
     public SchemeReview getSchemeReview(
             @PathVariable("schemeReviewId") String schemeReviewId,
@@ -32,7 +43,14 @@ public class SchemeReviewController {
         return schemeReviewService.findSchemeReview(schemeReviewId, userId, userRole);
     }
 
-    // 更新测试方案检查表内容
+    /**
+     * 更新测试方案检查表内容
+     *
+     * @param schemeReviewId 方案审查id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @param schemeReview 方案评审
+     */
     @PostMapping("/review/scheme/{schemeReviewId}")
     public void updateSchemeReview(
             @PathVariable("schemeReviewId") String schemeReviewId,
@@ -43,7 +61,15 @@ public class SchemeReviewController {
         schemeReviewService.updateSchemeReview(schemeReviewId, schemeReview, userId, userRole);
     }
 
-    // 上传测试方案评审表扫描件
+    /**
+     * 上传测试方案评审表扫描件
+     *
+     * @param schemeReviewId 方案审查id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @param scannedCopy 扫描副本
+     * @throws IOException ioexception
+     */
     @PostMapping("/review/scheme/{schemeReviewId}/upload")
     public void updateScannedCopy(
             @PathVariable("schemeReviewId") String schemeReviewId,
@@ -54,7 +80,15 @@ public class SchemeReviewController {
         schemeReviewService.saveScannedCopy(schemeReviewId, scannedCopy, userId, userRole);
     }
 
-    // 下载测试方案评审表扫描件
+    /**
+     * 下载测试方案评审表扫描件
+     *
+     * @param schemeReviewId 方案审查id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link ResponseEntity}<{@link Resource}>
+     * @throws IOException ioexception
+     */
     @GetMapping("/review/scheme/{schemeReviewId}/download")
     public ResponseEntity<Resource> downloadScannedCopy(
             @PathVariable("schemeReviewId") String schemeReviewId,

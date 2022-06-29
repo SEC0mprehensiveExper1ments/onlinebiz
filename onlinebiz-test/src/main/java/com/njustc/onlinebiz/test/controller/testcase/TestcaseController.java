@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * testcase控制器
+ *
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -18,7 +22,14 @@ public class TestcaseController {
         this.testcaseService = testcaseService;
     }
 
-    // 查看任意测试用例表的详细信息
+    /**
+     * 查看任意测试用例表的详细信息
+     *
+     * @param testcaseId testcase id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link Testcase}
+     */
     @GetMapping("/test/testcase/{testcaseId}")
     public Testcase getTestcase(
             @PathVariable("testcaseId") String testcaseId,
@@ -27,7 +38,14 @@ public class TestcaseController {
         return testcaseService.findTestcaseList(testcaseId, userId, userRole);
     }
 
-    // 修改测试用例表
+    /**
+     * 修改测试用例表
+     *
+     * @param testcaseId testcase id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @param content 内容
+     */
     @PostMapping("/test/testcase/{testcaseId}/content")
     public void updateContent(
             @PathVariable("testcaseId") String testcaseId,
@@ -38,7 +56,13 @@ public class TestcaseController {
         testcaseService.updateTestcaseList(testcaseId, content, userId, userRole);
     }
 
-    // 删除一份测试用例表
+    /**
+     * 删除一份测试用例表
+     *
+     * @param testcaseId testcase id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     */
     @DeleteMapping("/test/testcase/{testcaseId}")
     public void removeTestcase(
             @PathVariable("testcaseId") String testcaseId,
