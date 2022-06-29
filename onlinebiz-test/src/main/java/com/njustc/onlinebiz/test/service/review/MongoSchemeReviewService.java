@@ -123,7 +123,7 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         if (scannedCopy.isEmpty()) {
             throw new ReviewPermissionDeniedException("不能上传空的测试方案评审表的扫描件");
         }
-        SchemeReview schemeReview = findSchemeReview(schemeReviewId, userId, userRole);
+        SchemeReview schemeReview = schemeReviewDAO.findSchemeReviewById(schemeReviewId);
         // 检查阶段
         ProjectStage projectStage = projectDAO.findProjectById(schemeReview.getProjectId()).getStatus().getStage();
         if (projectStage != ProjectStage.SCHEME_AUDITING_PASSED) {

@@ -380,52 +380,53 @@ class MongoSchemeReviewServiceTest {
 
         //开始测试
         //尝试上传空的测试方案评审表
-        when(multipartfile.isEmpty()).thenReturn(false);
+        when(multipartfile.isEmpty()).thenReturn(true);
+        when(multipartfile.getOriginalFilename()).thenReturn("OriginalFilename");
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 0L, Role.ADMIN));
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 0L, Role.ADMIN));
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 2000L, Role.MARKETING_SUPERVISOR));
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 2000L, Role.MARKETING_SUPERVISOR));
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3000L, Role.QA_SUPERVISOR));
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3000L, Role.QA_SUPERVISOR));
         Assertions.assertThrows(
                 ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3001L, Role.QA));
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3001L, Role.QA));
         when(multipartfile.isEmpty()).thenReturn(false);
 
         //在阶段WAIT_FOR_QA（非法阶段）下上传测试方案评审表
         project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, ""));
         when(multipartfile.isEmpty()).thenReturn(false);
         Assertions.assertThrows(
-                ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 0L, Role.ADMIN));
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 0L, Role.ADMIN));
         Assertions.assertThrows(
-                ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 2000L, Role.MARKETING_SUPERVISOR));
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 2000L, Role.MARKETING_SUPERVISOR));
         Assertions.assertThrows(
-                ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3000L, Role.QA_SUPERVISOR));
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3000L, Role.QA_SUPERVISOR));
         Assertions.assertThrows(
-                ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3001L, Role.QA));
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3001L, Role.QA));
 
         //在阶段SCHEME_REVIEW_UPLOADED（非法阶段）下上传测试方案评审表
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
         when(multipartfile.isEmpty()).thenReturn(false);
         Assertions.assertThrows(
-                ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 0L, Role.ADMIN));
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 0L, Role.ADMIN));
         Assertions.assertThrows(
-                ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 2000L, Role.MARKETING_SUPERVISOR));
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 2000L, Role.MARKETING_SUPERVISOR));
         Assertions.assertThrows(
-                ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3000L, Role.QA_SUPERVISOR));
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3000L, Role.QA_SUPERVISOR));
         Assertions.assertThrows(
-                ReviewPermissionDeniedException.class,
-                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3001L, Role.QA));
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.saveScannedCopy("SchemeReviewId", multipartfile, 3001L, Role.QA));
 
         //在阶段SCHEME_AUDITING_PASSED（合法阶段）下上传测试方案评审表
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_AUDITING_PASSED, ""));
