@@ -70,7 +70,7 @@ public class SchemeReviewController {
      * @param scannedCopy 扫描副本
      * @throws IOException ioexception
      */
-    @PostMapping("/review/scheme/{schemeReviewId}/upload")
+    @PutMapping("/review/scheme/{schemeReviewId}/upload")
     public void updateScannedCopy(
             @PathVariable("schemeReviewId") String schemeReviewId,
             @RequestParam("userId") Long userId,
