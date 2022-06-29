@@ -135,6 +135,7 @@ class MongoTestIssueServiceTest {
         Assertions.assertThrows(
                 TestIssueNotFoundException.class,
                 () -> testissueservice.findTestIssueList("TestIssueListId", 3000L, Role.QA_SUPERVISOR));
+        when(testissueDAO.findTestIssueListById(any())).thenReturn(TestissueList);
 
         //在REPORT_QA_DENIED阶段（合法阶段）查找测试问题清单
         when(testissueDAO.findTestIssueListById(any())).thenReturn(TestissueList);
@@ -183,6 +184,7 @@ class MongoTestIssueServiceTest {
         Assertions.assertThrows(
                 TestIssueNotFoundException.class,
                 () -> testissueservice.findTestIssueList("TestIssueListId", 3000L, Role.QA_SUPERVISOR));
+        when(testissueDAO.findTestIssueListById(any())).thenReturn(TestissueList);
 
         //在WAIT_FOR_QA（非法阶段）阶段尝试查找测试问题清单
         when(testissueDAO.findTestIssueListById(any())).thenReturn(TestissueList);
@@ -270,6 +272,7 @@ class MongoTestIssueServiceTest {
         Assertions.assertThrows(
                 TestIssueNotFoundException.class,
                 () -> testissueservice.updateTestIssueList("TestIssueListId", null, 2000L, Role.TESTING_SUPERVISOR));
+        when(testissueDAO.findTestIssueListById(any())).thenReturn(TestissueList);
 
         //在REPORT_QA_DENIED阶段（合法阶段）尝试修改测试问题清单
         when(testissueDAO.findTestIssueListById(any())).thenReturn(TestissueList);
@@ -324,6 +327,7 @@ class MongoTestIssueServiceTest {
         Assertions.assertThrows(
                 TestIssueNotFoundException.class,
                 () -> testissueservice.updateTestIssueList("TestIssueListId", null, 2000L, Role.TESTING_SUPERVISOR));
+        when(testissueDAO.findTestIssueListById(any())).thenReturn(TestissueList);
 
         //在WAIT_FOR_QA（非法阶段）尝试修改测试问题清单
         project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, ""));
@@ -391,5 +395,6 @@ class MongoTestIssueServiceTest {
         Assertions.assertThrows(
                 TestIssueNotFoundException.class,
                 () -> testissueservice.removeTestIssueList("TestIssueListId", 0L, Role.ADMIN));
+        when(testissueDAO.findTestIssueListById(any())).thenReturn(TestissueList);
     }
 }

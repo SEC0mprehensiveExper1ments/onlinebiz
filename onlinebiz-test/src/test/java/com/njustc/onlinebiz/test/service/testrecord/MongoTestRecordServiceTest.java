@@ -131,6 +131,7 @@ class MongoTestRecordServiceTest {
         Assertions.assertThrows(
                 TestRecordNotFoundException.class,
                 () -> testrecordservice.findTestRecordList("TestRecordListId", 3000L, Role.QA_SUPERVISOR));
+        when(testrecordDAO.findTestRecordListById(any())).thenReturn(TestrecordList);
 
         //在REPORT_QA_DENIED阶段（合法阶段）进行查找测试记录表
         project.setStatus(new ProjectStatus(ProjectStage.REPORT_QA_DENIED, ""));
@@ -178,6 +179,7 @@ class MongoTestRecordServiceTest {
         Assertions.assertThrows(
                 TestRecordNotFoundException.class,
                 () -> testrecordservice.findTestRecordList("TestRecordListId", 3000L, Role.QA_SUPERVISOR));
+        when(testrecordDAO.findTestRecordListById(any())).thenReturn(TestrecordList);
 
         //在WAIT_FOR_QA阶段（不合法阶段）尝试寻找问题清单
         project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, ""));
@@ -259,6 +261,7 @@ class MongoTestRecordServiceTest {
         Assertions.assertThrows(
                 TestRecordNotFoundException.class,
                 () -> testrecordservice.updateTestRecordList("TestRecordListId", null, 2000L, Role.TESTING_SUPERVISOR));
+        when(testrecordDAO.findTestRecordListById(any())).thenReturn(TestrecordList);
 
         //在REPORT_QA_DENIED阶段（合法阶段）尝试修改测试记录表
         when(testrecordDAO.findTestRecordListById(any())).thenReturn(TestrecordList);
@@ -313,6 +316,7 @@ class MongoTestRecordServiceTest {
         Assertions.assertThrows(
                 TestRecordNotFoundException.class,
                 () -> testrecordservice.updateTestRecordList("TestRecordListId", null, 2000L, Role.TESTING_SUPERVISOR));
+        when(testrecordDAO.findTestRecordListById(any())).thenReturn(TestrecordList);
         
         //在REPORT_WAIT_SENT_TO_CUSTOMER阶段（非法阶段）尝试修改测试记录表
         project.setStatus(new ProjectStatus(ProjectStage.REPORT_WAIT_SENT_TO_CUSTOMER, ""));
@@ -381,5 +385,6 @@ class MongoTestRecordServiceTest {
         Assertions.assertThrows(
                 TestRecordNotFoundException.class,
                 () -> testrecordservice.removeTestRecordList("TestRecordListId", 0L, Role.ADMIN));
+        when(testrecordDAO.findTestRecordListById(any())).thenReturn(TestrecordList);
     }
 }

@@ -137,6 +137,7 @@ class MongoTestcaseServiceTest {
         Assertions.assertThrows(
                 TestcaseNotFoundException.class,
                 () -> mongotestcaseservice.findTestcaseList("TestcaseListId", 3000L, Role.QA_SUPERVISOR));
+        when(testcaseDAO.findTestcaseListById(any())).thenReturn(testcase);
 
         //在REPORT_QA_DENIED阶段（合法阶段）查找测试用例表
         when(testcaseDAO.findTestcaseListById(any())).thenReturn(testcase);
@@ -190,6 +191,7 @@ class MongoTestcaseServiceTest {
         Assertions.assertThrows(
                 TestcaseNotFoundException.class,
                 () -> mongotestcaseservice.findTestcaseList("TestcaseListId", 3000L, Role.QA_SUPERVISOR));
+        when(testcaseDAO.findTestcaseListById(any())).thenReturn(testcase);
 
         //在WAIT_FOR_QA阶段（非法阶段）尝试查找测试用例表
         project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, ""));
@@ -281,6 +283,7 @@ class MongoTestcaseServiceTest {
         Assertions.assertThrows(
                 TestcaseNotFoundException.class,
                 () -> mongotestcaseservice.updateTestcaseList("TestcaseListId", null, 2000L, Role.TESTING_SUPERVISOR));
+        when(testcaseDAO.findTestcaseListById(any())).thenReturn(testcase);
 
         //在REPORT_QA_DENIED（合法阶段）修改测试用例表
         when(testcaseDAO.findTestcaseListById(any())).thenReturn(testcase);
@@ -339,6 +342,7 @@ class MongoTestcaseServiceTest {
         Assertions.assertThrows(
                 TestcaseNotFoundException.class,
                 () -> mongotestcaseservice.updateTestcaseList("TestcaseListId", null, 2000L, Role.TESTING_SUPERVISOR));
+        when(testcaseDAO.findTestcaseListById(any())).thenReturn(testcase);
 
         //在WAIT_FOR_QA阶段（非法阶段）尝试修改测试用例表
         project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, ""));
@@ -408,5 +412,6 @@ class MongoTestcaseServiceTest {
         Assertions.assertThrows(
                 TestcaseNotFoundException.class,
                 () -> mongotestcaseservice.removeTestcaseList("TestcaseListId", 0L, Role.ADMIN));
+        when(testcaseDAO.findTestcaseListById(any())).thenReturn(testcase);
     }
 }
