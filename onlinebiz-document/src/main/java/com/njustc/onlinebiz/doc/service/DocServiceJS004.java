@@ -298,14 +298,11 @@ public class DocServiceJS004 {
     text2.setLeading(24f);
     Chunk chunk3 = new Chunk(JS004Json.getInputShouCeRuanJian(), textfont);
     chunk3.setUnderline(0.3f, -3f);
-    Chunk chunk4 = new Chunk(JS004Json.getInputZhiLiangTeXing(), textfont);
-    chunk4.setUnderline(0.3f, -3f);
 
     text2.add(new Chunk("一、任务表述\n", keyfont));
     text2.add(new Chunk("    乙方按照国家软件质量测试标准和测试规范，完成甲方委托的软件", textfont));
     text2.add(chunk3);
     text2.add(new Chunk("(下称受测软件)的质量特性", textfont));
-    text2.add(chunk4);
     text2.add(new Chunk("，进行测试，并出具相应的测试报告。", textfont));
     text2.setSpacingAfter(30f); // 设置段落下空白
 

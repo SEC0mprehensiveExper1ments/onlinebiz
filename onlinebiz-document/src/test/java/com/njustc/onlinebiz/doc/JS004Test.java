@@ -26,7 +26,6 @@ public class JS004Test {
                 .setInputQianDingRiQi0Yue("4")
                 .setInputQianDingRiQi0Ri("29")
                 .setInputShouCeRuanJian("南京大学计算机软件新技术国家重点项目软件")
-                .setInputZhiLiangTeXing("鲁棒性、稳定性")
                 .setInputCeShiFeiYong("三万元整")
                 .setInputCeShiFeiYong0Yuan("30000")
                 .setInputLvXingQiXian("100")
@@ -55,7 +54,6 @@ public class JS004Test {
         System.out.println(JSON.toJSONString(newJson));
         String JS004URL = docServiceJS004.fill("1111", newJson);
         System.out.println(JS004URL);
-        System.err.println(JS004URL);
         Assertions.assertTrue(JS004URL.startsWith("https://"));
     }
 }

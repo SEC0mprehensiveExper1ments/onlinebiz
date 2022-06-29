@@ -20,7 +20,7 @@ public class JS004 {
   private String inputQianDingRiQi0Yue = "";
   private String inputQianDingRiQi0Ri = "";
   private String inputShouCeRuanJian = "";
-  private String inputZhiLiangTeXing = "";
+//  private String inputZhiLiangTeXing = "";
   private String inputCeShiFeiYong = "";
   private String inputCeShiFeiYong0Yuan = "";
   private String inputLvXingQiXian = "";
@@ -61,8 +61,6 @@ public class JS004 {
 
     this.inputShouCeRuanJian = contract.getTargetSoftware();
 
-    // TODO: 质量特性
-//    this.inputZhiLiangTeXing = ;
 
     // TODO: 合同价款
 //    this.inputCeShiFeiYong = contract;
