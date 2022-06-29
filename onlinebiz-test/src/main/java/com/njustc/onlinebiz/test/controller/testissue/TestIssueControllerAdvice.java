@@ -13,10 +13,20 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.IOException;
 
+/**
+ * 控制器测试问题建议
+ *
+ */
 @Slf4j
 @ControllerAdvice
 public class TestIssueControllerAdvice {
 
+    /**
+     * 处理没有发现异常
+     *
+     * @param e e
+     * @return {@link String}
+     */
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ReviewNotFoundException.class)
@@ -25,6 +35,12 @@ public class TestIssueControllerAdvice {
         return e.getMessage();
     }
 
+    /**
+     * 处理拒绝访问异常
+     *
+     * @param e e
+     * @return {@link String}
+     */
     @ResponseBody
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(ReviewPermissionDeniedException.class)
@@ -33,6 +49,12 @@ public class TestIssueControllerAdvice {
         return e.getMessage();
     }
 
+    /**
+     * 处理无效阶段异常
+     *
+     * @param e e
+     * @return {@link String}
+     */
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ReviewInvalidStageException.class)
@@ -41,6 +63,12 @@ public class TestIssueControllerAdvice {
         return e.getMessage();
     }
 
+    /**
+     * 处理daofailure异常
+     *
+     * @param e e
+     * @return {@link String}
+     */
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(ReviewDAOFailureException.class)
@@ -49,6 +77,12 @@ public class TestIssueControllerAdvice {
         return e.getMessage();
     }
 
+    /**
+     * 处理ioexception
+     *
+     * @param e e
+     * @return {@link String}
+     */
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(IOException.class)

@@ -5,7 +5,6 @@ import com.njustc.onlinebiz.common.model.test.project.Project;
 import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
 import com.njustc.onlinebiz.common.model.test.scheme.Scheme;
 import com.njustc.onlinebiz.common.model.test.scheme.SchemeContent;
-import com.njustc.onlinebiz.test.dao.project.MongoProjectDAO;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.scheme.SchemeDAO;
 import com.njustc.onlinebiz.test.exception.project.ProjectNotFoundException;
@@ -15,7 +14,6 @@ import com.njustc.onlinebiz.test.exception.scheme.SchemeNotFoundException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemePermissionDeniedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Service

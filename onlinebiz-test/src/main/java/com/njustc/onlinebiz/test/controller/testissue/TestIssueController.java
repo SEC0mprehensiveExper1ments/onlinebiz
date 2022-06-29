@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 测试问题控制器
+ *
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -18,7 +22,14 @@ public class TestIssueController {
         this.testIssueService = testIssueService;
     }
 
-    // 查看任意测试问题清单的详细信息
+    /**
+     * 查看任意测试问题清单的详细信息
+     *
+     * @param testIssueId 测试问题id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link TestIssueList}
+     */
     @GetMapping("/test/testIssue/{testIssueId}")
     public TestIssueList getTestIssue(
             @PathVariable("testIssueId") String testIssueId,
@@ -27,7 +38,14 @@ public class TestIssueController {
         return testIssueService.findTestIssueList(testIssueId, userId, userRole);
     }
 
-    // 修改测试问题清单
+    /**
+     * 修改测试问题清单
+     *
+     * @param testIssueId 测试问题id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @param content 内容
+     */
     @PostMapping("/test/testIssue/{testIssueId}/content")
     public void updateContent(
             @PathVariable("testIssueId") String testIssueId,
@@ -38,7 +56,13 @@ public class TestIssueController {
         testIssueService.updateTestIssueList(testIssueId, content, userId, userRole);
     }
 
-    // 删除一份测试问题清单
+    /**
+     * 删除一份测试问题清单
+     *
+     * @param testIssueId 测试问题id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     */
     @DeleteMapping("/test/testIssue/{testIssueId}")
     public void removeTestIssue(
             @PathVariable("testIssueId") String testIssueId,
