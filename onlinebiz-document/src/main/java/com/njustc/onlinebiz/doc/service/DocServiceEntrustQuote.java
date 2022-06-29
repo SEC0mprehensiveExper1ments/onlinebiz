@@ -47,6 +47,13 @@ public class DocServiceEntrustQuote {
 
     private static EntrustQuoteDoc EntrustQuoteJson;
 
+    /**
+     * 填充
+     *
+     * @param entrustId 委托id
+     * @param newJson 新json
+     * @return {@link String} OSS下载链接
+     */
     public String fill(String entrustId, EntrustQuoteDoc newJson) {
         EntrustQuoteJson = newJson;
         String pdfPath = DOCUMENT_DIR + "EntrustQuote_" + entrustId + ".pdf";

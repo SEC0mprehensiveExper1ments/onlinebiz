@@ -86,7 +86,7 @@ public class SchemeReviewController {
      * @param schemeReviewId 方案审查id
      * @param userId 用户id
      * @param userRole 用户角色
-     * @return {@link ResponseEntity}<{@link Resource}>
+     * @return {@link ResponseEntity<Resource>}
      * @throws IOException ioexception
      */
     @GetMapping("/review/scheme/{schemeReviewId}/download")

@@ -53,7 +53,13 @@ public class DocServiceJS004 {
   }
 
 
-  /** 填充JS004文档 */
+  /**
+   * 填充
+   *
+   * @param contractId 委托id
+   * @param newJson 新json
+   * @return {@link String} OSS下载链接
+   */
   public String fill(String contractId, JS004 newJson) {
     JS004Json = newJson;
     String pdfPath = DOCUMENT_DIR + "JS004_" + contractId + ".pdf";

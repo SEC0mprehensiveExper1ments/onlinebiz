@@ -45,7 +45,13 @@ public class DocServiceJS007 {
     }
 
     private static JS007 JS007Json;
-
+    /**
+     * 填充
+     *
+     * @param reportId 委托id
+     * @param newJson 新json
+     * @return {@link String} OSS下载链接
+     */
     public String fill(String reportId, JS007 newJson) {
         JS007Json = newJson;
         String pdfPath = DOCUMENT_DIR + "JS007_" + reportId + ".pdf";

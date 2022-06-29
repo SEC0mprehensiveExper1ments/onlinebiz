@@ -48,7 +48,7 @@ public class ProjectController {
      * @param userRole 用户角色
      * @param page 页面
      * @param pageSize 页面大小
-     * @return {@link PageResult}<{@link ProjectOutline}>
+     * @return {@link PageResult<ProjectOutline>}
      */
     @GetMapping("/test")
     public PageResult<ProjectOutline> getProjects(
