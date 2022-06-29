@@ -110,6 +110,7 @@ class MongoSchemeServiceTest {
         Assertions.assertThrows(
                 SchemeNotFoundException.class,
                 () -> schemeservice.updateScheme("schemeId", schemecontent, 2000L, Role.TESTING_SUPERVISOR));
+        when(schemeDAO.findSchemeById(any())).thenReturn(scheme);
 
         //在SCHEME_AUDITING_DENIED阶段尝试修改测试方案（合法阶段）
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_AUDITING_DENIED, ""));
@@ -165,6 +166,7 @@ class MongoSchemeServiceTest {
         Assertions.assertThrows(
                 SchemeNotFoundException.class,
                 () -> schemeservice.updateScheme("schemeId", schemecontent, 2000L, Role.TESTING_SUPERVISOR));
+        when(schemeDAO.findSchemeById(any())).thenReturn(scheme);
 
         //尝试在不允许修改测试方案的阶段修改测试方案
         //在质量部审核测试方案阶段（SCHEME_AUDITING）尝试修改
@@ -375,6 +377,7 @@ class MongoSchemeServiceTest {
         Assertions.assertThrows(
                 SchemeNotFoundException.class,
                 () -> schemeservice.findScheme("SchemeId", 3000L, Role.QA_SUPERVISOR));
+        when(schemeDAO.findSchemeById(any())).thenReturn(scheme);
 
         //在SCHEME_AUDITING_DENIED状态（合法状态）查找测试方案
         when(schemeDAO.findSchemeById(any())).thenReturn(scheme);
@@ -432,6 +435,7 @@ class MongoSchemeServiceTest {
         Assertions.assertThrows(
                 SchemeNotFoundException.class,
                 () -> schemeservice.findScheme("SchemeId", 3000L, Role.QA_SUPERVISOR));
+        when(schemeDAO.findSchemeById(any())).thenReturn(scheme);
 
         //尝试在阶段WAIT_FOR_QA（非法阶段之一）查找测试方案
         when(schemeDAO.findSchemeById(any())).thenReturn(scheme);
