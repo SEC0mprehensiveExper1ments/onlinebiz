@@ -80,6 +80,10 @@ public class MongoProjectService implements ProjectService {
         if (entrustDto == null) {
             throw new ProjectDAOFailureException("entrustDto为空");
         }
+        // 检查项目是否已被创建
+        if (entrustDto.getProjectId() != null) {
+            throw new ProjectDAOFailureException("该委托已有测试项目");
+        }
         // 检查创建者匹配
         if (userRole == Role.MARKETER && !Objects.equals(userId, entrustDto.getMarketerId())) {
             throw new ProjectPermissionDeniedException("市场部人员信息不一致, 创建失败");
@@ -186,7 +190,6 @@ public class MongoProjectService implements ProjectService {
         String workChecklistId = entrustTestReviewService.createEntrustTestReview(projectId, marketerId, Role.MARKETER);
         projectFormIds.setWorkChecklistId(workChecklistId);
         // 对应的测试方案评审表 (JS013)
-        /** 可以参考这个示例 **/
         String testSchemeChecklistId = schemeReviewService.createSchemeReview(projectId, qaId, testerId);
         projectFormIds.setTestSchemeChecklistId(testSchemeChecklistId);
 
