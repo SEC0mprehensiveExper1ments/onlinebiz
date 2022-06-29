@@ -13,6 +13,10 @@ import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * ossprovider
+ *
+ */
 @Component
 public class OSSProvider {
   MinioClient minioClient;
@@ -32,6 +36,15 @@ public class OSSProvider {
     }
   }
 
+  /**
+   * 上传
+   *
+   * @param bucketName bucket名称
+   * @param objectName 对象名称
+   * @param data 数据
+   * @param contentType 内容类型
+   * @return boolean
+   */
   public boolean upload(String bucketName, String objectName, byte[] data, String contentType) {
     try {
       // 判断桶是否存在，不存在则先创建桶

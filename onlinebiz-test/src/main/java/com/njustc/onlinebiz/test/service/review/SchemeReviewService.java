@@ -8,6 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+/**
+ * 方案审查服务
+ *
+ */
 public interface SchemeReviewService {
 
     /**

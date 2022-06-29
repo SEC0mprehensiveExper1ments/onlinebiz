@@ -25,8 +25,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
 class MongoTestcaseServiceTest {
 
     private final ProjectDAO projectDAO = mock(ProjectDAO.class);

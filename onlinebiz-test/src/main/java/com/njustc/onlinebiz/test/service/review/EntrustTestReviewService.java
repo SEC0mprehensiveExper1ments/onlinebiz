@@ -7,6 +7,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+/**
+ * 委托测试评估服务
+ *
+ */
 public interface EntrustTestReviewService {
     /**
      * 创建一份工作检查表，在项目初始阶段生成，由市场部人员(主管)以及管理员来生成，若已有项目已生成工作检查表则创建失败

@@ -43,13 +43,13 @@ public class MongoSchemeReviewService implements SchemeReviewService {
     public SchemeReview findSchemeReview(String schemeReviewId, Long userId, Role userRole) {
         SchemeReview schemeReview = schemeReviewDAO.findSchemeReviewById(schemeReviewId);
         if (schemeReview == null) {
-            throw new ReviewNotFoundException("该测试方案检查表不存在: " + schemeReviewId);
+            throw new ReviewNotFoundException("该测试方案评审表不存在: " + schemeReviewId);
         } else if (!hasFindAuthority(schemeReview, userId, userRole)) {
-            throw new ReviewPermissionDeniedException("无权查看该测试方案检查表");
+            throw new ReviewPermissionDeniedException("无权查看该测试方案评审表");
         } else {
             ProjectStage projectStage = projectDAO.findProjectById(schemeReview.getProjectId()).getStatus().getStage();
             if(projectStage == ProjectStage.WAIT_FOR_QA || projectStage == ProjectStage.SCHEME_UNFILLED) {
-                throw new ReviewInvalidStageException("此阶段不能查看测试方案检查表");
+                throw new ReviewInvalidStageException("此阶段不能查看测试方案评审表");
             }
         }
         return schemeReview;
@@ -84,20 +84,20 @@ public class MongoSchemeReviewService implements SchemeReviewService {
             throw new ReviewNotFoundException("该测试方案评审表不存在");
         }
         if (!origin.getId().equals(schemeReview.getId())) {
-            throw new ReviewPermissionDeniedException("测试方案检查表ID不一致");
+            throw new ReviewPermissionDeniedException("测试方案评审表ID不一致");
         }
         // 检查测试项目的阶段
         ProjectStage projectStage = projectDAO.findProjectById(origin.getProjectId()).getStatus().getStage();
         if(projectStage == ProjectStage.SCHEME_AUDITING) {
             if (!hasUpdateOrDeleteAuthority(schemeReview, userId, userRole)) {
-                throw new ReviewPermissionDeniedException("无权修改此测试方案检查表");
+                throw new ReviewPermissionDeniedException("无权修改此测试方案评审表");
             }
         } else {
-            throw new ReviewInvalidStageException("此阶段不能修改测试方案检查表");
+            throw new ReviewInvalidStageException("此阶段不能修改测试方案评审表");
         }
-        // 更新测试方案检查表
+        // 更新测试方案评审表
         if (!schemeReviewDAO.updateSchemeReview(schemeReviewId, schemeReview)) {
-            throw new ReviewDAOFailureException("测试方案检查表更新失败");
+            throw new ReviewDAOFailureException("测试方案评审表更新失败");
         }
     }
 
@@ -121,9 +121,9 @@ public class MongoSchemeReviewService implements SchemeReviewService {
     @Override
     public void saveScannedCopy(String schemeReviewId, MultipartFile scannedCopy, Long userId, Role userRole) throws IOException {
         if (scannedCopy.isEmpty()) {
-            throw new ReviewPermissionDeniedException("不能上传空的测试方案检查表的扫描件");
+            throw new ReviewPermissionDeniedException("不能上传空的测试方案评审表的扫描件");
         }
-        SchemeReview schemeReview = findSchemeReview(schemeReviewId, userId, userRole);
+        SchemeReview schemeReview = schemeReviewDAO.findSchemeReviewById(schemeReviewId);
         // 检查阶段
         ProjectStage projectStage = projectDAO.findProjectById(schemeReview.getProjectId()).getStatus().getStage();
         if (projectStage != ProjectStage.SCHEME_AUDITING_PASSED) {
@@ -131,9 +131,9 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         }
         // 检查权限
         if (!hasUploadOrDownloadAuthority(schemeReview, userId, userRole)) {
-            throw new ReviewPermissionDeniedException("无权上传测试方案检查表");
+            throw new ReviewPermissionDeniedException("无权上传测试方案评审表");
         }
-        // 保存测试方案检查表到磁盘
+        // 保存测试方案评审表到磁盘
         String originalFilename = scannedCopy.getOriginalFilename();
         if (originalFilename == null) {
             throw new ReviewPermissionDeniedException("扫描文件名不能为空");
@@ -185,13 +185,13 @@ public class MongoSchemeReviewService implements SchemeReviewService {
     public void removeSchemeReview(String schemeReviewId, Long userId, Role userRole) {
         SchemeReview schemeReview = schemeReviewDAO.findSchemeReviewById(schemeReviewId);
         if (schemeReview == null) {
-            throw new ReviewNotFoundException("尝试删除不存在的测试方案检查表");
+            throw new ReviewNotFoundException("尝试删除不存在的测试方案评审表");
         }
         if (!hasUpdateOrDeleteAuthority(schemeReview, userId, userRole)) {
-            throw new ReviewPermissionDeniedException("无权删除此测试方案检查表");
+            throw new ReviewPermissionDeniedException("无权删除此测试方案评审表");
         }
         if (!schemeReviewDAO.deleteSchemeAuditById(schemeReview.getId())) {
-            throw new ReviewDAOFailureException("删除测试方案检查表失败");
+            throw new ReviewDAOFailureException("删除测试方案评审表失败");
         }
     }
 }

@@ -43,6 +43,13 @@ public class DocServiceJS006 {
     }
 
     private static JS006 JS006Json;
+    /**
+     * 填充
+     *
+     * @param schemeId 委托id
+     * @param newJson 新json
+     * @return {@link String} OSS下载链接
+     */
 
     public String fill(String schemeId, JS006 newJson) {
         JS006Json = newJson;

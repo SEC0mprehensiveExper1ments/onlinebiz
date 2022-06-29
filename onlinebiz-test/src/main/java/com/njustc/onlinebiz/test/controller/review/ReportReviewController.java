@@ -83,7 +83,7 @@ public class ReportReviewController {
      * @param reportReviewId 报告评论id
      * @param userId 用户id
      * @param userRole 用户角色
-     * @return {@link ResponseEntity}<{@link Resource}>
+     * @return {@link ResponseEntity<Resource>}
      * @throws IOException ioexception
      */
     @GetMapping("/review/report/{reportReviewId}/download")

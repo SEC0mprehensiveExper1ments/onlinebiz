@@ -17,11 +17,12 @@ import com.njustc.onlinebiz.doc.model.JS003.JS003;
 import com.njustc.onlinebiz.doc.service.*;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 下载控制器，收到请求后，文档服务向对应服务发出字段获取请求，通过DTO对象转换成文档内定义个的类对象
+ *
+ */
 @RestController
 @RequestMapping("/api")
-/**
- * 收到请求后，文档服务向对应服务发出字段获取请求，通过DTO对象转换成文档内定义个的类对象
- * */
 public class DownloadController {
 
     private final DocServiceJS001 docServiceJS001;
@@ -75,13 +76,24 @@ public class DownloadController {
         this.restRequestService = restRequestService;
     }
 
-    // JS001 文档下载接口
+    /**
+     * JS001 文档下载接口
+     *
+     * @return {@link String}
+     */
     @GetMapping("/doc/JS001")
     public String downloadJS001() {
         return docServiceJS001.fill();
     }
 
-    // JS002 文档下载接口
+    /**
+     * JS002 文档下载接口
+     *
+     * @param entrustId 委托id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
     @GetMapping("/doc/JS002/{entrustId}")
     public String downloadJS002(
             @PathVariable("entrustId") String entrustId,
@@ -92,7 +104,14 @@ public class DownloadController {
         return docServiceJS002.fill(entrustId.replaceAll("////",""), new JS002(entrust));
     }
 
-    // JS003 文档下载接口
+    /**
+     * JS003 文档下载接口
+     *
+     * @param entrustId 委托id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
     @GetMapping("/doc/JS003/{entrustId}")
     public String downloadJS003(
             @PathVariable("entrustId") String entrustId,
@@ -103,7 +122,14 @@ public class DownloadController {
         return docServiceJS003.fill(entrustId.replaceAll("////",""), new JS003(entrust));
     }
 
-    // JS004 文档下载接口
+    /**
+     * JS004 文档下载接口
+     *
+     * @param contractId 合同标识
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
     @GetMapping("/doc/JS004/{contractId}")
     public String downloadJS004(
             @PathVariable("contractId") String contractId,
@@ -114,7 +140,14 @@ public class DownloadController {
         return docServiceJS004.fill(contractId.replaceAll("////",""), new JS004(contract));
     }
 
-    // JS005 文档下载接口
+    /**
+     * JS005 文档下载接口
+     *
+     * @param contractId 合同标识
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
     @GetMapping("/doc/JS005/{contractId}")
     public String downloadJS005(
             @PathVariable("contractId") String contractId,
@@ -125,7 +158,14 @@ public class DownloadController {
         return docServiceJS005.fill(contractId.replaceAll("////",""), new JS005(contract));
     }
 
-    // JS006 文档下载接口
+    /**
+     * JS006 文档下载接口
+     *
+     * @param schemeId 计划id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
     @GetMapping("/doc/JS006/{schemeId}")
     public String downloadJS006(
             @PathVariable("schemeId") String schemeId,
@@ -137,7 +177,14 @@ public class DownloadController {
         return docServiceJS006.fill(schemeId.replaceAll("////",""), newJson);
     }
 
-    // JS007 文档下载接口
+    /**
+     * JS007 文档下载接口
+     *
+     * @param reportId 报告id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
     @GetMapping("/doc/JS007/{reportId}")
     public String downloadJS007(
             @PathVariable("reportId") String reportId,
@@ -149,7 +196,14 @@ public class DownloadController {
         return docServiceJS007.fill(reportId.replaceAll("////",""), newJson);
     }
 
-    // JS008 文档下载接口
+    /**
+     * JS008 文档下载接口
+     *
+     * @param testcaseId testcase id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
     @GetMapping("/doc/JS008/{testcaseId}")
     public String downloadJS008(
             @PathVariable("testcaseId") String testcaseId,
@@ -160,7 +214,14 @@ public class DownloadController {
         return docServiceJS008.fill(testcaseId.replaceAll("////",""), new JS008(testcase));
     }
 
-    // JS009 文档下载接口
+    /**
+     * JS009 文档下载接口
+     *
+     * @param testRecordId 测试记录id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
     @GetMapping("/doc/JS009/{testRecordId}")
     public String downloadJS009(
             @PathVariable("testRecordId") String testRecordId,
@@ -171,7 +232,14 @@ public class DownloadController {
         return docServiceJS009.fill(testRecordId.replaceAll("////",""), new JS009(testRecordList));
     }
 
-    // JS010 文档下载接口
+    /**
+     * JS010 文档下载接口
+     *
+     * @param reportReviewId 报告评论id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
     @GetMapping("/doc/JS010/{reportReviewId}")
     public String downloadJS010(
             @PathVariable("reportReviewId") String reportReviewId,
@@ -182,7 +250,14 @@ public class DownloadController {
         return docServiceJS010.fill(reportReviewId.replaceAll("////",""), new JS010(reportReview));
     }
 
-    // JS011 文档下载接口
+    /**
+     * JS011 文档下载接口
+     *
+     * @param testIssueId 测试问题id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
     @GetMapping("/doc/JS011/{testIssueId}")
     public String downloadJS011(
             @PathVariable("testIssueId") String testIssueId,
@@ -193,7 +268,14 @@ public class DownloadController {
         return docServiceJS011.fill(testIssueId.replaceAll("////",""), new JS011(testIssueList));
     }
 
-    // JS012 文档下载接口
+    /**
+     * JS012 文档下载接口
+     *
+     * @param entrustTestReviewId 委托测试评论id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
     @GetMapping("/doc/JS012/{entrustTestReviewId}")
     public String downloadJS012(
             @PathVariable("entrustTestReviewId") String entrustTestReviewId,
@@ -204,7 +286,14 @@ public class DownloadController {
         return docServiceJS012.fill(entrustTestReviewId.replaceAll("////",""), new JS012(entrustTestReview));
     }
 
-    // JS013 文档下载接口
+    /**
+     * JS013 文档下载接口
+     *
+     * @param schemeReviewId 方案审查id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
     @GetMapping("/doc/JS013/{schemeReviewId}")
     public String downloadJS013(
             @PathVariable("schemeReviewId") String schemeReviewId,
@@ -215,7 +304,14 @@ public class DownloadController {
         return docServiceJS013.fill(schemeReviewId.replaceAll("////",""), new JS013(schemeReview));
     }
 
-    // JS014 文档下载接口
+    /**
+     * JS014 文档下载接口
+     *
+     * @param entrustId 委托id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
     @GetMapping("/doc/JS014/{entrustId}")
     public String downloadJS014(
             @PathVariable("entrustId") String entrustId,
@@ -226,7 +322,14 @@ public class DownloadController {
         return docServiceJS014.fill(entrustId.replaceAll("////",""), new JS014(entrust));
     }
 
-    // 报价单 文档下载接口
+    /**
+     * 报价单 文档下载接口
+     *
+     * @param entrustId 委托id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
     @GetMapping("/doc/entrustQuote/{entrustId}")
     public String downloadEntrustQuote(
             @PathVariable("entrustId") String entrustId,
