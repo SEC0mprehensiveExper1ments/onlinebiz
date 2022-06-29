@@ -62,7 +62,7 @@ public class DocServiceJS007 {
             String header = "报告编号：" + JS007Json.getInputBaoGaoBianHao();
             String[] footer = new String[]{"南京大学计算机软件新技术国家重点实验室      " + header + "         第 ", " 页，共 ", " 页"};
             int headerToPage = 0;
-            int footerFromPage = 1;
+            int footerFromPage = 3;
             boolean isHaderLine = false;
             boolean isFooterLine = false;
             float[] headerLoc = new float[]{document.right() - 5, document.top() + 15};

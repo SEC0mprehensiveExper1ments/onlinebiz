@@ -239,9 +239,11 @@ class MongoSchemeReviewServiceTest {
     void updateSchemeReview() {
 
         SchemeReview schemereview = new SchemeReview();
+        schemereview.setId("SchemeReviewId");
         when(schemereviewDao.findSchemeReviewById(any())).thenReturn(schemereview);
         Project project = new Project();
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_UNFILLED, ""));
+        schemereview.setProjectId("ProjectId");
         when(projectDAO.findProjectById(any())).thenReturn(project);
         ProjectBaseInfo baseinfo = new ProjectBaseInfo();
         baseinfo.setMarketerId(1001L);
@@ -254,6 +256,83 @@ class MongoSchemeReviewServiceTest {
         //在阶段SCHEME_AUDITING（合法阶段）尝试修改测试方案评审表
         project.setStatus(new ProjectStatus(ProjectStage.SCHEME_AUDITING, ""));
         when(projectDAO.findProjectById(any())).thenReturn(project);
+        //由客户（非法人员）尝试修改测试方案评审表
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 11111L, Role.CUSTOMER));
+        //由市场部员工（非法人员）尝试修改测试方案评审表
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 1001L, Role.MARKETER));
+        //由市场部主管（非法人员）尝试修改测试方案评审表
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 1000L, Role.MARKETING_SUPERVISOR));
+        //由测试部员工（非法人员）尝试修改测试方案评审表
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 2001L, Role.TESTER));
+        //由测试部主管（非法人员）尝试修改测试方案评审表
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 2000L, Role.TESTING_SUPERVISOR));
+        //由非指派的质量部员工（非法人员）尝试修改测试方案评审表
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3066L, Role.QA));
+        Assertions.assertThrows(
+                ReviewPermissionDeniedException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3003L, Role.QA));
+
+        //由指派的质量部员工（合法人员）尝试修改测试方案评审表
+        Assertions.assertDoesNotThrow(() ->
+                schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3001L, Role.QA));
+        //由市场部主管（合法人员）尝试修改测试方案评审表
+        Assertions.assertDoesNotThrow(() ->
+                schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3000L, Role.QA_SUPERVISOR));
+        //由ADMIN（合法人员）尝试修改测试方案评审表
+        Assertions.assertDoesNotThrow(() ->
+                schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 0L, Role.ADMIN));
+
+        //尝试修改不存在的测试方案评审表
+        when(schemereviewDao.findSchemeReviewById(any())).thenReturn(null);
+        Assertions.assertThrows(
+                ReviewNotFoundException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3001L, Role.QA));
+        Assertions.assertThrows(
+                ReviewNotFoundException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3000L, Role.QA_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewNotFoundException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 0L, Role.ADMIN));
+
+        //尝试在WAIT_FOR_QA（非法阶段）修改测试方案评审表
+        project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, ""));
+        when(projectDAO.findProjectById(any())).thenReturn(project);
+        when(schemereviewDao.findSchemeReviewById(any())).thenReturn(schemereview);
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3001L, Role.QA));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3000L, Role.QA_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 0L, Role.ADMIN));
+
+        //尝试在WAIT_FOR_QA（非法阶段）修改测试方案评审表
+        project.setStatus(new ProjectStatus(ProjectStage.SCHEME_AUDITING_PASSED, ""));
+        when(projectDAO.findProjectById(any())).thenReturn(project);
+        when(schemereviewDao.findSchemeReviewById(any())).thenReturn(schemereview);
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3001L, Role.QA));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 3000L, Role.QA_SUPERVISOR));
+        Assertions.assertThrows(
+                ReviewInvalidStageException.class,
+                () -> schemereviewservice.updateSchemeReview("SchemeReviewId", schemereview, 0L, Role.ADMIN));
     }
 
     @Test
