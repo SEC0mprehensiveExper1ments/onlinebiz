@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,6 +35,42 @@ public class JS013 {
     private String inputBuTongGuo08 = "";
 
     public JS013(SchemeReview schemeReview) {
-        // TODO: 格式转换
+        List<SchemeReview.ConclusionRow> conclusions = schemeReview.getConclusions();
+        this.inputRuanJianMingChen = schemeReview.getSoftwareName();
+        this.inputBanBenHao = schemeReview.getVersion();
+        this.inputXiangMuBianHao = schemeReview.getProjectId();
+        this.inputCeShiLeiBie = schemeReview.getTestType();
+        this.inputTongGuo01 = conclusions.get(0).isPassed() ? "是" : "否";
+        this.inputTongGuo02 = conclusions.get(1).isPassed() ? "是" : "否";
+        this.inputTongGuo03 = conclusions.get(2).isPassed() ? "是" : "否";
+        this.inputTongGuo04 = conclusions.get(3).isPassed() ? "是" : "否";
+        this.inputTongGuo05 = conclusions.get(4).isPassed() ? "是" : "否";
+        this.inputTongGuo06 = conclusions.get(5).isPassed() ? "是" : "否";
+        this.inputTongGuo07 = conclusions.get(6).isPassed() ? "是" : "否";
+        this.inputTongGuo08 = conclusions.get(7).isPassed() ? "是" : "否";
+        if (!conclusions.get(0).isPassed()) {
+            this.inputBuTongGuo01 = conclusions.get(0).getMessage();
+        }
+        if (!conclusions.get(1).isPassed()) {
+            this.inputBuTongGuo02 = conclusions.get(1).getMessage();
+        }
+        if (!conclusions.get(2).isPassed()) {
+            this.inputBuTongGuo03 = conclusions.get(2).getMessage();
+        }
+        if (!conclusions.get(3).isPassed()) {
+            this.inputBuTongGuo04 = conclusions.get(3).getMessage();
+        }
+        if (!conclusions.get(4).isPassed()) {
+            this.inputBuTongGuo05 = conclusions.get(4).getMessage();
+        }
+        if (!conclusions.get(5).isPassed()) {
+            this.inputBuTongGuo06 = conclusions.get(5).getMessage();
+        }
+        if (!conclusions.get(6).isPassed()) {
+            this.inputBuTongGuo07 = conclusions.get(6).getMessage();
+        }
+        if (!conclusions.get(7).isPassed()) {
+            this.inputBuTongGuo08 = conclusions.get(7).getMessage();
+        }
     }
 }
