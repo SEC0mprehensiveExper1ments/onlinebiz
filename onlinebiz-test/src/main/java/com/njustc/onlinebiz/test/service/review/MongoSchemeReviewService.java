@@ -79,6 +79,10 @@ public class MongoSchemeReviewService implements SchemeReviewService {
     @Override
     public void updateSchemeReview(String schemeReviewId, SchemeReview schemeReview, Long userId, Role userRole) {
         SchemeReview origin = schemeReviewDAO.findSchemeReviewById(schemeReviewId);
+        // 检查测试方案评审表是否存在
+        if (origin == null) {
+            throw new ReviewDAOFailureException("该测试方案评审表不存在");
+        }
         if (!origin.getId().equals(schemeReview.getId())) {
             throw new ReviewPermissionDeniedException("测试方案检查表ID不一致");
         }
