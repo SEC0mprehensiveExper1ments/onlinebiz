@@ -67,6 +67,7 @@ public class MongoSchemeService implements SchemeService {
         scheme.setCreatorId(userId);
         scheme.setEntrustId(entrustId);
         scheme.setContent(content);
+        scheme.setProjectId(projectId);
         return schemeDAO.insertScheme(scheme).getId();
     }
 
