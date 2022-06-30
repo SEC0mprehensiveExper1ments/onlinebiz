@@ -1,10 +1,13 @@
 package com.njustc.onlinebiz.doc.model;
 
 import com.njustc.onlinebiz.common.model.entrust.Entrust;
+import com.njustc.onlinebiz.common.model.entrust.SoftwareDocReview;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -89,6 +92,62 @@ public class JS014 {
     private String inputPingShenShuoMing0263 = "";
 
     public JS014(Entrust entrust){
-        // TODO: 格式转换
+        this.inputRuanJianMingChen = entrust.getSoftwareDocReview().getSoftwareName();
+        this.inputBanBenHao = entrust.getSoftwareDocReview().getSoftwareVersion();
+        this.inputWeiTuoDanWei = "高校评审组";
+        this.inputPingShenRen = entrust.getSoftwareDocReview().getReviewer();
+        this.inputPingShenShiJian0Nian = Integer.toString(entrust.getSoftwareDocReview().getYear());
+        this.inputPingShenShiJian0Yue = Integer.toString(entrust.getSoftwareDocReview().getMonth());
+        this.inputPingShenShiJian0Ri = Integer.toString(entrust.getSoftwareDocReview().getDay());
+        List<SoftwareDocReview.ReviewRow> reviewRows = entrust.getSoftwareDocReview().getComments();
+        this.inputPingShenJieGuo011 = reviewRows.get(0).getResult();
+        this.inputPingShenJieGuo0121 = reviewRows.get(1).getResult();
+        this.inputPingShenJieGuo0122 = reviewRows.get(2).getResult();
+        this.inputPingShenJieGuo0123 = reviewRows.get(3).getResult();
+        this.inputPingShenJieGuo0131 = reviewRows.get(4).getResult();
+        this.inputPingShenJieGuo0132 = reviewRows.get(5).getResult();
+        this.inputPingShenJieGuo0133 = reviewRows.get(6).getResult();
+        this.inputPingShenJieGuo014 = reviewRows.get(7).getResult();
+        this.inputPingShenJieGuo015 = reviewRows.get(8).getResult();
+        this.inputPingShenJieGuo016 = reviewRows.get(9).getResult();
+        this.inputPingShenJieGuo017 = reviewRows.get(10).getResult();
+        this.inputPingShenJieGuo018 = reviewRows.get(11).getResult();
+        this.inputPingShenJieGuo019 = reviewRows.get(12).getResult();
+        this.inputPingShenJieGuo0110 = reviewRows.get(13).getResult();
+        this.inputPingShenShuoMing011 = reviewRows.get(0).getDescription();
+        this.inputPingShenShuoMing0121 = reviewRows.get(1).getDescription();
+        this.inputPingShenShuoMing0122 = reviewRows.get(2).getDescription();
+        this.inputPingShenShuoMing0123 = reviewRows.get(3).getDescription();
+        this.inputPingShenShuoMing0131 = reviewRows.get(4).getDescription();
+        this.inputPingShenShuoMing0132 = reviewRows.get(5).getDescription();
+        this.inputPingShenShuoMing0133 = reviewRows.get(6).getDescription();
+        this.inputPingShenShuoMing014 = reviewRows.get(7).getDescription();
+        this.inputPingShenShuoMing015 = reviewRows.get(8).getDescription();
+        this.inputPingShenShuoMing016 = reviewRows.get(9).getDescription();
+        this.inputPingShenShuoMing017 = reviewRows.get(10).getDescription();
+        this.inputPingShenShuoMing018 = reviewRows.get(11).getDescription();
+        this.inputPingShenShuoMing019 = reviewRows.get(12).getDescription();
+        this.inputPingShenShuoMing0110 = reviewRows.get(13).getDescription();
+
+        this.inputPingShenJieGuo0211 = reviewRows.get(14).getResult();
+        this.inputPingShenJieGuo0221 = reviewRows.get(15).getResult();
+        this.inputPingShenJieGuo0222 = reviewRows.get(16).getResult();
+        this.inputPingShenJieGuo0231 = reviewRows.get(17).getResult();
+        this.inputPingShenJieGuo0241 = reviewRows.get(18).getResult();
+        this.inputPingShenJieGuo0242 = reviewRows.get(19).getResult();
+        this.inputPingShenJieGuo0251 = reviewRows.get(20).getResult();
+        this.inputPingShenJieGuo0261 = reviewRows.get(21).getResult();
+        this.inputPingShenJieGuo0262 = reviewRows.get(22).getResult();
+        this.inputPingShenJieGuo0263 = reviewRows.get(23).getResult();
+        this.inputPingShenShuoMing0211 = reviewRows.get(14).getDescription();
+        this.inputPingShenShuoMing0221 = reviewRows.get(15).getDescription();
+        this.inputPingShenShuoMing0222 = reviewRows.get(16).getDescription();
+        this.inputPingShenShuoMing0231 = reviewRows.get(17).getDescription();
+        this.inputPingShenShuoMing0241 = reviewRows.get(18).getDescription();
+        this.inputPingShenShuoMing0242 = reviewRows.get(19).getDescription();
+        this.inputPingShenShuoMing0251 = reviewRows.get(20).getDescription();
+        this.inputPingShenShuoMing0261 = reviewRows.get(21).getDescription();
+        this.inputPingShenShuoMing0262 = reviewRows.get(22).getDescription();
+        this.inputPingShenShuoMing0263 = reviewRows.get(23).getDescription();
     }
 }
