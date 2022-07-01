@@ -1,4 +1,4 @@
-name: Auto-Test(unit test & it test)
+name: Auto-IT-Test
 
 on: [push]
 
@@ -14,4 +14,4 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Run tests
-        run: sudo mvn verify
+        run: sudo mvn failsafe:integration-test
