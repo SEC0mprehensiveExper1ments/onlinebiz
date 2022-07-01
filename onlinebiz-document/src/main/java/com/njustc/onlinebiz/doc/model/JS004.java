@@ -51,15 +51,16 @@ public class JS004 {
 
     PartyDetail jiaFang = contract.getPartyA();
     PartyDetail yiFang = contract.getPartyB();
-    this.inputJiaFang = jiaFang.getCompanyCH();
-    this.inputYiFang = yiFang.getCompanyCH();
+
+
     this.inputQianDingDiDian = contract.getSignedAt();
 
     String signedDate = contract.getSignedDate();
-    this.inputQianDingRiQi0Nian = signedDate.substring(0, 4);
-    this.inputQianDingRiQi0Yue = signedDate.substring(5, 7);
-    this.inputQianDingRiQi0Ri = signedDate.substring(8, 10);
-
+    if (signedDate.length() >= 10) {
+      this.inputQianDingRiQi0Nian = signedDate.substring(0, 4);
+      this.inputQianDingRiQi0Yue = signedDate.substring(5, 7);
+      this.inputQianDingRiQi0Ri = signedDate.substring(8, 10);
+    }
     this.inputShouCeRuanJian = contract.getTargetSoftware();
 
     this.inputCeShiFeiYong = contract.getPrice().toString();
@@ -69,25 +70,31 @@ public class JS004 {
     this.inputZhengGaiCishu = Integer.toString(contract.getRectificationLimit());
     this.inputZhengGaiTianShu = Integer.toString(contract.getRectificationDaysEachTime());
 
-    this.inputJiaFang0ShouQuanDaiBiao = jiaFang.getRepresentative();
-    // this.inputJiaFang0QianZhangRiQi = "";
-    this.inputJiaFang0LianXiRen = jiaFang.getContact();
-    this.inputJiaFang0TongXunDiZhi = jiaFang.getCompanyAddress();
-    this.inputJiaFang0DianHua = jiaFang.getCompanyPhone();
-    this.inputJiaFang0ChuanZhen = jiaFang.getFax();
-    this.inputJiaFang0KaiHuYinHang = jiaFang.getBankName();
-    this.inputJiaFang0ZhangHao = jiaFang.getAccount();
-    this.inputJiaFang0YouBian = jiaFang.getZipCode();
-    this.inputYiFang0ShouQuanDaiBiao = yiFang.getRepresentative();
-    // this.inputYiFang0QianZhangRiQi = "";
-    this.inputYiFang0LianXiRen = yiFang.getContact();
-    this.inputYiFang0TongXunDiZhi = yiFang.getCompanyAddress();
-    this.inputYiFang0DianHua = yiFang.getCompanyPhone();
-    this.inputYiFang0ChuanZhen = yiFang.getFax();
-    this.inputYiFang0HuMing = yiFang.getAccountName();
-    this.inputYiFang0KaiHuYinHang = yiFang.getBankName();
-    this.inputYiFang0ZhangHao = yiFang.getAccount();
-    this.inputYiFang0YouBian = yiFang.getZipCode();
+    if (jiaFang != null) {
+      this.inputJiaFang = jiaFang.getCompanyCH();
+      this.inputJiaFang0ShouQuanDaiBiao = jiaFang.getRepresentative();
+      // this.inputJiaFang0QianZhangRiQi = "";
+      this.inputJiaFang0LianXiRen = jiaFang.getContact();
+      this.inputJiaFang0TongXunDiZhi = jiaFang.getCompanyAddress();
+      this.inputJiaFang0DianHua = jiaFang.getCompanyPhone();
+      this.inputJiaFang0ChuanZhen = jiaFang.getFax();
+      this.inputJiaFang0KaiHuYinHang = jiaFang.getBankName();
+      this.inputJiaFang0ZhangHao = jiaFang.getAccount();
+      this.inputJiaFang0YouBian = jiaFang.getZipCode();
+    }
+    if (yiFang != null) {
+      this.inputYiFang = yiFang.getCompanyCH();
+      this.inputYiFang0ShouQuanDaiBiao = yiFang.getRepresentative();
+      // this.inputYiFang0QianZhangRiQi = "";
+      this.inputYiFang0LianXiRen = yiFang.getContact();
+      this.inputYiFang0TongXunDiZhi = yiFang.getCompanyAddress();
+      this.inputYiFang0DianHua = yiFang.getCompanyPhone();
+      this.inputYiFang0ChuanZhen = yiFang.getFax();
+      this.inputYiFang0HuMing = yiFang.getAccountName();
+      this.inputYiFang0KaiHuYinHang = yiFang.getBankName();
+      this.inputYiFang0ZhangHao = yiFang.getAccount();
+      this.inputYiFang0YouBian = yiFang.getZipCode();
+    }
     //增加字段的非空性检查
     if (this.inputXiangMuMingChen == null) this.inputXiangMuMingChen = "";
     if (this.inputJiaFang == null) this.inputJiaFang = "";
