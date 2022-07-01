@@ -231,13 +231,17 @@ public class DocServiceJS002 {
         phrase = new Phrase();
         phrase.add(new Chunk("软件用户对象描述： ", titlefont2));
         phrase.add(new Chunk(JS002Json.getInputRuanJianMiaoShu() + "\n\n", titlefont2));
+        cell.setFixedHeight(90f);
+        cell.setVerticalAlignment(Element.ALIGN_TOP);
         cell.setPhrase(phrase);
         table.addCell(cell);
 
         cell = ItextUtils.createCell(Element.ALIGN_LEFT, 33, 2,fixedLeading,  paddings3, borderWidth);
+        cell.setFixedHeight(170f);
+        cell.setVerticalAlignment(Element.ALIGN_TOP);
         phrase = new Phrase();
         phrase.add(new Chunk("主要功能及用途简介（限200字）： ", titlefont2));
-        phrase.add(new Chunk(JS002Json.getInputZhuYaoGongNeng() + "\n\n\n\n\n\n\n\n", titlefont2));
+        phrase.add(new Chunk(JS002Json.getInputZhuYaoGongNeng(), titlefont2));
         cell.setPhrase(phrase);
         table.addCell(cell);
 
@@ -247,7 +251,7 @@ public class DocServiceJS002 {
         phrase.add(ItextUtils.crossSetFont(new String[]{"",
                 multiChoice[isTicked(JS002Json.getMultiCeShiYiJu01())], "GB/T 25000.51-2010     ", multiChoice[isTicked(JS002Json.getMultiCeShiYiJu02())], "GB/T 16260.1-2006\n",
                 multiChoice[isTicked(JS002Json.getMultiCeShiYiJu03())], "NST-03-WI12-2011       ", multiChoice[isTicked(JS002Json.getMultiCeShiYiJu04())], "NST-03-WI13-2011\n",
-                multiChoice[isTicked(JS002Json.getInputCeShiYiJu05())], "其他"}, titlefont2, symbolfont));
+                multiChoice[isTicked(JS002Json.getMultiCeShiYiJu05())], "其他"}, titlefont2, symbolfont));
         phrase.add(ItextUtils.leastUnderlineChunk(JS002Json.getInputCeShiYiJu05(), textfont, 15, 0.7f, true));
         cell.setPhrase(phrase);
         table.addCell(cell);
@@ -259,8 +263,10 @@ public class DocServiceJS002 {
                 multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao01())], "功能性   ", multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao02())], "可靠性   ", multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao03())], "易用性性   ", multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao04())], "效率   ",
                 multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao05())], "可维护性   ", multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao06())], "可移植性\n",
                 multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao07())], "代码覆盖度   ", multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao08())], "缺陷检测率   ", multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao09())], "代码风格符合度   ", multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao010())], "代码不符合项检测率\n",
-                multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao011())], "产品说明要求   ", multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao012())], "用户文档集要求\n", multiChoice[isTicked(JS002Json.getInputJiShuZhiBiao013())], "其他"}, titlefont2, symbolfont));
+                multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao011())], "产品说明要求   ", multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao012())], "用户文档集要求\n", multiChoice[isTicked(JS002Json.getMultiJiShuZhiBiao013())], "其他"}, titlefont2, symbolfont));
         phrase.add(ItextUtils.leastUnderlineChunk(JS002Json.getInputJiShuZhiBiao013(), textfont, 15, 0.7f, true));
+        System.out.println("JiShuZhiBiao013 : : " + JS002Json.getMultiJiShuZhiBiao013() + "\n");
+        System.out.println("JiShuZhiBiao013 : : " + JS002Json.getInputJiShuZhiBiao013() + "\n");
         cell.setPhrase(phrase);
         table.addCell(cell);
 
@@ -304,7 +310,7 @@ public class DocServiceJS002 {
         cell = ItextUtils.createCell(Element.ALIGN_LEFT, 29, 2, 18f,  paddings3, borderWidth);
         phrase = new Phrase();
         phrase.add(ItextUtils.crossSetFont(new String[]{"操作系统：", multiChoice[isTicked(JS002Json.getMultiKeHuDuan0Windows())], "Windows "}, textfont, symbolfont));
-        phrase.add(ItextUtils.leastUnderlineChunk(JS002Json.getInputKeHuDuan0Linux(), textfont, 3, 0.7f, false));
+        phrase.add(ItextUtils.leastUnderlineChunk(JS002Json.getInputKeHuDuan0Windows(), textfont, 3, 0.7f, false));
         phrase.add(ItextUtils.crossSetFont(new String[]{"（版本) ", multiChoice[isTicked(JS002Json.getInputKeHuDuan0Linux())], "Linux "}, textfont, symbolfont));
         phrase.add(ItextUtils.leastUnderlineChunk(JS002Json.getInputKeHuDuan0Linux(), textfont, 3, 0.7f, false));
         phrase.add(ItextUtils.crossSetFont(new String[]{"(版本) ", multiChoice[isTicked(JS002Json.getMultiKeHuDuan0QiTa())], "其他 "}, textfont, symbolfont));
@@ -321,6 +327,7 @@ public class DocServiceJS002 {
         cell = ItextUtils.createCell(Element.ALIGN_LEFT, 27, 2, 18f,  paddings3, borderWidth);
         phrase = new Phrase();
         phrase.add(ItextUtils.crossSetFont(new String[]{"架构：", multiChoice[isTicked(JS002Json.getMultiFuWuQiYingJian0PC())], "PC服务器   ", multiChoice[isTicked(JS002Json.getMultiFuWuQiYingJian0Linux())], "UNIX/Linux服务器   ", multiChoice[isTicked(JS002Json.getMultiFuWuQiYingJian0QiTa())], "其他"}, textfont, symbolfont));
+        System.out.println("Test :: " + JS002Json.getInputFuWuQiYingJian0QiTa());
         phrase.add(ItextUtils.leastUnderlineChunk(JS002Json.getInputFuWuQiYingJian0QiTa(), textfont, 10, 0.7f, true));
         phrase.add(new Chunk("\n内存要求：", textfont));
         phrase.add(ItextUtils.leastUnderlineChunk(JS002Json.getInputFuWuQiYingJian0NeiCunYaoQiu(), textfont, 6, 0.7f, true));
@@ -367,7 +374,10 @@ public class DocServiceJS002 {
         table.addCell(cell);
 
         table.addCell(ItextUtils.createCell("文档资料", textfont, Element.ALIGN_CENTER, 4, 4, 18f,  paddings3, borderWidth));
-        table.addCell(ItextUtils.createCell(JS002Json.getInputWenDangZiLiao() + "\n\n\n", textfont, Element.ALIGN_LEFT, 27, 2, 18f, new float[]{3f, 3f, 5.5f, 5.5f}, borderWidth));
+        PdfPCell tmpCell = ItextUtils.createCell(JS002Json.getInputWenDangZiLiao(), textfont, Element.ALIGN_LEFT, 27, 2, 18f, new float[]{3f, 3f, 5.5f, 5.5f}, borderWidth);
+        tmpCell.setFixedHeight(90f);
+        tmpCell.setVerticalAlignment(Element.ALIGN_TOP);
+        table.addCell(tmpCell);
         table.addCell(ItextUtils.createCell(
                 "注：1、需求文档（例如：项目计划任务书、需求分析报告、合同等）（验收、鉴定测试必须）\n" +
                         "    2、用户文档（例如：用户手册、用户指南等）（必须）\n" +
@@ -389,7 +399,7 @@ public class DocServiceJS002 {
         phrase.add(new Chunk("\n传  真: ", smallFourFont));
         phrase.add(ItextUtils.leastUnderlineChunk(JS002Json.getInputWeiTuoDanWei0ChuanZhen(), smallFourFont, 10, 0.7f, true));
         phrase.add(new Chunk("\n地  址: ", smallFourFont));
-        phrase.add(ItextUtils.leastUnderlineChunk(JS002Json.getInputWeiTuoDanWei0DiZhi(), smallFourFont, 24, 0.7f, false));
+        phrase.add(ItextUtils.leastUnderlineChunk(JS002Json.getInputWeiTuoDanWei0DiZhi(), smallFourFont, 10, 0.7f, true));
         phrase.add(new Chunk("\n邮  编: ", smallFourFont));
         phrase.add(ItextUtils.leastUnderlineChunk(JS002Json.getInputWeiTuoDanWei0YouBian(), smallFourFont, 10, 0.7f, true));
         phrase.add(new Chunk("\n联系人: ", smallFourFont));

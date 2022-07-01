@@ -199,16 +199,17 @@ public class JS002 {
             if (safe(software.getDeveloperType()).equals("1")) {
                 this.singleDanWeiXingZhi01 = "1";
             } else if (safe(software.getDeveloperType()).equals("2")) {
-                this.singleDanWeiXingZhi02 = "2";
+                this.singleDanWeiXingZhi02 = "1";
             } else if (safe(software.getDeveloperType()).equals("3")) {
-                this.singleDanWeiXingZhi03 = "3";
+                this.singleDanWeiXingZhi03 = "1";
             } else if (safe(software.getDeveloperType()).equals("4")) {
-                this.singleDanWeiXingZhi04 = "4";
+                this.singleDanWeiXingZhi04 = "1";
             } else if (safe(software.getDeveloperType()).equals("5")) {
-                this.singleDanWeiXingZhi05 = "5";
+                this.singleDanWeiXingZhi05 = "1";
             } else if (safe(software.getDeveloperType()).equals("6")) {
-                this.singleDanWeiXingZhi06 = "6";
+                this.singleDanWeiXingZhi06 = "1";
             }
+            System.out.println("Test : : " + software.getDeveloperType() + "\n");
             this.inputRuanJianMiaoShu = safe(software.getUserDescription());
             this.inputZhuYaoGongNeng = safe(software.getFunctionIntro());
 
@@ -216,31 +217,31 @@ public class JS002 {
             this.inputRuanJianGuiMo02 = safe(software.getFunctionPoint());
             this.inputRuanJianGuiMo03 = safe(software.getCodeLine());
             //
-            if (safe(software.getType()).equals("1")) { this.singleRuanJianLeiXing0XiTong01 = "1"; }
-            else if (safe(software.getType()).equals("2")) { this.singleRuanJianLeiXing0XiTong02 = "1"; }
-            else if (safe(software.getType()).equals("3")) { this.singleRuanJianLeiXing0XiTong03 = "1"; }
-            else if (safe(software.getType()).equals("4")) { this.singleRuanJianLeiXing0XiTong04 = "1"; }
-            else if (safe(software.getType()).equals("5")) { this.singleRuanJianLeiXing0XiTong05 = "1"; }
-            else if (safe(software.getType()).equals("6")) { this.singleRuanJianLeiXing0ZhiChi01 = "1"; }
-            else if (safe(software.getType()).equals("7")) { this.singleRuanJianLeiXing0ZhiChi02 = "1"; }
-            else if (safe(software.getType()).equals("8")) { this.singleRuanJianLeiXing0ZhiChi03 = "1"; }
-            else if (safe(software.getType()).equals("9")) { this.singleRuanJianLeiXing0ZhiChi04 = "1"; }
-            else if (safe(software.getType()).equals("10")) { this.singleRuanJianLeiXing0ZhiChi05 = "1"; }
-            else if (safe(software.getType()).equals("11")) { this.singleRuanJianLeiXing0ZhiChi06 = "1"; }
-            else if (safe(software.getType()).equals("12")) { this.singleRuanJianLeiXing0YingYong01 = "1"; }
-            else if (safe(software.getType()).equals("13")) { this.singleRuanJianLeiXing0YingYong02 = "1"; }
-            else if (safe(software.getType()).equals("14")) { this.singleRuanJianLeiXing0YingYong03 = "1"; }
-            else if (safe(software.getType()).equals("15")) { this.singleRuanJianLeiXing0YingYong04 = "1"; }
-            else if (safe(software.getType()).equals("16")) { this.singleRuanJianLeiXing0YingYong05 = "1"; }
-            else if (safe(software.getType()).equals("17")) { this.singleRuanJianLeiXing0YingYong06 = "1"; }
-            else if (safe(software.getType()).equals("18")) { this.singleRuanJianLeiXing0YingYong07 = "1"; }
-            else if (safe(software.getType()).equals("19")) { this.singleRuanJianLeiXing0YingYong08 = "1"; }
-            else if (safe(software.getType()).equals("20")) { this.singleRuanJianLeiXing0YingYong09 = "1"; }
-            else if (safe(software.getType()).equals("21")) { this.singleRuanJianLeiXing0YingYong010 = "1"; }
-            else if (safe(software.getType()).equals("22")) { this.singleRuanJianLeiXing0YingYong011 = "1"; }
-            else if (safe(software.getType()).equals("23")) { this.singleRuanJianLeiXing0YingYong012 = "1"; }
-            else if (safe(software.getType()).equals("24")) { this.singleRuanJianLeiXing0YingYong013 = "1"; }
-            else if (safe(software.getType()).equals("25")) { this.singleRuanJianLeiXing0QiTa01 = "1"; }
+            if (safe(software.getType()).equals("操作系统")) { this.singleRuanJianLeiXing0XiTong01 = "1"; }
+            else if (safe(software.getType()).equals("中文处理系统")) { this.singleRuanJianLeiXing0XiTong02 = "1"; }
+            else if (safe(software.getType()).equals("网络系统")) { this.singleRuanJianLeiXing0XiTong03 = "1"; }
+            else if (safe(software.getType()).equals("嵌入式操作系统")) { this.singleRuanJianLeiXing0XiTong04 = "1"; }
+            else if (safe(software.getType()).equals("其他")) { this.singleRuanJianLeiXing0XiTong05 = "1"; }
+            else if (safe(software.getType()).equals("程序设计语言")) { this.singleRuanJianLeiXing0ZhiChi01 = "1"; }
+            else if (safe(software.getType()).equals("数据库系统设计")) { this.singleRuanJianLeiXing0ZhiChi02 = "1"; }
+            else if (safe(software.getType()).equals("工具软件")) { this.singleRuanJianLeiXing0ZhiChi03 = "1"; }
+            else if (safe(software.getType()).equals("网络通信软件")) { this.singleRuanJianLeiXing0ZhiChi04 = "1"; }
+            else if (safe(software.getType()).equals("中间件")) { this.singleRuanJianLeiXing0ZhiChi05 = "1"; }
+            else if (safe(software.getType()).equals("其他")) { this.singleRuanJianLeiXing0ZhiChi06 = "1"; }
+            else if (safe(software.getType()).equals("行业管理软件")) { this.singleRuanJianLeiXing0YingYong01 = "1"; }
+            else if (safe(software.getType()).equals("办公软件")) { this.singleRuanJianLeiXing0YingYong02 = "1"; }
+            else if (safe(software.getType()).equals("模式识别软件")) { this.singleRuanJianLeiXing0YingYong03 = "1"; }
+            else if (safe(software.getType()).equals("图形图像软件")) { this.singleRuanJianLeiXing0YingYong04 = "1"; }
+            else if (safe(software.getType()).equals("控制软件")) { this.singleRuanJianLeiXing0YingYong05 = "1"; }
+            else if (safe(software.getType()).equals("网络应用软件")) { this.singleRuanJianLeiXing0YingYong06 = "1"; }
+            else if (safe(software.getType()).equals("信息管理软件")) { this.singleRuanJianLeiXing0YingYong07 = "1"; }
+            else if (safe(software.getType()).equals("数据库管理应用软件")) { this.singleRuanJianLeiXing0YingYong08 = "1"; }
+            else if (safe(software.getType()).equals("安全与保密软件")) { this.singleRuanJianLeiXing0YingYong09 = "1"; }
+            else if (safe(software.getType()).equals("嵌入式应用软件")) { this.singleRuanJianLeiXing0YingYong010 = "1"; }
+            else if (safe(software.getType()).equals("教育软件")) { this.singleRuanJianLeiXing0YingYong011 = "1"; }
+            else if (safe(software.getType()).equals("游戏软件")) { this.singleRuanJianLeiXing0YingYong012 = "1"; }
+            else if (safe(software.getType()).equals("其他")) { this.singleRuanJianLeiXing0YingYong013 = "1"; }
+            else if (safe(software.getType()).equals("其他")) { this.singleRuanJianLeiXing0QiTa01 = "1"; }
 
             List<String> clientOS = software.getClientOS();
             if (clientOS != null) {
@@ -263,9 +264,8 @@ public class JS002 {
                         }
                     } else if (value != null){
                         this.multiKeHuDuan0QiTa = "1";
-                        String[] tmp = value.split("\\s+");
                         Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_3).*?(?=_0641#toReplaceA2C2_3)");
-                        Matcher matcher = pattern.matcher(tmp[1]);
+                        Matcher matcher = pattern.matcher(value);
                         if (matcher.find()) {
                             this.inputKeHuDuan0QiTa = matcher.group();
                         }
@@ -282,7 +282,7 @@ public class JS002 {
                         this.multiFuWuQiYingJian0PC = "1";
                     } else if (value.equals("UNIX/Linux服务器")) {
                         this.multiFuWuQiYingJian0Linux = "1";
-                    } else {
+                    } else if (value != null){
                         this.multiFuWuQiYingJian0QiTa = "1";
                         Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_4).*?(?=_0641#toReplaceA2C2_4)");
                         Matcher matcher = pattern.matcher(value);
@@ -329,8 +329,9 @@ public class JS002 {
                     this.multiCeShiYiJu03 = "1";
                 } else if (value.equals("NST-03-WI13-2011")) {
                     this.multiCeShiYiJu04 = "1";
-                } else if (value.startsWith("_0641#toReplaceA1C1_1")) {
+                } else if (value.startsWith("_0641#toReplaceA1C1_5")) {
                     this.multiCeShiYiJu05 = "1";
+                    System.out.println("Teset");
                     Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_5).*?(?=_0641#toReplaceA2C2_5)");
                     Matcher matcher = pattern.matcher(value);
                     if (matcher.find()) {
@@ -368,13 +369,14 @@ public class JS002 {
                     this.multiJiShuZhiBiao011 = "1";
                 } else if (value.equals("用户文档集要求")) {
                     this.multiJiShuZhiBiao012 = "1";
-                } else if (value.startsWith("_0641#toReplaceA1C1_2")) {
+                } else if (value.startsWith("_0641#toReplaceA1C1_6")) {
                     this.multiJiShuZhiBiao013 = "1";
                     Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_6).*?(?=_0641#toReplaceA2C2_6)");
                     Matcher matcher = pattern.matcher(value);
                     if (matcher.find()) {
                         this.inputJiShuZhiBiao013 = matcher.group();
                     }
+                    System.out.println("Test: : " + this.inputJiShuZhiBiao013 + "\n");
                 }
             }
         }
