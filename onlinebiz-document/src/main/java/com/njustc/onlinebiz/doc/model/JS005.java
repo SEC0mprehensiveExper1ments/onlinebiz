@@ -20,5 +20,12 @@ public class JS005 {
         // NonDisclosureAgreement nonDisclosureAgreement = contract.getNonDisclosureAgreement();
         this.inputJiaFang = contract.getPartyA().getCompanyCH();
         this.inputWeiTuoXiangMu = contract.getProjectName();
+        //非空性检查
+        if (this.inputJiaFang == null) {
+            this.inputJiaFang = "";
+        }
+        if (this.inputWeiTuoXiangMu == null) {
+            this.inputWeiTuoXiangMu = "";
+        }
     }
 }
