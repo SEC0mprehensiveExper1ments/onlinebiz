@@ -23,7 +23,7 @@ public class MongoSchemeDAO implements SchemeDAO {
 
     @Override
     public Scheme findSchemeById(String schemeId) {
-        return mongoTemplate.findById(schemeId, Scheme.class);
+        return mongoTemplate.findById(schemeId, Scheme.class, COLLECTION_NAME);
     }
 
     @Override
