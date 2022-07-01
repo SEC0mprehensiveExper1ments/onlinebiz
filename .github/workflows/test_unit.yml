@@ -1,4 +1,4 @@
-name: Auto-Test
+name: Auto-Test(unit test only)
 
 on: [push]
 
