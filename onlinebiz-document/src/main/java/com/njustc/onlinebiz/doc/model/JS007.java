@@ -161,6 +161,66 @@ public class JS007 {
         if (this.inputBanBenHao == null) this.inputBanBenHao = "";
         if (this.inputWeiTuoDanWei == null) this.inputWeiTuoDanWei = "";
         if (this.inputCeShiLeiBie == null) this.inputCeShiLeiBie = "";
+        if (this.inputBaoGaoRiQiNian == null) this.inputBaoGaoRiQiNian = "";
+        if (this.inputBaoGaoRiQiYue == null) this.inputBaoGaoRiQiYue = "";
+        if (this.inputBaoGaoRiQiRi == null) this.inputBaoGaoRiQiRi = "";
 
+
+        if (this.inputXiangMuBianHao == null) this.inputXiangMuBianHao = "";
+        if (this.inputYangPinMingCheng == null) this.inputYangPinMingCheng = "";
+        if (this.inputBanBenXingHao == null) this.inputBanBenXingHao = "";
+        if (this.inputLaiYangRiQiNian == null) this.inputLaiYangRiQiNian = "";
+        if (this.inputLaiYangRiQiYue == null) this.inputLaiYangRiQiYue = "";
+        if (this.inputLaiYangRiQiRi == null) this.inputLaiYangRiQiRi = "";
+
+        if (this.inputCeShiKaiShiRiQiNian == null) this.inputCeShiKaiShiRiQiNian = "";
+        if (this.inputCeShiKaiShiRiQiYue == null) this.inputCeShiKaiShiRiQiYue = "";
+        if (this.inputCeShiKaiShiRiQiRi == null) this.inputCeShiKaiShiRiQiRi = "";
+        if (this.inputCeShiJieShuRiQiNian == null) this.inputCeShiJieShuRiQiNian = "";
+        if (this.inputCeShiJieShuRiQiYue == null) this.inputCeShiJieShuRiQiYue = "";
+        if (this.inputCeShiJieShuRiQiRi == null) this.inputCeShiJieShuRiQiRi = "";
+
+        if (this.inputYangPinZhuangTai == null) this.inputYangPinZhuangTai = "";
+        if (this.inputCeShiYiJu == null) this.inputCeShiYiJu = "";
+        if (this.inputYangPinQingDan == null) this.inputYangPinQingDan = "";
+        if (this.inputCeShiJieLun == null) this.inputCeShiJieLun = "";
+        if (this.inputZhuCeRen == null) this.inputZhuCeRen = "";
+        if (this.inputZhuCeRiQiNian == null) this.inputZhuCeRiQiNian = "";
+        if (this.inputZhuCeRiQiYue == null) this.inputZhuCeRiQiYue = "";
+        if (this.inputZhuCeRiQiRi == null) this.inputZhuCeRiQiRi = "";
+        if (this.inputShenHeRen == null) this.inputShenHeRen = "";
+        if (this.inputShenHeRiQiNian == null) this.inputShenHeRiQiNian = "";
+        if (this.inputShenHeRiQiYue == null) this.inputShenHeRiQiYue = "";
+        if (this.inputShenHeRiQiRi == null) this.inputShenHeRiQiRi = "";
+        if (this.inputPiZhunRen == null) this.inputPiZhunRen = "";
+        if (this.inputPiZhunRiQiNian == null) this.inputPiZhunRiQiNian = "";
+        if (this.inputPiZhunRiQiYue == null) this.inputPiZhunRiQiYue = "";
+        if (this.inputPiZhunRiQiRi == null) this.inputPiZhunRiQiRi = "";
+
+        if (this.inputDianHua == null) this.inputDianHua = "";
+        if (this.inputChuanZhen == null) this.inputChuanZhen = "";
+        if (this.inputDiZhi == null) this.inputDiZhi = "";
+        if (this.inputYouBian == null) this.inputYouBian = "";
+        if (this.inputLianXiRen == null) this.inputLianXiRen = "";
+        if (this.inputEmail == null) this.inputEmail = "";
+
+        if (this.inputYingJianLeiBie == null) this.inputYingJianLeiBie = "";
+        if (this.inputYingJianMingCheng == null) this.inputYingJianMingCheng = "";
+        if (this.inputYingJianPeiZhi == null) this.inputYingJianPeiZhi = "";
+        if (this.inputYingJianShuLiang == null) this.inputYingJianShuLiang = "";
+        if (this.inputCaoZuoXiTongMingCheng == null) this.inputCaoZuoXiTongMingCheng = "";
+        if (this.inputCaoZuoXiTongBanBen == null) this.inputCaoZuoXiTongBanBen = "";
+        if (this.inputRuanJianHuanJing == null) this.inputRuanJianHuanJing = new ArrayList<>();
+        if (this.inputWangLuoHuanJing == null) this.inputWangLuoHuanJing = "";
+
+        if (this.inputTestBases == null) this.inputTestBases = new ArrayList<>();
+        if (this.inputCanKaoZiLiao == null) this.inputCanKaoZiLiao = new ArrayList<>();
+        if (this.inputGongNengXingCeShi == null) this.inputGongNengXingCeShi = new ArrayList<>();
+        if (this.inputXiaoLvCeShi == null) this.inputXiaoLvCeShi = new ArrayList<>();
+        if (this.inputKeYiZhiXingCeShi == null) this.inputKeYiZhiXingCeShi = new ArrayList<>();
+        if (this.inputYiYongXingCeShi == null) this.inputYiYongXingCeShi = new ArrayList<>();
+        if (this.inputKeKaoXingCeShi == null) this.inputKeKaoXingCeShi = new ArrayList<>();
+        if (this.inputKeWeiHuXingCeShi == null) this.inputKeWeiHuXingCeShi = new ArrayList<>();
+        if (this.inputCeShiZhiXingJiLu == null) this.inputCeShiZhiXingJiLu = new ArrayList<>();
     }
 }
