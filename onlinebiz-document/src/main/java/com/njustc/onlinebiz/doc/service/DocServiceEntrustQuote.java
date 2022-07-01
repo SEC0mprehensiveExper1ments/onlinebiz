@@ -2,7 +2,6 @@ package com.njustc.onlinebiz.doc.service;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.njustc.onlinebiz.common.model.entrust.EntrustQuote;
@@ -63,9 +62,7 @@ public class DocServiceEntrustQuote {
             document.setMargins(marginLeft, marginRight, marginTop, marginBottom);
             // 2.建立一个书写器(Writer)与document对象关联
             File file = new File(pdfPath);
-//            System.out.println("file: " + file);
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
-//            System.out.println("Success");
             // 3.打开文档
             document.open();
             // 4.向文档中添加内容
@@ -110,8 +107,6 @@ public class DocServiceEntrustQuote {
         }
     }
 
-    private static BaseFont bfYaHei;
-    private static BaseFont bfChinese;
     private static Font normal5YaHei;
     private static Font normalxiao4YaHei;
     private static Font normalxiao5song;
@@ -120,12 +115,10 @@ public class DocServiceEntrustQuote {
 
     public void generatePage(Document document) throws Exception {
         try {
-            bfYaHei =
-                    BaseFont.createFont(
-                            DOCUMENT_DIR + "font/msyh.ttc,0", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            bfChinese =
-                    BaseFont.createFont(
-                            DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            BaseFont bfYaHei = BaseFont.createFont(
+                    DOCUMENT_DIR + "font/msyh.ttc,0", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            BaseFont bfChinese = BaseFont.createFont(
+                    DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             normal5YaHei = new Font(bfYaHei, 10.5f, Font.NORMAL);
             normalxiao4YaHei = new Font(bfYaHei, 14f, Font.NORMAL);
             bold5YaHei = new Font(bfYaHei, 10.5f, Font.BOLD);
@@ -203,8 +196,9 @@ public class DocServiceEntrustQuote {
         document.add(quoteTable);
         Paragraph end = new Paragraph();
         Chunk BaoJiaTiGongRen = new Chunk("    报价提供人： ", normal5YaHei);
-        Chunk BaoJiaTiGongRenContent = new Chunk(EntrustQuoteJson.getProvider()+"                                                                                                                                   \n\n", Under5YaHei);
-        Chunk QianZi = new Chunk("    如果接受报价，请在此签字： ", normal5YaHei);
+        Chunk BaoJiaTiGongRenContent = ItextUtils.fixedUnderlineChunk(EntrustQuoteJson.getProvider(), Under5YaHei, 64, 0.5f);
+        // Chunk BaoJiaTiGongRenContent = new Chunk(EntrustQuoteJson.getProvider()+"                                                                                                                                   \n\n", Under5YaHei);
+        Chunk QianZi = new Chunk("\n    如果接受报价，请在此签字： ", normal5YaHei);
         Chunk QianZiContent = new Chunk("                                                                                                                    \n", Under5YaHei);
 
         end.add(BaoJiaTiGongRen);

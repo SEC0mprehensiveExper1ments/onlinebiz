@@ -39,17 +39,26 @@ public class EntrustQuoteDoc {
     // 签字
     private String signature;
 
-    public EntrustQuoteDoc(EntrustQuote entrustQuote) {
-        this.quotationDate = entrustQuote.getQuotationDate();
-        this.effectiveDate = entrustQuote.getEffectiveDate();
-        this.bankName = entrustQuote.getBankName();
-        this.account = entrustQuote.getAccount();
-        this.accountName = entrustQuote.getAccountName();
-        this.softwareName = entrustQuote.getSoftwareName();
-        this.subTotal = entrustQuote.getSubTotal();
-        this.taxRate = entrustQuote.getTaxRate();
-        this.total = entrustQuote.getTotal();
-        this.provider = entrustQuote.getProvider();
-        this.signature = entrustQuote.getSignature();
+    public String safe(String s) {
+        return s == null ? "" : s;
     }
+    private Double safe(Double s) {
+        return s == null ? 0f : s;
+    }
+    public EntrustQuoteDoc(EntrustQuote entrustQuote) {
+        if (entrustQuote != null) {
+            this.quotationDate = safe(entrustQuote.getQuotationDate());
+            this.effectiveDate = safe(entrustQuote.getEffectiveDate());
+            this.bankName = safe(entrustQuote.getBankName());
+            this.account = safe(entrustQuote.getAccount());
+            this.accountName = safe(entrustQuote.getAccountName());
+            this.softwareName = safe(entrustQuote.getSoftwareName());
+            this.subTotal = safe(entrustQuote.getSubTotal());
+            this.taxRate = safe(entrustQuote.getTaxRate());
+            this.total = safe(entrustQuote.getTotal());
+            this.provider = safe(entrustQuote.getProvider());
+            this.signature = safe(entrustQuote.getSignature());
+        }
+    }
+
 }
