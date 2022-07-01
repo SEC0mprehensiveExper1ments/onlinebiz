@@ -158,185 +158,232 @@ public class JS002 {
     /**
      * 从Entrust对象中抽取填充JS002
      * */
+    public String safe(String s) {
+        return s == null ? "" : s;
+    }
     public JS002(Entrust entrust) {
-        // 提取出需要的字段值
-        // 委托申请测试软件的软件信息
-        Software software = entrust.getContent().getSoftware();
-        // 测试类型
-        List<String> testType = entrust.getContent().getTestType();
-        // 测试依据
-        List<String> testStandard = entrust.getContent().getTestStandard();
-        // 技术指标
-        List<String> techIndex = entrust.getContent().getTechIndex();
+
+
         // 委托单位信息
         PartyDetail principal = entrust.getContent().getPrincipal();
-        //
-        for (String value: testType) {
-            if (value.equals("软件确认测试")) { this.multiCeShiLeiXing01 = "1"; }
-            else if (value.startsWith("_0641#toReplaceA1C1_0")) {
-                this.multiCeShiLeiXing02 = "1";
-                Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_0).*?(?=_0641#toReplaceA2C2_0)");
-                Matcher matcher = pattern.matcher(value);
-                if (matcher.find()) {
-                    this.inputCeShiLeiXing02 = matcher.group();
-                }
-            }
-            else if (value.equals("成果/技术鉴定测试")) { this.multiCeShiLeiXing03 = "1"; }
-            else if (value.equals("专项资金验收测试")) { this.multiCeShiLeiXing04 = "1"; }
-        }
-        //
-        this.inputRuanJianMingChen = software.getName();
-        this.inputBanBenHao = software.getVersion();
-        this.inputWeiTuoDanWeiZhongWen = principal.getCompanyCH();
-        this.inputWeiTuoDanWeiYingWen = principal.getCompanyEN();
-        this.inputKaiFaDanWei = software.getDeveloper();
-        //
-        if (software.getDeveloperType().equals("1")) { this.singleDanWeiXingZhi01 = "1"; }
-        else if (software.getDeveloperType().equals("2")) { this.singleDanWeiXingZhi02 = "2"; }
-        else if (software.getDeveloperType().equals("3")) { this.singleDanWeiXingZhi03 = "3"; }
-        else if (software.getDeveloperType().equals("4")) { this.singleDanWeiXingZhi04 = "4"; }
-        else if (software.getDeveloperType().equals("5")) { this.singleDanWeiXingZhi05 = "5"; }
-        else if (software.getDeveloperType().equals("6")) { this.singleDanWeiXingZhi06 = "6"; }
-        //
-        this.inputRuanJianMiaoShu = software.getUserDescription();
-        this.inputZhuYaoGongNeng = software.getFunctionIntro();
-        //
-        for (String value: testStandard) {
-            if (value.equals("GB/T 25000.51-2010")) { this.multiCeShiYiJu01 = "1"; }
-            else if (value.equals("GB/T 16260.1-2006")) { this.multiCeShiYiJu02 = "1"; }
-            else if (value.equals("NST-03-WI12-2011")) { this.multiCeShiYiJu03 = "1"; }
-            else if (value.equals("NST-03-WI13-2011")) { this.multiCeShiYiJu04 = "1"; }
-            else if (value.startsWith("_0641#toReplaceA1C1_1")) {
-                this.multiCeShiYiJu05 = "1";
-                Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_5).*?(?=_0641#toReplaceA2C2_5)");
-                Matcher matcher = pattern.matcher(value);
-                if (matcher.find()) {
-                    this.inputCeShiYiJu05 = matcher.group();
+
+        // 测试类型
+        List<String> testType = entrust.getContent().getTestType();
+        if (testType != null) {
+            for (String value : testType) {
+                if (safe(value).equals("软件确认测试")) {
+                    this.multiCeShiLeiXing01 = "1";
+                } else if (safe(value).startsWith("_0641#toReplaceA1C1_0")) {
+                    this.multiCeShiLeiXing02 = "1";
+                    Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_0).*?(?=_0641#toReplaceA2C2_0)");
+                    Matcher matcher = pattern.matcher(value);
+                    if (matcher.find()) {
+                        this.inputCeShiLeiXing02 = matcher.group();
+                    }
+                } else if (safe(value).equals("成果/技术鉴定测试")) {
+                    this.multiCeShiLeiXing03 = "1";
+                } else if (safe(value).equals("专项资金验收测试")) {
+                    this.multiCeShiLeiXing04 = "1";
                 }
             }
         }
-        //
-        for (String value: techIndex) {
-            if (value.equals("功能性")) { this.multiJiShuZhiBiao01 = "1"; }
-            else if (value.equals("可靠性")) { this.multiJiShuZhiBiao02 = "1"; }
-            else if (value.equals("易用性性")) { this.multiJiShuZhiBiao03 = "1"; }
-            else if (value.equals("效率")) { this.multiJiShuZhiBiao04 = "1"; }
-            else if (value.equals("可维护性")) { this.multiJiShuZhiBiao05 = "1"; }
-            else if (value.equals("可移植性")) { this.multiJiShuZhiBiao06 = "1"; }
-            else if (value.equals("代码覆盖度")) { this.multiJiShuZhiBiao07 = "1"; }
-            else if (value.equals("缺陷检测率")) { this.multiJiShuZhiBiao08 = "1"; }
-            else if (value.equals("代码风格符合度")) { this.multiJiShuZhiBiao09 = "1"; }
-            else if (value.equals("代码不符合项检测率")) { this.multiJiShuZhiBiao010 = "1"; }
-            else if (value.equals("产品说明要求")) { this.multiJiShuZhiBiao011 = "1"; }
-            else if (value.equals("用户文档集要求")) { this.multiJiShuZhiBiao012 = "1"; }
-            else if (value.startsWith("_0641#toReplaceA1C1_2")) {
-                this.multiJiShuZhiBiao013 = "1";
-                Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_6).*?(?=_0641#toReplaceA2C2_6)");
-                Matcher matcher = pattern.matcher(value);
-                if (matcher.find()) {
-                    this.inputJiShuZhiBiao013 = matcher.group();
+
+        // 委托申请测试软件的软件信息
+        Software software = entrust.getContent().getSoftware();
+        if (software != null) {
+            this.inputRuanJianMingChen = safe(software.getName());
+            this.inputBanBenHao = safe(software.getVersion());
+            this.inputWeiTuoDanWeiZhongWen = safe(principal.getCompanyCH());
+            this.inputWeiTuoDanWeiYingWen = safe(principal.getCompanyEN());
+            this.inputKaiFaDanWei = safe(software.getDeveloper());
+            if (safe(software.getDeveloperType()).equals("1")) {
+                this.singleDanWeiXingZhi01 = "1";
+            } else if (safe(software.getDeveloperType()).equals("2")) {
+                this.singleDanWeiXingZhi02 = "2";
+            } else if (safe(software.getDeveloperType()).equals("3")) {
+                this.singleDanWeiXingZhi03 = "3";
+            } else if (safe(software.getDeveloperType()).equals("4")) {
+                this.singleDanWeiXingZhi04 = "4";
+            } else if (safe(software.getDeveloperType()).equals("5")) {
+                this.singleDanWeiXingZhi05 = "5";
+            } else if (safe(software.getDeveloperType()).equals("6")) {
+                this.singleDanWeiXingZhi06 = "6";
+            }
+            this.inputRuanJianMiaoShu = safe(software.getUserDescription());
+            this.inputZhuYaoGongNeng = safe(software.getFunctionIntro());
+
+            this.inputRuanJianGuiMo01 = safe(software.getFunctionNums());
+            this.inputRuanJianGuiMo02 = safe(software.getFunctionPoint());
+            this.inputRuanJianGuiMo03 = safe(software.getCodeLine());
+            //
+            if (safe(software.getType()).equals("1")) { this.singleRuanJianLeiXing0XiTong01 = "1"; }
+            else if (safe(software.getType()).equals("2")) { this.singleRuanJianLeiXing0XiTong02 = "1"; }
+            else if (safe(software.getType()).equals("3")) { this.singleRuanJianLeiXing0XiTong03 = "1"; }
+            else if (safe(software.getType()).equals("4")) { this.singleRuanJianLeiXing0XiTong04 = "1"; }
+            else if (safe(software.getType()).equals("5")) { this.singleRuanJianLeiXing0XiTong05 = "1"; }
+            else if (safe(software.getType()).equals("6")) { this.singleRuanJianLeiXing0ZhiChi01 = "1"; }
+            else if (safe(software.getType()).equals("7")) { this.singleRuanJianLeiXing0ZhiChi02 = "1"; }
+            else if (safe(software.getType()).equals("8")) { this.singleRuanJianLeiXing0ZhiChi03 = "1"; }
+            else if (safe(software.getType()).equals("9")) { this.singleRuanJianLeiXing0ZhiChi04 = "1"; }
+            else if (safe(software.getType()).equals("10")) { this.singleRuanJianLeiXing0ZhiChi05 = "1"; }
+            else if (safe(software.getType()).equals("11")) { this.singleRuanJianLeiXing0ZhiChi06 = "1"; }
+            else if (safe(software.getType()).equals("12")) { this.singleRuanJianLeiXing0YingYong01 = "1"; }
+            else if (safe(software.getType()).equals("13")) { this.singleRuanJianLeiXing0YingYong02 = "1"; }
+            else if (safe(software.getType()).equals("14")) { this.singleRuanJianLeiXing0YingYong03 = "1"; }
+            else if (safe(software.getType()).equals("15")) { this.singleRuanJianLeiXing0YingYong04 = "1"; }
+            else if (safe(software.getType()).equals("16")) { this.singleRuanJianLeiXing0YingYong05 = "1"; }
+            else if (safe(software.getType()).equals("17")) { this.singleRuanJianLeiXing0YingYong06 = "1"; }
+            else if (safe(software.getType()).equals("18")) { this.singleRuanJianLeiXing0YingYong07 = "1"; }
+            else if (safe(software.getType()).equals("19")) { this.singleRuanJianLeiXing0YingYong08 = "1"; }
+            else if (safe(software.getType()).equals("20")) { this.singleRuanJianLeiXing0YingYong09 = "1"; }
+            else if (safe(software.getType()).equals("21")) { this.singleRuanJianLeiXing0YingYong010 = "1"; }
+            else if (safe(software.getType()).equals("22")) { this.singleRuanJianLeiXing0YingYong011 = "1"; }
+            else if (safe(software.getType()).equals("23")) { this.singleRuanJianLeiXing0YingYong012 = "1"; }
+            else if (safe(software.getType()).equals("24")) { this.singleRuanJianLeiXing0YingYong013 = "1"; }
+            else if (safe(software.getType()).equals("25")) { this.singleRuanJianLeiXing0QiTa01 = "1"; }
+
+            List<String> clientOS = software.getClientOS();
+            if (clientOS != null) {
+                for (String value : clientOS) {
+                    if (safe(value).startsWith("Windows")) {
+                        this.multiKeHuDuan0Windows = "1";
+                        String[] tmp = value.split("\\s+");
+                        Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_1).*?(?=_0641#toReplaceA2C2_1)");
+                        Matcher matcher = pattern.matcher(tmp[1]);
+                        if (matcher.find()) {
+                            this.inputKeHuDuan0Windows = matcher.group();
+                        }
+                    } else if (safe(value).startsWith("Linux")) {
+                        this.multiKeHuDuan0Linux = "1";
+                        String[] tmp = value.split("\\s+");
+                        Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_2).*?(?=_0641#toReplaceA2C2_2)");
+                        Matcher matcher = pattern.matcher(tmp[1]);
+                        if (matcher.find()) {
+                            this.inputKeHuDuan0Linux = matcher.group();
+                        }
+                    } else if (value != null){
+                        this.multiKeHuDuan0QiTa = "1";
+                        String[] tmp = value.split("\\s+");
+                        Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_3).*?(?=_0641#toReplaceA2C2_3)");
+                        Matcher matcher = pattern.matcher(tmp[1]);
+                        if (matcher.find()) {
+                            this.inputKeHuDuan0QiTa = matcher.group();
+                        }
+                    }
+                }
+            }
+            this.inputKeHuDuan0NeiCunYaoQiu = safe(software.getClientMemoryRequirement());
+            this.inputKeHuDuan0QiTaYaoQiu = safe(software.getClientOtherRequirement());
+
+            List<String> serverHardArch = software.getServerHardArch();
+            if (serverHardArch != null) {
+                for (String value : serverHardArch) {
+                    if (value.equals("PC服务器")) {
+                        this.multiFuWuQiYingJian0PC = "1";
+                    } else if (value.equals("UNIX/Linux服务器")) {
+                        this.multiFuWuQiYingJian0Linux = "1";
+                    } else {
+                        this.multiFuWuQiYingJian0QiTa = "1";
+                        Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_4).*?(?=_0641#toReplaceA2C2_4)");
+                        Matcher matcher = pattern.matcher(value);
+                        if (matcher.find()) {
+                            this.inputFuWuQiYingJian0QiTa = matcher.group();
+                        }
+                    }
+                }
+            }
+            this.inputFuWuQiYingJian0NeiCunYaoQiu = safe(software.getServHardMemoryRequirement());
+            this.inputFuWuQiYingJian0YingPanYaoQiu = safe(software.getServHardDiskRequirement());
+            this.inputFuWuQiYingJian0QiTaYaoQiu = safe(software.getServHardOtherRequirement());
+            this.inputFuWuQiRuanJian0CaoZuoXiTong = safe(software.getServSoftOS());
+            this.inputFuWuQiRuanJian0BanBen = safe(software.getServSoftVersion());
+            this.inputFuWuQiRuanJian0BianChengYuYan = safe(software.getServSoftProgramLang());
+
+            List<String> servSoftArch = software.getServSoftArch();
+            if (servSoftArch != null) {
+                for (String value : servSoftArch) {
+                    if (value.equals("C/S")) {
+                        this.multiFuWuQiRuanJian0GouJia0CS = "1";
+                    } else if (value.equals("B/S")) {
+                        this.multiFuWuQiRuanJian0GouJia0BS = "1";
+                    } else if (value.equals("其他")) {
+                        this.multiFuWuQiRuanJian0GouJia0QiTa = "1";
+                    }
+                }
+            }
+            this.inputFuWuQiRuanJian0ShuJuKu = safe(software.getServSoftDatabase());
+            this.inputFuWuQiRuanJian0ZhongJianJian = safe(software.getServSoftMiddleware());
+            this.inputFuWuQiRuanJian0QiTaZhiCheng = safe(software.getServerSideOtherSupport());
+            this.inputWangLuoHuanJing = safe(software.getNetworkEnvironment());
+        }
+
+        // 测试依据
+        List<String> testStandard = entrust.getContent().getTestStandard();
+        if (testStandard != null) {
+            for (String value : testStandard) {
+                if (value.equals("GB/T 25000.51-2010")) {
+                    this.multiCeShiYiJu01 = "1";
+                } else if (value.equals("GB/T 16260.1-2006")) {
+                    this.multiCeShiYiJu02 = "1";
+                } else if (value.equals("NST-03-WI12-2011")) {
+                    this.multiCeShiYiJu03 = "1";
+                } else if (value.equals("NST-03-WI13-2011")) {
+                    this.multiCeShiYiJu04 = "1";
+                } else if (value.startsWith("_0641#toReplaceA1C1_1")) {
+                    this.multiCeShiYiJu05 = "1";
+                    Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_5).*?(?=_0641#toReplaceA2C2_5)");
+                    Matcher matcher = pattern.matcher(value);
+                    if (matcher.find()) {
+                        this.inputCeShiYiJu05 = matcher.group();
+                    }
                 }
             }
         }
-        //
-        this.inputRuanJianGuiMo01 = software.getFunctionNums();
-        this.inputRuanJianGuiMo02 = software.getFunctionPoint();
-        this.inputRuanJianGuiMo03 = software.getCodeLine();
-        //
-        if (software.getType().equals("1")) { this.singleRuanJianLeiXing0XiTong01 = "1"; }
-        else if (software.getType().equals("2")) { this.singleRuanJianLeiXing0XiTong02 = "1"; }
-        else if (software.getType().equals("3")) { this.singleRuanJianLeiXing0XiTong03 = "1"; }
-        else if (software.getType().equals("4")) { this.singleRuanJianLeiXing0XiTong04 = "1"; }
-        else if (software.getType().equals("5")) { this.singleRuanJianLeiXing0XiTong05 = "1"; }
-        else if (software.getType().equals("6")) { this.singleRuanJianLeiXing0ZhiChi01 = "1"; }
-        else if (software.getType().equals("7")) { this.singleRuanJianLeiXing0ZhiChi02 = "1"; }
-        else if (software.getType().equals("8")) { this.singleRuanJianLeiXing0ZhiChi03 = "1"; }
-        else if (software.getType().equals("9")) { this.singleRuanJianLeiXing0ZhiChi04 = "1"; }
-        else if (software.getType().equals("10")) { this.singleRuanJianLeiXing0ZhiChi05 = "1"; }
-        else if (software.getType().equals("11")) { this.singleRuanJianLeiXing0ZhiChi06 = "1"; }
-        else if (software.getType().equals("12")) { this.singleRuanJianLeiXing0YingYong01 = "1"; }
-        else if (software.getType().equals("13")) { this.singleRuanJianLeiXing0YingYong02 = "1"; }
-        else if (software.getType().equals("14")) { this.singleRuanJianLeiXing0YingYong03 = "1"; }
-        else if (software.getType().equals("15")) { this.singleRuanJianLeiXing0YingYong04 = "1"; }
-        else if (software.getType().equals("16")) { this.singleRuanJianLeiXing0YingYong05 = "1"; }
-        else if (software.getType().equals("17")) { this.singleRuanJianLeiXing0YingYong06 = "1"; }
-        else if (software.getType().equals("18")) { this.singleRuanJianLeiXing0YingYong07 = "1"; }
-        else if (software.getType().equals("19")) { this.singleRuanJianLeiXing0YingYong08 = "1"; }
-        else if (software.getType().equals("20")) { this.singleRuanJianLeiXing0YingYong09 = "1"; }
-        else if (software.getType().equals("21")) { this.singleRuanJianLeiXing0YingYong010 = "1"; }
-        else if (software.getType().equals("22")) { this.singleRuanJianLeiXing0YingYong011 = "1"; }
-        else if (software.getType().equals("23")) { this.singleRuanJianLeiXing0YingYong012 = "1"; }
-        else if (software.getType().equals("24")) { this.singleRuanJianLeiXing0YingYong013 = "1"; }
-        else if (software.getType().equals("25")) { this.singleRuanJianLeiXing0QiTa01 = "1"; }
-        //
-        List<String> clientOS = software.getClientOS();
-        for (String value: clientOS) {
-            if (value.startsWith("Windows")) {
-                this.multiKeHuDuan0Windows = "1";
-                String[] tmp = value.split("\\s+");
-                Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_1).*?(?=_0641#toReplaceA2C2_1)");
-                Matcher matcher = pattern.matcher(tmp[1]);
-                if (matcher.find()) {
-                    this.inputKeHuDuan0Windows = matcher.group();
-                }
-            }
-            else if (value.startsWith("Linux")) {
-                this.multiKeHuDuan0Linux = "1";
-                String[] tmp = value.split("\\s+");
-                Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_2).*?(?=_0641#toReplaceA2C2_2)");
-                Matcher matcher = pattern.matcher(tmp[1]);
-                if (matcher.find()) {
-                    this.inputKeHuDuan0Linux = matcher.group();
-                }
-            }
-            else {
-                this.multiKeHuDuan0QiTa = "1";
-                String[] tmp = value.split("\\s+");
-                Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_3).*?(?=_0641#toReplaceA2C2_3)");
-                Matcher matcher = pattern.matcher(tmp[1]);
-                if (matcher.find()) {
-                    this.inputKeHuDuan0QiTa = matcher.group();
+
+        // 技术指标
+        List<String> techIndex = entrust.getContent().getTechIndex();
+        if (techIndex != null) {
+            for (String value : techIndex) {
+                if (value.equals("功能性")) {
+                    this.multiJiShuZhiBiao01 = "1";
+                } else if (value.equals("可靠性")) {
+                    this.multiJiShuZhiBiao02 = "1";
+                } else if (value.equals("易用性性")) {
+                    this.multiJiShuZhiBiao03 = "1";
+                } else if (value.equals("效率")) {
+                    this.multiJiShuZhiBiao04 = "1";
+                } else if (value.equals("可维护性")) {
+                    this.multiJiShuZhiBiao05 = "1";
+                } else if (value.equals("可移植性")) {
+                    this.multiJiShuZhiBiao06 = "1";
+                } else if (value.equals("代码覆盖度")) {
+                    this.multiJiShuZhiBiao07 = "1";
+                } else if (value.equals("缺陷检测率")) {
+                    this.multiJiShuZhiBiao08 = "1";
+                } else if (value.equals("代码风格符合度")) {
+                    this.multiJiShuZhiBiao09 = "1";
+                } else if (value.equals("代码不符合项检测率")) {
+                    this.multiJiShuZhiBiao010 = "1";
+                } else if (value.equals("产品说明要求")) {
+                    this.multiJiShuZhiBiao011 = "1";
+                } else if (value.equals("用户文档集要求")) {
+                    this.multiJiShuZhiBiao012 = "1";
+                } else if (value.startsWith("_0641#toReplaceA1C1_2")) {
+                    this.multiJiShuZhiBiao013 = "1";
+                    Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_6).*?(?=_0641#toReplaceA2C2_6)");
+                    Matcher matcher = pattern.matcher(value);
+                    if (matcher.find()) {
+                        this.inputJiShuZhiBiao013 = matcher.group();
+                    }
                 }
             }
         }
-        this.inputKeHuDuan0NeiCunYaoQiu = software.getClientMemoryRequirement();
-        this.inputKeHuDuan0QiTaYaoQiu = software.getClientOtherRequirement();
-        //
-        List<String> serverHardArch = software.getServerHardArch();
-        for (String value: serverHardArch) {
-            if (value.equals("PC服务器")) { this.multiFuWuQiYingJian0PC = "1"; }
-            else if (value.equals("UNIX/Linux服务器")) { this.multiFuWuQiYingJian0Linux = "1"; }
-            else {
-                this.multiFuWuQiYingJian0QiTa = "1";
-                Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_4).*?(?=_0641#toReplaceA2C2_4)");
-                Matcher matcher = pattern.matcher(value);
-                if (matcher.find()) {
-                    this.inputFuWuQiYingJian0QiTa = matcher.group();
-                }
-            }
-        }
-        this.inputFuWuQiYingJian0NeiCunYaoQiu = software.getServHardMemoryRequirement();
-        this.inputFuWuQiYingJian0YingPanYaoQiu = software.getServHardDiskRequirement();
-        this.inputFuWuQiYingJian0QiTaYaoQiu = software.getServHardOtherRequirement();
-        this.inputFuWuQiRuanJian0CaoZuoXiTong = software.getServSoftOS();
-        this.inputFuWuQiRuanJian0BanBen = software.getServSoftVersion();
-        this.inputFuWuQiRuanJian0BianChengYuYan = software.getServSoftProgramLang();
-        //
-        List<String> servSoftArch = software.getServSoftArch();
-        for (String value: servSoftArch) {
-            if (value.equals("C/S")) { this.multiFuWuQiRuanJian0GouJia0CS = "1"; }
-            else if (value.equals("B/S")) { this.multiFuWuQiRuanJian0GouJia0BS = "1"; }
-            else if (value.equals("其他")) { this.multiFuWuQiRuanJian0GouJia0QiTa = "1"; }
-        }
-        this.inputFuWuQiRuanJian0ShuJuKu = software.getServSoftDatabase();
-        this.inputFuWuQiRuanJian0ZhongJianJian = software.getServSoftMiddleware();
-        this.inputFuWuQiRuanJian0QiTaZhiCheng = software.getServerSideOtherSupport();
-        this.inputWangLuoHuanJing = software.getNetworkEnvironment();
+
         // 软件介质
         String softwareMedium = entrust.getContent().getSoftwareMedium();
-        if (softwareMedium.equals("1")) { this.singleRuanJianJieZhi0GuangPan = "1"; }
-        else if (softwareMedium.equals("2")) { this.singleRuanJianJieZhi0UPan = "1"; }
-        else {
+        if (safe(softwareMedium).equals("1")) { this.singleRuanJianJieZhi0GuangPan = "1"; }
+        else if (safe(softwareMedium).equals("2")) { this.singleRuanJianJieZhi0UPan = "1"; }
+        else if (softwareMedium != null) {
             this.singleRuanJianJieZhi0QiTa = "1";
             Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_7).*?(?=_0641#toReplaceA2C2_7)");
             Matcher matcher = pattern.matcher(softwareMedium);
@@ -346,69 +393,84 @@ public class JS002 {
         }
         // 文档资料
         String softwareDoc = entrust.getContent().getDocument();
-        this.inputWenDangZiLiao = softwareDoc;
+        this.inputWenDangZiLiao = safe(softwareDoc);
         // 样品处理方式
         String sampleHandling = entrust.getContent().getSampleHandling();
-        if (sampleHandling.equals("1")) { this.singleYangPingChuLi01 = "1"; }
-        else { this.singleYangPingChuLi02 = "1"; }
-        //
-        this.inputWeiTuoDanWei0DianHua = principal.getCompanyPhone();
-        this.inputWeiTuoDanWei0ChuanZhen = principal.getFax();
-        this.inputWeiTuoDanWei0DiZhi = principal.getCompanyAddress();
-        this.inputWeiTuoDanWei0YouBian = principal.getZipCode();
-        this.inputWeiTuoDanWei0LianXiRen = principal.getContact();
-        this.inputWeiTuoDanWei0ShouJi = principal.getContactPhone();
-        this.inputWeiTuoDanWei0Email = principal.getContactEmail();
-        this.inputWeiTuoDanWei0WangZhi = principal.getCompanyWebsite();
+        if (safe(sampleHandling).equals("1")) { this.singleYangPingChuLi01 = "1"; }
+        else if (sampleHandling != null) { this.singleYangPingChuLi02 = "1"; }
+
+        this.inputWeiTuoDanWei0DianHua = safe(principal.getCompanyPhone());
+        this.inputWeiTuoDanWei0ChuanZhen = safe(principal.getFax());
+        this.inputWeiTuoDanWei0DiZhi = safe(principal.getCompanyAddress());
+        this.inputWeiTuoDanWei0YouBian = safe(principal.getZipCode());
+        this.inputWeiTuoDanWei0LianXiRen = safe(principal.getContact());
+        this.inputWeiTuoDanWei0ShouJi = safe(principal.getContactPhone());
+        this.inputWeiTuoDanWei0Email = safe(principal.getContactEmail());
+        this.inputWeiTuoDanWei0WangZhi = safe(principal.getCompanyWebsite());
 
         // 从委托评审里获取，注意判断null
         EntrustReview entrustReview = entrust.getReview();
         if (entrustReview != null) {
             // 密级
             String securityLevel = entrustReview.getSecurityLevel();
-            if (securityLevel.equals("1")) { this.singleMiJi01 = "1"; }
-            else if (securityLevel.equals("2")) { this.singleMiJi02 = "1"; }
-            else { this.singleMiJi03 = "1"; }
+            if (safe(securityLevel).equals("1")) { this.singleMiJi01 = "1"; }
+            else if (safe(securityLevel).equals("2")) { this.singleMiJi02 = "1"; }
+            else if(securityLevel != null) { this.singleMiJi03 = "1"; }
             // 查杀病毒
             String checkVirus = entrustReview.getCheckVirus();
-            if (checkVirus.equals("1")) { this.singleChaShaBingDu01 = "1"; }
-            else {
+            if (safe(checkVirus).equals("1")) { this.singleChaShaBingDu01 = "1"; }
+            else if (checkVirus != null) {
                 this.singleChaShaBingDu02 = "1";
                 Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_0).*?(?=_0641#toReplaceA2C2_0)");
-                Matcher matcher = pattern.matcher(softwareMedium);
+                Matcher matcher = pattern.matcher(safe(softwareMedium));
                 if (matcher.find()) {
                     this.inputChaShaBingDu02 = matcher.group();
                 }
             }
+
             // 材料检查
             List<String> checkMaterial = entrustReview.getCheckMaterial();
-            for (String value: checkMaterial) {
-                if (value.equals("源代码")) { this.multiCaiLiaoJianCha0CeshiYangPing01 = "1"; }
-                else if (value.equals("可执行文件")) { this.multiCaiLiaoJianCha0CeshiYangPing02 = "1"; }
-                else if (value.equals("项目计划任务书")) { this.multiCaiLiaoJianCha0XuQiuWenDang01 = "1"; }
-                else if (value.equals("需求分析报告")) { this.multiCaiLiaoJianCha0XuQiuWenDang02 = "1"; }
-                else if (value.equals("合同")) { this.multiCaiLiaoJianCha0XuQiuWenDang03 = "1"; }
-                else if (value.equals("用户手册")) { this.multiCaiLiaoJianCha0YongHuWenDang01 = "1"; }
-                else if (value.equals("用户指南")) { this.multiCaiLiaoJianCha0YongHuWenDang02 = "1"; }
-                else if (value.equals("操作员手册")) { this.multiCaiLiaoJianCha0CaoZuoWenDang01 = "1"; }
-                else if (value.equals("安装手册")) { this.multiCaiLiaoJianCha0CaoZuoWenDang02 = "1"; }
-                else if (value.equals("诊断手册")) { this.multiCaiLiaoJianCha0CaoZuoWenDang03 = "1"; }
-                else if (value.equals("支持手册")) { this.multiCaiLiaoJianCha0CaoZuoWenDang04 = "1"; }
+            if (checkMaterial != null) {
+                for (String value : checkMaterial) {
+                    if (value.equals("源代码")) {
+                        this.multiCaiLiaoJianCha0CeshiYangPing01 = "1";
+                    } else if (value.equals("可执行文件")) {
+                        this.multiCaiLiaoJianCha0CeshiYangPing02 = "1";
+                    } else if (value.equals("项目计划任务书")) {
+                        this.multiCaiLiaoJianCha0XuQiuWenDang01 = "1";
+                    } else if (value.equals("需求分析报告")) {
+                        this.multiCaiLiaoJianCha0XuQiuWenDang02 = "1";
+                    } else if (value.equals("合同")) {
+                        this.multiCaiLiaoJianCha0XuQiuWenDang03 = "1";
+                    } else if (value.equals("用户手册")) {
+                        this.multiCaiLiaoJianCha0YongHuWenDang01 = "1";
+                    } else if (value.equals("用户指南")) {
+                        this.multiCaiLiaoJianCha0YongHuWenDang02 = "1";
+                    } else if (value.equals("操作员手册")) {
+                        this.multiCaiLiaoJianCha0CaoZuoWenDang01 = "1";
+                    } else if (value.equals("安装手册")) {
+                        this.multiCaiLiaoJianCha0CaoZuoWenDang02 = "1";
+                    } else if (value.equals("诊断手册")) {
+                        this.multiCaiLiaoJianCha0CaoZuoWenDang03 = "1";
+                    } else if (value.equals("支持手册")) {
+                        this.multiCaiLiaoJianCha0CaoZuoWenDang04 = "1";
+                    }
+                }
             }
-            // this.inputCaiLiaoJianCha0QiTa = "";
+
             // 确认意见
             String confirmation = entrustReview.getConfirmation();
-            if (confirmation.equals("1")) { this.singleQueRenYiJian01 = "1"; }
-            else if (confirmation.equals("2")) { this.singleQueRenYiJian02 = "1"; }
-            else if (confirmation.equals("3")) { this.singleQueRenYiJian03 = "1"; }
-            else { this.singleQueRenYiJian04 = "1"; }
+            if (safe(confirmation).equals("1")) { this.singleQueRenYiJian01 = "1"; }
+            else if (safe(confirmation).equals("2")) { this.singleQueRenYiJian02 = "1"; }
+            else if (safe(confirmation).equals("3")) { this.singleQueRenYiJian03 = "1"; }
+            else if (confirmation != null){ this.singleQueRenYiJian04 = "1"; }
             // 受理意见
             String acceptance = entrustReview.getAcceptance();
-            if (acceptance.equals("1")) { this.singleShouLiYiJian01 = "1"; }
-            else if (acceptance.equals("2")) { this.singleShouLiYiJian02 = "1"; }
-            else { this.singleShouLiYiJian03 = "1"; }
+            if (safe(acceptance).equals("1")) { this.singleShouLiYiJian01 = "1"; }
+            else if (safe(acceptance).equals("2")) { this.singleShouLiYiJian02 = "1"; }
+            else if (acceptance != null) { this.singleShouLiYiJian03 = "1"; }
             // 测试项目编号
-            this.inputCeShiXiangMuBianHao = entrustReview.getSerialNumber();
+            this.inputCeShiXiangMuBianHao = safe(entrustReview.getSerialNumber());
         }
 
     }

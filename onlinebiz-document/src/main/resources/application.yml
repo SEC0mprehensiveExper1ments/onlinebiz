@@ -16,3 +16,5 @@ eureka:
 
 # font文件路径代码中会加，此处不加是因为有中间文件会生成在/onlinebiz-document下，但上传OSS后，会删除
 document-dir: /root/onlinebiz/onlinebiz-document/
+# Windows本地运行时，使用该路径
+#document-dir: /

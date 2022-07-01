@@ -100,6 +100,7 @@ public class DownloadController {
             @RequestParam("userId") Long userId,
             @RequestParam("userRole") Role userRole
     ) {
+
         Entrust entrust = restRequestService.getEntrustById(entrustId, userId, userRole);
         return docServiceJS002.fill(entrustId.replaceAll("////",""), new JS002(entrust));
     }
