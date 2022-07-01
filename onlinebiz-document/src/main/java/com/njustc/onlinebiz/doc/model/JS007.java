@@ -154,5 +154,13 @@ public class JS007 {
         this.inputKeKaoXingCeShi=report.getContent().getReliabilityTests();
         this.inputKeWeiHuXingCeShi=report.getContent().getMaintainabilityTests();
         this.inputCeShiZhiXingJiLu=report.getContent().getTestRecords();
+
+        //添加字段非空性检查
+        if (this.inputBaoGaoBianHao == null) this.inputBaoGaoBianHao = "";
+        if (this.inputRuanJianMingCheng == null) this.inputRuanJianMingCheng = "";
+        if (this.inputBanBenHao == null) this.inputBanBenHao = "";
+        if (this.inputWeiTuoDanWei == null) this.inputWeiTuoDanWei = "";
+        if (this.inputCeShiLeiBie == null) this.inputCeShiLeiBie = "";
+
     }
 }
