@@ -15,5 +15,5 @@ jobs:
           distribution: 'adopt'
       - name: Build with Maven
         run: sudo mvn package
-      - name: Run tests
+      - name: Run IT tests
         run: sudo mvn failsafe:integration-test
