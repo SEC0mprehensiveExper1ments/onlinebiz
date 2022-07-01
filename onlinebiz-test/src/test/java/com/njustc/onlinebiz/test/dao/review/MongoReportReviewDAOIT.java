@@ -100,4 +100,13 @@ class MongoReportReviewDAOIT {
     // 删除一个不存在的ID
     Assertions.assertFalse(mongoReportReviewDAO.deleteReportAuditById(getNonExistId()));
   }
+
+  @Test
+  @Order(9)
+  public void deleteReportAuditById() {
+    // 删除一个存在的ID
+    for (String reportReviewId : reportReviewIds) {
+      Assertions.assertTrue(mongoReportReviewDAO.deleteReportAuditById(reportReviewId));
+    }
+  }
 }
