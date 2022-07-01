@@ -64,8 +64,10 @@ public class JS003 {
   public JS003(Entrust entrust) {
     //
     Software software = entrust.getContent().getSoftware();
-    this.inputRuanJianMingCheng = software.getName();
-    this.inputBanBenHao = software.getVersion();
+    if (software != null) {
+      this.inputRuanJianMingCheng = software.getName();
+      this.inputBanBenHao = software.getVersion();
+    }
     // 软件功能列表
     List<Module> modules = software.getModules();
     if (modules != null) {
@@ -73,6 +75,16 @@ public class JS003 {
         GongNeng gongNeng = new GongNeng(module);
         this.inputRuanJianGongNengXiangMu.add(gongNeng);
       }
+    }
+    //非空性检查
+    if (this.inputRuanJianMingCheng == null) {
+      this.inputRuanJianMingCheng = "";
+    }
+    if (this.inputBanBenHao == null) {
+      this.inputBanBenHao = "";
+    }
+    if (this.inputRuanJianGongNengXiangMu == null) {
+      this.inputRuanJianGongNengXiangMu = new ArrayList<>();
     }
   }
 

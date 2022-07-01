@@ -27,7 +27,12 @@ public class JS005 {
             this.inputJiaFang = jiaFang.getCompanyCH();
         }
         this.inputWeiTuoXiangMu = contract.getProjectName();
-
-
+        //非空性检查
+        if (this.inputJiaFang == null) {
+            this.inputJiaFang = "";
+        }
+        if (this.inputWeiTuoXiangMu == null) {
+            this.inputWeiTuoXiangMu = "";
+        }
     }
 }
