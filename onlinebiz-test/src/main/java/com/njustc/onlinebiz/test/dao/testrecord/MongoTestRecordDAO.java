@@ -29,7 +29,7 @@ public class MongoTestRecordDAO implements TestRecordDAO {
 
     @Override
     public TestRecordList findTestRecordListById(String testRecordListId) {
-        return mongoTemplate.findById(testRecordListId, TestRecordList.class);
+        return mongoTemplate.findById(testRecordListId, TestRecordList.class, COLLECTION_NAME);
     }
 
     @Override

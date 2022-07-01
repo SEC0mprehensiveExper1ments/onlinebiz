@@ -29,7 +29,7 @@ public class MongoTestcaseDAO implements TestcaseDAO {
 
     @Override
     public Testcase findTestcaseListById(String testcaseListId) {
-        return mongoTemplate.findById(testcaseListId, Testcase.class);
+        return mongoTemplate.findById(testcaseListId, Testcase.class, COLLECTION_NAME);
     }
 
     @Override
