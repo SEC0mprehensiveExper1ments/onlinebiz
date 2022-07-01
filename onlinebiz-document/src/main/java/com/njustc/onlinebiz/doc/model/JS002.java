@@ -415,19 +415,15 @@ public class JS002 {
         if (entrustReview != null) {
             // 密级
             String securityLevel = entrustReview.getSecurityLevel();
-            if (safe(securityLevel).equals("1")) { this.singleMiJi01 = "1"; }
-            else if (safe(securityLevel).equals("2")) { this.singleMiJi02 = "1"; }
-            else if(securityLevel != null) { this.singleMiJi03 = "1"; }
+            if (safe(securityLevel).equals("无密级")) { this.singleMiJi01 = "1"; }
+            else if (safe(securityLevel).equals("秘密")) { this.singleMiJi02 = "1"; }
+            else if(safe(securityLevel).equals("机密")) { this.singleMiJi03 = "1"; }
             // 查杀病毒
             String checkVirus = entrustReview.getCheckVirus();
-            if (safe(checkVirus).equals("1")) { this.singleChaShaBingDu01 = "1"; }
-            else if (checkVirus != null) {
+            if (safe(checkVirus).equals("已完成")) { this.singleChaShaBingDu01 = "1"; }
+            else if (safe(checkVirus).startsWith("无法完成")) {
                 this.singleChaShaBingDu02 = "1";
-                Pattern pattern = Pattern.compile("(?<=_0641#toReplaceA1C1_0).*?(?=_0641#toReplaceA2C2_0)");
-                Matcher matcher = pattern.matcher(safe(softwareMedium));
-                if (matcher.find()) {
-                    this.inputChaShaBingDu02 = matcher.group();
-                }
+                this.inputChaShaBingDu02 = checkVirus.substring(4);
             }
 
             // 材料检查
@@ -462,15 +458,15 @@ public class JS002 {
 
             // 确认意见
             String confirmation = entrustReview.getConfirmation();
-            if (safe(confirmation).equals("1")) { this.singleQueRenYiJian01 = "1"; }
-            else if (safe(confirmation).equals("2")) { this.singleQueRenYiJian02 = "1"; }
-            else if (safe(confirmation).equals("3")) { this.singleQueRenYiJian03 = "1"; }
-            else if (confirmation != null){ this.singleQueRenYiJian04 = "1"; }
+            if (safe(confirmation).equals("0")) { this.singleQueRenYiJian01 = "1"; }
+            else if (safe(confirmation).equals("1")) { this.singleQueRenYiJian02 = "1"; }
+            else if (safe(confirmation).equals("2")) { this.singleQueRenYiJian03 = "1"; }
+            else if (safe(confirmation).equals("3")){ this.singleQueRenYiJian04 = "1"; }
             // 受理意见
             String acceptance = entrustReview.getAcceptance();
-            if (safe(acceptance).equals("1")) { this.singleShouLiYiJian01 = "1"; }
-            else if (safe(acceptance).equals("2")) { this.singleShouLiYiJian02 = "1"; }
-            else if (acceptance != null) { this.singleShouLiYiJian03 = "1"; }
+            if (safe(acceptance).equals("0")) { this.singleShouLiYiJian01 = "1"; }
+            else if (safe(acceptance).equals("1")) { this.singleShouLiYiJian02 = "1"; }
+            else if (safe(acceptance).equals("2")) { this.singleShouLiYiJian03 = "1"; }
             // 测试项目编号
             this.inputCeShiXiangMuBianHao = safe(entrustReview.getSerialNumber());
         }
