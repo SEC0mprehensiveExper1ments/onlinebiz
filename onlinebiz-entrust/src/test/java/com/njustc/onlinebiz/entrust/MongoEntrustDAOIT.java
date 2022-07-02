@@ -357,13 +357,13 @@ public class MongoEntrustDAOIT {
     }
 
     @Test
-    @Order(37)
+    @Order(39)
     public void testDeleteEntrustNotExist() {
         Assertions.assertFalse(entrustDAO.deleteEntrust(getNonExistId()));
     }
 
     @Test
-    @Order(38)
+    @Order(40)
     public void testDeleteEntrustExist() {
         for (String entrustId : entrustIds) {
             Assertions.assertTrue(entrustDAO.deleteEntrust(entrustId));

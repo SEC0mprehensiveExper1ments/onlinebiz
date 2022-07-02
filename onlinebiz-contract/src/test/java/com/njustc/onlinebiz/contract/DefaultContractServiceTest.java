@@ -17,7 +17,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,7 +46,7 @@ public class DefaultContractServiceTest {
 
     @Test
     public void testCreateContractInconsistent() {
-        when(restTemplate.getForEntity(anyString(), any())).thenReturn(ResponseEntity.badRequest().build());
+        when(restTemplate.getForObject(anyString(), any())).thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
         Assertions.assertThrows(ContractCreateFailureException.class, () ->
                 contractService.createContract(new ObjectId().toString(), 2L, Role.MARKETER));
 

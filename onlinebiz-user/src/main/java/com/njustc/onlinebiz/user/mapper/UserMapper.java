@@ -6,6 +6,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+/**
+ * 用户服务的数据访问层接口类
+ */
 @Mapper
 public interface UserMapper {
 

@@ -6,6 +6,9 @@ import com.njustc.onlinebiz.user.model.User;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * 用户服务的接口类
+ */
 public interface UserService {
 
     /**
