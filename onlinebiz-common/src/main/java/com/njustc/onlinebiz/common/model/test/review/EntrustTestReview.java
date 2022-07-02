@@ -28,13 +28,13 @@ public class EntrustTestReview {
     // 申报单位
     private String principal;
     // 起始时间
-    private Date startDate;
+    private String startDate;
     // 预计完成时间
-    private Date expectFinishDate;
+    private String expectFinishDate;
     // 主测人
     private String mainTester;
     // 实际完成时间
-    private Date finishDate;
+    private String finishDate;
     // 各项检查结果
     List<String> conclusions;
 }
