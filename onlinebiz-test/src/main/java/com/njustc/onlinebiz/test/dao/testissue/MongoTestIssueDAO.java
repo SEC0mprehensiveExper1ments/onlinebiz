@@ -29,7 +29,7 @@ public class MongoTestIssueDAO implements TestIssueDAO {
 
     @Override
     public TestIssueList findTestIssueListById(String testIssueListId) {
-        return mongoTemplate.findById(testIssueListId, TestIssueList.class);
+        return mongoTemplate.findById(testIssueListId, TestIssueList.class, COLLECTION_NAME);
     }
 
     @Override

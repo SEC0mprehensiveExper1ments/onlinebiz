@@ -53,7 +53,13 @@ public class DocServiceJS004 {
   }
 
 
-  /** 填充JS004文档 */
+  /**
+   * 填充
+   *
+   * @param contractId 委托id
+   * @param newJson 新json
+   * @return {@link String} OSS下载链接
+   */
   public String fill(String contractId, JS004 newJson) {
     JS004Json = newJson;
     String pdfPath = DOCUMENT_DIR + "JS004_" + contractId + ".pdf";
@@ -62,7 +68,7 @@ public class DocServiceJS004 {
       Document document = new Document(PageSize.A4); // 建立一个Document对象
       document.setMargins(marginLeft, marginRight, marginTop, marginBottom);
       // 2.建立一个书写器(Writer)与document对象关联
-      File file = new File(pdfPath);
+      File file = new File(pdfPath.replaceAll("\\\\", "/"));
       System.out.println(pdfPath);
       PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
       System.out.println(1);
@@ -111,16 +117,16 @@ public class DocServiceJS004 {
     // 上传pdf
     try {
       if (ossProvider.upload(
-              "doc", "JS004_" + contractId + ".pdf", Files.readAllBytes(Path.of(pdfPath)), "application/pdf")) {
-        deleteOutFile(pdfPath);
+              "doc", "JS004_" + contractId + ".pdf", Files.readAllBytes(Path.of(pdfPath.replaceAll("\\\\", "/"))), "application/pdf")) {
+        deleteOutFile(pdfPath.replaceAll("\\\\", "/"));
         return "https://oss.syh1en.asia/doc/JS004_" + contractId + ".pdf";
       } else {
-        deleteOutFile(pdfPath);
+        deleteOutFile(pdfPath.replaceAll("\\\\", "/"));
         return "upload failed";
       }
     } catch (Exception e) {
       e.printStackTrace();
-      deleteOutFile(pdfPath);
+      deleteOutFile(pdfPath.replaceAll("\\\\", "/"));
       return "minio error";
     }
   }
@@ -130,7 +136,7 @@ public class DocServiceJS004 {
    * */
   private void deleteOutFile(String pdfPath) {
     try {
-      File file = new File(pdfPath);
+      File file = new File(pdfPath.replaceAll("\\\\", "/"));
       if (file.delete()) {
         System.out.println(file.getName() + " is deleted!");
       } else {
@@ -292,14 +298,11 @@ public class DocServiceJS004 {
     text2.setLeading(24f);
     Chunk chunk3 = new Chunk(JS004Json.getInputShouCeRuanJian(), textfont);
     chunk3.setUnderline(0.3f, -3f);
-    Chunk chunk4 = new Chunk(JS004Json.getInputZhiLiangTeXing(), textfont);
-    chunk4.setUnderline(0.3f, -3f);
 
     text2.add(new Chunk("一、任务表述\n", keyfont));
     text2.add(new Chunk("    乙方按照国家软件质量测试标准和测试规范，完成甲方委托的软件", textfont));
     text2.add(chunk3);
     text2.add(new Chunk("(下称受测软件)的质量特性", textfont));
-    text2.add(chunk4);
     text2.add(new Chunk("，进行测试，并出具相应的测试报告。", textfont));
     text2.setSpacingAfter(30f); // 设置段落下空白
 
@@ -347,14 +350,14 @@ public class DocServiceJS004 {
     text1.setLeading(24f);
     Chunk chunk1 = new Chunk(JS004Json.getInputCeShiFeiYong(), textfont);
     chunk1.setUnderline(0.3f, -3f);
-    Chunk chunk2 = new Chunk(JS004Json.getInputCeShiFeiYong0Yuan(), textfont);
+    //Chunk chunk2 = new Chunk(JS004Json.getInputCeShiFeiYong0Yuan(), textfont);
     //        chunk2.setUnderline(0.3f, -3f);
 
     text1.add(new Chunk("四、合同价款\n", keyfont));
     text1.add(new Chunk("    本合同软件测试费用为人民币", textfont));
     text1.add(chunk1);
     text1.add(new Chunk("（¥ ", textfont));
-    text1.add(chunk2);
+    //text1.add(chunk2);
     text1.add(new Chunk(" 元）。", textfont));
     text1.setSpacingAfter(30f); // 设置段落下空白
 

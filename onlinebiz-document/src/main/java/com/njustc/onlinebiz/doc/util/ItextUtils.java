@@ -191,6 +191,29 @@ public class ItextUtils {
         return cell;
     }
 
+    public static PdfPCell createCell_Leading(String value, Font font, int align, int colspan, int rowspan, float leading, float[] paddings, float borderWidth) {
+        PdfPCell cell = new PdfPCell();
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setHorizontalAlignment(align);
+        cell.setColspan(colspan);
+        cell.setRowspan(rowspan);
+        Phrase phrase=new Phrase(value, font);
+        cell.setPhrase(phrase);
+//        cell.setPaddingTop(10.0f);
+//        cell.setPaddingBottom(10.0f);
+//        cell.setPaddingLeft(5.0f);
+//        cell.setPaddingRight(5.0f);
+//        cell.setBorderWidth(1f);
+        cell.setPaddingTop(paddings[0]);
+        cell.setPaddingBottom(paddings[1]);
+        cell.setPaddingLeft(paddings[2]);
+        cell.setPaddingRight(paddings[3]);
+        cell.setBorderWidth(borderWidth);
+//        cell.setBorder(haveBorder);
+        cell.setLeading(leading, 0f);
+        return cell;
+    }
+
     public static PdfPCell createGreyCell(String value, Font font, int align, int colspan, int rowspan, float[] paddings, float borderWidth) {
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(new BaseColor(220, 220, 220));
@@ -204,6 +227,54 @@ public class ItextUtils {
 //        cell.setPaddingLeft(5.0f);
 //        cell.setPaddingRight(5.0f);
 //        cell.setBorderWidth(1f);
+        cell.setPaddingTop(paddings[0]);
+        cell.setPaddingBottom(paddings[1]);
+        cell.setPaddingLeft(paddings[2]);
+        cell.setPaddingRight(paddings[3]);
+        cell.setBorderWidth(borderWidth);
+//        cell.setBorder(haveBorder);
+//        cell.setLeading(12f, 0f);
+        return cell;
+    }
+
+    public static PdfPCell createGreyCell_Height(String value, Font font, int align, int colspan, int rowspan, float height, float[] paddings, float borderWidth) {
+        PdfPCell cell = new PdfPCell();
+        cell.setBackgroundColor(new BaseColor(220, 220, 220));
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setHorizontalAlignment(align);
+        cell.setColspan(colspan);
+        cell.setRowspan(rowspan);
+        cell.setPhrase(new Phrase(value, font));
+//        cell.setPaddingTop(10.0f);
+//        cell.setPaddingBottom(10.0f);
+//        cell.setPaddingLeft(5.0f);
+//        cell.setPaddingRight(5.0f);
+//        cell.setBorderWidth(1f);
+        cell.setFixedHeight(height);
+        cell.setPaddingTop(paddings[0]);
+        cell.setPaddingBottom(paddings[1]);
+        cell.setPaddingLeft(paddings[2]);
+        cell.setPaddingRight(paddings[3]);
+        cell.setBorderWidth(borderWidth);
+//        cell.setBorder(haveBorder);
+//        cell.setLeading(12f, 0f);
+        return cell;
+    }
+
+    public static PdfPCell createGreenCell_Height(String value, Font font, int align, int colspan, int rowspan, float height, float[] paddings, float borderWidth) {
+        PdfPCell cell = new PdfPCell();
+        cell.setBackgroundColor(new BaseColor(240, 255, 240));
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setHorizontalAlignment(align);
+        cell.setColspan(colspan);
+        cell.setRowspan(rowspan);
+        cell.setPhrase(new Phrase(value, font));
+//        cell.setPaddingTop(10.0f);
+//        cell.setPaddingBottom(10.0f);
+//        cell.setPaddingLeft(5.0f);
+//        cell.setPaddingRight(5.0f);
+//        cell.setBorderWidth(1f);
+        cell.setFixedHeight(height);
         cell.setPaddingTop(paddings[0]);
         cell.setPaddingBottom(paddings[1]);
         cell.setPaddingLeft(paddings[2]);

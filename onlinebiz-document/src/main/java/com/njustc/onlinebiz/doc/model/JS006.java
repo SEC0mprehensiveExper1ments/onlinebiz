@@ -62,5 +62,72 @@ public class JS006 {
         this.sheJiCeShi = scheme.getContent().getDesignSchedule();
         this.zhiXingCeShi = scheme.getContent().getExecuteSchedule();
         this.pingGuCeShi = scheme.getContent().getEvaluateSchedule();
+        //非空性检查
+        if (this.inputBanBenHao == null) {
+            this.inputBanBenHao = "";
+        }
+        if (this.wenDangXiuGaiJiLu == null) {
+            this.wenDangXiuGaiJiLu = new ArrayList<>();
+        }
+        if (this.inputBiaoShi == null) {
+            this.inputBiaoShi = "";
+        }
+        if (this.inputXiTongGaiShu == null) {
+            this.inputXiTongGaiShu = "";
+        }
+        if (this.inputWenDangGaiShu == null) {
+            this.inputWenDangGaiShu = "";
+        }
+        if (this.inputJiXian == null) {
+            this.inputJiXian = "";
+        }
+        if (this.inputYingJian == null) {
+            this.inputYingJian = "";
+        }
+        if (this.inputRuanJian == null) {
+            this.inputRuanJian = "";
+        }
+        if (this.inputQiTa == null) {
+            this.inputQiTa = "";
+        }
+        if (this.inputCanYuZuZhi == null) {
+            this.inputCanYuZuZhi = "";
+        }
+        if (this.inputRenYuan == null) {
+            this.inputRenYuan = "";
+        }
+        if (this.inputCeShiJiBie == null) {
+            this.inputCeShiJiBie = "";
+        }
+        if (this.inputCeShiLeiBie == null) {
+            this.inputCeShiLeiBie = "";
+        }
+        if (this.inputYiBanCeShiTiaoJian == null) {
+            this.inputYiBanCeShiTiaoJian = "";
+        }
+        if (this.inputJiHuaZhiXingDeCeShi == null) {
+            this.inputJiHuaZhiXingDeCeShi = "";
+        }
+        if (this.inputCeShiYongLi == null) {
+            this.inputCeShiYongLi = "";
+        }
+        if (this.inputYuJiGongZuoRi == null) {
+            this.inputYuJiGongZuoRi = "";
+        }
+        if (this.zhiDingJiHua == null) {
+            this.zhiDingJiHua = new Schedule();
+        }
+        if (this.sheJiCeShi == null) {
+            this.sheJiCeShi = new Schedule();
+        }
+        if (this.zhiXingCeShi == null) {
+            this.zhiXingCeShi = new Schedule();
+        }
+        if (this.pingGuCeShi == null) {
+            this.pingGuCeShi = new Schedule();
+        }
+        if (this.inputXuQiuKeZhuiZongXing == null) {
+            this.inputXuQiuKeZhuiZongXing = "";
+        }
     }
 }

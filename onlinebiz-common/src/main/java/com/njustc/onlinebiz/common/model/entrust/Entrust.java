@@ -53,6 +53,7 @@ public class Entrust {
                 entrustDto.setSoftware(software.getName());
             }
         }
+        entrustDto.setProjectId(projectId);
         entrustDto.setCustomerId(customerId);
         entrustDto.setMarketerId(marketerId);
         entrustDto.setTesterId(testerId);

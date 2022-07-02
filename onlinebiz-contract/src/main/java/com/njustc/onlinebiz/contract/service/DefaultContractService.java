@@ -256,7 +256,7 @@ public class DefaultContractService implements ContractService {
         }
         String suffix = originalFilename.substring(originalFilename.lastIndexOf('.'));
         String path = SCANNED_COPY_DIR + contractId + suffix;
-        scannedCopy.transferTo(new File(path));
+        scannedCopy.transferTo(new File(path.replaceAll("\\\\", "/")));
         // 将路径保存到合同对象中
         if (!contractDAO.updateScannedCopyPath(contractId, path)) {
             throw new ContractDAOFailureException("保存扫描件路径失败");

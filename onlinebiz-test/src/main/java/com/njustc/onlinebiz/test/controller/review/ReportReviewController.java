@@ -11,6 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+/**
+ * 报告审查控制器
+ *
+ */
 @RestController
 @RequestMapping("/api")
 public class ReportReviewController {
@@ -20,7 +24,14 @@ public class ReportReviewController {
         this.reportReviewService = reportReviewService;
     }
 
-    //获取检查表详情
+    /**
+     * 获取检查表详情
+     *
+     * @param reportReviewId 报告评论id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link ReportReview}
+     */
     @GetMapping("/review/report/{reportReviewId}")
     public ReportReview getReportReview(
             @PathVariable("reportReviewId") String reportReviewId,
@@ -29,7 +40,14 @@ public class ReportReviewController {
         return reportReviewService.findReportReview(reportReviewId, userId, userRole);
     }
 
-    // 更新检查表内容
+    /**
+     * 更新检查表内容
+     *
+     * @param reportReviewId 报告评论id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @param reportReview 报告审查
+     */
     @PostMapping("/review/report/{reportReviewId}")
     public void updateReportReview(
             @PathVariable("reportReviewId") String reportReviewId,
@@ -40,8 +58,16 @@ public class ReportReviewController {
         reportReviewService.updateReportReview(reportReviewId, reportReview, userId, userRole);
     }
 
-    // 上传合同扫描件
-    @PostMapping("/review/report/{reportReviewId}/upload")
+    /**
+     * 上传测试报告检查表扫描件
+     *
+     * @param reportReviewId 报告评论id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @param scannedCopy 扫描副本
+     * @throws IOException ioexception
+     */
+    @PutMapping("/review/report/{reportReviewId}/upload")
     public void updateScannedCopy(
             @PathVariable("reportReviewId") String reportReviewId,
             @RequestParam("userId") Long userId,
@@ -51,7 +77,15 @@ public class ReportReviewController {
         reportReviewService.saveScannedCopy(reportReviewId, scannedCopy, userId, userRole);
     }
 
-    // 下载合同扫描件
+    /**
+     * 下载测试报告检查表扫描件
+     *
+     * @param reportReviewId 报告评论id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link ResponseEntity<Resource>}
+     * @throws IOException ioexception
+     */
     @GetMapping("/review/report/{reportReviewId}/download")
     public ResponseEntity<Resource> downloadScannedCopy(
             @PathVariable("reportReviewId") String reportReviewId,

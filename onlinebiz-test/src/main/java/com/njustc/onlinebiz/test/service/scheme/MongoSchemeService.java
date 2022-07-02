@@ -5,7 +5,6 @@ import com.njustc.onlinebiz.common.model.test.project.Project;
 import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
 import com.njustc.onlinebiz.common.model.test.scheme.Scheme;
 import com.njustc.onlinebiz.common.model.test.scheme.SchemeContent;
-import com.njustc.onlinebiz.test.dao.project.MongoProjectDAO;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.scheme.SchemeDAO;
 import com.njustc.onlinebiz.test.exception.project.ProjectNotFoundException;
@@ -15,7 +14,6 @@ import com.njustc.onlinebiz.test.exception.scheme.SchemeNotFoundException;
 import com.njustc.onlinebiz.test.exception.scheme.SchemePermissionDeniedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Service
@@ -69,6 +67,7 @@ public class MongoSchemeService implements SchemeService {
         scheme.setCreatorId(userId);
         scheme.setEntrustId(entrustId);
         scheme.setContent(content);
+        scheme.setProjectId(projectId);
         return schemeDAO.insertScheme(scheme).getId();
     }
 
@@ -100,7 +99,7 @@ public class MongoSchemeService implements SchemeService {
         }
         Long testerId = project.getProjectBaseInfo().getTesterId();
         Long qaId =project.getProjectBaseInfo().getQaId();
-            /*根据调研情况，分配的测试部人员、测试部主管、所有质量部人员、质量部主管均有权限查阅*/
+            /*根据调研情况，分配的测试部人员、测试部主管、分配的质量部人员、质量部主管均有权限查阅*/
         return userRole == Role.ADMIN || (userRole == Role.TESTER && userId.equals(testerId))
                 || userRole == Role.TESTING_SUPERVISOR || (userRole == Role.QA && userId.equals(qaId))
                 || userRole == Role.QA_SUPERVISOR;

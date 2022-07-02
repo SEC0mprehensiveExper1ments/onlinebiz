@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 测试记录控制器
+ *
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -18,7 +22,14 @@ public class TestRecordController {
         this.testRecordService = testRecordService;
     }
 
-    // 查看任意测试记录表的详细信息
+    /**
+     * 查看任意测试记录表的详细信息
+     *
+     * @param testRecordId 测试记录id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link TestRecordList}
+     */
     @GetMapping("/test/testRecord/{testRecordId}")
     public TestRecordList getTestRecord(
             @PathVariable("testRecordId") String testRecordId,
@@ -27,7 +38,14 @@ public class TestRecordController {
         return testRecordService.findTestRecordList(testRecordId, userId, userRole);
     }
 
-    // 修改测试记录表
+    /**
+     * 修改测试记录表
+     *
+     * @param testRecordId 测试记录id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @param content 内容
+     */
     @PostMapping("/test/testRecord/{testRecordId}/content")
     public void updateContent(
             @PathVariable("testRecordId") String testRecordId,
@@ -38,7 +56,13 @@ public class TestRecordController {
         testRecordService.updateTestRecordList(testRecordId, content, userId, userRole);
     }
 
-    // 删除一份测试记录表
+    /**
+     * 删除一份测试记录表
+     *
+     * @param testRecordId 测试记录id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     */
     @DeleteMapping("/test/testRecord/{testRecordId}")
     public void removeTestRecord(
             @PathVariable("testRecordId") String testRecordId,

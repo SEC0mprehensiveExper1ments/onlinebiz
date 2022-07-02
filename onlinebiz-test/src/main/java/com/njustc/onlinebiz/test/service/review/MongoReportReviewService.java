@@ -64,6 +64,9 @@ public class MongoReportReviewService implements ReportReviewService {
     @Override
     public void updateReportReview(String reportReviewId, ReportReview reportReview, Long userId, Role userRole) {
         ReportReview origin = reportReviewDAO.findReportReviewById(reportReviewId);
+        if (origin == null) {
+            throw new ReviewNotFoundException("该测试报告检查表不存在");
+        }
         if (!origin.getId().equals(reportReview.getId())) {
             throw new ReviewPermissionDeniedException("测试报告检查表ID不一致");
         }
@@ -84,22 +87,31 @@ public class MongoReportReviewService implements ReportReviewService {
 
     @Override
     public void saveScannedCopy(String reportReviewId, MultipartFile scannedCopy, Long userId, Role userRole) throws IOException {
+        ReportReview origin = reportReviewDAO.findReportReviewById(reportReviewId);
         if (scannedCopy.isEmpty()) {
             throw new ReviewNotFoundException("测试报告检查表的扫描件为空");
         }
         ReportReview reportReview = findReportReview(reportReviewId, userId, userRole);
+
         // 检查权限
         if (!hasAuthorityToUploadOrDownload(reportReview, userId, userRole)) {
             throw new ReviewPermissionDeniedException("无权上传测试报告检查表");
         }
+
+        //检查状态
+        ProjectStage projectStage = projectDAO.findProjectById(origin.getProjectId()).getStatus().getStage();
+        if(projectStage != ProjectStage.REPORT_QA_PASSED){
+            throw new ReviewInvalidStageException("此阶段不能上传测试报告检查表扫描件");
+        }
+
         // 保存测试报告检查表到磁盘
         String originalFilename = scannedCopy.getOriginalFilename();
         if (originalFilename == null) {
-            throw new ReviewPermissionDeniedException("扫描文件名不能为空");
+            throw new ReviewNotFoundException("扫描文件名不能为空");
         }
         String suffix = originalFilename.substring(originalFilename.lastIndexOf('.'));
         String path = SCANNED_COPY_DIR + reportReviewId + suffix;
-        scannedCopy.transferTo(new File(path));
+        scannedCopy.transferTo(new File(path.replaceAll("\\\\", "/")));
         // 将路径保存到合同对象中
         if (!reportReviewDAO.updateScannedCopyPath(reportReviewId, path)) {
             throw new ReviewDAOFailureException("保存扫描文件路径失败");

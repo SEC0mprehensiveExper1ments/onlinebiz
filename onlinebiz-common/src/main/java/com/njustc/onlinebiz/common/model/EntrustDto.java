@@ -24,4 +24,7 @@ public class EntrustDto {
     // 项目编号（手填）
     private String serialNumber;
 
+    // 测试项目id
+    private String projectId;
+
 }

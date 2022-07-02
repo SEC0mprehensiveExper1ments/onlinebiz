@@ -17,10 +17,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.IOException;
 
+/**
+ * 报告控制层异常处理类
+ *
+ */
 @Slf4j
 @ControllerAdvice
 public class ReportControllerAdvice {
-    @ResponseBody
+    /**
+     * 处理没有发现异常
+     *
+     * @param e e
+     * @return {@link String}
+     */@ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ReportNotFoundException.class)
     public String handleNotFoundException(ReviewNotFoundException e) {
@@ -28,7 +37,12 @@ public class ReportControllerAdvice {
         return e.getMessage();
     }
 
-    @ResponseBody
+    /**
+     * 处理拒绝访问异常
+     *
+     * @param e e
+     * @return {@link String}
+     */@ResponseBody
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(ReportPermissionDeniedException.class)
     public String handlePermissionDeniedException(ReviewPermissionDeniedException e) {
@@ -36,7 +50,12 @@ public class ReportControllerAdvice {
         return e.getMessage();
     }
 
-    @ResponseBody
+    /**
+     * 处理无效阶段异常
+     *
+     * @param e e
+     * @return {@link String}
+     */@ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ReportInvalidStageException.class)
     public String handleInvalidStageException(ReviewInvalidStageException e) {
@@ -44,7 +63,12 @@ public class ReportControllerAdvice {
         return e.getMessage();
     }
 
-    @ResponseBody
+    /**
+     * 处理dao failure异常
+     *
+     * @param e e
+     * @return {@link String}
+     */@ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(ReportDAOFailureException.class)
     public String handleDAOFailureException(ReviewDAOFailureException e) {
@@ -52,7 +76,12 @@ public class ReportControllerAdvice {
         return e.getMessage();
     }
 
-    @ResponseBody
+    /**
+     * 处理ioexception
+     *
+     * @param e e
+     * @return {@link String}
+     */@ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(IOException.class)
     public String handleIOException(IOException e) {

@@ -26,7 +26,7 @@ public class MongoReportReviewDAO implements ReportReviewDAO {
 
     @Override
     public ReportReview findReportReviewById(String reportReviewId) {
-        return mongoTemplate.findById(reportReviewId, ReportReview.class);
+        return mongoTemplate.findById(reportReviewId, ReportReview.class, COLLECTION_NAME);
     }
 
     @Override
