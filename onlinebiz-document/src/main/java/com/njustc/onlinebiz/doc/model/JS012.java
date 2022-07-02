@@ -56,16 +56,16 @@ public class JS012 {
         this.inputRuanJianMingChen = entrustTestReview.getSoftwareName();
         this.inputBanBenHao = entrustTestReview.getVersion();
         this.inputShenBaoDanWei = entrustTestReview.getPrincipal();
-        this.inputQiShiShiJian0Nian = Integer.toString(entrustTestReview.getStartDate().getYear());
-        this.inputQiShiShiJian0Yue = Integer.toString(entrustTestReview.getStartDate().getMonth());
-        this.inputQiShiShiJian0Ri = Integer.toString(entrustTestReview.getStartDate().getDay());
-        this.inputYuJiShiJian0Nian = Integer.toString(entrustTestReview.getExpectFinishDate().getYear());
-        this.inputYuJiShiJian0Yue = Integer.toString(entrustTestReview.getExpectFinishDate().getMonth());
-        this.inputYuJiShiJian0Ri = Integer.toString(entrustTestReview.getExpectFinishDate().getDay());
+        this.inputQiShiShiJian0Nian = entrustTestReview.getStartDate().substring(0, 4);
+        this.inputQiShiShiJian0Yue = entrustTestReview.getStartDate().substring(5, 7);
+        this.inputQiShiShiJian0Ri = entrustTestReview.getStartDate().substring(8, 10);
+        this.inputYuJiShiJian0Nian = entrustTestReview.getExpectFinishDate().substring(0, 4);
+        this.inputYuJiShiJian0Yue = entrustTestReview.getExpectFinishDate().substring(5, 7);
+        this.inputYuJiShiJian0Ri = entrustTestReview.getExpectFinishDate().substring(8, 10);
         this.inputZhuCeRen = entrustTestReview.getMainTester();
-        this.inputShiJiShiJian0Nian = Integer.toString(entrustTestReview.getFinishDate().getYear());
-        this.inputShiJiShiJian0Yue = Integer.toString(entrustTestReview.getFinishDate().getMonth());
-        this.inputShiJiShiJian0Ri = Integer.toString(entrustTestReview.getFinishDate().getDay());
+        this.inputShiJiShiJian0Nian = entrustTestReview.getFinishDate().substring(0, 4);
+        this.inputShiJiShiJian0Yue = entrustTestReview.getFinishDate().substring(5, 7);
+        this.inputShiJiShiJian0Ri = entrustTestReview.getFinishDate().substring(8, 10);
         List<String> conclusions = entrustTestReview.getConclusions();
         if (conclusions.size() == 24) {
             this.inputQueRen011 = conclusions.get(0);
