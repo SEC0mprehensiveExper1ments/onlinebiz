@@ -40,6 +40,9 @@ public class JS006 {
     private String inputXuQiuKeZhuiZongXing = "";
 
     public JS006(Scheme scheme) {
+        if (scheme == null || scheme.getContent() == null) {
+            throw new IllegalArgumentException("scheme is null");
+        }
         this.inputBanBenHao = scheme.getContent().getVersion();
         this.wenDangXiuGaiJiLu = scheme.getContent().getModificationList();
         this.inputBiaoShi = scheme.getContent().getLogo();

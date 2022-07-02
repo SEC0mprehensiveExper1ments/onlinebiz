@@ -93,21 +93,24 @@ public class JS014 {
 
     public JS014(Entrust entrust) {
         //检查各个字段的非空性
-        if (entrust.getSoftwareDocReview().getSoftwareName() != null){
+        if (entrust.getSoftwareDocReview() == null) {
+            throw new IllegalArgumentException("SoftwareDocReview is null");
+        }
+        if (entrust.getSoftwareDocReview().getSoftwareName() != null) {
             this.inputRuanJianMingChen = entrust.getSoftwareDocReview().getSoftwareName();
         }
-        if (entrust.getSoftwareDocReview().getSoftwareVersion() != null){
+        if (entrust.getSoftwareDocReview().getSoftwareVersion() != null) {
             this.inputBanBenHao = entrust.getSoftwareDocReview().getSoftwareVersion();
         }
         this.inputWeiTuoDanWei = "高校评审组";
-        if (entrust.getSoftwareDocReview().getReviewer() != null){
+        if (entrust.getSoftwareDocReview().getReviewer() != null) {
             this.inputPingShenRen = entrust.getSoftwareDocReview().getReviewer();
         }
         this.inputPingShenShiJian0Nian = Integer.toString(entrust.getSoftwareDocReview().getYear());
         this.inputPingShenShiJian0Yue = Integer.toString(entrust.getSoftwareDocReview().getMonth());
         this.inputPingShenShiJian0Ri = Integer.toString(entrust.getSoftwareDocReview().getDay());
         List<SoftwareDocReview.ReviewRow> reviewRows = entrust.getSoftwareDocReview().getComments();
-        if (reviewRows != null) {
+        if (reviewRows != null && reviewRows.size() > 23) {
             //检查各个字段的非空性
             if (reviewRows.get(0).getResult() != null) {
                 this.inputPingShenJieGuo011 = reviewRows.get(0).getResult();

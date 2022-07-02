@@ -32,6 +32,9 @@ public class JS010 {
     private String inputJianChaJieGuo012 = "";
 
     public JS010(ReportReview reportReview) {
+        if (reportReview == null) {
+            throw new IllegalArgumentException("reportReview is null");
+        }
         this.inputRuanJianMingChen = reportReview.getSoftwareName();
         this.inputWeiTuoDanWei = reportReview.getPrincipal();
         List<ReportReview.ConclusionRow> conclusions = reportReview.getConclusions();

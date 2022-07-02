@@ -22,6 +22,9 @@ public class JS005 {
     }
     public JS005(Contract contract) {
         // NonDisclosureAgreement nonDisclosureAgreement = contract.getNonDisclosureAgreement();
+        if (contract == null) {
+            throw new IllegalArgumentException("contract is null");
+        }
         PartyDetail jiaFang = contract.getPartyA();
         if (jiaFang != null) {
             this.inputJiaFang = jiaFang.getCompanyCH();

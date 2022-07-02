@@ -35,6 +35,9 @@ public class JS013 {
     private String inputBuTongGuo08 = "";
 
     public JS013(SchemeReview schemeReview) {
+        if (schemeReview == null) {
+            throw new IllegalArgumentException("schemeReview is null");
+        }
         List<SchemeReview.ConclusionRow> conclusions = schemeReview.getConclusions();
         //检查各个字段的非空性
         if (schemeReview.getSoftwareName() != null) {
@@ -50,7 +53,7 @@ public class JS013 {
             this.inputCeShiLeiBie = schemeReview.getTestType();
         }
 
-        if (conclusions != null) {
+        if (conclusions != null && conclusions.size() > 7) {
             this.inputTongGuo01 = conclusions.get(0).isPassed() ? "是" : "否";
             this.inputTongGuo02 = conclusions.get(1).isPassed() ? "是" : "否";
             this.inputTongGuo03 = conclusions.get(2).isPassed() ? "是" : "否";

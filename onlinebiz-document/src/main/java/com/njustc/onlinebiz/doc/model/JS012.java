@@ -53,21 +53,30 @@ public class JS012 {
     private String inputQueRen093 = "";
 
     public JS012(EntrustTestReview entrustTestReview) {
+        if (entrustTestReview == null) {
+            throw new IllegalArgumentException("entrustTestReview is null");
+        }
         this.inputRuanJianMingChen = entrustTestReview.getSoftwareName();
         this.inputBanBenHao = entrustTestReview.getVersion();
         this.inputShenBaoDanWei = entrustTestReview.getPrincipal();
-        this.inputQiShiShiJian0Nian = entrustTestReview.getStartDate().substring(0, 4);
-        this.inputQiShiShiJian0Yue = entrustTestReview.getStartDate().substring(5, 7);
-        this.inputQiShiShiJian0Ri = entrustTestReview.getStartDate().substring(8, 10);
-        this.inputYuJiShiJian0Nian = entrustTestReview.getExpectFinishDate().substring(0, 4);
-        this.inputYuJiShiJian0Yue = entrustTestReview.getExpectFinishDate().substring(5, 7);
-        this.inputYuJiShiJian0Ri = entrustTestReview.getExpectFinishDate().substring(8, 10);
+        if (entrustTestReview.getStartDate() != null) {
+            this.inputQiShiShiJian0Nian = entrustTestReview.getStartDate().substring(0, 4);
+            this.inputQiShiShiJian0Yue = entrustTestReview.getStartDate().substring(5, 7);
+            this.inputQiShiShiJian0Ri = entrustTestReview.getStartDate().substring(8, 10);
+        }
+        if (entrustTestReview.getExpectFinishDate() != null) {
+            this.inputYuJiShiJian0Nian = entrustTestReview.getExpectFinishDate().substring(0, 4);
+            this.inputYuJiShiJian0Yue = entrustTestReview.getExpectFinishDate().substring(5, 7);
+            this.inputYuJiShiJian0Ri = entrustTestReview.getExpectFinishDate().substring(8, 10);
+        }
         this.inputZhuCeRen = entrustTestReview.getMainTester();
-        this.inputShiJiShiJian0Nian = entrustTestReview.getFinishDate().substring(0, 4);
-        this.inputShiJiShiJian0Yue = entrustTestReview.getFinishDate().substring(5, 7);
-        this.inputShiJiShiJian0Ri = entrustTestReview.getFinishDate().substring(8, 10);
+        if (entrustTestReview.getFinishDate() != null) {
+            this.inputShiJiShiJian0Nian = entrustTestReview.getFinishDate().substring(0, 4);
+            this.inputShiJiShiJian0Yue = entrustTestReview.getFinishDate().substring(5, 7);
+            this.inputShiJiShiJian0Ri = entrustTestReview.getFinishDate().substring(8, 10);
+        }
         List<String> conclusions = entrustTestReview.getConclusions();
-        if (conclusions.size() == 24) {
+        if (conclusions != null && conclusions.size() == 24) {
             this.inputQueRen011 = conclusions.get(0);
             this.inputQueRen012 = conclusions.get(1);
             this.inputQueRen013 = conclusions.get(2);

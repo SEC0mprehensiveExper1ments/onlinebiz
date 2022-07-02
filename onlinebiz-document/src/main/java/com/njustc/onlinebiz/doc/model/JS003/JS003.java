@@ -62,19 +62,21 @@ public class JS003 {
     }
 
   public JS003(Entrust entrust) {
-    //
+    if (entrust == null || entrust.getContent() == null) {
+      throw new IllegalArgumentException("entrust is null");
+    }
     Software software = entrust.getContent().getSoftware();
     if (software != null) {
-      this.inputRuanJianMingCheng = software.getName();
-      this.inputBanBenHao = software.getVersion();
-    }
-    // 软件功能列表
-    List<Module> modules = software.getModules();
-    if (modules != null) {
-      for (Module module : modules) {
-        GongNeng gongNeng = new GongNeng(module);
-        this.inputRuanJianGongNengXiangMu.add(gongNeng);
-      }
+        this.inputRuanJianMingCheng = software.getName();
+        this.inputBanBenHao = software.getVersion();
+        // 软件功能列表
+        List<Module> modules = software.getModules();
+        if (modules != null) {
+            for (Module module : modules) {
+                GongNeng gongNeng = new GongNeng(module);
+                this.inputRuanJianGongNengXiangMu.add(gongNeng);
+            }
+        }
     }
     //非空性检查
     if (this.inputRuanJianMingCheng == null) {

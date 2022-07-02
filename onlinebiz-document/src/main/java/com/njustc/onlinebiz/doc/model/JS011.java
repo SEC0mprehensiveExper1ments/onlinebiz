@@ -21,7 +21,13 @@ public class JS011 {
     private List<TestIssue> testIssues = new ArrayList<>();
 
     public JS011(TestIssueList testIssueList) {
+        if (testIssueList == null) {
+            throw new IllegalArgumentException("testIssueList is null");
+        }
         this.testIssues = testIssueList.getTestIssues();
+        if (this.testIssues == null) {
+            this.testIssues = new ArrayList<>();
+        }
     }
 }
 
