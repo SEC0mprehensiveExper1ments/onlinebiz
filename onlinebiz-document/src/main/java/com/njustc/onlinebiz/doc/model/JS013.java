@@ -47,7 +47,7 @@ public class JS013 {
             this.inputBanBenHao = schemeReview.getVersion();
         }
         if (schemeReview.getProjectId() != null) {
-            this.inputXiangMuBianHao = schemeReview.getProjectId();
+            this.inputXiangMuBianHao = schemeReview.getSerialNumber();
         }
         if (schemeReview.getTestType() != null) {
             this.inputCeShiLeiBie = schemeReview.getTestType();
