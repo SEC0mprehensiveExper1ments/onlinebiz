@@ -31,10 +31,11 @@ public class MongoSchemeReviewService implements SchemeReviewService {
     }
 
     @Override
-    public String createSchemeReview(String projectId, Long qaId, Long testerId) {
+    public String createSchemeReview(String projectId, String serialNumber, Long qaId, Long testerId) {
         // 创建一份空的检查表
         SchemeReview schemeReview = new SchemeReview();
         schemeReview.setProjectId(projectId);
+        schemeReview.setSerialNumber(serialNumber);
         // 获取检查表ID
         return schemeReviewDAO.insertSchemeReview(schemeReview).getId();
     }

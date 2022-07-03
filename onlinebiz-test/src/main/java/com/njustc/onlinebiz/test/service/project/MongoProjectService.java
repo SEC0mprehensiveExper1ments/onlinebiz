@@ -164,6 +164,7 @@ public class MongoProjectService implements ProjectService {
         Long marketerId = projectBaseInfo.getMarketerId();
         Long testerId = projectBaseInfo.getTesterId();
         Long qaId = projectBaseInfo.getQaId();
+        String serialNumber = projectBaseInfo.getSerialNumber();
 
         ProjectFormIds projectFormIds = new ProjectFormIds();
         /*TODO: 根据其他部分给出的接口新建各表，并将表编号填入testProject中字段，替换null*/
@@ -190,7 +191,7 @@ public class MongoProjectService implements ProjectService {
         String workChecklistId = entrustTestReviewService.createEntrustTestReview(projectId, marketerId, Role.MARKETER);
         projectFormIds.setWorkChecklistId(workChecklistId);
         // 对应的测试方案评审表 (JS013)
-        String testSchemeChecklistId = schemeReviewService.createSchemeReview(projectId, qaId, testerId);
+        String testSchemeChecklistId = schemeReviewService.createSchemeReview(projectId, serialNumber, qaId, testerId);
         projectFormIds.setTestSchemeChecklistId(testSchemeChecklistId);
 
         // 更新测试项目的formIds

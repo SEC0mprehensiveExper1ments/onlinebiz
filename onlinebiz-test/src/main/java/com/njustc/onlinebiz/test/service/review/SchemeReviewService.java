@@ -21,7 +21,7 @@ public interface SchemeReviewService {
      * @param testerId 与该表有关的测试部人员ID
      * @return 成功返回创建的测试方案检查表ID， 失败返回 null
      * */
-    String createSchemeReview(String projectId, Long qaId, Long testerId);
+    String createSchemeReview(String projectId, String serialNumber, Long qaId, Long testerId);
 
     /**
      * 查看具体测试方案检查表内容，只有和该测试方案检查表(也就是和测试项目)有关的测试部人员(主管)以及

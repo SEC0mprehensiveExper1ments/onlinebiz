@@ -1,40 +1,35 @@
 package com.njustc.onlinebiz.test.service.review;
 
+import com.njustc.onlinebiz.common.model.Role;
+import com.njustc.onlinebiz.common.model.test.project.Project;
+import com.njustc.onlinebiz.common.model.test.project.ProjectBaseInfo;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
+import com.njustc.onlinebiz.common.model.test.project.ProjectStatus;
 import com.njustc.onlinebiz.common.model.test.review.SchemeReview;
+import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.dao.review.SchemeReviewDAO;
 import com.njustc.onlinebiz.test.exception.review.ReviewDAOFailureException;
 import com.njustc.onlinebiz.test.exception.review.ReviewInvalidStageException;
 import com.njustc.onlinebiz.test.exception.review.ReviewNotFoundException;
 import com.njustc.onlinebiz.test.exception.review.ReviewPermissionDeniedException;
+import com.njustc.onlinebiz.test.service.project.ProjectService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import com.njustc.onlinebiz.common.model.test.project.Project;
-import com.njustc.onlinebiz.common.model.test.project.ProjectBaseInfo;
-import com.njustc.onlinebiz.common.model.test.project.ProjectStage;
-import com.njustc.onlinebiz.common.model.test.project.ProjectStatus;
-import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
-import com.njustc.onlinebiz.test.service.project.ProjectService;
-import com.njustc.onlinebiz.common.model.Role;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.font.MultipleMaster;
 import java.io.FileNotFoundException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class MongoSchemeReviewServiceTest {
 
     private final ProjectDAO projectDAO = mock(ProjectDAO.class);
     private final SchemeReviewDAO schemereviewDao = mock(SchemeReviewDAO.class);
     MongoSchemeReviewService schemereviewservice = new MongoSchemeReviewService(schemereviewDao, projectDAO);
-    private final ProjectBaseInfo projectbaseinfo = mock(ProjectBaseInfo.class);
     private final ProjectService projectService = mock(ProjectService.class);
     private final MultipartFile multipartfile = mock(MultipartFile.class);
-    private static final String ENTRUST_SERVICE_URL = "http://onlinebiz-entrust";
 
     @Test
     void createSchemeReview() {
@@ -55,16 +50,16 @@ class MongoSchemeReviewServiceTest {
         //分别赋予不同的ProjectId和TestId值，测试函数返回值结果是否符合预期
         schemereview.setId("TestId1");
         when(schemereviewDao.insertSchemeReview(any())).thenReturn(schemereview);
-        assert(schemereviewservice.createSchemeReview("ProjectId1", 3001L, 2001L).equals("TestId1"));
+        assert(schemereviewservice.createSchemeReview("ProjectId1", "11",  3001L, 2001L).equals("TestId1"));
         //assert(schemereviewDao.insertSchemeReview(any()).getProjectId().equals("ProjectId1"));
         schemereview.setId("TestId2022");
-        assert(schemereviewservice.createSchemeReview("ProjectId2", 3001L, 2001L).equals("TestId2022"));
+        assert(schemereviewservice.createSchemeReview("ProjectId2", "11", 3001L, 2001L).equals("TestId2022"));
         //assert(schemereviewDao.insertSchemeReview(any()).getProjectId().equals("ProjectId2"));
         schemereview.setId("TestId321");
-        assert(schemereviewservice.createSchemeReview("ProjectId3", 3001L, 2001L).equals("TestId321"));
+        assert(schemereviewservice.createSchemeReview("ProjectId3", "11", 3001L, 2001L).equals("TestId321"));
         //assert(schemereviewDao.insertSchemeReview(any()).getProjectId().equals("ProjectId3"));
         schemereview.setId("TestId2023");
-        assert(schemereviewservice.createSchemeReview("ProjectId4", 3001L, 2001L).equals("TestId2023"));
+        assert(schemereviewservice.createSchemeReview("ProjectId4", "11", 3001L, 2001L).equals("TestId2023"));
         //assert(schemereviewDao.insertSchemeReview(any()).getProjectId().equals("ProjectId4"));
     }
 
