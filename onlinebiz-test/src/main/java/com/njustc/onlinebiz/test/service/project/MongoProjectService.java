@@ -4,6 +4,7 @@ import com.njustc.onlinebiz.common.model.EntrustDto;
 import com.njustc.onlinebiz.common.model.PageResult;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.project.*;
+import com.njustc.onlinebiz.common.model.test.report.Report;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.exception.project.*;
 import com.njustc.onlinebiz.test.service.report.ReportService;
@@ -175,7 +176,9 @@ public class MongoProjectService implements ProjectService {
         // 对应的测试方案 id (JS006)
         String testSchemeId = schemeService.createScheme(entrustId, null, marketerId, Role.MARKETER, projectId);
         projectFormIds.setTestSchemeId(testSchemeId);
-        String testReportId = reportService.createReport(projectId, entrustId, null, marketerId, Role.MARKETER);
+        Report.ReportContent reportContent = new Report.ReportContent();
+        reportContent.setProjectSerialNumber(serialNumber);
+        String testReportId = reportService.createReport(projectId, entrustId, reportContent, marketerId, Role.MARKETER);
         projectFormIds.setTestReportId(testReportId);
         String testcaseListId = testcaseService.createTestcaseList(projectId, entrustId, null, marketerId, Role.MARKETER);
         projectFormIds.setTestcaseListId(testcaseListId);

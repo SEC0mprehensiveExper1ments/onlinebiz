@@ -44,7 +44,7 @@ public class Report {
     // 报告日期
     private String reportDate;
     // 项目编号
-    private String projectId;
+    private String projectSerialNumber;
     // 样品名称
     private String sampleName;
     // 样品版本/型号

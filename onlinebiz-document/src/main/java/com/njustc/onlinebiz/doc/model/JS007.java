@@ -96,7 +96,7 @@ public class JS007 {
             this.inputBaoGaoRiQiYue = report.getContent().getReportDate().substring(5, 7);
             this.inputBaoGaoRiQiRi = report.getContent().getReportDate().substring(8, 10);
         }
-        this.inputXiangMuBianHao = report.getContent().getProjectId();
+        this.inputXiangMuBianHao = report.getContent().getProjectSerialNumber();
         this.inputYangPinMingCheng = report.getContent().getSampleName();
         this.inputBanBenXingHao = report.getContent().getSampleVersion();
 
