@@ -246,7 +246,8 @@ public class MongoProjectService implements ProjectService {
         if (userRole != Role.ADMIN && userRole != Role.TESTING_SUPERVISOR && userRole != Role.QA_SUPERVISOR
             && !userId.equals(project.getProjectBaseInfo().getCustomerId())     // 项目有关的用户
             && !userId.equals(project.getProjectBaseInfo().getTesterId())       // 项目有关的测试部人员
-            && !userId.equals(project.getProjectBaseInfo().getQaId()))          // 项目有关的质量部人员
+            && !userId.equals(project.getProjectBaseInfo().getQaId())           // 项目有关的质量部人员
+            && !userId.equals(project.getProjectBaseInfo().getMarketerId()))    // 项目有关的市场部人员
         {
             throw new ProjectPermissionDeniedException("无权更新项目状态");
         }
