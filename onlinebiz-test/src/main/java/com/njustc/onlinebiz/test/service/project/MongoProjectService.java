@@ -252,6 +252,19 @@ public class MongoProjectService implements ProjectService {
             throw new ProjectPermissionDeniedException("无权更新项目状态");
         }
 
+        if (userId.equals(project.getProjectBaseInfo().getCustomerId())) {
+            // 测试报告已签发，待客户接受, next: REPORT_CUSTOMER_CONFIRM 或 REPORT_CUSTOMER_REJECT
+            if (project.getStatus().getStage() != ProjectStage.REPORT_WAIT_CUSTOMER
+                    || (nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_CONFIRM
+                    && nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_REJECT)) {
+                throw new ProjectInvalidStageException("更新的下一个状态不合法");
+            }
+            if (!projectDAO.updateStatus(project.getId(), nextStatus)) {
+                throw new ProjectDAOFailureException("更改测试项目状态失败");
+            }
+            return;
+        }
+
         switch (project.getStatus().getStage()) {
             case WAIT_FOR_QA:               // 等待分配质量人员（所有表不能改）, next: SCHEME_UNFILLED
                 if (nextStatus.getStage() != ProjectStage.SCHEME_UNFILLED || project.getProjectBaseInfo().getQaId() == null) {
@@ -295,11 +308,12 @@ public class MongoProjectService implements ProjectService {
                 if (nextStatus.getStage() != ProjectStage.REPORT_WAIT_CUSTOMER) {
                     throw new ProjectInvalidStageException("更新的下一个状态不合法");
                 }
-            case REPORT_WAIT_CUSTOMER:      // 测试报告已签发，待客户接受, next: REPORT_CUSTOMER_CONFIRM 或 REPORT_CUSTOMER_REJECT
-                if (nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_CONFIRM && nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_REJECT) {
-                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
-                }
                 break;
+//            case REPORT_WAIT_CUSTOMER:      // 测试报告已签发，待客户接受, next: REPORT_CUSTOMER_CONFIRM 或 REPORT_CUSTOMER_REJECT
+//                if (nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_CONFIRM && nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_REJECT) {
+//                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
+//                }
+//                break;
             case REPORT_CUSTOMER_CONFIRM:   // 测试报告被客户接受，质量部可审计测试文档, next: QA_ALL_REJECTED 或 QA_ALL_PASSED
                 if (nextStatus.getStage() != ProjectStage.QA_ALL_REJECTED && nextStatus.getStage() != ProjectStage.QA_ALL_PASSED) {
                     throw new ProjectInvalidStageException("更新的下一个状态不合法");
