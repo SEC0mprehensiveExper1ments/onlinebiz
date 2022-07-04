@@ -137,6 +137,49 @@ class MongoReportServiceTest {
   }
 
   @Test
+  void findReportByCustomerInvalidStage() {
+    Report report = new Report();
+    Project project = new Project();
+    ProjectBaseInfo baseInfo = new ProjectBaseInfo();
+    baseInfo.setCustomerId(1L);
+    project.setProjectBaseInfo(baseInfo);
+    project.setStatus(new ProjectStatus(ProjectStage.SCHEME_REVIEW_UPLOADED, ""));
+    when(projectDao.findProjectById(any())).thenReturn(project);
+    when(reportDAO.findReportById(any())).thenReturn(report);
+    Assertions.assertThrows(
+        ReportInvalidStageException.class,
+        () -> reportService.findReport("reportId", 1L, Role.CUSTOMER));
+  }
+
+  @Test
+  void findReportByCustomer() {
+    Report report = new Report();
+    Project project = new Project();
+    ProjectBaseInfo baseInfo = new ProjectBaseInfo();
+    baseInfo.setCustomerId(1L);
+    project.setProjectBaseInfo(baseInfo);
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_WAIT_CUSTOMER, ""));
+    when(projectDao.findProjectById(any())).thenReturn(project);
+    when(reportDAO.findReportById(any())).thenReturn(report);
+    Assertions.assertDoesNotThrow(() -> reportService.findReport("reportId", 1L, Role.CUSTOMER));
+  }
+
+  @Test
+  void findReportByInvalidCustomer() {
+    Report report = new Report();
+    Project project = new Project();
+    ProjectBaseInfo baseInfo = new ProjectBaseInfo();
+    baseInfo.setCustomerId(1L);
+    project.setProjectBaseInfo(baseInfo);
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_WAIT_CUSTOMER, ""));
+    when(projectDao.findProjectById(any())).thenReturn(project);
+    when(reportDAO.findReportById(any())).thenReturn(report);
+    Assertions.assertThrows(
+        ReportPermissionDeniedException.class,
+        () -> reportService.findReport("reportId", 2L, Role.CUSTOMER));
+  }
+
+  @Test
   void findReportInvalidStatus() {
     Report report = new Report();
     Project project = new Project();
