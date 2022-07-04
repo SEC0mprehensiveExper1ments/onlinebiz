@@ -100,7 +100,9 @@ public class MongoReportService implements ReportService {
         //项目的测试相关人员及质量相关人员可以查看
         Long testerId = projectDAO.findProjectById(report.getProjectId()).getProjectBaseInfo().getTesterId();
         Long qaId = projectDAO.findProjectById(report.getProjectId()).getProjectBaseInfo().getQaId();
+        Long customerId = projectDAO.findProjectById(report.getProjectId()).getProjectBaseInfo().getCustomerId();
         if (userRole == Role.TESTER && userId.equals(testerId)) return true;
+        else if (userRole == Role.CUSTOMER && userId.equals(customerId)) return true;
         return userRole == Role.QA && userId.equals(qaId);
     }
 
