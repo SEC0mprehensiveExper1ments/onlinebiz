@@ -182,7 +182,7 @@ public class RestRequestService {
      * */
     public TestIssueList getTestIssueListById(String testIssueId, Long userId, Role userRole) {
         // 调用test服务的getTestIssue接口
-        String params = "?userId" + userId + "&userRole=" + userRole;
+        String params = "?userId=" + userId + "&userRole=" + userRole;
         String url = TEST_SERVICE + "/api/test/testIssue/" + testIssueId;
         ResponseEntity<TestIssueList> responseEntity = restTemplate.getForEntity(url + params, TestIssueList.class);
         // 检查测试问题表 id 及权限有效性
