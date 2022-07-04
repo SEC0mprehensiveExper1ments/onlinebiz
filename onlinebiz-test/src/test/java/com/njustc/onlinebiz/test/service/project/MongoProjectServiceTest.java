@@ -115,10 +115,22 @@ class MongoProjectServiceTest {
   }
 
   @Test
-  void findProjectByCustomer() {
+  void findProjectByCustomerInvalidStage() {
+    Project project = new Project();
+    project.setStatus(new ProjectStatus(ProjectStage.WAIT_FOR_QA, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
     Assertions.assertThrows(
         ProjectPermissionDeniedException.class,
         () -> mongoProjectService.findProject("projectId", 0L, Role.CUSTOMER));
+  }
+
+  @Test
+  void findProjectByCustomer() {
+    Project project = new Project();
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_WAIT_CUSTOMER, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    Assertions.assertDoesNotThrow(
+            () -> mongoProjectService.findProject("projectId", 0L, Role.CUSTOMER));
   }
 
   @Test

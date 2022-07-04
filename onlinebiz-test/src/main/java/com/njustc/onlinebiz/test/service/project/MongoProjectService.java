@@ -111,15 +111,16 @@ public class MongoProjectService implements ProjectService {
 
     @Override
     public Project findProject(String projectId, Long userId, Role userRole) {
-        if (userRole == Role.CUSTOMER) {
-            throw new ProjectPermissionDeniedException("无权查看测试项目");
-        }
         Project project = projectDAO.findProjectById(projectId);
         if (project == null) {
             throw new ProjectNotFoundException("该测试项目不存在");
         }
-        // 检查阶段
         ProjectStage curStage = project.getStatus().getStage();
+        // 客户除非在确认报告时能够查看项目，其他阶段不可看
+        if (userRole == Role.CUSTOMER && curStage != ProjectStage.REPORT_WAIT_CUSTOMER) {
+            throw new ProjectPermissionDeniedException("无权查看测试项目");
+        }
+        // 检查阶段
         if (curStage == ProjectStage.WAIT_FOR_QA) {
             throw new ProjectInvalidStageException("待分配质量部人员");
         }
