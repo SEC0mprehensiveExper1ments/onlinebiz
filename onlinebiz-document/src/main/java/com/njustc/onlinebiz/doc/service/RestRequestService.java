@@ -295,7 +295,11 @@ public class RestRequestService {
         else if (responseEntity.getStatusCode() != HttpStatus.OK && responseEntity.getStatusCode() != HttpStatus.ACCEPTED) {
             throw new DownloadDAOFailureException("其他问题");
         }
-        EntrustQuote entrustQuote = responseEntity.getBody().getQuote();
+        Entrust entrust = responseEntity.getBody();
+        if (entrust == null) {
+            throw new DownloadNotFoundException("未找到报价单对应的委托");
+        }
+        EntrustQuote entrustQuote = entrust.getQuote();
 
         return entrustQuote;
     }
