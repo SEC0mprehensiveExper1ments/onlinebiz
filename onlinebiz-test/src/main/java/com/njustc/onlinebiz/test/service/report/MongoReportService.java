@@ -50,9 +50,15 @@ public class MongoReportService implements ReportService {
                 projectStage == ProjectStage.SCHEME_AUDITING || projectStage == ProjectStage.SCHEME_AUDITING_DENIED) {
             throw new ReportInvalidStageException("此阶段不可查看测试报告");
         }
-        // 用户请求时，判断状态是否为REPORT_WAIT_CUSTOMER，不是则抛出异常
-        if (userRole == Role.CUSTOMER && projectStage != ProjectStage.REPORT_WAIT_CUSTOMER) {
-            throw new ReportInvalidStageException("此阶段不可查看测试报告");
+        // 用户请求时，判断状态是否为REPORT_WAIT_CUSTOMER及其之后的状态，不是则抛出异常
+        if (userRole == Role.CUSTOMER) {
+            if (projectStage != ProjectStage.REPORT_WAIT_CUSTOMER &&
+                    projectStage != ProjectStage.REPORT_CUSTOMER_CONFIRM &&
+                    projectStage != ProjectStage.REPORT_CUSTOMER_REJECT &&
+                    projectStage != ProjectStage.QA_ALL_REJECTED &&
+                    projectStage != ProjectStage.QA_ALL_PASSED) {
+                throw new ReportInvalidStageException("此阶段不可查看测试报告");
+            }
         }
 
         return report;
