@@ -327,7 +327,7 @@ public class MongoProjectService implements ProjectService {
             case QA_ALL_PASSED:             // 质量部审计测试文档合格，完成（无可填，全可看）
                 throw new ProjectInvalidStageException("项目已结项");
             default:
-                throw new ProjectInvalidArgumentException("无法解析该状态");
+                throw new ProjectInvalidStageException("无法解析该状态或更新的下一个状态不合法");
         }
         if (!projectDAO.updateStatus(project.getId(), nextStatus)) {
             throw new ProjectDAOFailureException("更改测试项目状态失败");
