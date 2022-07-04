@@ -209,7 +209,7 @@ public class RestRequestService {
      * */
     public EntrustTestReview getEntrustTestReviewById(String entrustTestReviewId, Long userId, Role userRole) {
         // 调用test服务的getEntrustReview接口
-        String params = "?userId" + userId + "&userRole=" + userRole;
+        String params = "?userId=" + userId + "&userRole=" + userRole;
         String url = TEST_SERVICE + "/api/review/entrustTest/" + entrustTestReviewId;
         ResponseEntity<EntrustTestReview> responseEntity = restTemplate.getForEntity(url + params, EntrustTestReview.class);
         // 检查测试工作检查表 id 及权限有效性
