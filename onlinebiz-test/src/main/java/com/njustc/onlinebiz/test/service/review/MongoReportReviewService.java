@@ -130,6 +130,17 @@ public class MongoReportReviewService implements ReportReviewService {
     }
 
     @Override
+    public String getScannedCopyFileName(String reportReviewId, Long userId, Role userRole) {
+        ReportReview reportReview = findReportReview(reportReviewId, userId, userRole);
+        // 检查权限
+        if (!hasAuthorityToUploadOrDownload(reportReview, userId, userRole)) {
+            throw new ReviewPermissionDeniedException("无权下载扫描件");
+        }
+        // 从磁盘读取文件
+        return reportReview.getScannedCopyPath().substring(reportReview.getScannedCopyPath().lastIndexOf('/') + 1);
+    }
+
+    @Override
     public void removeReportReview(String reportReviewId, Long userId, Role userRole) {
         ReportReview reportReview = findReportReview(reportReviewId, userId, userRole);
         if (!hasAuthorityToUpdateOrDelete(reportReview, userId, userRole)) {
