@@ -58,6 +58,17 @@ public interface ReportReviewService {
      * */
     Resource getScannedCopy(String reportReviewId, Long userId, Role userRole) throws IOException;
 
+
+    /**
+     * 得到扫描复制文件名
+     *
+     * @param reportReviewId 报告评论id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
+    String getScannedCopyFileName(String reportReviewId, Long userId, Role userRole);
+
     /***
      * 删除一份测试评审表，只有管理员可以进行此操作
      * @param reportReviewId 要删除的测试评审表ID

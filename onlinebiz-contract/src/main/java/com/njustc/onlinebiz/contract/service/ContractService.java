@@ -105,6 +105,16 @@ public interface ContractService {
     Resource getScannedCopy(String contractId, Long userId, Role userRole) throws IOException;
 
     /**
+     * 得到扫描复制文件名
+     *
+     * @param contractId 合同标识
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
+    String getScannedCopyFileName(String contractId, Long userId, Role userRole);
+
+    /**
      * 更新合同对应的保密协议。只有与此合同相关的人员和管理员可以进行此操作。其中客户和市场部人员
      * 各自更新各自的内容；管理员将更新所有内容。
      * @param contractId 要更新的合同ID

@@ -126,8 +126,9 @@ public class ContractController {
             @RequestParam("userId") Long userId,
             @RequestParam("userRole") Role userRole
     ) throws IOException {
+        String fileName = contractService.getScannedCopyFileName(contractId, userId, userRole);
         Resource resource = contractService.getScannedCopy(contractId, userId, userRole);
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
+        return ResponseEntity.ok().header("Content-Disposition","attachment; filename=" + fileName).contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
     }
 
     // 更新合同保密协议

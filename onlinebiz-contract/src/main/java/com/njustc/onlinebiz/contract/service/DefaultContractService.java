@@ -286,6 +286,23 @@ public class DefaultContractService implements ContractService {
     }
 
     @Override
+    public String getScannedCopyFileName(String contractId, Long userId, Role userRole) {
+        Contract contract = findContract(contractId, userId, userRole);
+        ContractStage currStage = contract.getStatus().getStage();
+        // 检查阶段
+        if (currStage != ContractStage.COPY_SAVED) {
+            throw new ContractInvalidStageException("合同扫描件尚未上传");
+        }
+        // 检查权限
+        if (userRole != Role.ADMIN && (userRole != Role.MARKETER || !userId.equals(contract.getMarketerId()))
+                && (userRole != Role.CUSTOMER || !userId.equals(contract.getCustomerId()))) {
+            throw new ContractPermissionDeniedException("无权下载此扫描件");
+        }
+        // 获取文件名
+        return contract.getScannedCopyPath().substring(contract.getScannedCopyPath().lastIndexOf('/') + 1);
+    }
+
+    @Override
     public void updateNonDisclosure(String contractId, NonDisclosureAgreement nonDisclosureAgreement, Long userId, Role userRole) {
         Contract contract = findContract(contractId, userId, userRole);
         ContractStage currStage = contract.getStatus().getStage();

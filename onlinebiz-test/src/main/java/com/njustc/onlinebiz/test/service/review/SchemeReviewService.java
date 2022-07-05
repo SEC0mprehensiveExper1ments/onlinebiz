@@ -60,6 +60,16 @@ public interface SchemeReviewService {
      * */
     Resource getScannedCopy(String schemeReviewId, Long userId, Role userRole) throws IOException;
 
+    /**
+     * 得到扫描复制文件名
+     *
+     * @param schemeReviewId 方案审查id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
+    String getScannedCopyFileName(String schemeReviewId, Long userId, Role userRole);
+
     /***
      * 删除一份测试评审表，只有管理员可以进行此操作
      * @param schemeReviewId 要删除的测试评审表ID

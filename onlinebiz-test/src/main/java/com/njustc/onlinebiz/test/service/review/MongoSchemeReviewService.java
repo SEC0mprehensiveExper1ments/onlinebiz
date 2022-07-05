@@ -168,6 +168,26 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         return new InputStreamResource(new FileInputStream(schemeReview.getScannedCopyPath()));
     }
 
+    @Override
+    public String getScannedCopyFileName(String schemeReviewId, Long userId, Role userRole) {
+        SchemeReview schemeReview = schemeReviewDAO.findSchemeReviewById(schemeReviewId);
+        ProjectStage projectStage = projectDAO.findProjectById(schemeReview.getProjectId()).getStatus().getStage();
+        // 检查阶段
+        if (projectStage == ProjectStage.WAIT_FOR_QA ||
+            projectStage == ProjectStage.SCHEME_UNFILLED ||
+            projectStage == ProjectStage.SCHEME_AUDITING ||
+            projectStage == ProjectStage.SCHEME_AUDITING_DENIED ||
+            projectStage == ProjectStage.SCHEME_AUDITING_PASSED) {
+            throw new ReviewInvalidStageException("项目当前状态不支持该操作");
+        }
+        // 检查权限
+        if (!hasUploadOrDownloadAuthority(schemeReview, userId, userRole)) {
+            throw new ReviewPermissionDeniedException("无权下载扫描件");
+        }
+        // 获取文件名
+        return schemeReview.getScannedCopyPath().substring(schemeReview.getScannedCopyPath().lastIndexOf('/') + 1);
+    }
+
     private Boolean hasUploadOrDownloadAuthority(SchemeReview schemeReview, Long userId, Role userRole){
         if (userId == null || userRole == null) {
             return false;
