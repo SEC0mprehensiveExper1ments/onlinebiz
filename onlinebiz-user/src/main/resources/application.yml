@@ -21,7 +21,6 @@ spring:
   session:
     store-type: redis
   redis:
-    host: 124.221.156.98
     database: 0
     password: nAnj1ng_Jia0tong_Univ
   cache:
