@@ -21,6 +21,8 @@ public class SchemeReview {
     private String id;
     // 此测试方案所属的测试项目编号 id
     private String projectId;
+    // (手填)测试项目编号
+    private String serialNumber;
 
     // 评审表扫描件的文件路径
     private String scannedCopyPath;

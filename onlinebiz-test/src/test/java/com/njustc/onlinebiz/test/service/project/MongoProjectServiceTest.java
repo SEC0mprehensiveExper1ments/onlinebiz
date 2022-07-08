@@ -4,11 +4,7 @@ import com.njustc.onlinebiz.common.model.EntrustDto;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.project.*;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
-import com.njustc.onlinebiz.test.exception.project.ProjectDAOFailureException;
-import com.njustc.onlinebiz.test.exception.project.ProjectInvalidStageException;
-import com.njustc.onlinebiz.test.exception.project.ProjectInvalidArgumentException;
-import com.njustc.onlinebiz.test.exception.project.ProjectPermissionDeniedException;
-import com.njustc.onlinebiz.test.exception.project.ProjectNotFoundException;
+import com.njustc.onlinebiz.test.exception.project.*;
 import com.njustc.onlinebiz.test.service.report.ReportService;
 import com.njustc.onlinebiz.test.service.review.EntrustTestReviewService;
 import com.njustc.onlinebiz.test.service.review.ReportReviewService;
@@ -116,8 +112,10 @@ class MongoProjectServiceTest {
 
   @Test
   void findProjectByCustomer() {
-    Assertions.assertThrows(
-        ProjectPermissionDeniedException.class,
+    Project project = new Project();
+    project.setStatus(new ProjectStatus(ProjectStage.REPORT_WAIT_CUSTOMER, ""));
+    when(projectDAO.findProjectById(any())).thenReturn(project);
+    Assertions.assertDoesNotThrow(
         () -> mongoProjectService.findProject("projectId", 0L, Role.CUSTOMER));
   }
 

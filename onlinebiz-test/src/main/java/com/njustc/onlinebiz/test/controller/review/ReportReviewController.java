@@ -92,7 +92,8 @@ public class ReportReviewController {
             @RequestParam("userId") Long userId,
             @RequestParam("userRole") Role userRole
     ) throws IOException {
+        String fileName = reportReviewService.getScannedCopyFileName(reportReviewId, userId, userRole);
         Resource resource = reportReviewService.getScannedCopy(reportReviewId, userId, userRole);
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
+        return ResponseEntity.ok().header("Content-Disposition","attachment; filename=" + fileName).contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
     }
 }

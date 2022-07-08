@@ -95,8 +95,9 @@ public class SchemeReviewController {
             @RequestParam("userId") Long userId,
             @RequestParam("userRole") Role userRole
     ) throws IOException {
+        String fileName = schemeReviewService.getScannedCopyFileName(schemeReviewId, userId, userRole);
         Resource resource = schemeReviewService.getScannedCopy(schemeReviewId, userId, userRole);
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
+        return ResponseEntity.ok().header("Content-Disposition","attachment; filename=" + fileName).contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
     }
 
     // 删除测试方案检查表接口为测试项目内部调用

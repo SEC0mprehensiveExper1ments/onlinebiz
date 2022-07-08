@@ -52,76 +52,60 @@ public class JS012 {
     private String inputQueRen092 = "";
     private String inputQueRen093 = "";
 
+    public String safe(String s) {
+        return s == null ? "" : s;
+    }
+
     public JS012(EntrustTestReview entrustTestReview) {
+        if (entrustTestReview == null) {
+            throw new IllegalArgumentException("entrustTestReview is null");
+        }
         this.inputRuanJianMingChen = entrustTestReview.getSoftwareName();
         this.inputBanBenHao = entrustTestReview.getVersion();
         this.inputShenBaoDanWei = entrustTestReview.getPrincipal();
-        this.inputQiShiShiJian0Nian = Integer.toString(entrustTestReview.getStartDate().getYear());
-        this.inputQiShiShiJian0Yue = Integer.toString(entrustTestReview.getStartDate().getMonth());
-        this.inputQiShiShiJian0Ri = Integer.toString(entrustTestReview.getStartDate().getDay());
-        this.inputYuJiShiJian0Nian = Integer.toString(entrustTestReview.getExpectFinishDate().getYear());
-        this.inputYuJiShiJian0Yue = Integer.toString(entrustTestReview.getExpectFinishDate().getMonth());
-        this.inputYuJiShiJian0Ri = Integer.toString(entrustTestReview.getExpectFinishDate().getDay());
-        this.inputZhuCeRen = entrustTestReview.getMainTester();
-        this.inputShiJiShiJian0Nian = Integer.toString(entrustTestReview.getFinishDate().getYear());
-        this.inputShiJiShiJian0Yue = Integer.toString(entrustTestReview.getFinishDate().getMonth());
-        this.inputShiJiShiJian0Ri = Integer.toString(entrustTestReview.getFinishDate().getDay());
-        List<String> conclusions = entrustTestReview.getConclusions();
-        if (conclusions.size() == 24) {
-            this.inputQueRen011 = conclusions.get(0);
-            this.inputQueRen012 = conclusions.get(1);
-            this.inputQueRen013 = conclusions.get(2);
-            this.inputQueRen021 = conclusions.get(3);
-            this.inputQueRen022 = conclusions.get(4);
-            this.inputQueRen031 = conclusions.get(5);
-            this.inputQueRen032 = conclusions.get(6);
-            this.inputQueRen041 = conclusions.get(7);
-            this.inputQueRen051 = conclusions.get(8);
-            this.inputQueRen052 = conclusions.get(9);
-            this.inputQueRen053 = conclusions.get(10);
-            this.inputQueRen054 = conclusions.get(11);
-            this.inputQueRen055 = conclusions.get(12);
-            this.inputQueRen061 = conclusions.get(13);
-            this.inputQueRen071 = conclusions.get(14);
-            this.inputQueRen072 = conclusions.get(15);
-            this.inputQueRen073 = conclusions.get(16);
-            this.inputQueRen081 = conclusions.get(17);
-            this.inputQueRen082 = conclusions.get(18);
-            this.inputQueRen083 = conclusions.get(19);
-            this.inputQueRen084 = conclusions.get(20);
-            this.inputQueRen091 = conclusions.get(21);
-            this.inputQueRen092 = conclusions.get(22);
-            this.inputQueRen093 = conclusions.get(23);
+        if (entrustTestReview.getStartDate() != null) {
+            this.inputQiShiShiJian0Nian = entrustTestReview.getStartDate().substring(0, 4);
+            this.inputQiShiShiJian0Yue = entrustTestReview.getStartDate().substring(5, 7);
+            this.inputQiShiShiJian0Ri = entrustTestReview.getStartDate().substring(8, 10);
         }
-        //增加字段的非空性检查
-        if (this.inputRuanJianMingChen == null) this.inputRuanJianMingChen = "";
-        if (this.inputBanBenHao == null) this.inputBanBenHao = "";
-        if (this.inputShenBaoDanWei == null) this.inputShenBaoDanWei = "";
-        if (this.inputZhuCeRen == null) this.inputZhuCeRen = "";
-        if (this.inputQueRen011 == null) this.inputQueRen011 = "";
-        if (this.inputQueRen012 == null) this.inputQueRen012 = "";
-        if (this.inputQueRen013 == null) this.inputQueRen013 = "";
-        if (this.inputQueRen021 == null) this.inputQueRen021 = "";
-        if (this.inputQueRen022 == null) this.inputQueRen022 = "";
-        if (this.inputQueRen031 == null) this.inputQueRen031 = "";
-        if (this.inputQueRen032 == null) this.inputQueRen032 = "";
-        if (this.inputQueRen041 == null) this.inputQueRen041 = "";
-        if (this.inputQueRen051 == null) this.inputQueRen051 = "";
-        if (this.inputQueRen052 == null) this.inputQueRen052 = "";
-        if (this.inputQueRen053 == null) this.inputQueRen053 = "";
-        if (this.inputQueRen054 == null) this.inputQueRen054 = "";
-        if (this.inputQueRen055 == null) this.inputQueRen055 = "";
-        if (this.inputQueRen061 == null) this.inputQueRen061 = "";
-        if (this.inputQueRen071 == null) this.inputQueRen071 = "";
-        if (this.inputQueRen072 == null) this.inputQueRen072 = "";
-        if (this.inputQueRen073 == null) this.inputQueRen073 = "";
-        if (this.inputQueRen081 == null) this.inputQueRen081 = "";
-        if (this.inputQueRen082 == null) this.inputQueRen082 = "";
-        if (this.inputQueRen083 == null) this.inputQueRen083 = "";
-        if (this.inputQueRen084 == null) this.inputQueRen084 = "";
-        if (this.inputQueRen091 == null) this.inputQueRen091 = "";
-        if (this.inputQueRen092 == null) this.inputQueRen092 = "";
-        if (this.inputQueRen093 == null) this.inputQueRen093 = "";
+        if (entrustTestReview.getExpectFinishDate() != null) {
+            this.inputYuJiShiJian0Nian = entrustTestReview.getExpectFinishDate().substring(0, 4);
+            this.inputYuJiShiJian0Yue = entrustTestReview.getExpectFinishDate().substring(5, 7);
+            this.inputYuJiShiJian0Ri = entrustTestReview.getExpectFinishDate().substring(8, 10);
+        }
+        this.inputZhuCeRen = entrustTestReview.getMainTester();
+        if (entrustTestReview.getFinishDate() != null) {
+            this.inputShiJiShiJian0Nian = entrustTestReview.getFinishDate().substring(0, 4);
+            this.inputShiJiShiJian0Yue = entrustTestReview.getFinishDate().substring(5, 7);
+            this.inputShiJiShiJian0Ri = entrustTestReview.getFinishDate().substring(8, 10);
+        }
+        List<String> conclusions = entrustTestReview.getConclusions();
+        if (conclusions != null && conclusions.size() == 24) {
+            this.inputQueRen011 = safe(conclusions.get(0));
+            this.inputQueRen012 = safe(conclusions.get(1));
+            this.inputQueRen013 = safe(conclusions.get(2));
+            this.inputQueRen021 = safe(conclusions.get(3));
+            this.inputQueRen022 = safe(conclusions.get(4));
+            this.inputQueRen031 = safe(conclusions.get(5));
+            this.inputQueRen032 = safe(conclusions.get(6));
+            this.inputQueRen041 = safe(conclusions.get(7));
+            this.inputQueRen051 = safe(conclusions.get(8));
+            this.inputQueRen052 = safe(conclusions.get(9));
+            this.inputQueRen053 = safe(conclusions.get(10));
+            this.inputQueRen054 = safe(conclusions.get(11));
+            this.inputQueRen055 = safe(conclusions.get(12));
+            this.inputQueRen061 = safe(conclusions.get(13));
+            this.inputQueRen071 = safe(conclusions.get(14));
+            this.inputQueRen072 = safe(conclusions.get(15));
+            this.inputQueRen073 = safe(conclusions.get(16));
+            this.inputQueRen081 = safe(conclusions.get(17));
+            this.inputQueRen082 = safe(conclusions.get(18));
+            this.inputQueRen083 = safe(conclusions.get(19));
+            this.inputQueRen084 = safe(conclusions.get(20));
+            this.inputQueRen091 = safe(conclusions.get(21));
+            this.inputQueRen092 = safe(conclusions.get(22));
+            this.inputQueRen093 = safe(conclusions.get(23));
+        }
     }
 }
 

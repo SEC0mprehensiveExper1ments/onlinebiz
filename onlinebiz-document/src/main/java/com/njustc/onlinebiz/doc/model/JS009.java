@@ -20,6 +20,12 @@ public class JS009 {
     private List<TestRecord> testRecords = new ArrayList<>();
 
     public JS009(TestRecordList testRecordList) {
+        if (testRecordList == null) {
+            throw new IllegalArgumentException("testRecordList is null");
+        }
         this.testRecords = testRecordList.getTestRecords();
+        if (this.testRecords == null) {
+            this.testRecords = new ArrayList<>();
+        }
     }
 }

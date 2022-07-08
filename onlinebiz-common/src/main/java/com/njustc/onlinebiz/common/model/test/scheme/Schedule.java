@@ -14,7 +14,7 @@ public class Schedule {
     //    工作量
     private String workload;
     //    开始时间
-    private Date startDate;
+    private String startDate;
     //    结束时间
-    private Date endDate;
+    private String endDate;
 }

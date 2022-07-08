@@ -20,7 +20,13 @@ public class JS008 {
     private List<TestcaseList> testcases = new ArrayList<>();
 
     public JS008(Testcase testcase) {
+        if (testcase == null) {
+            throw new IllegalArgumentException("testcase is null");
+        }
         this.testcases = testcase.getTestcases();
+        if (this.testcases == null) {
+            this.testcases = new ArrayList<>();
+        }
     }
 
 }

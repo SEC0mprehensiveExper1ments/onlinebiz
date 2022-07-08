@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
 import java.util.List;
 
 @Service
@@ -200,7 +199,7 @@ public class DocServiceJS006 {
         List<Modification> modifications = JS006Json.getWenDangXiuGaiJiLu();
         for (Modification modification : modifications) {
             modificationTable.addCell(ItextUtils.createCell(modification.getVersion(), normal5song, Element.ALIGN_LEFT, 4, 2, paddings3, borderWidth));
-            modificationTable.addCell(ItextUtils.createCell(modification.getDate().toString(), normal5song, Element.ALIGN_LEFT, 17, 2, paddings3, borderWidth));
+            modificationTable.addCell(ItextUtils.createCell(modification.getModificationDate(), normal5song, Element.ALIGN_LEFT, 17, 2, paddings3, borderWidth));
             modificationTable.addCell(ItextUtils.createCell(modification.getMethod().toString(), normal5song, Element.ALIGN_LEFT, 4, 2, paddings3, borderWidth));
             modificationTable.addCell(ItextUtils.createCell(modification.getModifier(), normal5song, Element.ALIGN_LEFT, 8, 2, paddings3, borderWidth));
             modificationTable.addCell(ItextUtils.createCell(modification.getIllustration(), normal5song, Element.ALIGN_LEFT, 10, 2, paddings3, borderWidth));
@@ -472,23 +471,23 @@ public class DocServiceJS006 {
         // 第二行
         CeShiJinDuTable.addCell(ItextUtils.createCell("制定测试计划", normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
         CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiDingJiHua().getWorkload(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
-        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiDingJiHua().getStartDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
-        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiDingJiHua().getEndDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiDingJiHua().getStartDate(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiDingJiHua().getEndDate(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
         // 第三行
         CeShiJinDuTable.addCell(ItextUtils.createCell("设计测试", normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
         CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getSheJiCeShi().getWorkload(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
-        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getSheJiCeShi().getStartDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
-        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getSheJiCeShi().getEndDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getSheJiCeShi().getStartDate(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getSheJiCeShi().getEndDate(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
         // 第四行
         CeShiJinDuTable.addCell(ItextUtils.createCell("执行测试", normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
         CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiXingCeShi().getWorkload(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
-        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiXingCeShi().getStartDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
-        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiXingCeShi().getEndDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiXingCeShi().getStartDate(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getZhiXingCeShi().getEndDate(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
         // 第五行
         CeShiJinDuTable.addCell(ItextUtils.createCell("评估测试", normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
         CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getPingGuCeShi().getWorkload(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
-        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getPingGuCeShi().getStartDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
-        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getPingGuCeShi().getEndDate().toString(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getPingGuCeShi().getStartDate(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
+        CeShiJinDuTable.addCell(ItextUtils.createCell(JS006Json.getPingGuCeShi().getEndDate(), normal5song, Element.ALIGN_LEFT, 1, 2, paddings3, borderWidth));
         document.add(CeShiJinDuTable);
 
 //        Chapter chapter6 = new Chapter(new Paragraph("第6单元  ", normal5song),6);

@@ -21,7 +21,7 @@ public interface SchemeReviewService {
      * @param testerId 与该表有关的测试部人员ID
      * @return 成功返回创建的测试方案检查表ID， 失败返回 null
      * */
-    String createSchemeReview(String projectId, Long qaId, Long testerId);
+    String createSchemeReview(String projectId, String serialNumber, Long qaId, Long testerId);
 
     /**
      * 查看具体测试方案检查表内容，只有和该测试方案检查表(也就是和测试项目)有关的测试部人员(主管)以及
@@ -59,6 +59,16 @@ public interface SchemeReviewService {
      * @param userRole 执行此操作的用户角色
      * */
     Resource getScannedCopy(String schemeReviewId, Long userId, Role userRole) throws IOException;
+
+    /**
+     * 得到扫描复制文件名
+     *
+     * @param schemeReviewId 方案审查id
+     * @param userId 用户id
+     * @param userRole 用户角色
+     * @return {@link String}
+     */
+    String getScannedCopyFileName(String schemeReviewId, Long userId, Role userRole);
 
     /***
      * 删除一份测试评审表，只有管理员可以进行此操作

@@ -1,9 +1,7 @@
 package com.njustc.onlinebiz.doc.service;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.*;
 import com.njustc.onlinebiz.common.model.test.report.SoftwareEnvironment;
 import com.njustc.onlinebiz.common.model.test.report.TestContent;
 import com.njustc.onlinebiz.doc.dao.OSSProvider;
@@ -13,6 +11,7 @@ import com.njustc.onlinebiz.doc.util.ItextUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,6 +43,35 @@ public class DocServiceJS007 {
         marginBottom = 72f;
     }
 
+    public void mergePdfFiles(String[] files, String savepath) {
+        try
+        {
+            //获取当前pdf的高度及宽度
+            Document document = new Document(new PdfReader(files[0]).getPageSize(1));
+            PdfCopy copy = new PdfCopy(document, new FileOutputStream(savepath));
+            //打开当前操作的document，方便写入
+            document.open();
+            for (String file : files) {
+                //读取当前文件的内容
+                PdfReader reader = new PdfReader(file);
+                //获取当前文件的长度
+                int n = reader.getNumberOfPages();
+                for (int j = 1; j <= n; j++) {
+                    //一页一页的复制
+                    document.newPage();
+                    PdfImportedPage page = copy.getImportedPage(reader, j);
+                    //这个方法是获取当前页面内容 注意：只是文本内容
+                    //PdfTextExtractor.getTextFromPage(reader, j);
+                    copy.addPage(page);
+                }
+                reader.close();
+            }
+            document.close();
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static JS007 JS007Json;
     /**
      * 填充
@@ -55,38 +83,59 @@ public class DocServiceJS007 {
     public String fill(String reportId, JS007 newJson) {
         JS007Json = newJson;
         String pdfPath = DOCUMENT_DIR + "JS007_" + reportId + ".pdf";
+        String pdfCover = DOCUMENT_DIR + "JS007_cover_" + reportId + ".pdf";
+        String pdfMainText = DOCUMENT_DIR + "JS007_mainbody_" + reportId + ".pdf";
         try {
+            // 生辰pdf封面
             // 1.新建document对象
-            Document document = new Document(PageSize.A4);// 建立一个Document对象
-            document.setMargins(marginLeft, marginRight, marginTop, marginBottom);
+            Document coverDocument = new Document(PageSize.A4);// 建立一个Document对象
+            coverDocument.setMargins(marginLeft, marginRight, marginTop, marginBottom);
             // 2.建立一个书写器(Writer)与document对象关联
-            File file = new File(pdfPath.replaceAll("\\\\", "/"));
-//            System.out.println("file: " + file);
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
-//            System.out.println("Success");
+            File coverFile = new File(pdfCover.replaceAll("\\\\", "/"));
+            PdfWriter coverWriter = PdfWriter.getInstance(coverDocument, new FileOutputStream(coverFile)); // 不要删
+            // 3.打开文档
+            coverDocument.open();
+            // 4.向文档中添加内容
+            generateCover(coverDocument);
+            // 5.关闭文档
+            coverDocument.close();
+
+            // 生成pdf正文
+            // 1.新建document对象
+            Document bodyDocument = new Document(PageSize.A4);// 建立一个Document对象
+            bodyDocument.setMargins(marginLeft, marginRight, marginTop, marginBottom);
+            // 2.建立一个书写器(Writer)与document对象关联
+            File bodyFile = new File(pdfMainText.replaceAll("\\\\", "/"));
+            PdfWriter bodyWriter = PdfWriter.getInstance(bodyDocument, new FileOutputStream(bodyFile));
             // 2.5 添加页眉/页脚
             String header = "报告编号：" + JS007Json.getInputBaoGaoBianHao();
             String[] footer = new String[]{"南京大学计算机软件新技术国家重点实验室      " + header + "         第 ", " 页，共 ", " 页"};
             int headerToPage = 0;
-            int footerFromPage = 3;
+            int footerFromPage = 1;
             boolean isHaderLine = false;
             boolean isFooterLine = false;
-            float[] headerLoc = new float[]{document.right() - 5, document.top() + 15};
-            float[] footerLoc = new float[]{document.left() + 15, document.bottom() - 20};
+            float[] headerLoc = new float[]{bodyDocument.right() - 5, bodyDocument.top() + 15};
+            float[] footerLoc = new float[]{bodyDocument.left() + 15, bodyDocument.bottom() - 20};
             float headLineOff = -5f;
             float footLineOff = 12f;
-            writer.setPageEvent(new HeaderFooter(header, footer, headerToPage, footerFromPage, isHaderLine, isFooterLine,
+            bodyWriter.setPageEvent(new HeaderFooter(header, footer, headerToPage, footerFromPage, isHaderLine, isFooterLine,
                     headerLoc, footerLoc, headLineOff, footLineOff));
             // 3.打开文档
-            document.open();
+            bodyDocument.open();
             // 4.向文档中添加内容
-            generatePage(document);
+            generatePage(bodyDocument);
             // 5.关闭文档
-            document.close();
+            bodyDocument.close();
         } catch (Exception e) {
             e.printStackTrace();
             return "unable to generate a pdf";
         }
+        // 合并pdf
+        mergePdfFiles(new String[]{pdfCover, pdfMainText}, pdfPath);
+        // 删除封面与正文pdf
+        System.gc();    // 及时清除缓存
+        deleteOutFile(pdfCover);
+        deleteOutFile(pdfMainText);
         // 上传pdf
         try {
             if (ossProvider.upload(
@@ -121,8 +170,6 @@ public class DocServiceJS007 {
         }
     }
 
-    private static BaseFont bfChinese;
-    private static BaseFont bfHeiTi;
     private static Font boldchusong;
     private static Font boldxiao3song;
     private static Font bold3song;
@@ -136,14 +183,10 @@ public class DocServiceJS007 {
     private static Font bold4song;
     private static Font bold2song;
 
-    public void generatePage(Document document) throws Exception {
+    public void generateCover(Document document) throws Exception {
         try {
-            bfChinese =
-                    BaseFont.createFont(
-                            DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            bfHeiTi =
-                    BaseFont.createFont(
-                            DOCUMENT_DIR + "font/simhei.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            BaseFont bfChinese = BaseFont.createFont(
+                    DOCUMENT_DIR + "font/simsun.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             boldchusong = new Font(bfChinese, 36f, Font.BOLD);
             boldxiao3song = new Font(bfChinese, 15f, Font.BOLD);
             bold3song = new Font(bfChinese, 16f, Font.BOLD);
@@ -210,8 +253,10 @@ public class DocServiceJS007 {
         secondPageContent.setAlignment(0); // 设置文字居中 0靠左   1，居中     2，靠右
         secondPageContent.setLeading(25f);
         document.add(secondPageContent);
+    }
 
-        document.newPage();
+    public void generatePage(Document document) throws Exception {
+//        document.newPage();
 
         Paragraph CeShiBaoGaoTitle = new Paragraph("测 试 报 告", bold2song);
         CeShiBaoGaoTitle.setAlignment(1); // 设置文字居中 0靠左   1，居中     2，靠右

@@ -31,10 +31,11 @@ public class MongoSchemeReviewService implements SchemeReviewService {
     }
 
     @Override
-    public String createSchemeReview(String projectId, Long qaId, Long testerId) {
+    public String createSchemeReview(String projectId, String serialNumber, Long qaId, Long testerId) {
         // 创建一份空的检查表
         SchemeReview schemeReview = new SchemeReview();
         schemeReview.setProjectId(projectId);
+        schemeReview.setSerialNumber(serialNumber);
         // 获取检查表ID
         return schemeReviewDAO.insertSchemeReview(schemeReview).getId();
     }
@@ -165,6 +166,26 @@ public class MongoSchemeReviewService implements SchemeReviewService {
         }
         // 从磁盘读取文件
         return new InputStreamResource(new FileInputStream(schemeReview.getScannedCopyPath()));
+    }
+
+    @Override
+    public String getScannedCopyFileName(String schemeReviewId, Long userId, Role userRole) {
+        SchemeReview schemeReview = schemeReviewDAO.findSchemeReviewById(schemeReviewId);
+        ProjectStage projectStage = projectDAO.findProjectById(schemeReview.getProjectId()).getStatus().getStage();
+        // 检查阶段
+        if (projectStage == ProjectStage.WAIT_FOR_QA ||
+            projectStage == ProjectStage.SCHEME_UNFILLED ||
+            projectStage == ProjectStage.SCHEME_AUDITING ||
+            projectStage == ProjectStage.SCHEME_AUDITING_DENIED ||
+            projectStage == ProjectStage.SCHEME_AUDITING_PASSED) {
+            throw new ReviewInvalidStageException("项目当前状态不支持该操作");
+        }
+        // 检查权限
+        if (!hasUploadOrDownloadAuthority(schemeReview, userId, userRole)) {
+            throw new ReviewPermissionDeniedException("无权下载扫描件");
+        }
+        // 获取文件名
+        return schemeReview.getScannedCopyPath().substring(schemeReview.getScannedCopyPath().lastIndexOf('/') + 1);
     }
 
     private Boolean hasUploadOrDownloadAuthority(SchemeReview schemeReview, Long userId, Role userRole){

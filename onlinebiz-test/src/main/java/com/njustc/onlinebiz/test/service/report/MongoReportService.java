@@ -50,6 +50,16 @@ public class MongoReportService implements ReportService {
                 projectStage == ProjectStage.SCHEME_AUDITING || projectStage == ProjectStage.SCHEME_AUDITING_DENIED) {
             throw new ReportInvalidStageException("此阶段不可查看测试报告");
         }
+        // 用户请求时，判断状态是否为REPORT_WAIT_CUSTOMER及其之后的状态，不是则抛出异常
+        if (userRole == Role.CUSTOMER) {
+            if (projectStage != ProjectStage.REPORT_WAIT_CUSTOMER &&
+                    projectStage != ProjectStage.REPORT_CUSTOMER_CONFIRM &&
+                    projectStage != ProjectStage.REPORT_CUSTOMER_REJECT &&
+                    projectStage != ProjectStage.QA_ALL_REJECTED &&
+                    projectStage != ProjectStage.QA_ALL_PASSED) {
+                throw new ReportInvalidStageException("此阶段不可查看测试报告");
+            }
+        }
 
         return report;
     }
@@ -100,7 +110,9 @@ public class MongoReportService implements ReportService {
         //项目的测试相关人员及质量相关人员可以查看
         Long testerId = projectDAO.findProjectById(report.getProjectId()).getProjectBaseInfo().getTesterId();
         Long qaId = projectDAO.findProjectById(report.getProjectId()).getProjectBaseInfo().getQaId();
+        Long customerId = projectDAO.findProjectById(report.getProjectId()).getProjectBaseInfo().getCustomerId();
         if (userRole == Role.TESTER && userId.equals(testerId)) return true;
+        else if (userRole == Role.CUSTOMER && userId.equals(customerId)) return true;
         return userRole == Role.QA && userId.equals(qaId);
     }
 

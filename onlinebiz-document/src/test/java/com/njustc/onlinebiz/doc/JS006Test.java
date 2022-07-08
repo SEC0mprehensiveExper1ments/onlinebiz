@@ -23,13 +23,13 @@ public class JS006Test {
         Date date2 = new Date();
         Date date3 = new Date();
         List<Modification> modifications = new ArrayList<>();
-        modifications.add(new Modification("1.0", date1, Modification.Method.A, "1", "1"));
-        modifications.add(new Modification("1.1", date2, Modification.Method.M, "2", "2"));
-        modifications.add(new Modification("1.2", date3, Modification.Method.D, "3", "3"));
-        Schedule zhiDingJiHua= new Schedule("1", date1, date2);
-        Schedule sheJiCeShi= new Schedule("2", date1, date2);
-        Schedule zhiXingCeShi= new Schedule("3", date1, date2);
-        Schedule pingGuCeShi= new Schedule("4", date1, date2);
+        modifications.add(new Modification("1.0", date1.toString(), Modification.Method.A, "1", "1"));
+        modifications.add(new Modification("1.1", date2.toString(), Modification.Method.M, "2", "2"));
+        modifications.add(new Modification("1.2", date3.toString(), Modification.Method.D, "3", "3"));
+        Schedule zhiDingJiHua= new Schedule("1", date1.toString(), date2.toString());
+        Schedule sheJiCeShi= new Schedule("2", date1.toString(), date2.toString());
+        Schedule zhiXingCeShi= new Schedule("3", date1.toString(), date2.toString());
+        Schedule pingGuCeShi= new Schedule("4", date1.toString(), date2.toString());
         JS006 newJson=new JS006()
                 .setInputBanBenHao("1.2")
                 .setWenDangXiuGaiJiLu(modifications)

@@ -15,7 +15,7 @@ public class Modification{
     //    版本号
     private String version;
     //    修改日期
-    private Date date;
+    private String modificationDate;
     //    操作
     public enum Method{A,M,D}
     Method method;

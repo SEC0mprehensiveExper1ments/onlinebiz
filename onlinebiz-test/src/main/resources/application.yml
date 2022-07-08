@@ -13,6 +13,11 @@ spring:
       password: nAnj1ng_Jia0tong_Univ
       database: onlinebiz
       authentication-database: admin
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
 
 eureka:
   instance:

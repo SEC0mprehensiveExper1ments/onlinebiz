@@ -4,6 +4,7 @@ import com.njustc.onlinebiz.common.model.EntrustDto;
 import com.njustc.onlinebiz.common.model.PageResult;
 import com.njustc.onlinebiz.common.model.Role;
 import com.njustc.onlinebiz.common.model.test.project.*;
+import com.njustc.onlinebiz.common.model.test.report.Report;
 import com.njustc.onlinebiz.test.dao.project.ProjectDAO;
 import com.njustc.onlinebiz.test.exception.project.*;
 import com.njustc.onlinebiz.test.service.report.ReportService;
@@ -110,15 +111,12 @@ public class MongoProjectService implements ProjectService {
 
     @Override
     public Project findProject(String projectId, Long userId, Role userRole) {
-        if (userRole == Role.CUSTOMER) {
-            throw new ProjectPermissionDeniedException("无权查看测试项目");
-        }
         Project project = projectDAO.findProjectById(projectId);
         if (project == null) {
             throw new ProjectNotFoundException("该测试项目不存在");
         }
-        // 检查阶段
         ProjectStage curStage = project.getStatus().getStage();
+        // 检查阶段
         if (curStage == ProjectStage.WAIT_FOR_QA) {
             throw new ProjectInvalidStageException("待分配质量部人员");
         }
@@ -164,6 +162,7 @@ public class MongoProjectService implements ProjectService {
         Long marketerId = projectBaseInfo.getMarketerId();
         Long testerId = projectBaseInfo.getTesterId();
         Long qaId = projectBaseInfo.getQaId();
+        String serialNumber = projectBaseInfo.getSerialNumber();
 
         ProjectFormIds projectFormIds = new ProjectFormIds();
         /*TODO: 根据其他部分给出的接口新建各表，并将表编号填入testProject中字段，替换null*/
@@ -174,7 +173,9 @@ public class MongoProjectService implements ProjectService {
         // 对应的测试方案 id (JS006)
         String testSchemeId = schemeService.createScheme(entrustId, null, marketerId, Role.MARKETER, projectId);
         projectFormIds.setTestSchemeId(testSchemeId);
-        String testReportId = reportService.createReport(projectId, entrustId, null, marketerId, Role.MARKETER);
+        Report.ReportContent reportContent = new Report.ReportContent();
+        reportContent.setProjectSerialNumber(serialNumber);
+        String testReportId = reportService.createReport(projectId, entrustId, reportContent, marketerId, Role.MARKETER);
         projectFormIds.setTestReportId(testReportId);
         String testcaseListId = testcaseService.createTestcaseList(projectId, entrustId, null, marketerId, Role.MARKETER);
         projectFormIds.setTestcaseListId(testcaseListId);
@@ -190,7 +191,7 @@ public class MongoProjectService implements ProjectService {
         String workChecklistId = entrustTestReviewService.createEntrustTestReview(projectId, marketerId, Role.MARKETER);
         projectFormIds.setWorkChecklistId(workChecklistId);
         // 对应的测试方案评审表 (JS013)
-        String testSchemeChecklistId = schemeReviewService.createSchemeReview(projectId, qaId, testerId);
+        String testSchemeChecklistId = schemeReviewService.createSchemeReview(projectId, serialNumber, qaId, testerId);
         projectFormIds.setTestSchemeChecklistId(testSchemeChecklistId);
 
         // 更新测试项目的formIds
@@ -242,9 +243,23 @@ public class MongoProjectService implements ProjectService {
         if (userRole != Role.ADMIN && userRole != Role.TESTING_SUPERVISOR && userRole != Role.QA_SUPERVISOR
             && !userId.equals(project.getProjectBaseInfo().getCustomerId())     // 项目有关的用户
             && !userId.equals(project.getProjectBaseInfo().getTesterId())       // 项目有关的测试部人员
-            && !userId.equals(project.getProjectBaseInfo().getQaId()))          // 项目有关的质量部人员
+            && !userId.equals(project.getProjectBaseInfo().getQaId())           // 项目有关的质量部人员
+            && !userId.equals(project.getProjectBaseInfo().getMarketerId()))    // 项目有关的市场部人员
         {
             throw new ProjectPermissionDeniedException("无权更新项目状态");
+        }
+
+        if (userId.equals(project.getProjectBaseInfo().getCustomerId())) {
+            // 测试报告已签发，待客户接受, next: REPORT_CUSTOMER_CONFIRM 或 REPORT_CUSTOMER_REJECT
+            if (project.getStatus().getStage() != ProjectStage.REPORT_WAIT_CUSTOMER
+                    || (nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_CONFIRM
+                    && nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_REJECT)) {
+                throw new ProjectInvalidStageException("更新的下一个状态不合法");
+            }
+            if (!projectDAO.updateStatus(project.getId(), nextStatus)) {
+                throw new ProjectDAOFailureException("更改测试项目状态失败");
+            }
+            return;
         }
 
         switch (project.getStatus().getStage()) {
@@ -290,11 +305,12 @@ public class MongoProjectService implements ProjectService {
                 if (nextStatus.getStage() != ProjectStage.REPORT_WAIT_CUSTOMER) {
                     throw new ProjectInvalidStageException("更新的下一个状态不合法");
                 }
-            case REPORT_WAIT_CUSTOMER:      // 测试报告已签发，待客户接受, next: REPORT_CUSTOMER_CONFIRM 或 REPORT_CUSTOMER_REJECT
-                if (nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_CONFIRM && nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_REJECT) {
-                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
-                }
                 break;
+//            case REPORT_WAIT_CUSTOMER:      // 测试报告已签发，待客户接受, next: REPORT_CUSTOMER_CONFIRM 或 REPORT_CUSTOMER_REJECT
+//                if (nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_CONFIRM && nextStatus.getStage() != ProjectStage.REPORT_CUSTOMER_REJECT) {
+//                    throw new ProjectInvalidStageException("更新的下一个状态不合法");
+//                }
+//                break;
             case REPORT_CUSTOMER_CONFIRM:   // 测试报告被客户接受，质量部可审计测试文档, next: QA_ALL_REJECTED 或 QA_ALL_PASSED
                 if (nextStatus.getStage() != ProjectStage.QA_ALL_REJECTED && nextStatus.getStage() != ProjectStage.QA_ALL_PASSED) {
                     throw new ProjectInvalidStageException("更新的下一个状态不合法");
@@ -308,7 +324,7 @@ public class MongoProjectService implements ProjectService {
             case QA_ALL_PASSED:             // 质量部审计测试文档合格，完成（无可填，全可看）
                 throw new ProjectInvalidStageException("项目已结项");
             default:
-                throw new ProjectInvalidArgumentException("无法解析该状态");
+                throw new ProjectInvalidStageException("无法解析该状态或更新的下一个状态不合法");
         }
         if (!projectDAO.updateStatus(project.getId(), nextStatus)) {
             throw new ProjectDAOFailureException("更改测试项目状态失败");
