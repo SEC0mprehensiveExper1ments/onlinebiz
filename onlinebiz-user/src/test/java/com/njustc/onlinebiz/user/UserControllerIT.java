@@ -132,7 +132,7 @@ public class UserControllerIT {
     public void testRegisterWithAnotherValid() {
         client.post()
                 .uri("/register?userName=guest&userPassword=guest")
-                .exchange().expectStatus().is4xxClientError();
+                .exchange().expectStatus().isOk();
     }
 
     @Test
